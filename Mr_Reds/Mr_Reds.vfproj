@@ -14,7 +14,7 @@
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" UseProcessorExtensions="codeExclusivelyHost" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)Mr_Reds_Library\include" VectorizerDiagLevel="vectorizerDiagLevelNew5" ArrayAlignment="alignArray32Bytes" RuntimeLibrary="rtMultiThreadedDLL"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" Optimization="optimizeDisabled" UseProcessorExtensions="codeExclusivelyHost" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)Mr_Reds_Library\include" VectorizerDiagLevel="vectorizerDiagLevelNew5" ArrayAlignment="alignArray32Bytes" RuntimeLibrary="rtMultiThreadedDLL"/>
 				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)Mr_Reds_Library\lib" IgnoreDefaultLibraryNames="libcmt" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.1.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -25,5 +25,87 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd;h;inc"/>
-		<Filter Name="Source Files"/></Files>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<Filter Name="MR_DEFS">
+		<Filter Name="MR_KINDS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_FIELD_VARS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_FIELD_VARS_DSET_NAMES.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_FIELD_VARS_UNITS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_FILES.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_GRID_SYS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_PRJ_METADATA.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_RANKS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_SLOPE.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_TIMING.f90"/></Filter>
+		<Filter Name="MR_MOD_FILE_MANIPULATIONS">
+		<Filter Name="MR_MOD_FILE_PRJ_MANIPULATIONS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_ACCESS_REC.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_AWAYOUT_REC_ELEMENTS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_PRJ.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_V_STRING_FROM_ACQUIRE_PRJ_METADATA.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_V_STRING_FROM_GET_RANKS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_V_STRING_FROM_READ_CONSTS_N_REF_PARS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_V_STRING_FROM_READ_SLOPE.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_PRJ_MANIPULATIONS\MR_MOD_V_STRING_FROM_READ_TIMING.f90"/></Filter>
+		<Filter Name="MR_MOD_FILE_XMDF_MANIPULATIONS">
+		<Filter Name="XMDF">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_CREATE_DSET.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_GET_RANKS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_COORS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_GRID_SYS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_READ_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_TO_WRITE_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/></Filter></Filter>
+		<Filter Name="MR_MOD_FUNCS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FUNCS\MR_MOD_FUNC_H.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_FUNCS\MR_MOD_FUNC_TBUV.f90"/></Filter>
+		<Filter Name="MR_MOD_OPERATIONS">
+		<Filter Name="MR_MOD_OPERATORS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_UV.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_XUV.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_XY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_QADV_N_QDIF_XY - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_QADV_N_QDIF_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_TDMA.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_OPERATIONS\MR_MOD_TDMA3.f90"/></Filter>
+		<Filter Name="MR_MOD_PROCESSES">
+		<Filter Name="MR_MOD_INITS">
+		<Filter Name="MR_MOD_MALLOCS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_ACTIVITY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_CONSTS_N_REF_PARS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_CURVED_GEOS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_FIELD_VARS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_CURVED_GEOS - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_FIELD_VARS_N_ACTIVITY - for Test.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_OUTPUT.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/></Filter>
+		<Filter Name="MR_MOD_UPDTS">
+		<Filter Name="MR_MOD_CALC_HYD">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_A_B_C_D - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_ALFA_N_BETA.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_A3_B3_C3_D3.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_ADV_N_DIF_XY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_ADV_N_DIF_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_BAR_XY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_COR_XY.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_H.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_HYD - To be revised.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_TBUV.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_VZW.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_OUTPUT.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MAIN.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_REDS.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
