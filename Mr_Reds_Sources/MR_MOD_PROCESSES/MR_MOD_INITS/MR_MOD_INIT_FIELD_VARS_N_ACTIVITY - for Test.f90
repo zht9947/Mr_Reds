@@ -82,7 +82,7 @@
     DI    =   0.0
     
     
-    ACTIVITY(1:NI,1:NJ) = BEACTIVE
+    ACTIVITY = BEACTIVE
     
     
     WHERE( ACTIVITY == NOACTIVE )
