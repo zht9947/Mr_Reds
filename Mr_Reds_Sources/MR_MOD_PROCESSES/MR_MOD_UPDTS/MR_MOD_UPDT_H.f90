@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -65,20 +66,34 @@
 
     IMPLICIT NONE
 
-    H = MR_FUNC_H( ZS , ZB )
+    INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( ZBU(0:NI,1:NJ) )
+    DO J = 1 , NJ
+      DO I = 1 , NI
+        H( I , J ) = MR_FUNC_H( ZS( I , J ) , ZB( I , J ) )
+      END DO
+    END DO
+
+    ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) )
       CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
-
-      HU = MR_FUNC_H( ZSU , ZBU )
-
+      
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          HU( I , J ) = MR_FUNC_H( ZSU( I , J ) , ZBU( I , J ) )
+        END DO
+      END DO
+      
     DEALLOCATE( ZBU )
 
-    ALLOCATE( ZBV(1:NI,0:NJ) )
+    ALLOCATE( ZBV(1:NI1(FDRD_KIND),0:NJ) )
       CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
-
-      HV = MR_FUNC_H( ZSV , ZBV )
-
+      
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          HV( I , J ) = MR_FUNC_H( ZSV( I , J ) , ZBV( I , J ) )
+        END DO
+      END DO
+      
     DEALLOCATE( ZBV )
 
   END SUBROUTINE MR_UPDT_H

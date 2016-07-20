@@ -78,7 +78,7 @@
     
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
-    WRITE(*,'(4X,"                       Computational time interval [s]              : ",G13.6)') DT
+    WRITE(*,'(4X,"                       Computational time interval [s]              : ",G13.6)') DT/COR
     WRITE(*,'(4X,"                                    Time beginning [s]              : ",G13.6)') T_START
     WRITE(*,'(4X,"          Total number of time steps for computing                  : ",I9   )') NTSS
     WRITE(*,'(4X,"    Inteval of number of time steps for outputting                  : ",I9   )') ITS_OUTPUT

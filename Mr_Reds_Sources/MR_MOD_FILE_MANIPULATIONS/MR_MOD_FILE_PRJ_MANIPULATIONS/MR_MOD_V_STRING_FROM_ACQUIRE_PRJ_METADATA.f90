@@ -65,11 +65,11 @@
 
     READ( V_STRING , * , IOSTAT=ERROR ) PRJ_METADATA
     IF( ERROR == -1 ) THEN
-      ERRMSG = "End of file when acquiring Project Metadata from file"
+      ERRMSG = "End of file when acquiring Project Metadata"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in acquiring Project Metadata from file"
+      ERRMSG = "Error in acquiring Project Metadata"
       RETURN
     END IF
 

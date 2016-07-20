@@ -68,11 +68,11 @@
     ERRMSG = ""
     READ( V_STRING , * , IOSTAT=ERROR ) VALUE
     IF( ERROR == -1 ) THEN
-      ERRMSG = "Null string when reading value of"
+      ERRMSG = "No digits when reading value of"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in reading value from string """//TRIM(ADJUSTL(V_STRING))//""" of"
+      ERRMSG = "Error in reading value of"
       RETURN
     END IF
 
@@ -112,11 +112,11 @@
     ERRMSG = ""
     READ( V_STRING , * , IOSTAT=ERROR ) VALUE
     IF( ERROR == -1 ) THEN
-      ERRMSG = "Null string when reading value of"
+      ERRMSG = "No digits when reading value of"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in reading value from string """//TRIM(ADJUSTL(V_STRING))//""" of"
+      ERRMSG = "Error in reading value of"
       RETURN
     END IF
 
@@ -156,11 +156,11 @@
     ERRMSG = ""
     READ( V_STRING , * , IOSTAT=ERROR ) VALUE
     IF( ERROR == -1 ) THEN
-      ERRMSG = "Null string when reading value of"
+      ERRMSG = "No digits when reading value of"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in reading value from string """//TRIM(ADJUSTL(V_STRING))//""" of"
+      ERRMSG = "Error in reading value of"
       RETURN
     END IF
 

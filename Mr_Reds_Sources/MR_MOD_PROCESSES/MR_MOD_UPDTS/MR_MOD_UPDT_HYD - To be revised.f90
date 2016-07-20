@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -81,19 +82,21 @@
 
     IMPLICIT NONE
 
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
 
-    ALLOCATE( HYD_D3(1:NI,1:NJ,1:2,1:NK) )
+    ALLOCATE( HYD_D3(1:NI1(CARD_KIND),1:NJ,1:2,1:NK) )
 
       CALL MR_CALC_RAW_HYD_D3( NI , NJ , NK , HYD_D3 )
 
-      ALLOCATE( ALFA(1:NI,1:NJ,1:2) , BETA(1:NI,1:NJ,1:2) )
+      ALLOCATE( ALFA(1:NI1(CARD_KIND),1:NJ,1:2) , BETA(1:NI1(CARD_KIND),1:NJ,1:2) )
 
-        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS STEP
+        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS CALL
 
-        ALLOCATE( D1(1:NI,1:NJ) )
+        ALLOCATE( D1(1:NI1(CARD_KIND),1:NJ) )
           CALL MR_CALC_D1( NI , NJ , ZS , ALFA , BETA , D1 )
-          ALLOCATE( A1(2:NI,1:NJ) , B1(1:NI,1:NJ) , C1(1:NI-1,1:NJ) )
+          ALLOCATE( A1(2:NI2(CARD_KIND),1:NJ) , B1(1:NI1(CARD_KIND),1:NJ) , C1(1:NI2(CARD_KIND)-1,1:NJ) )
             CALL MR_CALC_A1_B1_C1( NI , NJ , ALFA , A1 , B1 , C1 )
             !BLOCK
               ZS = MR_TDMA1( NI , NJ , A1 , B1 , C1 , D1 )
@@ -101,9 +104,9 @@
           DEALLOCATE( A1 , B1 , C1 )
         DEALLOCATE( D1 )
 
-        ALLOCATE( D2(1:NI,1:NJ) )
+        ALLOCATE( D2(1:NI1(CARD_KIND),1:NJ) )
           CALL MR_CALC_D2( NI , NJ , ZS , BETA , D2 )
-          ALLOCATE( A2(1:NI,2:NJ) , B2(1:NI,1:NJ) , C2(1:NI,1:NJ-1) )
+          ALLOCATE( A2(1:NI1(CARD_KIND),2:NJ) , B2(1:NI1(CARD_KIND),1:NJ) , C2(1:NI1(CARD_KIND),1:NJ-1) )
             CALL MR_CALC_A2_B2_C2( NI , NJ , ALFA , A2 , B2 , C2 )
             !BLOCK
               ZS = MR_TDMA2( NI , NJ , A2 , B2 , C2 , D2 )
@@ -121,13 +124,11 @@
 
       DEALLOCATE( ALFA , BETA )
 
-      ALLOCATE( HYD_A3(1:NI,1:NJ,2:NK) , HYD_B3(1:NI,1:NJ,1:NK) , HYD_C3(1:NI,1:NJ,1:NK-1) )
-
+      ALLOCATE( HYD_A3(1:NI1(CARD_KIND),1:NJ,2:NK) , HYD_B3(1:NI1(CARD_KIND),1:NJ,1:NK) , HYD_C3(1:NI1(CARD_KIND),1:NJ,1:NK-1) )
         CALL MR_CALC_HYD_A3_B3_C3( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 )
         !BLOCK
           UV = MR_TDMA3_UV( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 , HYD_D3 )
         !END BLOCK
-
       DEALLOCATE( HYD_A3 , HYD_B3 , HYD_C3 )
 
     DEALLOCATE( HYD_D3 )
@@ -139,17 +140,30 @@
 
   ! CALCULATE VERTICAL VELOCITY
     CALL MR_CALC_W( NI , NJ , NK , U , V , W )
-    IF( .TRUE. ) THEN
-      CALL MR_CALC_WW( NI , NJ , NK , UA , VA , W , WW )
-    END IF
 
   ! MERGE EXTERNAL AND INTERNAL
   ! COMPONENTS OF HORIZONTAL VELOCITY TOGETHER
     DO K = 1 , NK
-      U(:,:, K ) = U(:,:, K ) + UA(:,:)
-      V(:,:, K ) = V(:,:, K ) + VA(:,:)
-
-      UV(:,:,1:2, K ) = UV(:,:,1:2, K ) + UVA(:,:,1:2)
+    
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          U( I , J , K ) = U( I , J , K ) + UA( I , J )
+        END DO
+      END DO
+      
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          V( I , J , K ) = V( I , J , K ) + VA( I , J )
+        END DO
+      END DO
+      
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            UV( I , J ,DIM, K ) = UV( I , J ,DIM, K ) + UVA( I , J ,DIM)
+          END DO
+        END DO
+      END DO
 
     END DO
 
@@ -183,14 +197,14 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ    ) :: ZSU
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ    ) :: ZSV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ    ) :: ZSU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ    ) :: ZSV
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2) :: ALFA , BETA
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:2) :: ALFA , BETA
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2) :: UVA
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: UVA
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ,1:2) :: GRAD_XY_ZS
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: GRAD_XY_ZS
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -231,30 +245,30 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_W( NI , NJ , NK , UD , VD , W )
 
+    USE MR_MOD_OPERATOR_SS
     USE MR_MOD_CALC_GRAD_XY
 
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ,1:NK) :: UD
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ,1:NK) :: VD
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,0:NK) :: W
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:NK) :: UD
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:NK) :: VD
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ) :: REDC_GRAD_UVD
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
+
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVD
 
     INTEGER(IJID_KIND) :: I , J
-
     INTEGER(KKID_KIND) :: K
 
-    W(:,:, 0 ) = 0.0
+    W(1:NI,1:NJ, 0 ) = 0.0
 
     DO K = 1 , NK
 
       CALL MR_CALC_REDC_GRAD_XY_SS( NI , NJ ,   &
-      & REAL( MU*HU*UD(:,:, K ) , FDRD_KIND ) , REAL( MV*HV*VD(:,:, K ) , FDRD_KIND ) , REDC_GRAD_UVD )
+      & ( MU .MRSSSCL. ( UD(:,:, K ) .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VD(:,:, K ) .MRSSMTP. HV ) ) , REDC_GRAD_UVD )
 
       DO J = 1 , NJ
         DO I = 1 , NI
@@ -317,27 +331,28 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_WW( NI , NJ , NK , UA , VA , W , WW )
 
+    USE MR_MOD_OPERATOR_SS
     USE MR_MOD_CALC_GRAD_XY
 
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ     ) :: UA
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ     ) :: VA
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,0:NK) :: W
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:NK) :: WW
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ     ) :: UA
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ     ) :: VA
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ) :: REDC_GRAD_UVA
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
+  
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: WW
+
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVA
 
     INTEGER(IJID_KIND) :: I , J
-
     INTEGER(KKID_KIND) :: K
 
     CALL MR_CALC_REDC_GRAD_XY_SS( NI , NJ ,   &
-    & REAL( MU*HU*UA , FDRD_KIND ) , REAL( MV*HV*VA , FDRD_KIND ) , REDC_GRAD_UVA )
+    & ( MU .MRSSSCL. ( UA .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VA .MRSSMTP. HV ) ) , REDC_GRAD_UVA )
 
     DO K = 1 , NK
 

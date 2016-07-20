@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -42,7 +43,7 @@
     END INTERFACE
 
     INTERFACE OPERATOR( .MRUVSCL. )
-      MODULE PROCEDURE MR_VECTOR_SCALE_BY_MUV
+      MODULE PROCEDURE MR_VECTOR_SCALE_BY_MW
     END INTERFACE
 
     INTERFACE OPERATOR( .MRUVTFM. )
@@ -90,18 +91,23 @@
     IMPLICIT NONE
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:  ) :: SS
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVMTP
 
-    INTEGER :: DIM
-
-    ALLOCATE( UVMTP , SOURCE = UV )
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+    
+    ALLOCATE( UVMTP(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-
-      UVMTP(:,:,DIM) = UV(:,:,DIM) * SS(:,:)
-
+    
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , SIZE(UV,DIM=1)
+          UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
+        END DO
+      END DO
+      
     END DO
 
   END FUNCTION MR_VECTOR_MULTIPLY_BY_SS
@@ -131,18 +137,23 @@
     IMPLICIT NONE
 
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:  ) :: SS
 
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVMTP
 
-    INTEGER :: DIM
-
-    ALLOCATE( UVMTP , SOURCE = UV )
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+    
+    ALLOCATE( UVMTP(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-
-      UVMTP(:,:,DIM) = UV(:,:,DIM) * SS(:,:)
-
+    
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
+          UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
+        END DO
+      END DO
+      
     END DO
 
   END FUNCTION MR_VECTOR_MULTIPLY_BY_SS_CARD_KIND
@@ -172,18 +183,23 @@
     IMPLICIT NONE
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:  ) :: SS
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVDIV
 
-    INTEGER :: DIM
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
 
-    ALLOCATE( UVDIV , SOURCE = UV )
+    ALLOCATE( UVDIV(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-
-      UVDIV(:,:,DIM) = UV(:,:,DIM) / SS(:,:)
-
+    
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , SIZE(UV,DIM=1)
+          UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
+        END DO
+      END DO
+      
     END DO
 
   END FUNCTION MR_VECTOR_DIVIDE_BY_SS
@@ -213,18 +229,23 @@
     IMPLICIT NONE
 
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:  ) :: SS
 
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVDIV
 
-    INTEGER :: DIM
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
 
-    ALLOCATE( UVDIV , SOURCE = UV )
+    ALLOCATE( UVDIV(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-
-      UVDIV(:,:,DIM) = UV(:,:,DIM) / SS(:,:)
-
+    
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
+          UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
+        END DO
+      END DO
+      
     END DO
 
   END FUNCTION MR_VECTOR_DIVIDE_BY_SS_CARD_KIND
@@ -249,26 +270,31 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_VECTOR_SCALE_BY_MUV( MW , UV ) RESULT( UVSCL )
+  FUNCTION MR_VECTOR_SCALE_BY_MW( MW , UV ) RESULT( UVSCL )
 
     IMPLICIT NONE
 
-    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:  ) :: MW
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVSCL
 
-    INTEGER :: DIM
-
-    ALLOCATE( UVSCL , SOURCE = UV )
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+    
+    ALLOCATE( UVSCL(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-
-      UVSCL(:,:,DIM) = MW(:,:) * UV(:,:,DIM)
-
+    
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(UV,DIM=1) )
+          UVSCL( I , J ,DIM) = MW( I , J ) * UV( I , J ,DIM)
+        END DO
+      END DO
+      
     END DO
 
-  END FUNCTION MR_VECTOR_SCALE_BY_MUV
+  END FUNCTION MR_VECTOR_SCALE_BY_MW
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -295,17 +321,22 @@
     IMPLICIT NONE
 
     REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:  ) :: UV
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVTFM
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: UVTFM
 
-    INTEGER :: DIM
-
-    ALLOCATE( UVTFM , SOURCE = UV )
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+    
+    ALLOCATE( UVTFM(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
 
-      UVTFM(:,:,DIM) = XUV(:,:,DIM,1) * UV(:,:,1) + XUV(:,:,DIM,2) * UV(:,:,2)
+      DO J = 1 , SIZE(UV,DIM=2)
+        DO I = 1 , MIN( SIZE(XUV,DIM=1) , SIZE(UV,DIM=1) )
+          UVTFM( I , J ,DIM) = XUV( I , J ,DIM,1) * UV( I , J ,1) + XUV( I , J ,DIM,2) * UV( I , J ,2)
+        END DO
+      END DO
 
     END DO
 
@@ -338,11 +369,17 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVROT
+    
+    INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( UVROT , SOURCE = UV )
+    ALLOCATE( UVROT(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
-    UVROT(:,:,1) = + UV(:,:,2)
-    UVROT(:,:,2) = - UV(:,:,1)
+    DO J = 1 , SIZE(UV,DIM=2)
+      DO I = 1 , SIZE(UV,DIM=1)
+        UVROT( I , J ,1) =+UV( I , J ,2)
+        UVROT( I , J ,2) =-UV( I , J ,1)
+      END DO
+    END DO
 
   END FUNCTION MR_VECTOR_ROTATE_90CW
 
@@ -372,11 +409,17 @@
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: UVSQR
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:  ) :: UVSQR
+    
+    INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( UVSQR , SOURCE = UV(:,:,1) )
+    ALLOCATE( UVSQR(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2)) )
 
-    UVSQR(:,:) = UV(:,:,1) * UV(:,:,1) + UV(:,:,2) * UV(:,:,2)
+    DO J = 1 , SIZE(UV,DIM=2)
+      DO I = 1 , SIZE(UV,DIM=1)
+        UVSQR( I , J ) = UV( I , J ,1) * UV( I , J ,1) + UV( I , J ,2) * UV( I , J ,2)
+      END DO
+    END DO
 
   END FUNCTION MR_VECTOR_SQUARE
 
@@ -406,11 +449,17 @@
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV1 , UV2
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: UVDOT
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:  ) :: UVDOT
+    
+    INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( UVDOT , SOURCE = UV1(:,:,1) )
+    ALLOCATE( UVDOT(1:SIZE(UV1,DIM=1),1:SIZE(UV1,DIM=2)) )
 
-    UVDOT(:,:) = UV1(:,:,1) * UV2(:,:,1) + UV1(:,:,2) * UV2(:,:,2)
+    DO J = 1 , SIZE(UV1,DIM=2)
+      DO I = 1 , SIZE(UV1,DIM=1)
+        UVDOT( I , J ) = UV1( I , J ,1) * UV2( I , J ,1) + UV1( I , J ,2) * UV2( I , J ,2)
+      END DO
+    END DO
 
   END FUNCTION MR_VECTOR_DOT_PRODUCT
 

@@ -69,11 +69,11 @@
 
     READ( FILE_PRJ_ID , '(A)' , IOSTAT=ERROR ) REC
     IF( ERROR == -1 ) THEN
-      ERRMSG = "End of file when accessing a record"
+      ERRMSG = "End of file when accessing record"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in accessing a record"
+      ERRMSG = "Error in accessing record"
       RETURN
     END IF
 

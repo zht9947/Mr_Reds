@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -58,18 +59,15 @@
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2,0:NK) :: UVW
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: UVW
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2,1:NK) :: GRAD_Z_UV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK) :: GRAD_Z_UV
 
     INTEGER(IJID_KIND) :: I , J
-
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
-
-    INTEGER :: DIM
 
     DO K = 1 , NK
 
@@ -112,15 +110,13 @@
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,0:NK) :: SW
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: SW
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:NK) :: GRAD_Z_SS
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: GRAD_Z_SS
 
     INTEGER(IJID_KIND) :: I , J
-
     INTEGER(KKID_KIND) :: K
 
     DO K = 1 , NK

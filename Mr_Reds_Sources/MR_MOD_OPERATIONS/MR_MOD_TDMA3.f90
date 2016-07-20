@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -58,44 +59,71 @@
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,    2:NK  ) :: A
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,    1:NK  ) :: B
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,    1:NK-1) :: C
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2,1:NK  ) :: D
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,    2:NK  ) :: A
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,    1:NK  ) :: B
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,    1:NK-1) :: C
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:2,1:NK  ) :: D
 
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,1:2,1:NK  ) :: X
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,1:2,1:NK  ) :: Y
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:2,1:NK  ) :: X
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:2,1:NK  ) :: Y
 
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ           ) :: W
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,    1:NK-1) :: V
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ           ) :: W
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,    1:NK-1) :: V
 
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
 
-    INTEGER :: DIM
-
   ! GAUSSIAN ELIMINATION
-    W(:,:) = B(:,:, 1 )
-    DO DIM = 1 , 2
-      Y(:,:,DIM, 1 ) = D(:,:,DIM, 1 ) / W(:,:)
-    END DO
-    DO K = 2 , NK
-      V(:,:,K-1) = C(:,:,K-1) / W(:,:)
-      W(:,:) = B(:,:, K ) - A(:,:, K ) * V(:,:,K-1)
+    K = 1
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          W( I , J ) = B( I , J , K )
+        END DO
+      END DO
       DO DIM = 1 , 2
-        Y(:,:,DIM, K ) = ( D(:,:,DIM, K ) - A(:,:, K ) * Y(:,:,DIM,K-1) ) / W(:,:)
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            Y( I , J ,DIM, K ) = D( I , J ,DIM, K ) / W( I , J )
+          END DO
+        END DO
+      END DO
+    !END K = 1
+    DO K = 2 , NK
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          V( I , J ,K-1) = C( I , J ,K-1) / W( I , J )
+          W( I , J ) = B( I , J , K ) - A( I , J , K ) * V( I , J ,K-1)
+        END DO
+      END DO
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            Y( I , J ,DIM, K ) = ( D( I , J ,DIM, K ) - A( I , J , K ) * Y( I , J ,DIM,K-1) ) / W( I , J )
+          END DO
+        END DO
       END DO
     END DO
 
   ! BACK SUBSTITUTION
-    DO DIM = 1 , 2
-      X(:,:,DIM,NK ) = Y(:,:,DIM,NK )
-    END DO
+    K = NK
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            X( I , J ,DIM, K ) = Y( I , J ,DIM, K )
+          END DO
+        END DO
+      END DO
+    !END K = NK
     DO K = NK-1 , 1 , -1
       DO DIM = 1 , 2
-        X(:,:,DIM, K ) = Y(:,:,DIM, K ) - V(:,:, K ) * X(:,:,DIM,K+1)
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            X( I , J ,DIM, K ) = Y( I , J ,DIM, K ) - V( I , J , K ) * X( I , J ,DIM,K+1)
+          END DO
+        END DO
       END DO
     END DO
 
@@ -126,35 +154,57 @@
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,2:NK  ) :: A
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:NK  ) :: B
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:NK-1) :: C
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:NK  ) :: D
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,2:NK  ) :: A
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK  ) :: B
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK-1) :: C
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK  ) :: D
 
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,1:NK  ) :: X
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,1:NK  ) :: Y
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK  ) :: X
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK  ) :: Y
 
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ       ) :: W
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ,1:NK-1) :: V
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ       ) :: W
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND),1:NJ,1:NK-1) :: V
 
+    INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
 
   ! GAUSSIAN ELIMINATION
-    W(:,:) = B(:,:, 1 )
-    Y(:,:, 1 ) = D(:,:, 1 ) / W(:,:)
+    K = 1
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          W( I , J ) = B( I , J , K )
+        END DO
+      END DO
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          Y( I , J , K ) = D( I , J , K ) / W( I , J )
+        END DO
+      END DO
+    !END K = 1
     DO K = 2 , NK
-      V(:,:,K-1) = C(:,:,K-1) / W(:,:)
-      W(:,:) = B(:,:, K ) - A(:,:, K ) * V(:,:,K-1)
-      Y(:,:, K ) = ( D(:,:, K ) - A(:,:, K ) * Y(:,:,K-1) ) / W(:,:)
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          V( I , J ,K-1) = C( I , J ,K-1) / W( I , J )
+          W( I , J ) = B( I , J , K ) - A( I , J , K ) * V( I , J ,K-1)
+        END DO
+      END DO
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          Y( I , J , K ) = ( D( I , J , K ) - A( I , J , K ) * Y( I , J ,K-1) ) / W( I , J )
+        END DO
+      END DO
     END DO
 
   ! BACK SUBSTITUTION
-    X(:,:,NK ) = Y(:,:,NK )
+    X( I , J ,NK ) = Y( I , J ,NK )
     DO K = NK-1 , 1 , -1
-      X(:,:, K ) = Y(:,:, K ) - V(:,:, K ) * X(:,:,K+1)
+      DO J = 1 , NJ
+        DO I = 1 , NI
+          X( I , J , K ) = Y( I , J , K ) - V( I , J , K ) * X( I , J ,K+1)
+        END DO
+      END DO
     END DO
 
   END FUNCTION MR_TDMA3_SS

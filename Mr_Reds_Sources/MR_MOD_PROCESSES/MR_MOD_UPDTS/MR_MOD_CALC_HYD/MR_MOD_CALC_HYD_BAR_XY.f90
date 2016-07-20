@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -70,10 +71,10 @@
 
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2) :: HYD_BAR_XY
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: HYD_BAR_XY
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ,1:2) :: GRAD_XY_RI
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ,1:2) :: GRAD_XY_H
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: GRAD_XY_RI
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: GRAD_XY_H
 
     CALL MR_CALC_BY_INTERP_GRAD_XY_SS( NI , NJ , RI(:,:, K ) , GRAD_XY_RI )
     CALL MR_CALC_GRAD_XY_SS( NI , NJ , HU , HV , GRAD_XY_H )
@@ -81,8 +82,8 @@
     HYD_BAR_XY = - DT * RB / FRD2 *   &
     ( MW .MRUVSCL.   &
       ( FUV .MRUVTFM.   &
-        ( ( GRAD_XY_RI .MRUVMTP. H )  &
-        + ( GRAD_XY_H  .MRUVMTP. REAL( ( RI(:,:, K ) + R(:,:, K ) * SIGMA(K) ) , FDRD_KIND ) )   &
+        ( ( GRAD_XY_RI .MRUVMTP. H )   &
+        + ( GRAD_XY_H  .MRUVMTP. REAL( ( RI(:,:, K ) + R(:,:, K ) * SIGMA( K ) ) , FDRD_KIND ) )   &
         )   &
       )   &
     )

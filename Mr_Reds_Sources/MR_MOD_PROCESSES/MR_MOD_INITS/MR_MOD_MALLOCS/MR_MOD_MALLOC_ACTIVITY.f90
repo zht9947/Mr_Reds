@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -60,7 +61,7 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    ALLOCATE( ACTIVITY(1:NI,1:NJ) )
+    ALLOCATE( ACTIVITY(1:NI1(ACID_KIND),1:NJ) )
 
   END SUBROUTINE MR_MALLOC_ACTIVITY
 

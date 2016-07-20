@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -60,9 +61,12 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    ALLOCATE( EMIDW(1:NI,1:NJ) )
-    ALLOCATE( NDIDW(1:NI,1:NJ) , NDIDU(0:NI,1:NJ) , NDIDV(1:NI,0:NJ) , NDIDO(0:NI,0:NJ) )
-    
+    ALLOCATE( EMIDW(1:NI1(EMID_KIND),1:NJ) )
+
+    ALLOCATE( NDIDW(1:NI1(NDID_KIND),1:NJ) )
+    ALLOCATE( NDIDU(0:NI0(NDID_KIND),1:NJ) , NDIDV(1:NI1(NDID_KIND),0:NJ) )
+    ALLOCATE( NDIDO(0:NI0(NDID_KIND),0:NJ) )
+
   END SUBROUTINE MR_MALLOC_GRID_SYS
 
   END MODULE MR_MOD_MALLOC_GRID_SYS

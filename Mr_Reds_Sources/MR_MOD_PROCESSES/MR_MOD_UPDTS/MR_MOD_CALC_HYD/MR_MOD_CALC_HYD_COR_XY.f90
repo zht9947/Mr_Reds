@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -68,7 +69,7 @@
 
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2) :: HYD_COR_XY
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: HYD_COR_XY
 
     HYD_COR_XY = + DT *   &
     ( MW .MRUVSCL.   &
@@ -78,7 +79,7 @@
         )   &
       )   &
     )
-
+    
   END SUBROUTINE MR_CALC_HYD_COR_XY
 
   END MODULE MR_MOD_CALC_HYD_COR_XY

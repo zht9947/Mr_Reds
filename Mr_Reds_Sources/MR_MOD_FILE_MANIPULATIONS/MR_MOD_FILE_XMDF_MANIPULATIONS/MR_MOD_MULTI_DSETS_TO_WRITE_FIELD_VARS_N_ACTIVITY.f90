@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -67,7 +68,7 @@
     INTEGER(EMID_KIND) , INTENT(IN ) :: NEM
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ) :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI1(ACID_KIND),1:NJ) :: ACTIVITY
     INTEGER(1)         , DIMENSION(1:NEM) :: ACTIVITY_ARRAY
 
     INTEGER            , INTENT(OUT) :: ERROR
@@ -164,20 +165,20 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: UV_BASE
     REAL   (PARD_KIND) , INTENT(IN ) :: UV_REF
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2) , OPTIONAL :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ    ) , OPTIONAL :: U
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ,1:2) , OPTIONAL :: UU
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ    ) , OPTIONAL :: V
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ,1:2) , OPTIONAL :: VV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) , OPTIONAL :: UV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ    ) , OPTIONAL :: U
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) , OPTIONAL :: UU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ    ) , OPTIONAL :: V
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) , OPTIONAL :: VV
 
-    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ    ) , OPTIONAL :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI1(ACID_KIND),1:NJ    ) , OPTIONAL :: ACTIVITY
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION( :  , :      ) :: U_AT_U
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION( :  , :      ) :: V_AT_V
 
     REAL   (4)         , DIMENSION(1:2,1:NND) :: UV_ARRAY
 
-    INTEGER            :: DSET_UV_ID
+    INTEGER                          :: DSET_UV_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -251,18 +252,38 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,1:NJ,1:2) :: UV_AT_W
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: UV_AT_W
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
     IF( PRESENT( UV ) ) THEN
-      UV_AT_W = UV
+    
+      DO DIM = 1 , 2
+      
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            UV_AT_W( I , J ,DIM) = UV( I , J ,DIM)
+          END DO
+        END DO
+        
+      END DO
+      
     ELSE
-      UV_AT_W = 0.0
+    
+      DO DIM = 1 , 2
+      
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            UV_AT_W( I , J ,DIM) = 0.0
+          END DO
+        END DO
+        
+      END DO
+      
     END IF
 
-    UV_AT_W = JUV .MRUVTFM. UV
+    UV_AT_W = JUV .MRUVTFM. UV_AT_W
 
     DO DIM = 1 , 2
 
@@ -300,28 +321,53 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,1:NJ,1:2) :: UV_AT_U
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) :: UV_AT_U
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
     IF( PRESENT( U ) ) THEN
-      UV_AT_U( : , : ,1) = U
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          UV_AT_U( I , J ,1) = U( I , J )
+        END DO
+      END DO
     ELSE IF( PRESENT( UU ) ) THEN
-      UV_AT_U( : , : ,1) = UU( : , : ,1)
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          UV_AT_U( I , J ,1) = UU( I , J ,1)
+        END DO
+      END DO
     ELSE IF( PRESENT( UV ) ) THEN
-      CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV , UV_AT_U( : , : ,1) )
-      ALLOCATE( U_AT_U , SOURCE = UV_AT_U( : , : ,1) )
+      CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV , UV_AT_U(:,:,1) )
+      ALLOCATE( U_AT_U(0:NI0(FDRD_KIND),1:NJ) )
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          U_AT_U( I , J ) = UV_AT_U( I , J ,1)
+        END DO
+      END DO
     ELSE
-      UV_AT_U( : , : ,1) = 0.0
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          UV_AT_U( I , J ,1) = 0.0
+        END DO
+      END DO
     END IF
 
     IF( PRESENT( UU ) ) THEN
-      UV_AT_U( : , : ,2) = UU( : , : ,2)
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          UV_AT_U( I , J ,2) = UU( I , J ,2)
+        END DO
+      END DO
     ELSE IF( PRESENT( UV ) ) THEN
-      CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U( NI , NJ , UV , UV_AT_U( : , : ,2) )
+      CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U( NI , NJ , UV , UV_AT_U(:,:,2) )
     ELSE
-      UV_AT_U( : , : ,2) = 0.0
+      DO J = 1 , NJ
+        DO I = 0 , NI
+          UV_AT_U( I , J ,2) = 0.0
+        END DO
+      END DO
     END IF
 
     UV_AT_U = JUU .MRUVTFM. UV_AT_U
@@ -362,28 +408,53 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,0:NJ,1:2) :: UV_AT_V
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) :: UV_AT_V
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
     IF( PRESENT( VV ) ) THEN
-      UV_AT_V( : , : ,1) = VV( : , : ,1)
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          UV_AT_V( I , J ,1) = VV( I , J ,1)
+        END DO
+      END DO
     ELSE IF( PRESENT( UV ) ) THEN
-      CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV , UV_AT_V( : , : ,1) )
+      CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV , UV_AT_V(:,:,1) )
     ELSE
-      UV_AT_V( : , : ,1) = 0.0
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          UV_AT_V( I , J ,1) = 0.0
+        END DO
+      END DO
     END IF
 
     IF( PRESENT( V ) ) THEN
-      UV_AT_V( : , : ,2) = V
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          UV_AT_V( I , J ,2) = V( I , J )
+        END DO
+      END DO
     ELSE IF( PRESENT( VV ) ) THEN
-      UV_AT_V( : , : ,2) = VV( : , : ,2)
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          UV_AT_V( I , J ,2) = VV( I , J ,2)
+        END DO
+      END DO
     ELSE IF( PRESENT( UV ) ) THEN
-      CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV , UV_AT_V( : , : ,2) )
-      ALLOCATE( V_AT_V , SOURCE = UV_AT_V( : , : ,2) )
+      CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV , UV_AT_V(:,:,2) )
+      ALLOCATE( V_AT_V(1:NI1(FDRD_KIND),0:NJ) )
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          V_AT_V( I , J ) = UV_AT_V( I , J ,2) 
+        END DO
+      END DO
     ELSE
-      UV_AT_V( : , : ,2) = 0.0
+      DO J = 0 , NJ
+        DO I = 1 , NI
+          UV_AT_V( I , J ,2) = 0.0
+        END DO
+      END DO
     END IF
 
     UV_AT_V = JVV .MRUVTFM. UV_AT_V
@@ -424,31 +495,39 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,0:NJ,1:2) :: UV_AT_O
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ,1:2) :: UV_AT_O
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
     IF( PRESENT( U ) ) THEN
-      CALL MR_INTERP_XY_UV_O_U( NI , NJ , U , UV_AT_O( : , : ,1) )
+      CALL MR_INTERP_XY_UV_O_U( NI , NJ , U , UV_AT_O(:,:,1) )
     ELSE IF( PRESENT( UU ) ) THEN
-      CALL MR_INTERP_XY_UV_O_U( NI , NJ , UU( : , : ,1) , UV_AT_O( : , : ,1) )
+      CALL MR_INTERP_XY_UV_O_U( NI , NJ , UU(:,:,1) , UV_AT_O(:,:,1) )
     ELSE IF( ALLOCATED( U_AT_U ) ) THEN
-      CALL MR_INTERP_XY_UV_O_U( NI , NJ , U_AT_U , UV_AT_O( : , : ,1) )
+      CALL MR_INTERP_XY_UV_O_U( NI , NJ , U_AT_U , UV_AT_O(:,:,1) )
       DEALLOCATE( U_AT_U )
     ELSE
-      UV_AT_O( : , : ,1) = 0.0
+      DO J = 0 , NJ
+        DO I = 0 , NI
+          UV_AT_O( I , J ,1) = 0.0
+        END DO
+      END DO
     END IF
 
     IF( PRESENT( V ) ) THEN
-      CALL MR_INTERP_XY_UV_O_V( NI , NJ , V , UV_AT_O( : , : ,2) )
+      CALL MR_INTERP_XY_UV_O_V( NI , NJ , V , UV_AT_O(:,:,2) )
     ELSE IF( PRESENT( VV ) ) THEN
-      CALL MR_INTERP_XY_UV_O_V( NI , NJ , VV( : , : ,2) , UV_AT_O( : , : ,2) )
+      CALL MR_INTERP_XY_UV_O_V( NI , NJ , VV(:,:,2) , UV_AT_O(:,:,2) )
     ELSE IF( ALLOCATED( V_AT_V ) ) THEN
-      CALL MR_INTERP_XY_UV_O_V( NI , NJ , V_AT_V , UV_AT_O( : , : ,2) )
+      CALL MR_INTERP_XY_UV_O_V( NI , NJ , V_AT_V , UV_AT_O(:,:,2) )
       DEALLOCATE( V_AT_V )
     ELSE
-      UV_AT_O( : , : ,2) = 0.0
+      DO J = 0 , NJ
+        DO I = 0 , NI
+          UV_AT_O( I , J ,2) = 0.0
+        END DO
+      END DO
     END IF
 
     UV_AT_O = JOO .MRUVTFM. UV_AT_O
@@ -508,19 +587,19 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: SS_BASE
     REAL   (PARD_KIND) , INTENT(IN ) :: SS_REF
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ) , OPTIONAL :: SS
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ) , OPTIONAL :: SU
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ) , OPTIONAL :: SV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,0:NJ) , OPTIONAL :: SO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) , OPTIONAL :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) , OPTIONAL :: SU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) , OPTIONAL :: SV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) , OPTIONAL :: SO
 
-    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ) , OPTIONAL :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(IN ) , DIMENSION(1:NI1(ACID_KIND),1:NJ) , OPTIONAL :: ACTIVITY
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION( :  , :  ) :: SU_AT_O
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION( :  , :  ) :: SV_AT_O
 
     REAL   (4)         , DIMENSION(1:NND) :: SS_ARRAY
 
-    INTEGER            :: DSET_SS_ID
+    INTEGER                          :: DSET_SS_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -640,15 +719,16 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,1:NJ) :: SS_AT_U
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: SS_AT_U
 
     INTEGER(IJID_KIND) :: I , J
 
     IF( PRESENT( SU ) ) THEN
 
-      ALLOCATE( SU_AT_O(0:NI,0:NJ) )
-
-      CALL MR_INTERP_XY_SS_O_U( NI , NJ , SU , SU_AT_O )
+      IF( .NOT. PRESENT( SO ) ) THEN
+        ALLOCATE( SU_AT_O(0:NI0(FDRD_KIND),0:NJ) )
+        CALL MR_INTERP_XY_SS_O_U( NI , NJ , SU , SU_AT_O )
+      END IF
 
       DO J = 1 , NJ
         DO I = 0 , NI
@@ -657,11 +737,13 @@
       END DO
 
     ELSE IF( PRESENT( SS ) ) THEN
-
-      ALLOCATE( SU_AT_O(0:NI,0:NJ) )
-
+    
       CALL MR_INTERP_XY_SS_U( NI , NJ , SS , SS_AT_U )
-      CALL MR_INTERP_XY_SS_O_U( NI , NJ , SS_AT_U , SU_AT_O )
+    
+      IF( .NOT. PRESENT( SO ) ) THEN
+        ALLOCATE( SU_AT_O(0:NI0(FDRD_KIND),0:NJ) )
+        CALL MR_INTERP_XY_SS_O_U( NI , NJ , SS_AT_U , SU_AT_O )
+      END IF
 
       DO J = 1 , NJ
         DO I = 0 , NI
@@ -705,15 +787,16 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,0:NJ) :: SS_AT_V
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: SS_AT_V
 
     INTEGER(IJID_KIND) :: I , J
 
     IF( PRESENT( SV ) ) THEN
 
-      ALLOCATE( SV_AT_O(0:NI,0:NJ) )
-
-      CALL MR_INTERP_XY_SS_O_V( NI , NJ , SV , SV_AT_O )
+      IF( .NOT. PRESENT( SO ) ) THEN
+        ALLOCATE( SV_AT_O(0:NI0(FDRD_KIND),0:NJ) )
+        CALL MR_INTERP_XY_SS_O_V( NI , NJ , SV , SV_AT_O )
+      END IF
 
       DO J = 0 , NJ
         DO I = 1 , NI
@@ -722,11 +805,13 @@
       END DO
 
     ELSE IF( PRESENT( SS ) ) THEN
-
-      ALLOCATE( SV_AT_O(0:NI,0:NJ) )
-
+    
       CALL MR_INTERP_XY_SS_V( NI , NJ , SS , SS_AT_V )
-      CALL MR_INTERP_XY_SS_O_V( NI , NJ , SS_AT_V , SV_AT_O )
+
+      IF( .NOT. PRESENT( SO ) ) THEN
+        ALLOCATE( SV_AT_O(0:NI0(FDRD_KIND),0:NJ) )
+        CALL MR_INTERP_XY_SS_O_V( NI , NJ , SS_AT_V , SV_AT_O )
+      END IF
 
       DO J = 0 , NJ
         DO I = 1 , NI
@@ -770,7 +855,7 @@
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,0:NJ) :: SS_AT_V
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: SS_AT_V
 
     INTEGER(IJID_KIND) :: I , J
 

@@ -67,13 +67,13 @@
     ERRMSG = ""
     READ( V_STRING , * , IOSTAT=ERROR ) NI , NJ , NK
     IF( ERROR == -1 ) THEN
-      ERRMSG = "Null string when getting numbers of "   &
+      ERRMSG = "No or no enough digits when getting numbers of "   &
       //"columns (NI), rows (NJ) and layers (NK)"
       RETURN
     ELSE IF( ERROR > 0 ) THEN
       ERROR = - ERROR
       ERRMSG = "Error in getting numbers of "   &
-      //"columns (NI), rows (NJ) and layers (NK) from string """//TRIM(ADJUSTL(V_STRING))
+      //"columns (NI), rows (NJ) and layers (NK)"
       RETURN
     END IF
 

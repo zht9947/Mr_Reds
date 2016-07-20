@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -61,18 +62,25 @@
   SUBROUTINE MR_UPDT_TBUV
 
     USE MR_MOD_FUNC_TBUV
+
+    USE MR_MOD_OPERATOR_SS
     USE MR_MOD_OPERATOR_UV
 
     IMPLICIT NONE
+    
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
 
-    INTEGER :: DIM
+    ALLOCATE( UVAM(1:NI1(FDRD_KIND),1:NJ) )
 
-    ALLOCATE( UVAM(1:NI,1:NJ) )
-
-      UVAM = SQRT( .MRUVSQR. ( JUV .MRUVTFM. UVA ) )
+      UVAM = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UVA ) )
 
       DO DIM = 1 , 2
-        TBUV(:,:,DIM) = MR_FUNC_TBUV_COMP( 9.1699E-3 , H , UVA(:,:,DIM) , UVAM )
+        DO J = 1 , NJ
+          DO I = 1 , NI
+            TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( 9.1699E-3 , H( I , J ) , UVA( I , J ,DIM) , UVAM( I , J ) )
+          END DO
+        END DO
       END DO
 
     DEALLOCATE( UVAM )

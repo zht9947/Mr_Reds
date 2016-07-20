@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -75,11 +76,17 @@
     
     REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV
     
-    REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: XUVDTM
+    REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: XUVDTM
     
-    ALLOCATE( XUVDTM , SOURCE = XUV(:,:,1,1) )
+    INTEGER(IJID_KIND) :: I , J
     
-    XUVDTM(:,:) = XUV(:,:,1,1) * XUV(:,:,2,2) - XUV(:,:,2,1) * XUV(:,:,1,2)
+    ALLOCATE( XUVDTM(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2)) )
+    
+    DO J = 1 , SIZE(XUV,DIM=2)
+      DO I = 1 , SIZE(XUV,DIM=1)
+        XUVDTM( I , J ) = XUV( I , J ,1,1) * XUV( I , J ,2,2) - XUV( I , J ,2,1) * XUV( I , J ,1,2)
+      END DO
+    END DO
     
   END FUNCTION MR_TENSOR_DETERMINANT
   
@@ -107,17 +114,23 @@
   
     IMPLICIT NONE
     
-    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:    ) :: MW
     REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV
     
     REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:) :: XUVIVS
     
-    ALLOCATE( XUVIVS , SOURCE = XUV )
+    INTEGER(IJID_KIND) :: I , J
     
-    XUVIVS(:,:,1,1) = XUV(:,:,2,2) / MW(:,:)
-    XUVIVS(:,:,2,1) =-XUV(:,:,2,1) / MW(:,:)
-    XUVIVS(:,:,1,2) =-XUV(:,:,1,2) / MW(:,:)
-    XUVIVS(:,:,2,2) = XUV(:,:,1,1) / MW(:,:)
+    ALLOCATE( XUVIVS(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2),1:2,1:2) )
+    
+    DO J = 1 , SIZE(XUV,DIM=2)
+      DO I = 1 , SIZE(XUV,DIM=1)
+        XUVIVS( I , J ,1,1) = XUV( I , J ,2,2) / MW( I , J )
+        XUVIVS( I , J ,2,1) =-XUV( I , J ,2,1) / MW( I , J )
+        XUVIVS( I , J ,1,2) =-XUV( I , J ,1,2) / MW( I , J )
+        XUVIVS( I , J ,2,2) = XUV( I , J ,1,1) / MW( I , J )
+      END DO
+    END DO
     
   END FUNCTION MR_TENSOR_INVERSE
   
@@ -149,12 +162,18 @@
     
     REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:) :: XUVTPS
     
-    ALLOCATE( XUVTPS , SOURCE = XUV )
+    INTEGER(IJID_KIND) :: I , J
     
-    XUVTPS(:,:,1,1) = XUV(:,:,1,1)
-    XUVTPS(:,:,2,1) = XUV(:,:,1,2)
-    XUVTPS(:,:,1,2) = XUV(:,:,2,1)
-    XUVTPS(:,:,2,2) = XUV(:,:,2,2)
+    ALLOCATE( XUVTPS(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2),1:2,1:2) )
+    
+    DO J = 1 , SIZE(XUV,DIM=2)
+      DO I = 1 , SIZE(XUV,DIM=1)
+        XUVTPS( I , J ,1,1) = XUV( I , J ,1,1)
+        XUVTPS( I , J ,2,1) = XUV( I , J ,1,2)
+        XUVTPS( I , J ,1,2) = XUV( I , J ,2,1)
+        XUVTPS( I , J ,2,2) = XUV( I , J ,2,2)
+      END DO
+    END DO
     
   END FUNCTION MR_TENSOR_TRANSPOSE
   
@@ -186,12 +205,18 @@
     
     REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:) :: XUVMAT
     
-    ALLOCATE( XUVMAT , SOURCE = XUV1 )
+    INTEGER(IJID_KIND) :: I , J
     
-    XUVMAT(:,:,1,1) = XUV1(:,:,1,1) * XUV2(:,:,1,1) + XUV1(:,:,1,2) * XUV2(:,:,2,1)
-    XUVMAT(:,:,2,1) = XUV1(:,:,2,1) * XUV2(:,:,1,1) + XUV1(:,:,2,2) * XUV2(:,:,2,1)
-    XUVMAT(:,:,1,2) = XUV1(:,:,1,1) * XUV2(:,:,1,2) + XUV1(:,:,1,2) * XUV2(:,:,2,2)
-    XUVMAT(:,:,2,2) = XUV1(:,:,2,1) * XUV2(:,:,1,2) + XUV1(:,:,2,2) * XUV2(:,:,2,2)
+    ALLOCATE( XUVMAT(1:SIZE(XUV1,DIM=1),1:SIZE(XUV1,DIM=2),1:2,1:2) )
+    
+    DO J = 1 , SIZE(XUV1,DIM=2)
+      DO I = 1 , SIZE(XUV1,DIM=1)
+        XUVMAT( I , J ,1,1) = XUV1( I , J ,1,1) * XUV2( I , J ,1,1) + XUV1( I , J ,1,2) * XUV2( I , J ,2,1)
+        XUVMAT( I , J ,2,1) = XUV1( I , J ,2,1) * XUV2( I , J ,1,1) + XUV1( I , J ,2,2) * XUV2( I , J ,2,1)
+        XUVMAT( I , J ,1,2) = XUV1( I , J ,1,1) * XUV2( I , J ,1,2) + XUV1( I , J ,1,2) * XUV2( I , J ,2,2)
+        XUVMAT( I , J ,2,2) = XUV1( I , J ,2,1) * XUV2( I , J ,1,2) + XUV1( I , J ,2,2) * XUV2( I , J ,2,2)
+      END DO
+    END DO
     
   END FUNCTION MR_TENSOR_MATRIX_MULTIPLY
   

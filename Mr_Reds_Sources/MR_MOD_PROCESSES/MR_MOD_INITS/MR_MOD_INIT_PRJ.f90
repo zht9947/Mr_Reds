@@ -89,14 +89,19 @@
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
     
-    CHARACTER( 2**10 )               :: REC , RECBAK
-
+    CHARACTER( 2**10 )               :: REC
+    
+    INTEGER                          :: REC_ID
+    CHARACTER( 2**03 )               :: REC_ID_CHAR
+    
     CHARACTER( 2**05 )               :: LABEL
     CHARACTER( 2**08 )               :: ALIAS
 
     INTEGER(KKID_KIND)               :: K
 
     ERRMSG = ""
+
+    REC_ID = 0
 
     CALL MR_OPEN_FILE_PRJ( FILE_PRJ_NAME , FILE_PRJ_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -106,8 +111,9 @@
     
     DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
       CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+      REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
       IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "   &
+        ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
         //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
         RETURN
@@ -115,11 +121,9 @@
         CYCLE
       END IF
 
-      RECBAK = REC
-
       CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+        ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
         //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
         RETURN
@@ -129,8 +133,9 @@
       CASE( "PRJMETADATA" )
         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
           CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+          REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
           IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" "   &
+            ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -138,11 +143,9 @@
             CYCLE
           END IF
 
-          RECBAK = REC
-
           CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+            ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -151,11 +154,12 @@
           SELECT CASE( TRIM(LABEL) )
           CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
             BACKSPACE( FILE_PRJ_ID )
+            REC_ID = REC_ID - 1
             EXIT
           CASE( "TITLE" )
             CALL MR_ACQUIRE_PRJ_METADATA( REC , PRJ_TITLE , ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+              ERRMSG = TRIM(ERRMSG)//" from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Project Title from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -163,7 +167,7 @@
           CASE( "ABSTRACT" )
             CALL MR_ACQUIRE_PRJ_METADATA( REC , PRJ_ABSTRACT , ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+              ERRMSG = TRIM(ERRMSG)//" from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Project Abstract from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -175,7 +179,7 @@
       CASE( "IJK" )
         CALL MR_GET_NI_NJ_NK( REC , NI , NJ , NK , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "   &
+          ERRMSG = TRIM(ERRMSG)//" from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
           //"when initializing Grid Ranks from file "//TRIM(FILE_PRJ_NAME)
           CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
           RETURN
@@ -194,7 +198,8 @@
       CASE( "DKS" )
         CALL MR_READ_PAR( REC , D0 , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "   &
+          ERRMSG = TRIM(ERRMSG)//" ""Grain size"" "   &
+          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
           //"when initializing Grain Size from file "//TRIM(FILE_PRJ_NAME)
           CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
           RETURN
@@ -208,7 +213,7 @@
       CASE( "TAB" )
         CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+          ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
           //"when initializing Project Groups from file "//TRIM(FILE_PRJ_NAME)
           CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
           RETURN
@@ -218,8 +223,9 @@
         CASE( "Timing" )
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
             CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+            REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -227,11 +233,9 @@
               CYCLE
             END IF
 
-            RECBAK = REC
-
             CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -240,11 +244,12 @@
             SELECT CASE( TRIM(LABEL) )
             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
               BACKSPACE( FILE_PRJ_ID )
+              REC_ID = REC_ID - 1
               EXIT
             CASE( "VAR" )
               CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+                ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                 //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
@@ -255,7 +260,7 @@
                 CALL MR_READ_T( REC , DT , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Computational time interval"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -264,7 +269,7 @@
                 CALL MR_READ_T( REC , T_START , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Starting time"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -273,7 +278,7 @@
                 CALL MR_READ_ITS( REC , NTSS , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Total number of time steps for computing"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -282,7 +287,7 @@
                 CALL MR_READ_ITS( REC , ITS_OUTPUT , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Inteval of number of time steps for outputting"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -291,7 +296,7 @@
                 CALL MR_READ_TIME_FACTOR( REC , PHI , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Time relaxation factor"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -305,8 +310,9 @@
         CASE( "Flow Plane Slope" )
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
             CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+            REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -314,11 +320,9 @@
               CYCLE
             END IF
 
-            RECBAK = REC
-
             CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -327,11 +331,12 @@
             SELECT CASE( TRIM(LABEL) )
             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
               BACKSPACE( FILE_PRJ_ID )
+              REC_ID = REC_ID - 1
               EXIT
             CASE( "VAR" )
               CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+                ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                 //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
@@ -342,7 +347,7 @@
                 CALL MR_READ_SLOPE( REC , SLOPE , ERROR , ERRMSG )
                 IF( ERROR < 0 ) THEN
                   ERRMSG = TRIM(ERRMSG)//" ""Flow plane slope"" "   &
-                  //"from record """//TRIM(RECBAK)//""" "   &
+                  //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -355,9 +360,10 @@
 
         CASE( "Constants and Reference Parameters" )
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
-            CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+            CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG ) 
+            REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -365,11 +371,9 @@
               CYCLE
             END IF
 
-            RECBAK = REC
-
             CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+              ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -378,11 +382,12 @@
             SELECT CASE( TRIM(LABEL) )
             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
               BACKSPACE( FILE_PRJ_ID )
+              REC_ID = REC_ID - 1
               EXIT
             CASE( "TAC" )
               CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
+                ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                 //"when initializing Constants and Reference Parameters Groups from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
@@ -392,21 +397,22 @@
               CASE( "Water Physical Properties" )
                 DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
                   CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+                  REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" "   &
-                    //"when initializing Constants and Reference Parameters\Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE IF( REC == "" ) THEN
                     CYCLE
                   END IF
 
-                  RECBAK = REC
-
                   CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                    //"when initializing Constants and Reference Parameters\Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   END IF
@@ -414,12 +420,14 @@
                   SELECT CASE( TRIM(LABEL) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
                     BACKSPACE( FILE_PRJ_ID )
+                    REC_ID = REC_ID - 1
                     EXIT
                   CASE( "VAR" )
                     CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
                     IF( ERROR < 0 ) THEN
-                      ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                      //"when initializing Constants and Reference Parameters\Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                      ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      //"when initializing Constants and Reference Parameters\"   &
+                      //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     END IF
@@ -429,8 +437,9 @@
                       CALL MR_READ_PAR( REC , R0 , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Water density"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -438,8 +447,9 @@
                       CALL MR_READ_PAR( REC , V0 , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Water kinematic viscosity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -452,21 +462,22 @@
               CASE( "Sediment Physical Properties" )
                 DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
                   CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+                  REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" "   &
-                    //"when initializing Constants and Reference Parameters\Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE IF( REC == "" ) THEN
                     CYCLE
                   END IF
 
-                  RECBAK = REC
-
                   CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                    //"when initializing Constants and Reference Parameters\Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   END IF
@@ -474,12 +485,14 @@
                   SELECT CASE( TRIM(LABEL) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
                     BACKSPACE( FILE_PRJ_ID )
+                    REC_ID = REC_ID - 1
                     EXIT
                   CASE( "VAR" )
                     CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
                     IF( ERROR < 0 ) THEN
-                      ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                      //"when initializing Constants and Reference Parameters\Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                      ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      //"when initializing Constants and Reference Parameters\"   &
+                      //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     END IF
@@ -489,8 +502,9 @@
                       CALL MR_READ_PAR( REC , SS , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Sediment specific gravity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -498,8 +512,9 @@
                       CALL MR_READ_PAR( REC , PS , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Sediment porosity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -512,21 +527,22 @@
               CASE( "Physical Constants" )
                 DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
                   CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+                  REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" "   &
-                    //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE IF( REC == "" ) THEN
                     CYCLE
                   END IF
 
-                  RECBAK = REC
-
                   CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                    //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   END IF
@@ -534,12 +550,14 @@
                   SELECT CASE( TRIM(LABEL) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
                     BACKSPACE( FILE_PRJ_ID )
+                    REC_ID = REC_ID - 1
                     EXIT
                   CASE( "VAR" )
                     CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
                     IF( ERROR < 0 ) THEN
-                      ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                      //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                      ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      //"when initializing Constants and Reference Parameters\"   &
+                      //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     END IF
@@ -549,8 +567,9 @@
                       CALL MR_READ_PAR( REC , KAR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Von Karman constant"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -558,8 +577,9 @@
                       CALL MR_READ_PAR( REC , COR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Coriolis frequency"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -567,8 +587,9 @@
                       CALL MR_READ_PAR( REC , GR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Gravitational acceleration"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -581,21 +602,22 @@
               CASE( "Reference Parameters" )
                 DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
                   CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
+                  REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" "   &
-                    //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE IF( REC == "" ) THEN
                     CYCLE
                   END IF
 
-                  RECBAK = REC
-
                   CALL MR_AWAYOUT_LABEL( REC , LABEL , ERROR , ERRMSG )
                   IF( ERROR < 0 ) THEN
-                    ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                    //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                    ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing Constants and Reference Parameters\"   &
+                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   END IF
@@ -603,12 +625,14 @@
                   SELECT CASE( TRIM(LABEL) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
                     BACKSPACE( FILE_PRJ_ID )
+                    REC_ID = REC_ID - 1
                     EXIT
                   CASE( "VAR" )
                     CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
                     IF( ERROR < 0 ) THEN
-                      ERRMSG = TRIM(ERRMSG)//" """//TRIM(RECBAK)//""" "   &
-                      //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                      ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      //"when initializing Constants and Reference Parameters\"   &
+                      //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     END IF
@@ -618,8 +642,9 @@
                       CALL MR_READ_PAR( REC , XYR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference horizontal dimension"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -627,8 +652,9 @@
                       CALL MR_READ_PAR( REC , ZR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference vertical dimension"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -636,8 +662,9 @@
                       CALL MR_READ_PAR( REC , UVR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference horizontal velocity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -645,8 +672,9 @@
                       CALL MR_READ_PAR( REC , VXYR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference horizontal eddy kinematic viscosity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -654,8 +682,9 @@
                       CALL MR_READ_PAR( REC , VZR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference vertical eddy kinematic viscosity"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF
@@ -663,8 +692,9 @@
                       CALL MR_READ_PAR( REC , RR , ERROR , ERRMSG )
                       IF( ERROR < 0 ) THEN
                         ERRMSG = TRIM(ERRMSG)//" ""Reference water-sediment mixture density"" "   &
-                        //"from record """//TRIM(RECBAK)//""" "   &
-                        //"when initializing Constants and Reference Parameters\Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                        //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                        //"when initializing Constants and Reference Parameters\"   &
+                        //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                         CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                         RETURN
                       END IF

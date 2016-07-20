@@ -54,7 +54,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  ELEMENTAL FUNCTION MR_FUNC_TBUV_COMP( KS , H , UVA_COMP , UVA_MAG ) RESULT( TBUV_COMP )
+  FUNCTION MR_FUNC_TBUV_COMP( KS , H , UVA_COMP , UVA_MAG ) RESULT( TBUV_COMP )
   
     IMPLICIT NONE
     
@@ -88,7 +88,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  ELEMENTAL FUNCTION MR_FUNC_CHEZY( KS , H ) RESULT( CHEZY )
+  FUNCTION MR_FUNC_CHEZY( KS , H ) RESULT( CHEZY )
   
     IMPLICIT NONE
     

@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -60,11 +61,21 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    ALLOCATE( JUV(1:NI,1:NJ,1:2,1:2) , JUU(0:NI,1:NJ,1:2,1:2) , JVV(1:NI,0:NJ,1:2,1:2) , JOO(0:NI,0:NJ,1:2,1:2) )
-    ALLOCATE( IUV(1:NI,1:NJ,1:2,1:2) , IUU(0:NI,1:NJ,1:2,1:2) , IVV(1:NI,0:NJ,1:2,1:2) , IOO(0:NI,0:NJ,1:2,1:2) )
-    ALLOCATE( FUV(1:NI,1:NJ,1:2,1:2) , FUU(0:NI,1:NJ,1:2,1:2) , FVV(1:NI,0:NJ,1:2,1:2) )
+    ALLOCATE( JUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
+    ALLOCATE( JUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , JVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
+    ALLOCATE( JOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
 
-    ALLOCATE( MW(1:NI,1:NJ) , MU(0:NI,1:NJ) , MV(1:NI,0:NJ) )
+    ALLOCATE( IUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
+    ALLOCATE( IUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , IVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
+    ALLOCATE( IOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+
+    ALLOCATE( FUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
+    ALLOCATE( FUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , FVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
+    ALLOCATE( FOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    
+    ALLOCATE(  MW(1:NI1(GJRD_KIND),1:NJ)         )
+    ALLOCATE(  MU(0:NI0(GJRD_KIND),1:NJ)         ,  MV(1:NI1(GJRD_KIND),0:NJ)         )
+    ALLOCATE(  MO(0:NI0(GJRD_KIND),0:NJ)         )
 
   END SUBROUTINE MR_MALLOC_CURVED_GEOS
 

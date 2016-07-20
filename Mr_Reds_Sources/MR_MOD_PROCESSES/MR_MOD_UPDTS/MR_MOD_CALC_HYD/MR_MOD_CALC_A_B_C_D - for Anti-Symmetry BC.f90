@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -65,18 +66,20 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI  ,1:NJ,1:2) :: ALFA
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ,1:2) :: ALFA
 
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(2:NI  ,1:NJ) :: A1
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI  ,1:NJ) :: B1
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI-1,1:NJ) :: C1
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(2:NI2(CARD_KIND)  ,1:NJ      ) :: A1
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ      ) :: B1
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI2(CARD_KIND)-1,1:NJ      ) :: C1
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(IJID_KIND) :: P , Q
 
     DO J = 1 , NJ
       DO I = 1 , NI
-        B1( I , J ) = MW( I , J )
+        !BLOCK
+          B1( I , J ) = MW( I , J )
+        !END BLOCK
       END DO
     END DO
 
@@ -142,17 +145,19 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI  ,1:NJ) :: ZS
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI  ,1:NJ,1:2) :: ALFA , BETA
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND)  ,1:NJ      ) :: ZS
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ,1:2) :: ALFA , BETA
 
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI  ,1:NJ) :: D1
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ      ) :: D1
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(IJID_KIND) :: P , Q
 
     DO J = 1 , NJ
       DO I = 1 , NI
-        D1( I , J ) = MW( I , J ) * ZS( I , J )
+        !BLOCK
+          D1( I , J ) = MW( I , J ) * ZS( I , J )
+        !END BLOCK
       END DO
     END DO
 
@@ -236,17 +241,19 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ  ,1:2) :: ALFA
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ,1:2) :: ALFA
 
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI,2:NJ  ) :: A2
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ  ) :: B2
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ-1) :: C2
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,2:NJ      ) :: A2
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ      ) :: B2
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ-1    ) :: C2
 
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
       DO I = 1 , NI
-        B2( I , J ) = MW( I , J )
+        !BLOCK
+          B2( I , J ) = MW( I , J )
+        !END BLOCK
       END DO
     END DO
 
@@ -300,16 +307,18 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ  ) :: ZT
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ  ,1:2) :: BETA
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND)  ,1:NJ      ) :: ZT
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ,1:2) :: BETA
 
-    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ  ) :: D2
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ      ) :: D2
 
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
       DO I = 1 , NI
-        D2( I , J ) = MW( I , J ) * ZT( I , J )
+        !BLOCK
+          D2( I , J ) = MW( I , J ) * ZT( I , J )
+        !END BLOCK
       END DO
     END DO
 

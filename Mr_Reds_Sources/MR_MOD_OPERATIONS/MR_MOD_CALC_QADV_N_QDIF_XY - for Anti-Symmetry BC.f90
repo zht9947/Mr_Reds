@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -66,14 +67,14 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ,1:2) :: VV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: UV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) :: VV
 
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , EKXY
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ    ) :: U , VXYU
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,1:NJ,1:2) :: QADV_XY_UV_U , QDIF_XY_UV_U
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ    ) :: U , VXYU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) :: QADV_XY_UV_U , QDIF_XY_UV_U
 
-    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(          1:2) :: FACTOR = (/+1.0,-1.0/)
+    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(                      1:2) :: FACTOR = (/+1.0,-1.0/)
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -137,10 +138,10 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -250,10 +251,10 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -363,8 +364,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
   ! AT IMPERMEABLE INTERNAL INTERFACE
     IF( ACTIVITY(I+1, J ) == NOACTIVE .OR. ACTIVITY( I , J ) == NOACTIVE ) THEN
@@ -472,10 +473,10 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -585,10 +586,10 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -699,12 +700,12 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ) :: SS
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ) :: SV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: SV
 
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , SCXY
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ) :: U , DXYU
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,1:NJ) :: QADV_XY_SS_U , QDIF_XY_SS_U
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: U , DXYU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: QADV_XY_SS_U , QDIF_XY_SS_U
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -762,10 +763,10 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -874,10 +875,10 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -986,8 +987,8 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
   ! AT IMPERMEABLE INTERNAL INTERFACE
     IF( ACTIVITY(I+1, J ) == NOACTIVE .OR. ACTIVITY( I , J ) == NOACTIVE ) THEN
@@ -1094,10 +1095,10 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -1206,10 +1207,10 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRU , DRU
-    REAL   (CARD_KIND) :: DDU , D2U , DCU
+    REAL   (CARD_KIND)               :: CRU , DRU
+    REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
-    INTEGER(IJID_KIND) :: P , Q
+    INTEGER(IJID_KIND)               :: P , Q
 
     P = MOD(NI+I+NI/2,2*NI)-NI/2 ; Q = NJ-J+1
 
@@ -1320,12 +1321,12 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2) :: UV
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ,1:2) :: UU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: UV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) :: UU
 
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , EKXY
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ    ) :: V , VXYV
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,0:NJ,1:2) :: QADV_XY_UV_V , QDIF_XY_UV_V
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ    ) :: V , VXYV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) :: QADV_XY_UV_V , QDIF_XY_UV_V
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -1427,8 +1428,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE INTERNAL INTERFACE
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN
@@ -1530,8 +1531,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE INTERNAL INTERFACE
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN
@@ -1639,8 +1640,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER            , INTENT(IN ) :: DIM
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE INTERNAL INTERFACE
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN
@@ -1775,12 +1776,12 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ) :: SS
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ) :: SU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: SU
 
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , SCXY
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ) :: V , DXYV
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,0:NJ) :: QADV_XY_SS_V , QDIF_XY_SS_V
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: V , DXYV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: QADV_XY_SS_V , QDIF_XY_SS_V
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -1875,8 +1876,8 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE BOUNDARY
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN
@@ -1977,8 +1978,8 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE BOUNDARY
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN
@@ -2085,8 +2086,8 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
-    REAL   (CARD_KIND) :: CRV , DRV
-    REAL   (CARD_KIND) :: DDV , D2V , DCV
+    REAL   (CARD_KIND)               :: CRV , DRV
+    REAL   (CARD_KIND)               :: DDV , D2V , DCV
 
   ! AT IMPERMEABLE BOUNDARY
     IF( ACTIVITY( I , J ) == NOACTIVE .OR. ACTIVITY( I ,J+1) == NOACTIVE ) THEN

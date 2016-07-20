@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -70,7 +71,6 @@
 
     USE MR_MOD_WRITE_FIELD_VARS_N_ACTIVITY
 
-    USE MR_MOD_FUNC_H
     USE MR_MOD_INTERP_XY
 
     IMPLICIT NONE
@@ -110,12 +110,12 @@
     END IF
 
   ! WRITE ZB, ZS AND H
-    ALLOCATE( ZBU(0:NI,1:NJ) , ZBV(1:NI,0:NJ) )
+    ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) , ZBV(1:NI1(FDRD_KIND),0:NJ) )
     
     CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
     CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
     
-    ALLOCATE( ZBOO(0:NI,0:NJ) )
+    ALLOCATE( ZBOO(0:NI0(FDRD_KIND),0:NJ) )
       
     CALL MR_CALC_ZBOO( NI , NJ , ZBU , ZBV , ZBOO )
       
@@ -137,7 +137,7 @@
     
     DEALLOCATE( ZBU , ZBV )
     
-    ALLOCATE( ZSOO(0:NI,0:NJ) )
+    ALLOCATE( ZSOO(0:NI0(FDRD_KIND),0:NJ) )
     
     CALL MR_CALC_ZSOO( NI , NJ , ZSU , ZSV , ZSOO )
       
@@ -157,9 +157,9 @@
       RETURN
     END IF
 
-    ALLOCATE( HOO(0:NI,0:NJ) )
-        
-    HOO = MR_FUNC_H( ZSOO , ZBOO )
+    ALLOCATE( HOO(0:NI0(FDRD_KIND),0:NJ) )
+    
+    CALL MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
     
     DEALLOCATE( ZSOO , ZBOO )
 
@@ -333,18 +333,24 @@
     
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ) :: ZSU
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ) :: ZSV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: ZSU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: ZSV
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,0:NJ) :: ZSOO
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO
     
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,0:NJ) :: ZSUO
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,0:NJ) :: ZSVO
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSUO
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSVO
+    
+    INTEGER(IJID_KIND) :: I , J
   
     CALL MR_INTERP_XY_ZS_O_U( NI , NJ , ZSU , ZSUO )
     CALL MR_INTERP_XY_ZS_O_V( NI , NJ , ZSV , ZSVO )
     
-    ZSOO = ( ZSUO + ZSVO ) / 2.0
+    DO J = 0 , NJ
+      DO I = 0 , NI
+        ZSOO( I , J ) = ( ZSUO( I , J )  + ZSVO( I , J )  ) / 2.0
+      END DO
+    END DO
   
   END SUBROUTINE MR_CALC_ZSOO
   
@@ -376,19 +382,68 @@
     
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI,1:NJ) :: ZBU
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,0:NJ) :: ZBV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: ZBU
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: ZBV
     
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,0:NJ) :: ZBOO
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBOO
     
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,0:NJ) :: ZBUO
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,0:NJ) :: ZBVO
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBUO
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBVO
     
+    INTEGER(IJID_KIND) :: I , J
+  
     CALL MR_INTERP_XY_SS_O_U( NI , NJ , ZBU , ZBUO )
     CALL MR_INTERP_XY_SS_O_V( NI , NJ , ZBV , ZBVO )
     
-    ZBOO = ( ZBUO + ZBVO ) / 2.0
-  
+    DO J = 0 , NJ
+      DO I = 0 , NI
+        ZBOO( I , J ) = ( ZBUO( I , J )  + ZBVO( I , J )  ) / 2.0
+      END DO
+    END DO
+    
   END SUBROUTINE MR_CALC_ZBOO
+  
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
+  
+    USE MR_MOD_FUNC_H
+  
+    IMPLICIT NONE
+    
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBOO
+    
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: HOO
+    
+    INTEGER(IJID_KIND) :: I , J
+    
+    DO J = 0 , NJ
+      DO I = 0 , NI
+        HOO( I , J ) = MR_FUNC_H( ZSOO( I , J ) , ZBOO( I , J ) )
+      END DO
+    END DO
+    
+  END SUBROUTINE MR_CALC_HOO
 
   END MODULE MR_MOD_OUTPUT

@@ -54,7 +54,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  ELEMENTAL FUNCTION MR_FUNC_H( ZS , ZB ) RESULT( H )
+  FUNCTION MR_FUNC_H( ZS , ZB ) RESULT( H )
   
     IMPLICIT NONE
     

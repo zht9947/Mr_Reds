@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -66,13 +67,13 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2,1:NK) :: UV
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK) :: UV
     
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , EKZ
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,    0:NK) :: W , VZW
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2,0:NK) :: QADV_Z_UV_W , QDIF_Z_UV_W
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    0:NK) :: W , VZW
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: QADV_Z_UV_W , QDIF_Z_UV_W
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:2     ) :: TUV0 , TUVN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: TUV0 , TUVN
     
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -200,8 +201,8 @@
     INTEGER            , INTENT(IN ) :: DIM
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
         
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
           
@@ -270,8 +271,8 @@
     INTEGER            , INTENT(IN ) :: DIM
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
     
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
           
@@ -340,8 +341,8 @@
     INTEGER            , INTENT(IN ) :: DIM
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
         
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
           
@@ -451,13 +452,13 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,1:NK) :: SS
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: SS
     
     REAL   (PARD_KIND) , INTENT(IN ) :: RB , SCZ
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ,0:NK) :: W , DZW
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,0:NK) :: QADV_Z_SS_W , QDIF_Z_SS_W
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W , DZW
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: QADV_Z_SS_W , QDIF_Z_SS_W
     
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ     ) :: TSS0 , TSSN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: TSS0 , TSSN
     
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -572,8 +573,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
       
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
         
@@ -641,8 +642,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
     
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
         
@@ -710,8 +711,8 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
-    REAL   (CARD_KIND) :: CRW , DRW
-    REAL   (CARD_KIND) :: DDW , D2W
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
     
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
         

@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -58,24 +59,26 @@
     
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(2:NI  ,1:NJ) :: A
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI  ,1:NJ) :: B
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI-1,1:NJ) :: C
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI  ,1:NJ) :: D
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(2:NI2(CARD_KIND)  ,1:NJ  ) :: A
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: B
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI2(CARD_KIND)-1,1:NJ  ) :: C
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: D
     
-    REAL   (CARD_KIND) , DIMENSION(1:NI  ,1:NJ) :: X
-    REAL   (CARD_KIND) , DIMENSION(1:NI  ) :: Y
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: X
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)         ) :: Y
     
-    REAL   (CARD_KIND)                     :: W
-    REAL   (CARD_KIND) , DIMENSION(1:NI-1) :: V
+    REAL   (CARD_KIND)                                        :: W
+    REAL   (CARD_KIND) , DIMENSION(1:NI2(CARD_KIND)-1       ) :: V
     
     INTEGER(IJID_KIND) :: I , J
     
     DO J = 1 , NJ
     
     ! GAUSSIAN ELIMINATION
-      W = B( 1 , J )
-      Y( 1 ) = D( 1 , J ) / W
+      I = 1
+        W = B( I , J )
+        Y( I ) = D( I , J ) / W
+      !END I = 1
       DO I = 2 , NI
         V(I-1) = C(I-1, J ) / W
         W = B( I , J ) - A( I , J ) * V(I-1)
@@ -83,7 +86,9 @@
       END DO
       
     ! BACK SUBSTITUTION
-      X(NI , J ) = Y(NI )
+      I = NI
+        X( I , J ) = Y( I )
+      !END I = NI
       DO I = NI-1 , 1 , -1
         X( I , J ) = Y( I ) - V( I ) * X(I+1, J )
       END DO
@@ -118,32 +123,44 @@
     
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,2:NJ  ) :: A
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ  ) :: B
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ-1) :: C
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI,1:NJ  ) :: D
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,2:NJ  ) :: A
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: B
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ-1) :: C
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: D
     
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ  ) :: X
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ  ) :: Y
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: X
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: Y
     
-    REAL   (CARD_KIND) , DIMENSION(1:NI       ) :: W
-    REAL   (CARD_KIND) , DIMENSION(1:NI,1:NJ-1) :: V
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)         ) :: W
+    REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ-1) :: V
     
-    INTEGER(IJID_KIND) :: J
+    INTEGER(IJID_KIND) :: I , J
     
   ! GAUSSIAN ELIMINATION
-    W(:) = B(:, 1 )
-    Y(:, 1 ) = D(:, 1 ) / W(:)
+    J = 1
+      DO I = 1 , NI
+        W( I ) = B( I , J )
+        Y( I , J ) = D( I , J ) / W( I )
+      END DO
+    !END J = 1
     DO J = 2 , NJ
-      V(:,J-1) = C(:,J-1) / W(:)
-      W(:) = B(:, J ) - A(:, J ) * V(:,J-1)
-      Y(:, J ) = ( D(:, J ) - A(:, J ) * Y(:,J-1) ) / W(:)
+      DO I = 1 , NI
+        V( I ,J-1) = C( I ,J-1) / W( I )
+        W( I ) = B( I , J ) - A( I , J ) * V( I ,J-1)
+        Y( I , J ) = ( D( I , J ) - A( I , J ) * Y( I ,J-1) ) / W( I )
+      END DO
     END DO
     
   ! BACK SUBSTITUTION
-    X(:,NJ ) = Y(:,NJ )
+    J = NJ
+      DO I = 1 , NI
+        X( I , J ) = Y( I , J )
+      END DO
+    !END J = NJ
     DO J = NJ-1 , 1 , -1
-      X(:, J ) = Y(:, J ) - V(:, J ) * X(:,J+1)
+      DO I = 1 , NI
+        X( I , J ) = Y( I , J ) - V( I , J ) * X( I ,J+1)
+      END DO
     END DO
     
   END FUNCTION MR_TDMA2

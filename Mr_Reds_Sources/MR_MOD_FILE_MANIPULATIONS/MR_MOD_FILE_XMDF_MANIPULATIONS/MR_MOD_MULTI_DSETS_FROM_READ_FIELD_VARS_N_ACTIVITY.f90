@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -69,7 +70,7 @@
     INTEGER(EMID_KIND) , INTENT(IN ) :: NEM
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ) :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI1(ACID_KIND),1:NJ) :: ACTIVITY
     INTEGER            , DIMENSION(1:NEM) :: ACTIVITY_ARRAY
 
     INTEGER            , INTENT(OUT) :: ERROR
@@ -165,18 +166,18 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: UV_BASE
     REAL   (PARD_KIND) , INTENT(IN ) :: UV_REF
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2) , OPTIONAL :: UV
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,1:NJ    ) , OPTIONAL :: U
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,1:NJ,1:2) , OPTIONAL :: UU
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,0:NJ    ) , OPTIONAL :: V
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,0:NJ,1:2) , OPTIONAL :: VV
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,0:NJ,1:2) , OPTIONAL :: UVO
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) , OPTIONAL :: UV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ    ) , OPTIONAL :: U
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) , OPTIONAL :: UU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),0:NJ    ) , OPTIONAL :: V
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) , OPTIONAL :: VV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ,1:2) , OPTIONAL :: UVO
 
-    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ    ) , OPTIONAL :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI1(ACID_KIND),1:NJ    ) , OPTIONAL :: ACTIVITY
 
     REAL   (4)         , DIMENSION(1:2,1:NND) :: UV_ARRAY
 
-    INTEGER            :: DSET_UV_ID
+    INTEGER                          :: DSET_UV_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -315,12 +316,16 @@
       UU = IUU .MRUVTFM. UU
 
       IF( PRESENT( U ) ) THEN
-        U = UU( : , : ,1)
+        DO J = 1 , NJ
+          DO I = 0 , NI
+            U( I , J ) = UU( I , J ,1)
+          END DO
+        END DO
       END IF
 
     ELSE IF( PRESENT( U ) ) THEN
 
-      ALLOCATE( UT(0:NI,1:NJ,1:2) )
+      ALLOCATE( UT(0:NI0(FDRD_KIND),1:NJ,1:2) )
 
         DO DIM = 1 , 2
 
@@ -334,7 +339,11 @@
 
         UT = IUU .MRUVTFM. UT
 
-        U = UT( : , : ,1)
+        DO J = 1 , NJ
+          DO I = 0 , NI
+            U( I , J ) = UT( I , J ,1)
+          END DO
+        END DO
 
       DEALLOCATE( UT )
 
@@ -386,12 +395,16 @@
       VV = IVV .MRUVTFM. VV
 
       IF( PRESENT( V ) ) THEN
-        V = VV( : , : ,2)
+        DO J = 0 , NJ
+          DO I = 1 , NI
+            V( I , J ) = VV( I , J ,2)
+          END DO
+        END DO
       END IF
 
     ELSE IF( PRESENT( V ) ) THEN
 
-      ALLOCATE( VT(1:NI,0:NJ,1:2) )
+      ALLOCATE( VT(1:NI1(FDRD_KIND),0:NJ,1:2) )
 
         DO DIM = 1 , 2
 
@@ -405,7 +418,11 @@
 
         VT = IVV .MRUVTFM. VT
 
-        V = VT( : , : ,2)
+        DO J = 0 , NJ
+          DO I = 1 , NI
+            V( I , J ) = VT( I , J ,2)
+          END DO
+        END DO
 
       DEALLOCATE( VT )
 
@@ -499,16 +516,16 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: SS_BASE
     REAL   (PARD_KIND) , INTENT(IN ) :: SS_REF
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ) , OPTIONAL :: SS
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,1:NJ) , OPTIONAL :: SU
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,0:NJ) , OPTIONAL :: SV
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI,0:NJ) , OPTIONAL :: SO
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) , OPTIONAL :: SS
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) , OPTIONAL :: SU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) , OPTIONAL :: SV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) , OPTIONAL :: SO
 
-    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ) , OPTIONAL :: ACTIVITY
+    INTEGER(ACID_KIND) , INTENT(OUT) , DIMENSION(1:NI1(ACID_KIND),1:NJ) , OPTIONAL :: ACTIVITY
 
     REAL   (4)         , DIMENSION(1:NND) :: SS_ARRAY
 
-    INTEGER            :: DSET_SS_ID
+    INTEGER                          :: DSET_SS_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG

@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -79,7 +80,9 @@
 
     INTEGER            :: DIM
 
-    ALLOCATE( XYUV(1:NI,1:NJ,1:2) , XYUU(0:NI,1:NJ,1:2) , XYVV(1:NI,0:NJ,1:2) , XYOO(0:NI,0:NJ,1:2) )
+    ALLOCATE( XYUV(1:NI1(XYRD_KIND),1:NJ,1:2) )
+    ALLOCATE( XYUU(0:NI0(XYRD_KIND),1:NJ,1:2) , XYVV(1:NI1(XYRD_KIND),0:NJ,1:2) )
+    ALLOCATE( XYOO(0:NI0(XYRD_KIND),0:NJ,1:2) )
 
     ERRMSG = ""
     CALL MR_INIT_COORS( TRIM(FILE_XMDF_NAME) , ERROR , ERRMSG )
@@ -104,7 +107,7 @@
       JUV = JUV / XYR
       IF( ALLOCATED(GUV) ) GUV = ( .MRXUVTPS. JUV ) .MRXUVMAT. JUV
       IF( ALLOCATED(MW) ) THEN
-        MW  = .MRXUVDTM. JUV
+        MW = .MRXUVDTM. JUV
         IF( ALLOCATED(IUV) ) THEN
           IUV = MW .MRXUVIVS. JUV
           IF( ALLOCATED(FUV) ) THEN
@@ -158,7 +161,7 @@
       JUU = JUU / XYR
       IF( ALLOCATED(GUU) ) GUU = ( .MRXUVTPS. JUU ) .MRXUVMAT. JUU
       IF( ALLOCATED(MU) ) THEN
-        MU  = .MRXUVDTM. JUU
+        MU = .MRXUVDTM. JUU
         IF( ALLOCATED(IUU) ) THEN
           IUU = MU .MRXUVIVS. JUU
           IF( ALLOCATED(FUU) ) THEN
@@ -194,7 +197,7 @@
       JVV = JVV / XYR
       IF( ALLOCATED(GVV) ) GVV = ( .MRXUVTPS. JVV ) .MRXUVMAT. JVV
       IF( ALLOCATED(MV) ) THEN
-        MV  = .MRXUVDTM. JVV
+        MV = .MRXUVDTM. JVV
         IF( ALLOCATED(IVV) ) THEN
           IVV = MV .MRXUVIVS. JVV
           IF( ALLOCATED(FVV) ) THEN
@@ -286,7 +289,7 @@
       JOO = JOO / XYR
       IF( ALLOCATED(GOO) ) GOO = ( .MRXUVTPS. JOO ) .MRXUVMAT. JOO
       IF( ALLOCATED(MO) ) THEN
-        MO  = .MRXUVDTM. JOO
+        MO = .MRXUVDTM. JOO
         IF( ALLOCATED(IOO) ) THEN
           IOO = MO .MRXUVIVS. JOO
           IF( ALLOCATED(FOO) ) THEN

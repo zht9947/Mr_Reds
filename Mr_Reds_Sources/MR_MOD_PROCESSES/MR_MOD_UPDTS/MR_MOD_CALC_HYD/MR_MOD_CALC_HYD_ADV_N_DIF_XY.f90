@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -75,16 +76,16 @@
 
     INTEGER(KKID_KIND) , INTENT(IN ) :: K
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI,1:NJ,1:2) :: HYD_ADV_XY , HYD_DIF_XY
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: HYD_ADV_XY , HYD_DIF_XY
 
-    REAL   (FDRD_KIND) , DIMENSION(0:NI,1:NJ,1:2) :: HYD_QADV_XY_U , HYD_QDIF_XY_U
-    REAL   (FDRD_KIND) , DIMENSION(1:NI,0:NJ,1:2) :: HYD_QADV_XY_V , HYD_QDIF_XY_V
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),1:NJ,1:2) :: HYD_QADV_XY_U , HYD_QDIF_XY_U
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) :: HYD_QADV_XY_V , HYD_QDIF_XY_V
 
-    ALLOCATE( UVT(1:NI,1:NJ,1:2) )
-
+    ALLOCATE( UVT(1:NI1(FDRD_KIND),1:NJ,1:2) )
+    
       UVT = JUV .MRUVTFM. UV(:,:,1:2, K )
-
-      ALLOCATE( VVT(1:NI,0:NJ,1:2) )
+        
+      ALLOCATE( VVT(1:NI1(FDRD_KIND),0:NJ,1:2) )
         CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,1) )
         CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,2) )
 
@@ -95,7 +96,7 @@
 
       DEALLOCATE( VVT )
 
-      ALLOCATE( UUT(0:NI,1:NJ,1:2) )
+      ALLOCATE( UUT(0:NI0(FDRD_KIND),1:NJ,1:2) )
         CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,1) )
         CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,2) )
 
@@ -118,7 +119,6 @@
 
   ! CALCULATE DIFFUSION
     CALL MR_CALC_REDC_GRAD_XY_UV( NI , NJ , HYD_QDIF_XY_U , HYD_QDIF_XY_V , HYD_DIF_XY )
-  ! REVISE DIFFUSION BY THE DEPTH H
   ! CONTRAVARIANTLY TRANSFORM
     HYD_DIF_XY = IUV .MRUVTFM. ( HYD_DIF_XY )
 
