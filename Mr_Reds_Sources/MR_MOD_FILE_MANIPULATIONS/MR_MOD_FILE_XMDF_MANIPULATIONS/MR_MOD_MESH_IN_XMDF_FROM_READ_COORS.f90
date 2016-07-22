@@ -94,6 +94,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
           XYUV( I , J ,DIM) = XY_ARRAY(DIM, NDIDW( I , J ) )
         END DO
@@ -104,6 +105,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
           XYUU( I , J ,DIM) = XY_ARRAY(DIM, NDIDU( I , J ) )
         END DO
@@ -114,6 +116,7 @@
     DO DIM = 1 , 2
 
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
           XYVV( I , J ,DIM) = XY_ARRAY(DIM, NDIDV( I , J ) )
         END DO
@@ -124,6 +127,7 @@
     DO DIM = 1 , 2
 
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
           XYOO( I , J ,DIM) = XY_ARRAY(DIM, NDIDO( I , J ) )
         END DO

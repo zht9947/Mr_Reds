@@ -91,6 +91,7 @@
     ALLOCATE( SSMTP(1:SIZE(SS1,DIM=1),1:SIZE(SS1,DIM=2)) )
 
     DO J = 1 , SIZE(SS1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(SS1,DIM=1)
         SSMTP( I , J ) = SS1( I , J ) * SS2( I , J )
       END DO
@@ -132,6 +133,7 @@
     ALLOCATE( SSMTP(1:SIZE(SS1,DIM=1),1:SIZE(SS1,DIM=2)) )
 
     DO J = 1 , SIZE(SS1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , MIN( SIZE(SS1,DIM=1) , SIZE(SS2,DIM=1) )
         SSMTP( I , J ) = SS1( I , J ) * SS2( I , J )
       END DO
@@ -172,6 +174,7 @@
     ALLOCATE( SSDIV(1:SIZE(SS1,DIM=1),1:SIZE(SS1,DIM=2)) )
 
     DO J = 1 , SIZE(SS1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(SS1,DIM=1)
         SSDIV( I , J ) = SS1( I , J ) / SS2( I , J )
       END DO
@@ -213,6 +216,7 @@
     ALLOCATE( SSDIV(1:SIZE(SS1,DIM=1),1:SIZE(SS1,DIM=2)) )
 
     DO J = 1 , SIZE(SS1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , MIN( SIZE(SS1,DIM=1) , SIZE(SS2,DIM=1) )
         SSDIV( I , J ) = SS1( I , J ) / SS2( I , J )
       END DO
@@ -254,6 +258,7 @@
     ALLOCATE( SSSCL(1:SIZE(SS,DIM=1),1:SIZE(SS,DIM=2)) )
 
     DO J = 1 , SIZE(SS,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(SS,DIM=1) )
         SSSCL( I , J ) = MW( I , J ) * SS( I , J )
       END DO
@@ -294,6 +299,7 @@
     ALLOCATE( SSSQR(1:SIZE(SS,DIM=1),1:SIZE(SS,DIM=2)) )
 
     DO J = 1 , SIZE(SS,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(SS,DIM=1)
         SSSQR( I , J ) = SS( I , J ) * SS( I , J )
       END DO
@@ -334,6 +340,7 @@
     ALLOCATE( SSQRT(1:SIZE(SS,DIM=1),1:SIZE(SS,DIM=2)) )
 
     DO J = 1 , SIZE(SS,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(SS,DIM=1)
         SSQRT( I , J ) = SQRT( SS( I , J ) )
       END DO

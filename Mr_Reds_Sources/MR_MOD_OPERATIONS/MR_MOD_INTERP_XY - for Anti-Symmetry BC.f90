@@ -86,19 +86,23 @@
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ    ) :: U
     
     INTEGER(IJID_KIND) :: I , J
-    
+     
     DO J = 1 , NJ
     
       I = 0
-        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_I0_JJ
       !END I = 0
-        
+      
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_II_JJ
       END DO
       
       I = NI
-        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_RCPRAC_IN_JJ
       !END I = NI
       
     END DO
@@ -127,11 +131,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -167,11 +169,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .AND. ACTIVITY( I , J ) == BEACTIVE ) THEN
       U( I , J ) = 0.5 * ( ( ALFA(I+1, J ,1) + ALFA( I , J ,1) ) * ( ZS(I+1, J ) - ZS( I , J ) )   &
@@ -203,11 +203,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_RCPRAC_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -259,15 +257,19 @@
     DO J = 1 , NJ
     
       I = 0
-        CALL MR_INTERP_XY_UV_U_BY_LINEAR_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_LINEAR_I0_JJ
       !END I = 0
       
+     !DIR$ VECTOR ALIGNED 
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_U_BY_LINEAR_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_LINEAR_II_JJ
       END DO
       
       I = NI
-        CALL MR_INTERP_XY_UV_U_BY_LINEAR_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_BY_LINEAR_IN_JJ
       !END I = NI
       
     END DO
@@ -296,11 +298,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -334,11 +334,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .AND. ACTIVITY( I , J ) == BEACTIVE ) THEN
       U( I , J ) = 0.5 * ( UV(I+1, J ,1) + UV( I , J ,1) )
@@ -368,11 +366,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_BY_LINEAR_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -424,15 +420,19 @@
     DO J = 1 , NJ
     
       I = 0
-        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_I0_JJ
       !END I = 0
       
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_II_JJ
       END DO
       
       I = NI
-        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U_IN_JJ
       !END I = NI
       
     END DO
@@ -461,11 +461,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -502,11 +500,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       V_AT_U( I , J ) =   &
@@ -539,11 +535,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_U_TO_GET_V_AT_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -596,15 +590,19 @@
     DO J = 1 , NJ
     
       I = 0
-        CALL MR_INTERP_XY_SS_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_U_I0_JJ
       !END I = 0
       
+     !DIR$ VECTOR ALIGNED  
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_U_II_JJ
       END DO
       
       I = NI
-        CALL MR_INTERP_XY_SS_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_U_IN_JJ
       !END I = NI
       
     END DO
@@ -633,11 +631,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -674,11 +670,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       SU( I , J ) =   &
@@ -711,11 +705,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -776,15 +768,19 @@
     DO J = 1 , NJ
     
       I = 0
-        CALL MR_INTERP_XY_ZS_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_U_I0_JJ
       !END I = 0
       
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_U_II_JJ
       END DO
       
       I = NI
-        CALL MR_INTERP_XY_ZS_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_U_IN_JJ
       !END I = NI
       
     END DO
@@ -813,11 +809,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -854,11 +848,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       ZSU( I , J ) =   &
@@ -891,11 +883,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -947,37 +937,49 @@
     
     J = 0
       I = 0
-        CALL MR_INTERP_XY_UV_O_U_I0_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_I0_J0
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_O_U_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_II_J0
       END DO
       I = NI
-        CALL MR_INTERP_XY_UV_O_U_IN_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_IN_J0
       !END I = NI
     !END J = 0
 
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_UV_O_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_O_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_II_JJ
       END DO
       I = NI
-        CALL MR_INTERP_XY_UV_O_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_IN_JJ
       !END I = NI
     END DO
     
     J = NJ
       I = 0
-        CALL MR_INTERP_XY_UV_O_U_I0_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_I0_JN
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_O_U_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_II_JN
       END DO  
       I = NI
-        CALL MR_INTERP_XY_UV_O_U_IN_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_U_IN_JN
       !END I = NI
     !END J = NJ
     
@@ -1005,11 +1007,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1043,11 +1043,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .AND. ACTIVITY( I ,J+1) ) == BEACTIVE ) THEN
       UO( I , J ) = U( I ,J+1)
@@ -1077,11 +1075,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1115,11 +1111,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1158,11 +1152,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .AND. ACTIVITY( I ,J+1) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY(I+1, J ) .AND. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -1197,11 +1189,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1240,11 +1230,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_I0_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1278,11 +1266,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1, J ) .AND. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
       UO( I , J ) = U( I , J )
@@ -1312,11 +1298,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_U_IN_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1365,37 +1349,49 @@
     
     J = 0
       I = 0
-        CALL MR_INTERP_XY_SS_O_U_I0_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_I0_J0
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_U_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_II_J0
       END DO    
       I = NI
-        CALL MR_INTERP_XY_SS_O_U_IN_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_IN_J0
       !END I = NI
     !END J = 0
 
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_SS_O_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_II_JJ
       END DO      
       I = NI
-        CALL MR_INTERP_XY_SS_O_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_IN_JJ
       !END I = NI
     END DO
     
     J = NJ
       I = 0
-        CALL MR_INTERP_XY_SS_O_U_I0_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_I0_JN
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_U_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_II_JN
       END DO      
       I = NI
-        CALL MR_INTERP_XY_SS_O_U_IN_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_U_IN_JN
       !END I = NI
     !END J = NJ
     
@@ -1423,11 +1419,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1461,11 +1455,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY( I ,J+1) ) == BEACTIVE ) THEN
       SUO( I , J ) = SU( I ,J+1)
@@ -1495,11 +1487,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1533,11 +1523,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1576,11 +1564,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY( I ,J+1) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY(I+1, J ) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -1615,11 +1601,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1658,11 +1642,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_I0_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1696,11 +1678,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1, J ) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
       SUO( I , J ) = SU( I , J )
@@ -1730,11 +1710,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_U_IN_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1791,37 +1769,49 @@
     
     J = 0
       I = 0
-        CALL MR_INTERP_XY_ZS_O_U_I0_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_I0_J0
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_U_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_II_J0
       END DO    
       I = NI
-        CALL MR_INTERP_XY_ZS_O_U_IN_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_IN_J0
       !END I = NI
     !END J = 0
 
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_ZS_O_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_II_JJ
       END DO       
       I = NI
-        CALL MR_INTERP_XY_ZS_O_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_IN_JJ
       !END I = NI
     END DO
 
     J = NJ
       I = 0
-        CALL MR_INTERP_XY_ZS_O_U_I0_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_I0_JN
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_U_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_II_JN
       END DO      
       I = NI
-        CALL MR_INTERP_XY_ZS_O_U_IN_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_U_IN_JN
       !END I = NI
     !END J = NJ
 
@@ -1849,11 +1839,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1887,11 +1875,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY( I ,J+1) ) == BEACTIVE ) THEN
       ZSUO( I , J ) = ZSU( I ,J+1) - 0.5 * JUU( I ,J+1,1,2) * SRATIO
@@ -1921,11 +1907,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -1959,11 +1943,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -2002,11 +1984,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY( I ,J+1) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY(I+1, J ) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -2041,11 +2021,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -2084,11 +2062,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_I0_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -2122,11 +2098,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1, J ) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
       ZSUO( I , J ) = ZSU( I , J ) + 0.5 * JUU( I , J ,1,2) * SRATIO
@@ -2156,11 +2130,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_U_IN_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -2213,20 +2185,26 @@
     INTEGER(IJID_KIND) :: I , J
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_JJ
       END DO
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_RCPRAC_II_JN
       END DO
     !END J = NJ
     
@@ -2254,11 +2232,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     V( I , J ) = 0.0
     
@@ -2284,11 +2260,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
       
     IF( ACTIVITY( I ,J+1) == BEACTIVE .AND. ACTIVITY( I , J ) == BEACTIVE ) THEN
       V( I , J ) = 0.5 * ( ( ALFA( I ,J+1,2) + ALFA( I , J ,2) ) * ( ZS( I ,J+1) - ZS( I , J ) )   &
@@ -2320,11 +2294,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     V( I , J ) = 0.0
     
@@ -2364,20 +2336,26 @@
     INTEGER(IJID_KIND) :: I , J
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_JJ
       END DO
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_BY_LINEAR_II_JN
       END DO
     !END J = NJ
     
@@ -2405,11 +2383,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     V( I , J ) = 0.0
     
@@ -2435,11 +2411,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE .AND. ACTIVITY( I , J ) == BEACTIVE ) THEN
       V( I , J ) = 0.5 * ( UV( I ,J+1,2) + UV( I , J ,2) )
@@ -2469,11 +2443,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_BY_LINEAR_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     V( I , J ) = 0.0
     
@@ -2513,20 +2485,26 @@
     INTEGER(IJID_KIND) :: I , J
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JJ
       END DO
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JN
       END DO
     !END J = NJ
     
@@ -2554,11 +2532,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE ) THEN
       U_AT_V( I , J ) = UV( I ,J+1,1)
@@ -2588,11 +2564,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       U_AT_V( I , J ) =   &
@@ -2625,11 +2599,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_V_TO_GET_U_AT_V_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       U_AT_V( I , J ) = UV( I , J ,1)
@@ -2673,20 +2645,26 @@
     INTEGER(IJID_KIND) :: I , J
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_SS_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_V_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_SS_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_V_II_JJ
       END DO
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_SS_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_V_II_JN
       END DO
     !END J = NJ
     
@@ -2714,11 +2692,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_V_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE ) THEN
       SV( I , J ) = SS( I ,J+1)
@@ -2748,11 +2724,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_V_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       SV( I , J ) =   &
@@ -2785,11 +2759,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_V_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       SV( I , J ) = SS( I , J )
@@ -2841,20 +2813,26 @@
     SRATIO = XYR/ZR / ALPAR * SLOPE
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_ZS_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_V_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_ZS_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_V_II_JJ
       END DO
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_INTERP_XY_ZS_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_V_II_JN
       END DO
     !END J = NJ
     
@@ -2882,11 +2860,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_V_II_J0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE ) THEN
       ZSV( I , J ) = ZS( I ,J+1) - 0.5 * JUV( I ,J+1,1,2) * SRATIO
@@ -2916,11 +2892,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_V_II_JJ
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I ,J+1) == BEACTIVE .OR. ACTIVITY( I , J ) == BEACTIVE ) THEN
       ZSV( I , J ) =   &
@@ -2953,11 +2927,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_V_II_JN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       ZSV( I , J ) = ZS( I , J ) + 0.5 * JUV( I , J ,1,2) * SRATIO
@@ -3003,26 +2975,34 @@
     INTEGER(IJID_KIND) :: I , J
     
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
-        CALL MR_INTERP_XY_UV_O_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_V_II_J0
       END DO
     !END J = 0
     
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_UV_O_V_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_V_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_UV_O_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_V_II_JJ
       END DO
       I = NI
-        CALL MR_INTERP_XY_UV_O_V_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_V_IN_JJ
       !END I = NI
     END DO
     
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
-        CALL MR_INTERP_XY_UV_O_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_UV_O_V_II_JN
       END DO
     !END J = NJ
     
@@ -3050,11 +3030,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_V_II_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
   
     VO( I , J ) = 0.0
   
@@ -3080,11 +3058,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_V_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_V_I0_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3123,11 +3099,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_V_II_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .AND. ACTIVITY(I+1, J ) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY( I ,J+1) .AND. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -3162,11 +3136,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_V_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_V_IN_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3205,11 +3177,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_UV_O_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_UV_O_V_II_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     VO( I , J ) = 0.0
   
@@ -3250,37 +3220,49 @@
     
     J = 0
       I = 0
-        CALL MR_INTERP_XY_SS_O_V_I0_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_I0_J0
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_II_J0
       END DO
       I = NI
-        CALL MR_INTERP_XY_SS_O_V_IN_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_IN_J0
       !END I = NI
     !END J = NJ
     
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_SS_O_V_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_II_JJ
       END DO
       I = NI
-        CALL MR_INTERP_XY_SS_O_V_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_IN_JJ
       !END I = NI
     END DO
     
     J = NJ
       I = 0
-        CALL MR_INTERP_XY_SS_O_V_I0_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_I0_JN
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_SS_O_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_II_JN
       END DO
       I = NI
-        CALL MR_INTERP_XY_SS_O_V_IN_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_SS_O_V_IN_JN
       !END I = NI
     !END J = NJ
     
@@ -3308,11 +3290,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3350,11 +3330,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_II_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1,J+1) == BEACTIVE .OR.   &
     &   ACTIVITY( I ,J+1) == BEACTIVE ) THEN
@@ -3388,11 +3366,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3430,11 +3406,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3473,11 +3447,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_II_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY(I+1, J ) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY( I ,J+1) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -3512,11 +3484,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3555,11 +3525,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_I0_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3597,11 +3565,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_II_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .OR.   &
     &   ACTIVITY( I , J ) == BEACTIVE ) THEN
@@ -3635,11 +3601,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_SS_O_V_IN_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3700,37 +3664,49 @@
     
     J = 0
       I = 0
-        CALL MR_INTERP_XY_ZS_O_V_I0_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_I0_J0
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_II_J0
       END DO
       I = NI
-        CALL MR_INTERP_XY_ZS_O_V_IN_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_IN_J0
       !END I = NI
     !END J = 0
     
     DO J = 1 , NJ-1
       I = 0
-        CALL MR_INTERP_XY_ZS_O_V_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_I0_JJ
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_II_JJ
       END DO
       I = NI
-        CALL MR_INTERP_XY_ZS_O_V_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_IN_JJ
       !END I = NI
     END DO
     
     J = NJ
       I = 0
-        CALL MR_INTERP_XY_ZS_O_V_I0_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_I0_JN
       !END I = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
-        CALL MR_INTERP_XY_ZS_O_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_II_JN
       END DO
       I = NI
-        CALL MR_INTERP_XY_ZS_O_V_IN_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_INTERP_XY_ZS_O_V_IN_JN
       !END I = NI
     !END J = NJ
     
@@ -3758,11 +3734,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3800,11 +3774,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1,J+1) == BEACTIVE .OR.   &
     &   ACTIVITY( I ,J+1) == BEACTIVE ) THEN
@@ -3838,11 +3810,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_J0( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_J0
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3880,11 +3850,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -3923,11 +3891,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ( ACTIVITY(I+1,J+1) .OR. ACTIVITY(I+1, J ) ) == BEACTIVE .OR.   &
     &   ( ACTIVITY( I ,J+1) .OR. ACTIVITY( I , J ) ) == BEACTIVE ) THEN
@@ -3962,11 +3928,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_JJ( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_JJ
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -4005,11 +3969,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_I0_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     
@@ -4047,11 +4009,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_II_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     IF( ACTIVITY(I+1, J ) == BEACTIVE .OR.   &
     &   ACTIVITY( I , J ) == BEACTIVE ) THEN
@@ -4085,11 +4045,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_JN( I , J )
+  SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_JN
   
     IMPLICIT NONE
-  
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
     
     INTEGER(IJID_KIND) :: P , Q
     

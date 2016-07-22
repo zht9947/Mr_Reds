@@ -82,8 +82,10 @@
     K = 0
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K0( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K0
           END DO
         END DO
       END DO
@@ -92,8 +94,10 @@
     K = 1
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K1( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K1
           END DO
         END DO
       END DO
@@ -102,8 +106,10 @@
     DO K = 2 , NK-2
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KK( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KK
           END DO
         END DO
       END DO
@@ -112,8 +118,10 @@
     K = NK-1
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KM( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KM
           END DO
         END DO
       END DO
@@ -122,8 +130,10 @@
     K = NK
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KN( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KN
           END DO
         END DO
       END DO
@@ -153,14 +163,10 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K0( I , J ,DIM, K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
-    
+
     !BLOCK
       QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
     !END BLOCK
@@ -193,13 +199,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K1( I , J ,DIM, K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K1
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
@@ -263,13 +265,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KK( I , J ,DIM, K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KK
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
@@ -333,13 +331,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KM( I , J ,DIM, K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KM
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
@@ -403,13 +397,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KN( I , J ,DIM, K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     !BLOCK
       QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
@@ -465,40 +455,50 @@
     
     K = 0
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K0( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K0
         END DO
       END DO
     !END K = 0
     
     K = 1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K1( I , J , K )
+         !DIR$ FORCEINLINE   
+          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K1
         END DO
       END DO
     !END K = 1
     
     DO K = 2 , NK-2
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KK( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KK
         END DO
       END DO
     END DO
     
     K = NK-1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KM( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KM
         END DO
       END DO
     !END K = NK-1
 
     K = NK
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN
         END DO
       END DO
     !END K = NK
@@ -527,12 +527,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K0( I , J , K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     !BLOCK
       QADV_Z_SS_W( I , J , K ) = 0.0
@@ -566,12 +563,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K1( I , J , K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K1
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
@@ -635,13 +629,10 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KK( I , J , K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KK
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
-    
+  
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
     
@@ -704,12 +695,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KM( I , J , K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KM
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     REAL   (CARD_KIND)               :: CRW , DRW
     REAL   (CARD_KIND)               :: DDW , D2W
@@ -773,12 +761,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN( I , J , K )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     !BLOCK
       QADV_Z_SS_W( I , J , K ) = 0.0

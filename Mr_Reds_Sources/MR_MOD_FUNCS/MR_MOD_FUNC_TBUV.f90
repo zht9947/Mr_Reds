@@ -55,13 +55,14 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_TBUV_COMP( KS , H , UVA_COMP , UVA_MAG ) RESULT( TBUV_COMP )
-  
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM(KS) :: MR_FUNC_TBUV_COMP
     IMPLICIT NONE
     
     REAL(FDRD_KIND) , INTENT(IN ) :: KS , H , UVA_COMP , UVA_MAG
     
     REAL(FDRD_KIND) :: TBUV_COMP
     
+   !DIR$ INLINE
     TBUV_COMP = RBT * UVA_COMP * UVA_MAG / MR_FUNC_CHEZY( KS , H )**2
     
 !***********************************************************************************************************************************
@@ -89,7 +90,7 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_CHEZY( KS , H ) RESULT( CHEZY )
-  
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM(KS) :: MR_FUNC_CHEZY
     IMPLICIT NONE
     
     REAL(FDRD_KIND) , INTENT(IN ) :: KS , H

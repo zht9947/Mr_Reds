@@ -79,6 +79,7 @@
         W = B( I , J )
         Y( I ) = D( I , J ) / W
       !END I = 1
+     !DIR$ VECTOR ALIGNED
       DO I = 2 , NI
         V(I-1) = C(I-1, J ) / W
         W = B( I , J ) - A( I , J ) * V(I-1)
@@ -89,6 +90,7 @@
       I = NI
         X( I , J ) = Y( I )
       !END I = NI
+     !DIR$ VECTOR ALIGNED
       DO I = NI-1 , 1 , -1
         X( I , J ) = Y( I ) - V( I ) * X(I+1, J )
       END DO
@@ -138,12 +140,14 @@
     
   ! GAUSSIAN ELIMINATION
     J = 1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         W( I ) = B( I , J )
         Y( I , J ) = D( I , J ) / W( I )
       END DO
     !END J = 1
     DO J = 2 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         V( I ,J-1) = C( I ,J-1) / W( I )
         W( I ) = B( I , J ) - A( I , J ) * V( I ,J-1)
@@ -153,11 +157,13 @@
     
   ! BACK SUBSTITUTION
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         X( I , J ) = Y( I , J )
       END DO
     !END J = NJ
     DO J = NJ-1 , 1 , -1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         X( I , J ) = Y( I , J ) - V( I , J ) * X( I ,J+1)
       END DO

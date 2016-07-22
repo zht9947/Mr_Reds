@@ -347,6 +347,7 @@
     CALL MR_INTERP_XY_ZS_O_V( NI , NJ , ZSV , ZSVO )
     
     DO J = 0 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         ZSOO( I , J ) = ( ZSUO( I , J )  + ZSVO( I , J )  ) / 2.0
       END DO
@@ -396,6 +397,7 @@
     CALL MR_INTERP_XY_SS_O_V( NI , NJ , ZBV , ZBVO )
     
     DO J = 0 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         ZBOO( I , J ) = ( ZBUO( I , J )  + ZBVO( I , J )  ) / 2.0
       END DO
@@ -439,6 +441,7 @@
     INTEGER(IJID_KIND) :: I , J
     
     DO J = 0 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         HOO( I , J ) = MR_FUNC_H( ZSOO( I , J ) , ZBOO( I , J ) )
       END DO

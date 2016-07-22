@@ -103,6 +103,7 @@
     DO DIM = 1 , 2
     
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , SIZE(UV,DIM=1)
           UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
         END DO
@@ -149,6 +150,7 @@
     DO DIM = 1 , 2
     
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
           UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
         END DO
@@ -195,6 +197,7 @@
     DO DIM = 1 , 2
     
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , SIZE(UV,DIM=1)
           UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
         END DO
@@ -241,6 +244,7 @@
     DO DIM = 1 , 2
     
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
           UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
         END DO
@@ -287,6 +291,7 @@
     DO DIM = 1 , 2
     
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(UV,DIM=1) )
           UVSCL( I , J ,DIM) = MW( I , J ) * UV( I , J ,DIM)
         END DO
@@ -333,6 +338,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , SIZE(UV,DIM=2)
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(XUV,DIM=1) , SIZE(UV,DIM=1) )
           UVTFM( I , J ,DIM) = XUV( I , J ,DIM,1) * UV( I , J ,1) + XUV( I , J ,DIM,2) * UV( I , J ,2)
         END DO
@@ -375,6 +381,7 @@
     ALLOCATE( UVROT(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO J = 1 , SIZE(UV,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(UV,DIM=1)
         UVROT( I , J ,1) =+UV( I , J ,2)
         UVROT( I , J ,2) =-UV( I , J ,1)
@@ -416,6 +423,7 @@
     ALLOCATE( UVSQR(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2)) )
 
     DO J = 1 , SIZE(UV,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(UV,DIM=1)
         UVSQR( I , J ) = UV( I , J ,1) * UV( I , J ,1) + UV( I , J ,2) * UV( I , J ,2)
       END DO
@@ -456,6 +464,7 @@
     ALLOCATE( UVDOT(1:SIZE(UV1,DIM=1),1:SIZE(UV1,DIM=2)) )
 
     DO J = 1 , SIZE(UV1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(UV1,DIM=1)
         UVDOT( I , J ) = UV1( I , J ,1) * UV2( I , J ,1) + UV1( I , J ,2) * UV2( I , J ,2)
       END DO

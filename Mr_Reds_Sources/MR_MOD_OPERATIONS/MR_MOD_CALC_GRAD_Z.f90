@@ -74,6 +74,7 @@
       DO DIM = 1 , 2
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             GRAD_Z_UV( I , J ,DIM, K ) = UVW( I , J ,DIM, K ) - UVW( I , J ,DIM,K-1)
           END DO
@@ -122,6 +123,7 @@
     DO K = 1 , NK
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           GRAD_Z_SS( I , J , K ) = SW( I , J , K ) - SW( I , J ,K-1)
         END DO

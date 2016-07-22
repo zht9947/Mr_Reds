@@ -69,6 +69,7 @@
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         H( I , J ) = MR_FUNC_H( ZS( I , J ) , ZB( I , J ) )
       END DO
@@ -78,6 +79,7 @@
       CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
       
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 0 , NI
           HU( I , J ) = MR_FUNC_H( ZSU( I , J ) , ZBU( I , J ) )
         END DO
@@ -89,6 +91,7 @@
       CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
       
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           HV( I , J ) = MR_FUNC_H( ZSV( I , J ) , ZBV( I , J ) )
         END DO

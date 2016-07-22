@@ -73,8 +73,10 @@
     K = 0
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_INTERP_Z_UV_W_II_JJ_K0( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_INTERP_Z_UV_W_II_JJ_K0
           END DO
         END DO
       END DO
@@ -83,8 +85,10 @@
     DO K = 1 , NK-1
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_INTERP_Z_UV_W_II_JJ_KK( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_INTERP_Z_UV_W_II_JJ_KK
           END DO
         END DO
       END DO
@@ -93,8 +97,10 @@
     K = NK
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            CALL MR_INTERP_Z_UV_W_II_JJ_KN( I , J ,DIM, K )
+           !DIR$ FORCEINLINE
+            CALL MR_INTERP_Z_UV_W_II_JJ_KN
           END DO
         END DO
       END DO
@@ -124,13 +130,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_K0( I , J ,DIM, K )
+  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_K0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
  
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       UVW( I , J ,DIM, K ) = UV( I , J ,DIM,K+1)
@@ -160,14 +162,10 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KK( I , J ,DIM, K )
+  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KK
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
-    
+
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       UVW( I , J ,DIM, K ) = 0.5 * ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) )
     ELSE
@@ -196,13 +194,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KN( I , J ,DIM, K )
+  SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       UVW( I , J ,DIM, K ) = UV( I , J ,DIM, K )
@@ -249,24 +243,30 @@
     
     K = 0
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_INTERP_Z_SS_W_II_JJ_K0( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_INTERP_Z_SS_W_II_JJ_K0
         END DO
       END DO
     !END K = 0
     
     DO K = 1 , NK-1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_INTERP_Z_SS_W_II_JJ_KK( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_INTERP_Z_SS_W_II_JJ_KK
         END DO
       END DO
     END DO
     
     K = NK
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_INTERP_Z_SS_W_II_JJ_KN( I , J , K )
+         !DIR$ FORCEINLINE
+          CALL MR_INTERP_Z_SS_W_II_JJ_KN
         END DO
       END DO
     !END K = NK
@@ -295,12 +295,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_K0( I , J , K )
+  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_K0
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       SW( I , J , K ) = SS( I , J ,K+1)
@@ -330,12 +327,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KK( I , J , K )
+  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KK
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       SW( I , J , K ) = 0.5 * ( SS( I , J ,K+1) + SS( I , J , K ) )
@@ -365,12 +359,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KN( I , J , K )
+  SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KN
   
     IMPLICIT NONE
-    
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
     
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
       SW( I , J , K ) = SS( I , J , K )

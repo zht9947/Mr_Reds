@@ -59,6 +59,7 @@
 !  implicit none
 !  
 !  integer(ijid_kind) :: ni111 , ni222
+!  integer(ijid_kind) :: nixx  , njxx
 !  
 !  integer(ijid_kind) :: i , j
 !  integer(kkid_kind) :: k
@@ -111,10 +112,8 @@
 !  
 !  CALL MR_ECHO_PRJ
 !  
-!  print*, NI1(FDRD_KIND),NI0(FDRD_KIND)
-!  print*, NI1(GJRD_KIND),NI0(GJRD_KIND)
-!  
-!  ni111=ni+1 ; ni222=ni-2
+!  nixx = 4 ; njxx = 3
+!  ni111=nixx+1 ; ni222=nixx-2
 !  
 !  ALLOCATE(    H0(1:NI1(FDRD_KIND),1:NJ           ) )
 !  ALLOCATE(  UVA0(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
@@ -163,119 +162,126 @@
 !    WRITE(*,'("Done! ")')
 !  END IF
 !  
+!  !juv(:,:,1,1) = 1.0 ; juu(:,:,1,1) = 1.0 ; jvv(:,:,1,1) = 1.0 ; joo(:,:,1,1) = 1.0
+!  !iuv(:,:,1,1) = 1.0 ; iuu(:,:,1,1) = 1.0 ; ivv(:,:,1,1) = 1.0 ; ioo(:,:,1,1) = 1.0
+!  !guv(:,:,1,1) = 1.0 ; guu(:,:,1,1) = 1.0 ; gvv(:,:,1,1) = 1.0 ; goo(:,:,1,1) = 1.0
+!  !fuv(:,:,1,1) = 1.0 ; fuu(:,:,1,1) = 1.0 ; fvv(:,:,1,1) = 1.0 ; foo(:,:,1,1) = 1.0
+!
+!  ! mw(:,:)     = 1.0 ;  mu(:,:)     = 1.0 ;  mv(:,:)     = 1.0 ;  mo(:,:)     = 1.0
+!  
 ! ! PRINT'("J11 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,1,1), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,1,1), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("J12 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,1,2), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,1,2), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("J21 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,2,1), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,2,1), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("J22 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,2,2), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( jvv(i,j,2,2), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! !!***
-!  !PRINT'("J11 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,1), ( (jvv(i,j,1,1), joo(i,j,1,1)), i=1,ni )
-!  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,ni )
-!  !  end if
-!  !end do
-!  !PRINT'("J12 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,2), ( (jvv(i,j,1,2), joo(i,j,1,2)), i=1,ni )
-!  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,ni )
-!  !  end if
-!  !end do
-!  !PRINT'("J21 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,1), ( (jvv(i,j,2,1), joo(i,j,2,1)), i=1,ni )
-!  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,ni )
-!  !  end if
-!  !end do
-!  !PRINT'("J22 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,2), ( (jvv(i,j,2,2), joo(i,j,2,2)), i=1,ni )
-!  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,ni )
-!  !  end if
-!  !end do
+!  PRINT'("J11 : ")'
+!  do j = njxx, 0, -1
+!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,1), ( (jvv(i,j,1,1), joo(i,j,1,1)), i=1,nixx )
+!    if(j/=0) then
+!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,nixx )
+!    end if
+!  end do
+!  PRINT'("J12 : ")'
+!  do j = njxx, 0, -1
+!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,2), ( (jvv(i,j,1,2), joo(i,j,1,2)), i=1,nixx )
+!    if(j/=0) then
+!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,nixx )
+!    end if
+!  end do
+!  PRINT'("J21 : ")'
+!  do j = njxx, 0, -1
+!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,1), ( (jvv(i,j,2,1), joo(i,j,2,1)), i=1,nixx )
+!    if(j/=0) then
+!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,nixx )
+!    end if
+!  end do
+!  PRINT'("J22 : ")'
+!  do j = njxx, 0, -1
+!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,2), ( (jvv(i,j,2,2), joo(i,j,2,2)), i=1,nixx )
+!    if(j/=0) then
+!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,nixx )
+!    end if
+!  end do
 !  
 ! ! PRINT'("I11 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,1,1), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,1,1), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,1), ( (iuv(i,j,1,1), iuu(i,j,1,1)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,1), ( (iuv(i,j,1,1), iuu(i,j,1,1)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("I12 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,1,2), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,1,2), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,2), ( (iuv(i,j,1,2), iuu(i,j,1,2)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,2), ( (iuv(i,j,1,2), iuu(i,j,1,2)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("I21 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,2,1), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,2,1), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,1), ( (iuv(i,j,2,1), iuu(i,j,2,1)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,1), ( (iuv(i,j,2,1), iuu(i,j,2,1)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! ! PRINT'("I22 : ")'
-! ! do j = nj, 0, -1
-! !   print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,2,2), i=1,ni )
+! ! do j = njxx, 0, -1
+! !   print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( ivv(i,j,2,2), i=1,nixx )
 ! !   if(j/=0) then
-! !     print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,2), ( (iuv(i,j,2,2), iuu(i,j,2,2)), i=1,ni )
+! !     print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,2), ( (iuv(i,j,2,2), iuu(i,j,2,2)), i=1,nixx )
 ! !   end if
 ! ! end do
 ! !!***
 !  !PRINT'("I11 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,1,1), ( (ivv(i,j,1,1), ioo(i,j,1,1)), i=1,ni )
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,1,1), ( (ivv(i,j,1,1), ioo(i,j,1,1)), i=1,nixx )
 !  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,1), ( (iuv(i,j,1,1), iuu(i,j,1,1)), i=1,ni )
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,1), ( (iuv(i,j,1,1), iuu(i,j,1,1)), i=1,nixx )
 !  !  end if
 !  !end do
 !  !PRINT'("I12 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,1,2), ( (ivv(i,j,1,2), ioo(i,j,1,2)), i=1,ni )
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,1,2), ( (ivv(i,j,1,2), ioo(i,j,1,2)), i=1,nixx )
 !  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,2), ( (iuv(i,j,1,2), iuu(i,j,1,2)), i=1,ni )
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,1,2), ( (iuv(i,j,1,2), iuu(i,j,1,2)), i=1,nixx )
 !  !  end if
 !  !end do
 !  !PRINT'("I21 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,2,1), ( (ivv(i,j,2,1), ioo(i,j,2,1)), i=1,ni )
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,2,1), ( (ivv(i,j,2,1), ioo(i,j,2,1)), i=1,nixx )
 !  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,1), ( (iuv(i,j,2,1), iuu(i,j,2,1)), i=1,ni )
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,1), ( (iuv(i,j,2,1), iuu(i,j,2,1)), i=1,nixx )
 !  !  end if
 !  !end do
 !  !PRINT'("I22 : ")'
-!  !do j = nj, 0, -1
-!  !  print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,2,2), ( (ivv(i,j,2,2), ioo(i,j,2,2)), i=1,ni )
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', ioo(0,j,2,2), ( (ivv(i,j,2,2), ioo(i,j,2,2)), i=1,nixx )
 !  !  if(j/=0) then
-!  !    print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,2), ( (iuv(i,j,2,2), iuu(i,j,2,2)), i=1,ni )
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', iuu(0,j,2,2), ( (iuv(i,j,2,2), iuu(i,j,2,2)), i=1,nixx )
 !  !  end if
 !  !end do
 !  
@@ -283,16 +289,9 @@
 !  
 !  CALL MR_INIT_FIELD_VARS_N_ACTIVITY
 !  
-!  
-!  
 !  WRITE(*,'( )')
 !  
 !  print'("Start computing:")'
-!  
-!  where( activity == noactive )
-!    zb = huge(zb)
-!     h = epsilon(h)
-!  end where
 !  
 !  t = 0.0
 !  
@@ -307,8 +306,8 @@
 !  
 !    call mr_updt_tbuv
 !    print'("TBUV : ")'
-!    do j = nj, 1, -1
-!      print'(<ni>(35X,"(",es10.3,",",es10.3,")",:,1X))', ( TUVR*tbuv(i,j,1:2) , i=1,ni )
+!    do j = njxx, 1, -1
+!      print'(<nixx>(35X,"(",es10.3,",",es10.3,")",:,1X))', ( TUVR*tbuv(i,j,1:2) , i=1,nixx )
 !    end do
 !  
 !  !! QADV and QDIF xy
@@ -328,202 +327,202 @@
 !  !    
 !  !    print'("k=",i3)', k
 !  !    print'("QADV : ")'
-!  !    do j = nj, 0, -1
-!  !      print'( <ni>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( qadv_xy_uv_v(i,j,1:2), i=1,ni )
+!  !    do j = njxx, 0, -1
+!  !      print'( <nixx>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( qadv_xy_uv_v(i,j,1:2), i=1,nixx )
 !  !      if(j/=0) then
-!  !        print'( <ni111>(10X,"(",es10.3,",",es10.3,")",25X,:,1X) )', ( qadv_xy_uv_u(i,j,1:2), i=0,ni )
+!  !        print'( <ni111>(10X,"(",es10.3,",",es10.3,")",25X,:,1X) )', ( qadv_xy_uv_u(i,j,1:2), i=0,nixx )
 !  !      end if
 !  !    end do
 !  !    print'("QDIF : ")'
-!  !    do j = nj, 0, -1
-!  !      print'( <ni>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qdif_xy_uv_v(i,j,1:2), i=1,ni )
+!  !    do j = njxx, 0, -1
+!  !      print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qdif_xy_uv_v(i,j,1:2), i=1,nixx )
 !  !      if(j/=0) then
-!  !        print'( <ni111>(10X,"(",f10.5,",",f10.5,")",25X,:,1X) )', ( qdif_xy_uv_u(i,j,1:2), i=0,ni )
+!  !        print'( <ni111>(10X,"(",f10.5,",",f10.5,")",25X,:,1X) )', ( qdif_xy_uv_u(i,j,1:2), i=0,nixx )
 !  !      end if
 !  !    end do
 !  !    
 !  !  end do
-!    
+!  !  
 !  !! QADV and QDIF z
 !  !  call mr_calc_qadv_n_qdif_z_uv_w( ni , nj , nk , uv , rb , w , qadv_z_uv_w , ekz , vzw , qdif_z_uv_w , tbuv , tsuv )
 !  !  do k = 0, nk
 !  !    print'("k=",i3)',k
 !  !    print'("QADV : ")'
-!  !    do j = nj, 1, -1
-!  !      print'( <ni>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qadv_z_uv_w(i,j,1:2, k ), i=1,ni )
+!  !    do j = njxx, 1, -1
+!  !      print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qadv_z_uv_w(i,j,1:2, k ), i=1,nixx )
 !  !    end do
 !  !    print'("QDIF : ")'
-!  !    do j = nj, 1, -1
-!  !      print'( <ni>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qdif_z_uv_w(i,j,1:2, k ), i=1,ni )
+!  !    do j = njxx, 1, -1
+!  !      print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qdif_z_uv_w(i,j,1:2, k ), i=1,nixx )
 !  !    end do
 !  !  end do
 !    
-!  !! ALFA and BETA
-!  !! block
-!  !  call mr_calc_raw_hyd_d3( ni , nj , nk , hyd_d3 )
-!  !  !print'("Rough HYD_D3 : ")'
-!  !  !do k = 1, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 1, -1
-!  !  !    print'( <ni>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( hyd_d3(i,j,1:2,k), i=1,ni )
-!  !  !  end do
-!  !  !end do
-!  !  
-!  !  call mr_calc_alfa_n_beta( ni , nj , nk , hyd_d3 , alfa , beta )
-!  !  !print'("HYD_D3 : ")'
-!  !  !do k = 1, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 1, -1
-!  !  !    print'( <ni>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( hyd_d3(i,j,1:2,k), i=1,ni )
-!  !  !  end do
-!  !  !end do
-!  !  print'("===================================")'
-!  !  print'("ALFA : ")'
-!  !  do j = nj, 1, -1
-!  !    print'( <ni>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( alfa(i,j,1:2), i=1,ni )
-!  !  end do
-!  !  print'("BETA : ")'
-!  !  do j = nj, 1, -1
-!  !    print'( <ni>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( beta(i,j,1:2), i=1,ni )
-!  !  end do
-!  !  print'("===================================")'
-!  !  
-!  !  call mr_calc_d1( ni , nj , zs , alfa , beta , d1 )
-!  !  call mr_calc_a1_b1_c1( ni , nj , alfa , a1 , b1 , c1 )
-!  !  zs = mr_tdma1( ni , nj , a1 , b1 , c1 , d1 )
-!  !  do j = nj, 1, -1
-!  !    print'(  ( A10 ,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X),   &
-!  !    & <ni222>(f10.5,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X),   &
-!  !    &        (f10.5,",",f10.5,",", A10 ," : "," ",es10.3," ",10X," ",:,1X) )',   &
-!  !      "-------",  b1( 1,j),  c1( 1,j), d1( 1,j),   &
-!  !    ( ( a1( i,j), b1( i,j),  c1( i,j), d1( i,j)), i=2,ni-1 ),   &
-!  !        a1(ni,j), b1(ni,j), "-------", d1(ni,j)
-!  !  end do
-!  !  print'("ZS : ")'
-!  !  do j = nj, 1, -1
-!  !    print'( <ni>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,ni )
-!  !  end do
-!  !    
-!  !  print*
-!  !    
-!  !  call mr_calc_d2( ni , nj , zs , beta , d2 )
-!  !  call mr_calc_a2_b2_c2( ni , nj , alfa , a2 , b2 , c2 )
-!  !  zs = mr_tdma2( ni , nj , a2 , b2 , c2 , d2 )
-!  !  do j = nj, 1, -1
-!  !    if(j==1) then
-!  !      print'( <ni>( A10 ,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X) )', ( ( "-------", b2(i, 1),  c2(i, 1), d2(i, 1) ), i=1,ni )
-!  !    else if(j<nj) then
-!  !      print'( <ni>(f10.5,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X) )', ( (  a2(i, j), b2(i, j),  c2(i, j), d2(i, j) ), i=1,ni )
-!  !    else
-!  !      print'( <ni>(f10.5,",",f10.5,",", A10 ," : "," ",es10.3," ",10X," ",:,1X) )', ( (  a2(i,nj), b2(i,nj), "-------", d2(i,nj) ), i=1,ni )
-!  !    end if
-!  !  end do
-!  !  print'("ZS : ")'
-!  !  do j = nj, 1, -1
-!  !    print'( <ni>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,ni )
-!  !  end do
-!  !  
-!  !  print*
-!  !  print*,"Sum ZS = ",sum(zs(1:ni,1:nj))
-!  !  print*
-!  !
-!  !  
-!  !  call mr_interp_xy_zs_u( ni , nj , zs , zsu )
-!  !  call mr_interp_xy_zs_v( ni , nj , zs , zsv )
-!  !    
-!  !  PRINT'("ZS, ZSU & ZSV : ")'
-!  !  do j = nj, 0, -1
-!  !    print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( zsv(i,j), i=1,ni )
-!  !    if(j/=0) then
-!  !      print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', zsu(0,j), ( (zs(i,j), zsu(i,j)), i=1,ni )
-!  !    end if
-!  !  end do
-!  !  
-!  !  call mr_calc_uva( ni , nj , zsU , zsv , alfa , beta , uva )
-!  !    
-!  !  call mr_interp_xy_uv_u_by_rcprac( ni , nj , zs , alfa , beta , ua )
-!  !  call mr_interp_xy_uv_v_by_rcprac( ni , nj , zs , alfa , beta , va )
-!  !  print'("UVA, UA & VA : ")'
-!  !  do j = nj, 0, -1
-!  !    print'( <ni>(35x," ",10x," ",f10.5," ",:,1x) )', ( va(i,j), i=1,ni )
-!  !    if(j/=0) then
-!  !      print'( (10x," ",f10.5," ",10x,"   "), <ni>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', ua(0,j), ( (uva(i,j,1:2), ua(i,j)), i=1,ni )
-!  !    end if
-!  !  end do
-!  !  
-!  !  !print'("===================================")'
-!  !  
-!  !  call mr_calc_hyd_a3_b3_c3( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 )
-!  !  !do k = 1, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 1, -1
-!  !  !    if(k==1) then
-!  !  !      print'( <ni>(  A10 ,",",es10.3,",",es10.3," : ","(",es10.3,",",es10.3,")",:,1X) )', (      "-------", hyd_b3(i,j, 1), hyd_c3(i,j, 1), hyd_d3(i,j,1:2, 1), i=1,ni )
-!  !  !    else if(k<nk) then
-!  !  !      print'( <ni>(es10.3,",",es10.3,",",es10.3," : ","(",es10.3,",",es10.3,")",:,1X) )', ( hyd_a3(i,j, k), hyd_b3(i,j, k), hyd_c3(i,j, k), hyd_d3(i,j,1:2, k), i=1,ni )
-!  !  !    else
-!  !  !      print'( <ni>(es10.3,",",es10.3,",",  A10 ," : ","(",es10.3,",",es10.3,")",:,1X) )', ( hyd_a3(i,j,nk), hyd_b3(i,j,nk),      "-------", hyd_d3(i,j,1:2,nk), i=1,ni )
-!  !  !    end if
-!  !  !  end do
-!  !  !end do
-!  !  
-!  !  !print*
-!  !  
-!  !  uv = mr_tdma3_uv( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 , hyd_d3 )
-!  !  !print'("UV Deviation : ")'
-!  !  !do k = 1, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 1, -1
-!  !  !    print'( <ni>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( uv(i,j,1:2,k), i=1,ni )
-!  !  !  end do
-!  !  !end do
-!  !  !
-!  !  !print*
-!  !  
-!  !  do k = 1 , nk
-!  !    call mr_interp_xy_uv_u_by_linear( ni , nj , uv(:,:,1:2, k ) , u(:,:, k ) )
-!  !    call mr_interp_xy_uv_v_by_linear( ni , nj , uv(:,:,1:2, k ) , v(:,:, k ) )
-!  !  end do
-!  !  call mr_calc_w( ni , nj , nk , u , v , w )
-!  !  !print'("W : ")'
-!  !  !do k = 0, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 1, -1
-!  !  !    print'( <ni>(35X," ",es10.3," ",10X" ",:,1X) )', ( w(i,j,k), i=1,ni )
-!  !  !  end do
-!  !  !end do
-!  !  
-!  !  do k = 1 , nk
-!  !    u(:,:, k ) = u(:,:, k ) + ua(:,:)
-!  !    v(:,:, k ) = v(:,:, k ) + va(:,:)
-!  !    
-!  !    uv(:,:,1:2, k ) = uv(:,:,1:2, k ) + uva(:,:,1:2)
-!  !    
-!  !  end do
-!  !  !print'("UV, U & V : ")'
-!  !  !do k = 1, nk
-!  !  !  print'("k=",i3)', k
-!  !  !  do j = nj, 0, -1
-!  !  !    print'( <ni>(35x," ",10x," ",f10.5," ",:,1x) )', ( v(i,j,k), i=1,ni )
-!  !  !    if(j/=0) then
-!  !  !      print'( (10x," ",f10.5," ",10x,"   "), <ni>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', u(0,j,k), ( (uv(i,j,1:2,k), u(i,j,k)), i=1,ni )
-!  !  !    end if
-!  !  !  end do
-!  !  !end do
-!  !  
-!  !! end block
+!  ! ALFA and BETA
+!  ! block
+!    call mr_calc_raw_hyd_d3( ni , nj , nk , hyd_d3 )
+!    !print'("Rough HYD_D3 : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( hyd_d3(i,j,1:2,k), i=1,nixx )
+!    !  end do
+!    !end do
+!    
+!    call mr_calc_alfa_n_beta( ni , nj , nk , hyd_d3 , alfa , beta )
+!    !print'("HYD_D3 : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( hyd_d3(i,j,1:2,k), i=1,nixx )
+!    !  end do
+!    !end do
+!    print'("===================================")'
+!    print'("ALFA : ")'
+!    do j = njxx, 1, -1
+!      print'( <nixx>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( alfa(i,j,1:2), i=1,nixx )
+!    end do
+!    print'("BETA : ")'
+!    do j = njxx, 1, -1
+!      print'( <nixx>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( beta(i,j,1:2), i=1,nixx )
+!    end do
+!    print'("===================================")'
+!    
+!    call mr_calc_d1( ni , nj , zs , alfa , beta , d1 )
+!    call mr_calc_a1_b1_c1( ni , nj , alfa , a1 , b1 , c1 )
+!    zs = mr_tdma1( ni , nj , a1 , b1 , c1 , d1 )
+!    do j = njxx, 1, -1
+!      print'(  ( A10 ,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X),   &
+!      & <ni222>(f10.5,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X),   &
+!      &        (f10.5,",",f10.5,",", A10 ," : "," ",es10.3," ",10X," ",:,1X) )',   &
+!        "-------",    b1( 1  ,j),  c1( 1,j), d1( 1  ,j),   &
+!      ( ( a1( i  ,j), b1( i  ,j),  c1( i,j), d1( i  ,j)), i=2,nixx-1 ),   &
+!          a1(nixx,j), b1(nixx,j), "-------", d1(nixx,j)
+!    end do
+!    print'("ZS : ")'
+!    do j = njxx, 1, -1
+!      print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,nixx )
+!    end do
+!      
+!    print*
+!      
+!    call mr_calc_d2( ni , nj , zs , beta , d2 )
+!    call mr_calc_a2_b2_c2( ni , nj , alfa , a2 , b2 , c2 )
+!    zs = mr_tdma2( ni , nj , a2 , b2 , c2 , d2 )
+!    do j = njxx, 1, -1
+!      if(j==1) then
+!        print'( <nixx>( A10 ,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X) )', ( ( "-------", b2(i, 1),  c2(i, 1), d2(i, 1) ), i=1,nixx )
+!      else if(j<nj) then
+!        print'( <nixx>(f10.5,",",f10.5,",",f10.5," : "," ",es10.3," ",10X," ",:,1X) )', ( (  a2(i, j), b2(i, j),  c2(i, j), d2(i, j) ), i=1,nixx )
+!      else
+!        print'( <nixx>(f10.5,",",f10.5,",", A10 ," : "," ",es10.3," ",10X," ",:,1X) )', ( (  a2(i,nj), b2(i,nj), "-------", d2(i,nj) ), i=1,nixx )
+!      end if
+!    end do
+!    print'("ZS : ")'
+!    do j = njxx, 1, -1
+!      print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,nixx )
+!    end do
+!    
+!    print*
+!    print*,"Sum ZS = ",sum(zs(1:ni,1:nj))
+!    print*
 !  
-!    call mr_updt_hyd
+!    
+!    call mr_interp_xy_zs_u( ni , nj , zs , zsu )
+!    call mr_interp_xy_zs_v( ni , nj , zs , zsv )
+!      
+!    PRINT'("ZS, ZSU & ZSV : ")'
+!    do j = njxx, 0, -1
+!      print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( zsv(i,j), i=1,nixx )
+!      if(j/=0) then
+!        print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', zsu(0,j), ( (zs(i,j), zsu(i,j)), i=1,nixx )
+!      end if
+!    end do
+!    
+!    call mr_calc_uva( ni , nj , zsu , zsv , alfa , beta , uva )
+!      
+!    call mr_interp_xy_uv_u_by_rcprac( ni , nj , zs , alfa , beta , ua )
+!    call mr_interp_xy_uv_v_by_rcprac( ni , nj , zs , alfa , beta , va )
+!    print'("UVA, UA & VA : ")'
+!    do j = njxx, 0, -1
+!      print'( <nixx>(35x," ",10x," ",f10.5," ",:,1x) )', ( va(i,j), i=1,nixx )
+!      if(j/=0) then
+!        print'( (10x," ",f10.5," ",10x,"   "), <nixx>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', ua(0,j), ( (uva(i,j,1:2), ua(i,j)), i=1,nixx )
+!      end if
+!    end do
+!    
+!    !print'("===================================")'
+!    
+!    call mr_calc_hyd_a3_b3_c3( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 )
+!    !do k = 1, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 1, -1
+!    !    if(k==1) then
+!    !      print'( <nixx>(  A10 ,",",es10.3,",",es10.3," : ","(",es10.3,",",es10.3,")",:,1X) )', (      "-------", hyd_b3(i,j, 1), hyd_c3(i,j, 1), hyd_d3(i,j,1:2, 1), i=1,nixx )
+!    !    else if(k<nk) then
+!    !      print'( <nixx>(es10.3,",",es10.3,",",es10.3," : ","(",es10.3,",",es10.3,")",:,1X) )', ( hyd_a3(i,j, k), hyd_b3(i,j, k), hyd_c3(i,j, k), hyd_d3(i,j,1:2, k), i=1,nixx )
+!    !    else
+!    !      print'( <nixx>(es10.3,",",es10.3,",",  A10 ," : ","(",es10.3,",",es10.3,")",:,1X) )', ( hyd_a3(i,j,nk), hyd_b3(i,j,nk),      "-------", hyd_d3(i,j,1:2,nk), i=1,nixx )
+!    !    end if
+!    !  end do
+!    !end do
+!    
+!    !print*
+!    
+!    uv = mr_tdma3_uv( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 , hyd_d3 )
+!    !print'("UV Deviation : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( uv(i,j,1:2,k), i=1,nixx )
+!    !  end do
+!    !end do
+!    !
+!    !print*
+!    
+!    do k = 1 , nk
+!      call mr_interp_xy_uv_u_by_linear( ni , nj , uv(:,:,1:2, k ) , u(:,:, k ) )
+!      call mr_interp_xy_uv_v_by_linear( ni , nj , uv(:,:,1:2, k ) , v(:,:, k ) )
+!    end do
+!    call mr_calc_w( ni , nj , nk , u , v , w )
+!    !print'("W : ")'
+!    !do k = 0, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X," ",es10.3," ",10X" ",:,1X) )', ( w(i,j,k), i=1,nixx )
+!    !  end do
+!    !end do
+!    
+!    do k = 1 , nk
+!      u(:,:, k ) = u(:,:, k ) + ua(:,:)
+!      v(:,:, k ) = v(:,:, k ) + va(:,:)
+!      
+!      uv(:,:,1:2, k ) = uv(:,:,1:2, k ) + uva(:,:,1:2)
+!      
+!    end do
+!    !print'("UV, U & V : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)', k
+!    !  do j = njxx, 0, -1
+!    !    print'( <nixx>(35x," ",10x," ",f10.5," ",:,1x) )', ( v(i,j,k), i=1,nixx )
+!    !    if(j/=0) then
+!    !      print'( (10x," ",f10.5," ",10x,"   "), <nixx>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', u(0,j,k), ( (uv(i,j,1:2,k), u(i,j,k)), i=1,nixx )
+!    !    end if
+!    !  end do
+!    !end do
+!    
+!  ! end block
+!  
+!    !call mr_updt_hyd
 !    !if( mod(its,its_output) == 0 ) then
 !    !  call mr_updt_ww
 !    !end if
 !    
 !    call mr_updt_h
 !    print'("H, HU & HV : ")'
-!    do j = nj, 0, -1
-!      print'( <ni>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,ni )
+!    do j = njxx, 0, -1
+!      print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,nixx )
 !      if(j/=0) then
-!        print'( (10x," ",f10.5," ",10x,"   "), <ni>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,ni )
+!        print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,nixx )
 !      end if
 !    end do
 !    
@@ -531,8 +530,8 @@
 !    !print'("vzw : ")'
 !    !do k = 0, nk
 !    !  print'("k=",i3)',k
-!    !  do j = nj, 1, -1
-!    !    print'( <ni>(35X," ",es10.3," ",10X," ",:,1X) )', ( vzw(i,j,k), i=1,ni )
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( vzw(i,j,k), i=1,nixx )
 !    !  end do
 !    !end do
 !    

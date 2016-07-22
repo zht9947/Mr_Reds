@@ -75,6 +75,7 @@
 
     DO K = 1 , NK
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           !BLOCK
             HYD_B3( I , J , K ) = MW( I , J )
@@ -85,6 +86,7 @@
 
     DO K = 2 , NK
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
             HYD_A3( I , J , K ) =-DT * PHI * EKZ * MW( I , J ) * VZW( I , J ,K-1) / ( H( I , J ) * DSIGMA )**2
@@ -98,6 +100,7 @@
 
     DO K = 1 , NK-1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
             HYD_C3( I , J , K ) = HYD_A3( I , J ,K+1)
@@ -164,6 +167,7 @@
       DO DIM = 1 , 2
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             !BLOCK
               HYD_D3( I , J ,DIM, K ) = MW( I , J ) * UV( I , J ,DIM, K )
@@ -172,6 +176,7 @@
         END DO
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
               HYD_D3( I , J ,DIM, K ) = HYD_D3( I , J ,DIM, K ) +  &

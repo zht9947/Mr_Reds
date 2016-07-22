@@ -77,6 +77,7 @@
 
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( 9.1699E-3 , H( I , J ) , UVA( I , J ,DIM) , UVAM( I , J ) )
           END DO

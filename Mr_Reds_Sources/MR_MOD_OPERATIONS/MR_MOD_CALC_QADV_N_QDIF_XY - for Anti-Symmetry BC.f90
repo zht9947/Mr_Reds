@@ -84,23 +84,29 @@
       DO J = 1 , NJ
 
         I = 0
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_I0_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_I0_JJ
         !END I = 0
 
         I = 1
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_I1_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_I1_JJ
         !END I = 1
 
+       !DIR$ VECTOR ALIGNED
         DO I = 2 , NI-2
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_II_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_II_JJ
         END DO
 
         I = NI-1
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_IM_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_IM_JJ
         !END I = NI-1
 
         I = NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_IN_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_U_IN_JJ
         !END I = NI
 
       END DO
@@ -131,12 +137,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_I0_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_I0_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -244,12 +247,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_I1_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_I1_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -357,13 +357,10 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_II_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_II_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-
+   
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
@@ -466,13 +463,10 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_IM_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_IM_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
-
+   
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
@@ -579,12 +573,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_IN_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_IN_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -708,27 +699,33 @@
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: QADV_XY_SS_U , QDIF_XY_SS_U
 
     INTEGER(IJID_KIND) :: I , J
-
+    
     DO J = 1 , NJ
 
       I = 0
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_I0_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_I0_JJ
       !END I = 0
 
       I = 1
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_I1_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_I1_JJ
       !END I = 1
 
+     !DIR$ VECTOR ALIGNED
       DO I = 2 , NI-2
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_II_JJ
       END DO
 
       I = NI-1
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_IM_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_IM_JJ
       !END I = NI-1
 
       I = NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_IN_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_U_IN_JJ
       !END I = NI
 
     END DO
@@ -757,11 +754,9 @@
 !   2015-06-04    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_I0_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_I0_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -869,11 +864,9 @@
 !   2015-06-04    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_I1_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_I1_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -981,11 +974,9 @@
 !   2015-06-04    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_II_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_II_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -1089,11 +1080,9 @@
 !   2015-06-04    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_IM_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_IM_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -1201,11 +1190,9 @@
 !   2015-06-04    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_IN_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_U_IN_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
@@ -1334,32 +1321,42 @@
     DO DIM = 1 , 2
 
       J = 0
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_J0( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_J0
         END DO
       !END J = 0
 
       J = 1
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_J1( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_J1
         END DO
       !END J = 1
 
       DO J = 2 , NJ-2
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JJ( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JJ
         END DO
       END DO
 
       J = NJ-1
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JM( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JM
         END DO
       !END J = NJ-1
 
       J = NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JN( I , J ,DIM)
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_QADV_N_QDIF_XY_UV_V_II_JN
         END DO
       !END J = NJ
 
@@ -1389,12 +1386,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_J0( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_J0
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     QADV_XY_UV_V( I , J ,DIM) = 0.0
     QDIF_XY_UV_V( I , J ,DIM) = 0.0
@@ -1421,12 +1415,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_J1( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_J1
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -1524,12 +1515,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JJ( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -1633,12 +1621,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JM( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JM
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -1736,12 +1721,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JN( I , J ,DIM)
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_V_II_JN
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
-    INTEGER            , INTENT(IN ) :: DIM
 
     QADV_XY_UV_V( I , J ,DIM) = 0.0
     QDIF_XY_UV_V( I , J ,DIM) = 0.0
@@ -1786,32 +1768,42 @@
     INTEGER(IJID_KIND) :: I , J
 
     J = 0
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_J0( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_J0
       END DO
     !END J = 0
 
     J = 1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_J1( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_J1
       END DO
     !END J = 1
 
     DO J = 2 , NJ-2
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JJ( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JJ
       END DO
     END DO
 
     J = NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JM( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JM
       END DO
     !END J = NJ-1
 
     J = NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JN( I , J )
+       !DIR$ FORCEINLINE
+        CALL MR_CALC_QADV_N_QDIF_XY_SS_V_II_JN
       END DO
     !END J = NJ
 
@@ -1839,11 +1831,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_J0( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_J0
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     QADV_XY_SS_V( I , J ) = 0.0
     QDIF_XY_SS_V( I , J ) = 0.0
@@ -1870,11 +1860,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_J1( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_J1
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -1972,11 +1960,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JJ( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JJ
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -2080,11 +2066,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JM( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JM
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     REAL   (CARD_KIND)               :: CRV , DRV
     REAL   (CARD_KIND)               :: DDV , D2V , DCV
@@ -2182,11 +2166,9 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JN( I , J )
+  SUBROUTINE MR_CALC_QADV_N_QDIF_XY_SS_V_II_JN
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: I , J
 
     QADV_XY_SS_V( I , J ) = 0.0
     QDIF_XY_SS_V( I , J ) = 0.0

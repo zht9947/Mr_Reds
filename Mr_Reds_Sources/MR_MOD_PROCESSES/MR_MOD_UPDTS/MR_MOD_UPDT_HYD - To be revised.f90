@@ -146,12 +146,14 @@
     DO K = 1 , NK
     
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 0 , NI
           U( I , J , K ) = U( I , J , K ) + UA( I , J )
         END DO
       END DO
       
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           V( I , J , K ) = V( I , J , K ) + VA( I , J )
         END DO
@@ -159,6 +161,7 @@
       
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             UV( I , J ,DIM, K ) = UV( I , J ,DIM, K ) + UVA( I , J ,DIM)
           END DO
@@ -214,6 +217,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           UVA( I , J ,DIM) = ( ALFA( I , J ,DIM) * GRAD_XY_ZS( I , J ,DIM) + BETA( I , J ,DIM) ) / MW( I , J ) / H( I , J )
         END DO
@@ -271,6 +275,7 @@
       & ( MU .MRSSSCL. ( UD(:,:, K ) .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VD(:,:, K ) .MRSSMTP. HV ) ) , REDC_GRAD_UVD )
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           W( I , J , K ) = W( I , J ,K-1) -   &
           & DSIGMA * REDC_GRAD_UVD( I , J ) / MW( I , J ) / H( I , J )
@@ -357,6 +362,7 @@
     DO K = 1 , NK
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           WW( I , J , K ) = 0.5 * ( W( I , J , K ) + W( I , J ,K-1) ) * H( I , J ) -   &
           & ( 1.0 + SIGMA( K ) ) * REDC_GRAD_UVA( I , J ) / MW( I , J )

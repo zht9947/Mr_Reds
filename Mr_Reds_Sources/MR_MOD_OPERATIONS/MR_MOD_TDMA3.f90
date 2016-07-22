@@ -78,13 +78,17 @@
 
   ! GAUSSIAN ELIMINATION
     K = 1
-      DO J = 1 , NJ
-        DO I = 1 , NI
-          W( I , J ) = B( I , J , K )
+      !BLOCK
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            W( I , J ) = B( I , J , K )
+          END DO
         END DO
-      END DO
+      !END BLOCK
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             Y( I , J ,DIM, K ) = D( I , J ,DIM, K ) / W( I , J )
           END DO
@@ -92,14 +96,18 @@
       END DO
     !END K = 1
     DO K = 2 , NK
-      DO J = 1 , NJ
-        DO I = 1 , NI
-          V( I , J ,K-1) = C( I , J ,K-1) / W( I , J )
-          W( I , J ) = B( I , J , K ) - A( I , J , K ) * V( I , J ,K-1)
+      !BLOCK
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            V( I , J ,K-1) = C( I , J ,K-1) / W( I , J )
+            W( I , J ) = B( I , J , K ) - A( I , J , K ) * V( I , J ,K-1)
+          END DO
         END DO
-      END DO
+      !END BLOCK
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             Y( I , J ,DIM, K ) = ( D( I , J ,DIM, K ) - A( I , J , K ) * Y( I , J ,DIM,K-1) ) / W( I , J )
           END DO
@@ -111,6 +119,7 @@
     K = NK
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             X( I , J ,DIM, K ) = Y( I , J ,DIM, K )
           END DO
@@ -120,6 +129,7 @@
     DO K = NK-1 , 1 , -1
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             X( I , J ,DIM, K ) = Y( I , J ,DIM, K ) - V( I , J , K ) * X( I , J ,DIM,K+1)
           END DO
@@ -173,11 +183,13 @@
   ! GAUSSIAN ELIMINATION
     K = 1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           W( I , J ) = B( I , J , K )
         END DO
       END DO
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           Y( I , J , K ) = D( I , J , K ) / W( I , J )
         END DO
@@ -185,12 +197,14 @@
     !END K = 1
     DO K = 2 , NK
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           V( I , J ,K-1) = C( I , J ,K-1) / W( I , J )
           W( I , J ) = B( I , J , K ) - A( I , J , K ) * V( I , J ,K-1)
         END DO
       END DO
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           Y( I , J , K ) = ( D( I , J , K ) - A( I , J , K ) * Y( I , J ,K-1) ) / W( I , J )
         END DO
@@ -198,9 +212,17 @@
     END DO
 
   ! BACK SUBSTITUTION
-    X( I , J ,NK ) = Y( I , J ,NK )
+    K = NK
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          X( I , J , K ) = Y( I , J , K )
+        END DO
+      END DO
+    !END K = NK
     DO K = NK-1 , 1 , -1
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           X( I , J , K ) = Y( I , J , K ) - V( I , J , K ) * X( I , J ,K+1)
         END DO

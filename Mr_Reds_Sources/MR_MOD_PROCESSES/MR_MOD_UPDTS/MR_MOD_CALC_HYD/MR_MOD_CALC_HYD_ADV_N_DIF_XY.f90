@@ -82,9 +82,9 @@
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),0:NJ,1:2) :: HYD_QADV_XY_V , HYD_QDIF_XY_V
 
     ALLOCATE( UVT(1:NI1(FDRD_KIND),1:NJ,1:2) )
-    
+
       UVT = JUV .MRUVTFM. UV(:,:,1:2, K )
-        
+
       ALLOCATE( VVT(1:NI1(FDRD_KIND),0:NJ,1:2) )
         CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,1) )
         CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,2) )

@@ -75,6 +75,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
             GRAD_XY_UV( I , J ,DIM,1) = UU( I , J ,DIM) - UU(I-1, J ,DIM)
@@ -90,6 +91,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
             GRAD_XY_UV( I , J ,DIM,2) = VV( I , J ,DIM) - VV( I ,J-1,DIM)
@@ -144,6 +146,7 @@
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           REDC_GRAD_XY_UV( I , J ,DIM) = GRAD_XY_UV( I , J ,DIM,1) + GRAD_XY_UV( I , J ,DIM,2)
         END DO
@@ -188,6 +191,7 @@
 
   ! U DIRECTION
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           GRAD_XY_SS( I , J ,1) = SU( I , J ) - SU(I-1, J )
@@ -199,6 +203,7 @@
 
   ! V DIRECTION
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           GRAD_XY_SS( I , J ,2) = SV( I , J ) - SV( I ,J-1)
@@ -248,6 +253,7 @@
     CALL MR_CALC_GRAD_XY_SS( NI , NJ , SU , SV , GRAD_XY_SS )
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         REDC_GRAD_XY_SS( I , J ) = GRAD_XY_SS( I , J ,1) + GRAD_XY_SS( I , J ,2)
       END DO

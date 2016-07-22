@@ -76,6 +76,7 @@
     INTEGER(IJID_KIND) :: P , Q
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         !BLOCK
           B1( I , J ) = MW( I , J )
@@ -90,6 +91,7 @@
           B1( I , J ) = B1( I , J ) - DT * PHI * BPAR * ( ALFA( I , J ,1) + ALFA(P-1, Q ,1) ) / 2.0
         END IF
       !END I = 1
+     !DIR$ VECTOR ALIGNED
       DO I = 2 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY(I-1, J ) == BEACTIVE ) THEN
           A1( I , J ) = DT * PHI * BPAR * ( ALFA( I , J ,1) + ALFA(I-1, J ,1) ) / 2.0
@@ -101,6 +103,7 @@
     END DO
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY(I+1, J ) == BEACTIVE ) THEN
           C1( I , J ) = DT * PHI * BPAR * ( ALFA(I+1, J ,1) + ALFA( I , J ,1) ) / 2.0
@@ -154,6 +157,7 @@
     INTEGER(IJID_KIND) :: P , Q
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         !BLOCK
           D1( I , J ) = MW( I , J ) * ZS( I , J )
@@ -162,6 +166,7 @@
     END DO
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           D1( I , J ) = D1( I , J )   &
@@ -188,6 +193,7 @@
           & ) / 2.0
         END IF
       !END I = 1
+     !DIR$ VECTOR ALIGNED
       DO I = 2 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY(I-1, J ) == BEACTIVE ) THEN
           D1( I , J ) = D1( I , J ) + DT * PHI * BPAR * ( BETA( I , J ,1) + BETA(I-1, J ,1) ) / 2.0
@@ -196,6 +202,7 @@
     END DO
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI-1
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY(I+1, J ) == BEACTIVE ) THEN
           D1( I , J ) = D1( I , J ) - DT * PHI * BPAR * ( BETA(I+1, J ,1) + BETA( I , J ,1) ) / 2.0
@@ -250,6 +257,7 @@
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         !BLOCK
           B2( I , J ) = MW( I , J )
@@ -258,6 +266,7 @@
     END DO
 
     DO J = 2 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY( I ,J-1) == BEACTIVE ) THEN
           A2( I , J ) = DT * PHI * BPAR * ( ALFA( I , J ,2) + ALFA( I ,J-1,2) ) / 2.0
@@ -269,6 +278,7 @@
     END DO
 
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY( I ,J+1) == BEACTIVE ) THEN
           C2( I , J ) = DT * PHI * BPAR * ( ALFA( I ,J+1,2) + ALFA( I , J ,2) ) / 2.0
@@ -315,6 +325,7 @@
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         !BLOCK
           D2( I , J ) = MW( I , J ) * ZT( I , J )
@@ -323,6 +334,7 @@
     END DO
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           D2( I , J ) = D2( I , J )   &
@@ -335,6 +347,7 @@
     END DO
 
     DO J = 2 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY( I ,J-1) == BEACTIVE ) THEN
           D2( I , J ) = D2( I , J ) + DT * PHI * BPAR * ( BETA( I , J ,2) + BETA( I ,J-1,2) ) / 2.0
@@ -343,6 +356,7 @@
     END DO
 
     DO J = 1 , NJ-1
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE .AND. ACTIVITY( I ,J+1) == BEACTIVE ) THEN
           D2( I , J ) = D2( I , J ) - DT * PHI * BPAR * ( BETA( I ,J+1,2) + BETA( I , J ,2) ) / 2.0

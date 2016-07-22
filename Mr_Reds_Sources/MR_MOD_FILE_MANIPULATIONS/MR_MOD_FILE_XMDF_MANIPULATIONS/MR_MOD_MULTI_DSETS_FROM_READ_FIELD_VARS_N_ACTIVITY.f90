@@ -83,7 +83,9 @@
       RETURN
     END IF
 
+   !DIR$ FORCEINLINE
     CALL MR_READ_ACTIVITY_UNPACK_FOR_ELEMS
+   !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
 
@@ -116,6 +118,7 @@
     INTEGER(IJID_KIND) :: I , J
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED, ALWAYS
       DO I = 1 , NI
         ACTIVITY( I , J ) = ACTIVITY_ARRAY( EMIDW( I , J ) )
       END DO
@@ -218,10 +221,15 @@
 
     UV_ARRAY = ( UV_ARRAY - UV_BASE ) / ( UV_REF - UV_BASE )
 
+   !DIR$ FORCEINLINE
     CALL MR_READ_UV_UNPACK_FOR_W_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_UV_UNPACK_FOR_U_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_UV_UNPACK_FOR_V_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_UV_UNPACK_FOR_O_NODES
+   !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
 
@@ -259,6 +267,7 @@
       DO DIM = 1 , 2
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED, ALWAYS
           DO I = 1 , NI
             UV( I , J ,DIM) = UV_ARRAY(DIM, NDIDW( I , J ) )
           END DO
@@ -306,6 +315,7 @@
       DO DIM = 1 , 2
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED, ALWAYS
           DO I = 0 , NI
             UU( I , J ,DIM) = UV_ARRAY(DIM, NDIDU( I , J ) )
           END DO
@@ -317,6 +327,7 @@
 
       IF( PRESENT( U ) ) THEN
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 0 , NI
             U( I , J ) = UU( I , J ,1)
           END DO
@@ -330,6 +341,7 @@
         DO DIM = 1 , 2
 
           DO J = 1 , NJ
+           !DIR$ VECTOR ALIGNED, ALWAYS
             DO I = 0 , NI
               UT( I , J ,DIM) = UV_ARRAY(DIM, NDIDU( I , J ) )
             END DO
@@ -340,6 +352,7 @@
         UT = IUU .MRUVTFM. UT
 
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 0 , NI
             U( I , J ) = UT( I , J ,1)
           END DO
@@ -385,6 +398,7 @@
       DO DIM = 1 , 2
 
         DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED, ALWAYS
           DO I = 1 , NI
             VV( I , J ,DIM) = UV_ARRAY(DIM, NDIDV( I , J ) )
           END DO
@@ -396,6 +410,7 @@
 
       IF( PRESENT( V ) ) THEN
         DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             V( I , J ) = VV( I , J ,2)
           END DO
@@ -409,6 +424,7 @@
         DO DIM = 1 , 2
 
           DO J = 0 , NJ
+           !DIR$ VECTOR ALIGNED, ALWAYS
             DO I = 1 , NI
               VT( I , J ,DIM) = UV_ARRAY(DIM, NDIDV( I , J ) )
             END DO
@@ -419,6 +435,7 @@
         VT = IVV .MRUVTFM. VT
 
         DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             V( I , J ) = VT( I , J ,2)
           END DO
@@ -462,6 +479,7 @@
       DO DIM = 1 , 2
 
         DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED, ALWAYS
           DO I = 0 , NI
             UVO( I , J ,DIM) = UV_ARRAY(DIM, NDIDO( I , J ) )
           END DO
@@ -566,10 +584,15 @@
 
     SS_ARRAY = ( SS_ARRAY - SS_BASE ) / ( SS_REF - SS_BASE )
 
+   !DIR$ FORCEINLINE
     CALL MR_READ_SS_UNPACK_FOR_W_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_SS_UNPACK_FOR_U_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_SS_UNPACK_FOR_V_NODES
+   !DIR$ FORCEINLINE
     CALL MR_READ_SS_UNPACK_FOR_O_NODES
+   !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
 
@@ -603,6 +626,7 @@
 
     IF( PRESENT( SS ) ) THEN
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
           SS( I , J ) = SS_ARRAY( NDIDW( I , J ) )
         END DO
@@ -639,6 +663,7 @@
 
     IF( PRESENT( SU ) ) THEN
       DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
           SU( I , J ) = SS_ARRAY( NDIDU( I , J ) )
         END DO
@@ -675,6 +700,7 @@
 
     IF( PRESENT( SV ) ) THEN
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
           SV( I , J ) = SS_ARRAY( NDIDV( I , J ) )
         END DO
@@ -711,6 +737,7 @@
 
     IF( PRESENT( SO ) ) THEN
       DO J = 0 , NJ
+       !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
           SO( I , J ) = SS_ARRAY( NDIDO( I , J ) )
         END DO

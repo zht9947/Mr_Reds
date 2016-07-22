@@ -84,6 +84,7 @@
     DO DIM = 1 , 2
       !BLOCK
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             BETA( I , J ,DIM) = 0.0
           END DO
@@ -91,6 +92,7 @@
       !END BLOCK
       DO K = 1 , NK
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             BETA( I , J ,DIM) = BETA( I , J ,DIM) + DSIGMA * HYD_D3( I , J ,DIM, K )
           END DO
@@ -102,6 +104,7 @@
     DO DIM = 1 , 2
       DO K = 1 , NK
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             HYD_D3( I , J ,DIM, K ) = HYD_D3( I , J ,DIM, K ) - BETA( I , J ,DIM)
           END DO
@@ -115,6 +118,7 @@
     CALL MR_CALC_GRAD_XY_SS( NI , NJ , ZSU , ZSV , GRAD_XY_ZS )
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         ALFA( I , J ,1) =   &
         -   DT * MW( I , J ) * H( I , J ) *   &
@@ -122,6 +126,7 @@
       END DO
     END DO
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           BETA( I , J ,1) = BETA( I , J ,1)   &
@@ -136,6 +141,7 @@
     END DO
 
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         ALFA( I , J ,2) =   &
         -   DT * MW(I , J ) * H( I , J ) *   &
@@ -143,6 +149,7 @@
       END DO
     END DO
     DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           BETA( I , J ,2) = BETA( I , J ,2)   &

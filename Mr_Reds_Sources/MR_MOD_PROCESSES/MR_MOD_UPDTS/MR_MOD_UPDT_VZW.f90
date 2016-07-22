@@ -81,8 +81,9 @@
     
       DO K = 1 , NK
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            VZWW( I , J , K ) = V0 - KAR * SQRT(RBT) / EKZ * SQRT(TBUVM( I ,J )) * H( I , J ) * (1.0+SIGMA( K )) * SIGMA( K )
+            VZWW( I , J , K ) = V0 - KAR * SQRT(RBT) / EKZ * SQRT(TBUVM( I , J )) * H( I , J ) * (1.0+SIGMA( K )) * SIGMA( K )
           END DO
         END DO
       END DO

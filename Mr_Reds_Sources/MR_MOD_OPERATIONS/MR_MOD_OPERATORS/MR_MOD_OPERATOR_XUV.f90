@@ -83,6 +83,7 @@
     ALLOCATE( XUVDTM(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2)) )
     
     DO J = 1 , SIZE(XUV,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(XUV,DIM=1)
         XUVDTM( I , J ) = XUV( I , J ,1,1) * XUV( I , J ,2,2) - XUV( I , J ,2,1) * XUV( I , J ,1,2)
       END DO
@@ -124,6 +125,7 @@
     ALLOCATE( XUVIVS(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2),1:2,1:2) )
     
     DO J = 1 , SIZE(XUV,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(XUV,DIM=1)
         XUVIVS( I , J ,1,1) = XUV( I , J ,2,2) / MW( I , J )
         XUVIVS( I , J ,2,1) =-XUV( I , J ,2,1) / MW( I , J )
@@ -167,6 +169,7 @@
     ALLOCATE( XUVTPS(1:SIZE(XUV,DIM=1),1:SIZE(XUV,DIM=2),1:2,1:2) )
     
     DO J = 1 , SIZE(XUV,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(XUV,DIM=1)
         XUVTPS( I , J ,1,1) = XUV( I , J ,1,1)
         XUVTPS( I , J ,2,1) = XUV( I , J ,1,2)
@@ -210,6 +213,7 @@
     ALLOCATE( XUVMAT(1:SIZE(XUV1,DIM=1),1:SIZE(XUV1,DIM=2),1:2,1:2) )
     
     DO J = 1 , SIZE(XUV1,DIM=2)
+     !DIR$ VECTOR ALIGNED
       DO I = 1 , SIZE(XUV1,DIM=1)
         XUVMAT( I , J ,1,1) = XUV1( I , J ,1,1) * XUV2( I , J ,1,1) + XUV1( I , J ,1,2) * XUV2( I , J ,2,1)
         XUVMAT( I , J ,2,1) = XUV1( I , J ,2,1) * XUV2( I , J ,1,1) + XUV1( I , J ,2,2) * XUV2( I , J ,2,1)

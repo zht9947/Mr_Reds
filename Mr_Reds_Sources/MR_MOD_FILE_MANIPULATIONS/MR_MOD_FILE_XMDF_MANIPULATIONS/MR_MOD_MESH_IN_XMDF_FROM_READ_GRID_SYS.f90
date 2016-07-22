@@ -100,8 +100,10 @@
             END IF
           END DO
         END DO INIT_SHARE_SEARCH
+       !DIR$ FORCEINLINE
         CALL MR_READ_NDID_I1_J1( I , J , NDID_IN_EM )
       !END I = 1
+     !DIR$ NOVECTOR
       DO I = 2 , NI
         DO NDID_IN_EM = 1 , NND_IN_EM
           IF( NDIDO(I-1,J-1) == NDID_ARRAY( NDID_IN_EM , EMIDW( I , J ) ) ) THEN
@@ -109,10 +111,12 @@
           END IF
         END DO
         NDID_IN_EM = MOD( NDID_IN_EM , NND_IN_EM ) + 1
+       !DIR$ FORCEINLINE
         CALL MR_READ_NDID_II_J1( I , J , NDID_IN_EM )
       END DO
     !END J = 1
 
+   !DIR$ NOVECTOR
     DO J = 2 , NJ
       I = 1
         DO NDID_IN_EM = 1 , NND_IN_EM
@@ -121,8 +125,10 @@
           END IF
         END DO
         NDID_IN_EM = MOD( NDID_IN_EM , NND_IN_EM ) + 1
+       !DIR$ FORCEINLINE
         CALL MR_READ_NDID_I1_JJ( I , J , NDID_IN_EM )
       !END I = 1
+     !DIR$ NOVECTOR
       DO I = 2 , NI
         DO NDID_IN_EM = 1 , NND_IN_EM
           IF( NDIDO( I ,J-1) == NDID_ARRAY( NDID_IN_EM , EMIDW( I , J ) ) ) THEN
@@ -130,6 +136,7 @@
           END IF
         END DO
         NDID_IN_EM = MOD( NDID_IN_EM , NND_IN_EM ) + 1
+       !DIR$ FORCEINLINE
         CALL MR_READ_NDID_II_JJ( I , J , NDID_IN_EM )
       END DO
     END DO
