@@ -6,7 +6,7 @@
 !
 ! PURPOSE:
 !
-!   TO 
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -20,17 +20,17 @@
 !
 !***********************************************************************************************************************************
   MODULE MR_MOD_TDMA
-    
+
     USE MR_KINDS
-    
+
     IMPLICIT NONE
-    
+
     PRIVATE
-    
+
     PUBLIC :: MR_TDMA1 , MR_TDMA2
-    
+
 !***********************************************************************************************************************************
-    
+
   CONTAINS
 
 !***********************************************************************************************************************************
@@ -40,7 +40,7 @@
 !
 ! PURPOSE:
 !
-!   TO 
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -54,26 +54,26 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_TDMA1( NI , NJ , A , B , C , D ) RESULT( X )
-  
+
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    
+
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(2:NI2(CARD_KIND)  ,1:NJ  ) :: A
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: B
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI2(CARD_KIND)-1,1:NJ  ) :: C
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: D
-    
+
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: X
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)         ) :: Y
-    
+
     REAL   (CARD_KIND)                                        :: W
     REAL   (CARD_KIND) , DIMENSION(1:NI2(CARD_KIND)-1       ) :: V
-    
+
     INTEGER(IJID_KIND) :: I , J
-    
+
     DO J = 1 , NJ
-    
+
     ! GAUSSIAN ELIMINATION
       I = 1
         W = B( I , J )
@@ -85,7 +85,7 @@
         W = B( I , J ) - A( I , J ) * V(I-1)
         Y( I ) = ( D( I , J ) - A( I , J ) * Y(I-1) ) / W
       END DO
-      
+
     ! BACK SUBSTITUTION
       I = NI
         X( I , J ) = Y( I )
@@ -94,11 +94,11 @@
       DO I = NI-1 , 1 , -1
         X( I , J ) = Y( I ) - V( I ) * X(I+1, J )
       END DO
-      
+
     END DO
-    
+
   END FUNCTION MR_TDMA1
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -106,7 +106,7 @@
 !
 ! PURPOSE:
 !
-!   TO 
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -120,24 +120,24 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_TDMA2( NI , NJ , A , B , C , D ) RESULT( X )
-  
+
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    
+
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,2:NJ  ) :: A
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: B
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ-1) :: C
     REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: D
-    
+
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: X
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ  ) :: Y
-    
+
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)         ) :: W
     REAL   (CARD_KIND) , DIMENSION(1:NI1(CARD_KIND)  ,1:NJ-1) :: V
-    
+
     INTEGER(IJID_KIND) :: I , J
-    
+
   ! GAUSSIAN ELIMINATION
     J = 1
      !DIR$ VECTOR ALIGNED
@@ -154,7 +154,7 @@
         Y( I , J ) = ( D( I , J ) - A( I , J ) * Y( I ,J-1) ) / W( I )
       END DO
     END DO
-    
+
   ! BACK SUBSTITUTION
     J = NJ
      !DIR$ VECTOR ALIGNED
@@ -168,7 +168,7 @@
         X( I , J ) = Y( I , J ) - V( I , J ) * X( I ,J+1)
       END DO
     END DO
-    
+
   END FUNCTION MR_TDMA2
-  
+
   END MODULE MR_MOD_TDMA

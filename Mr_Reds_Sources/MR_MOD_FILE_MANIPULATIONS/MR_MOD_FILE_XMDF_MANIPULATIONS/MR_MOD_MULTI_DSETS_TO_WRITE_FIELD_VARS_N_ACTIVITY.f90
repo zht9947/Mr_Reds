@@ -149,7 +149,7 @@
   SUBROUTINE MR_WRITE_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , T ,   &
   & NND , NEM , NI , NJ , UV_BASE , UV_REF , UV , U , UU , V , VV ,   &
   & ACTIVITY , ERROR , ERRMSG )
-  
+
     USE MR_MOD_OPERATOR_UV
     USE MR_MOD_INTERP_XY
 
@@ -225,7 +225,7 @@
         ERROR = ERROR_DUMMY
         ERRMSG = "Error in closing vector dataset group"
       END IF
-    
+
     END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(PATH_UV_IN_MULTI_DSETS)//" in multiple datasets"
@@ -266,31 +266,31 @@
     INTEGER            :: DIM
 
     IF( PRESENT( UV ) ) THEN
-    
+
       DO DIM = 1 , 2
-      
+
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             UV_AT_W( I , J ,DIM) = UV( I , J ,DIM)
           END DO
         END DO
-        
+
       END DO
-      
+
     ELSE
-    
+
       DO DIM = 1 , 2
-      
+
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             UV_AT_W( I , J ,DIM) = 0.0
           END DO
         END DO
-        
+
       END DO
-      
+
     END IF
 
     UV_AT_W = JUV .MRUVTFM. UV_AT_W
@@ -469,7 +469,7 @@
       DO J = 0 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          V_AT_V( I , J ) = UV_AT_V( I , J ,2) 
+          V_AT_V( I , J ) = UV_AT_V( I , J ,2)
         END DO
       END DO
     ELSE
@@ -773,9 +773,9 @@
       END DO
 
     ELSE IF( PRESENT( SS ) ) THEN
-    
+
       CALL MR_INTERP_XY_SS_U( NI , NJ , SS , SS_AT_U )
-    
+
       IF( .NOT. PRESENT( SO ) ) THEN
         ALLOCATE( SU_AT_O(0:NI0(FDRD_KIND),0:NJ) )
         CALL MR_INTERP_XY_SS_O_U( NI , NJ , SS_AT_U , SU_AT_O )
@@ -844,7 +844,7 @@
       END DO
 
     ELSE IF( PRESENT( SS ) ) THEN
-    
+
       CALL MR_INTERP_XY_SS_V( NI , NJ , SS , SS_AT_V )
 
       IF( .NOT. PRESENT( SO ) ) THEN

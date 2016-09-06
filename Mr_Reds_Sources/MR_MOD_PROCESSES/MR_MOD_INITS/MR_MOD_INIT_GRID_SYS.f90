@@ -56,16 +56,16 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_GRID_SYS( FILE_XMDF_NAME , ERROR , ERRMSG )
-  
+
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF
-    
+
     USE MR_MOD_GET_RANKS2
 
     USE MR_MOD_READ_GRID_SYS
 
     IMPLICIT NONE
-    
+
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
 
     INTEGER                          :: FILE_XMDF_ID , MESH_IN_XMDF_ID
@@ -77,7 +77,7 @@
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
 
     CALL MR_INIT_EMID
-    
+
     ERRMSG = ""
 
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "READ" , FILE_XMDF_ID , ERROR , ERRMSG )
@@ -114,7 +114,7 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-    
+
     CALL MR_READ_NDID( MESH_IN_XMDF_ID , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MESH_IN_XMDF)//" in file "//TRIM(FILE_XMDF_NAME)
@@ -122,7 +122,7 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-    
+
     CALL MR_CLOSE_MESH_IN_XMDF( MESH_IN_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MESH_IN_XMDF)//" in file "//TRIM(FILE_XMDF_NAME)

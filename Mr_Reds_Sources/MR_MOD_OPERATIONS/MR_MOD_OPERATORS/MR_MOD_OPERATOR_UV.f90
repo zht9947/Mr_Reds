@@ -97,18 +97,18 @@
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
-    
+
     ALLOCATE( UVMTP(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-    
+
       DO J = 1 , SIZE(UV,DIM=2)
        !DIR$ VECTOR ALIGNED
         DO I = 1 , SIZE(UV,DIM=1)
           UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
         END DO
       END DO
-      
+
     END DO
 
   END FUNCTION MR_VECTOR_MULTIPLY_BY_SS
@@ -144,18 +144,18 @@
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
-    
+
     ALLOCATE( UVMTP(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-    
+
       DO J = 1 , SIZE(UV,DIM=2)
        !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
           UVMTP( I , J ,DIM) = UV( I , J ,DIM) * SS( I , J )
         END DO
       END DO
-      
+
     END DO
 
   END FUNCTION MR_VECTOR_MULTIPLY_BY_SS_CARD_KIND
@@ -195,14 +195,14 @@
     ALLOCATE( UVDIV(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-    
+
       DO J = 1 , SIZE(UV,DIM=2)
        !DIR$ VECTOR ALIGNED
         DO I = 1 , SIZE(UV,DIM=1)
           UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
         END DO
       END DO
-      
+
     END DO
 
   END FUNCTION MR_VECTOR_DIVIDE_BY_SS
@@ -242,14 +242,14 @@
     ALLOCATE( UVDIV(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-    
+
       DO J = 1 , SIZE(UV,DIM=2)
        !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(UV,DIM=1) , SIZE(SS,DIM=1) )
           UVDIV( I , J ,DIM) = UV( I , J ,DIM) / SS( I , J )
         END DO
       END DO
-      
+
     END DO
 
   END FUNCTION MR_VECTOR_DIVIDE_BY_SS_CARD_KIND
@@ -285,18 +285,18 @@
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
-    
+
     ALLOCATE( UVSCL(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
-    
+
       DO J = 1 , SIZE(UV,DIM=2)
        !DIR$ VECTOR ALIGNED
         DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(UV,DIM=1) )
           UVSCL( I , J ,DIM) = MW( I , J ) * UV( I , J ,DIM)
         END DO
       END DO
-      
+
     END DO
 
   END FUNCTION MR_VECTOR_SCALE_BY_MW
@@ -332,7 +332,7 @@
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
-    
+
     ALLOCATE( UVTFM(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
 
     DO DIM = 1 , 2
@@ -375,7 +375,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:) :: UVROT
-    
+
     INTEGER(IJID_KIND) :: I , J
 
     ALLOCATE( UVROT(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2),1:2) )
@@ -417,7 +417,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:  ) :: UVSQR
-    
+
     INTEGER(IJID_KIND) :: I , J
 
     ALLOCATE( UVSQR(1:SIZE(UV,DIM=1),1:SIZE(UV,DIM=2)) )
@@ -458,7 +458,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:,:) :: UV1 , UV2
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:  ) :: UVDOT
-    
+
     INTEGER(IJID_KIND) :: I , J
 
     ALLOCATE( UVDOT(1:SIZE(UV1,DIM=1),1:SIZE(UV1,DIM=2)) )

@@ -67,7 +67,7 @@
     USE MR_MOD_OPERATOR_UV
 
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 

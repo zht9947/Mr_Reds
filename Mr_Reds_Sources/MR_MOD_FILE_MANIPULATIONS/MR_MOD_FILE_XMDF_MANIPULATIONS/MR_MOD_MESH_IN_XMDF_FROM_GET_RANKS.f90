@@ -1,7 +1,7 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) 
+!  (MODULE)
 !
 ! PURPOSE:
 !
@@ -31,13 +31,13 @@
     PUBLIC :: MR_GET_NND_NEM
 
 !***********************************************************************************************************************************
-    
+
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (SUBROUTINE) 
+!  (SUBROUTINE)
 !
 ! PURPOSE:
 !
@@ -55,7 +55,7 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_GET_NND_NEM( MESH_IN_XMDF_ID , NND , NEM , ERROR , ERRMSG )
-  
+
     IMPLICIT NONE
 
     INTEGER            , INTENT(IN ) :: MESH_IN_XMDF_ID
@@ -67,7 +67,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    
+
     CALL XF_GET_NUMBER_OF_NODES( MESH_IN_XMDF_ID , NND , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in getting then number of nodes from mesh"

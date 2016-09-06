@@ -33,7 +33,7 @@
     USE MR_KINDS
 
     IMPLICIT NONE
-    
+
     REAL   (TMRD_KIND) :: DT
 
     REAL   (TMRD_KIND) :: T_START

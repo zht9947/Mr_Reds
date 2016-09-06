@@ -36,7 +36,7 @@
     PUBLIC :: MR_UPDT_HYD , MR_UPDT_WW
 
     PUBLIC :: MR_CALC_UVA , MR_CALC_WW , MR_CALC_W   !Just for test
-    
+
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: ALFA , BETA
 
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: A1 , B1 , C1 , D1
@@ -144,21 +144,21 @@
   ! MERGE EXTERNAL AND INTERNAL
   ! COMPONENTS OF HORIZONTAL VELOCITY TOGETHER
     DO K = 1 , NK
-    
+
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 0 , NI
           U( I , J , K ) = U( I , J , K ) + UA( I , J )
         END DO
       END DO
-      
+
       DO J = 0 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           V( I , J , K ) = V( I , J , K ) + VA( I , J )
         END DO
       END DO
-      
+
       DO DIM = 1 , 2
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
@@ -285,7 +285,7 @@
     END DO
 
   END SUBROUTINE MR_CALC_W
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -348,7 +348,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ     ) :: VA
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
-  
+
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: WW
 
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVA

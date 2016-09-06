@@ -63,7 +63,7 @@
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
     ALLOCATE(    ZB(1:NI1(FDRD_KIND),1:NJ           ) )
-    
+
     ALLOCATE(    ZS(1:NI1(FDRD_KIND),1:NJ           ) )
     ALLOCATE(   ZSU(0:NI0(FDRD_KIND),1:NJ           ) ,  ZSV(1:NI1(FDRD_KIND),0:NJ           ) )
 

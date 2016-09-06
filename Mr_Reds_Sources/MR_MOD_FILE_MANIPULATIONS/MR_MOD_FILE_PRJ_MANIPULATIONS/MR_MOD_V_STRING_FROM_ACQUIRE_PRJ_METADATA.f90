@@ -27,11 +27,11 @@
     PRIVATE
 
     PUBLIC :: MR_ACQUIRE_PRJ_METADATA
-    
+
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -57,9 +57,9 @@
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: V_STRING
-    
+
     CHARACTER(   *   ) , INTENT(OUT) :: PRJ_METADATA
-    
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
@@ -74,5 +74,5 @@
     END IF
 
   END SUBROUTINE MR_ACQUIRE_PRJ_METADATA
-  
+
   END MODULE MR_MOD_ACQUIRE_PRJ_METADATA

@@ -192,19 +192,19 @@
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in openning vector dataset group"
     ELSE
-    
+
       CALL XF_READ_VECTOR_VALUES_TIMESTEP( DSET_UV_ID , ITS , NND , 2 , UV_ARRAY , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in reading vector values from dataset group"
       ELSE
-      
+
         IF( PRESENT( ACTIVITY ) ) THEN
           CALL MR_READ_ACTIVITY( DSET_UV_ID , ITS , NEM , NI , NJ , ACTIVITY , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
             ERRMSG = TRIM(ERRMSG)//" from vector dataset group"
           END IF
         END IF
-        
+
       END IF
 
       CALL XF_CLOSE_GROUP( DSET_UV_ID , ERROR_DUMMY )
@@ -212,7 +212,7 @@
         ERROR = ERROR_DUMMY
         ERRMSG = "Error in closing vector dataset group"
       END IF
-      
+
     END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(PATH_UV_IN_MULTI_DSETS)//" in multiple datasets"
@@ -446,7 +446,7 @@
     END IF
 
   END SUBROUTINE MR_READ_UV_UNPACK_FOR_V_NODES
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -708,7 +708,7 @@
     END IF
 
   END SUBROUTINE MR_READ_SS_UNPACK_FOR_V_NODES
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !

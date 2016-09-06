@@ -77,26 +77,26 @@
 
     ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) )
       CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
-      
+
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 0 , NI
           HU( I , J ) = MR_FUNC_H( ZSU( I , J ) , ZBU( I , J ) )
         END DO
       END DO
-      
+
     DEALLOCATE( ZBU )
 
     ALLOCATE( ZBV(1:NI1(FDRD_KIND),0:NJ) )
       CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
-      
+
       DO J = 0 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           HV( I , J ) = MR_FUNC_H( ZSV( I , J ) , ZBV( I , J ) )
         END DO
       END DO
-      
+
     DEALLOCATE( ZBV )
 
   END SUBROUTINE MR_UPDT_H

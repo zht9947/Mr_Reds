@@ -32,7 +32,7 @@
     PRIVATE
 
     PUBLIC :: MR_INIT_CURVED_GEOS
-    
+
     REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUV
     REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUU
     REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYVV
@@ -41,7 +41,7 @@
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -67,7 +67,7 @@
     USE MR_MOD_OPERATOR_XUV
 
     IMPLICIT NONE
-  
+
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
 
     INTEGER            , INTENT(OUT) :: ERROR
@@ -297,13 +297,13 @@
           END IF
         END IF
       END IF
-      
+
     END IF
 
     DEALLOCATE( XYUV , XYUU , XYVV , XYOO )
 
   END SUBROUTINE MR_INIT_CURVED_GEOS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -325,7 +325,7 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COORS( FILE_XMDF_NAME , ERROR , ERRMSG )
-  
+
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF
 
@@ -339,7 +339,7 @@
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
-    
+
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
 
@@ -365,7 +365,7 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-        
+
     CALL MR_CLOSE_MESH_IN_XMDF( MESH_IN_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MESH_IN_XMDF)//" in file "//TRIM(FILE_XMDF_NAME)
@@ -378,7 +378,7 @@
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)
       RETURN
     END IF
-    
+
   END SUBROUTINE MR_INIT_COORS
 
   END MODULE MR_MOD_INIT_CURVED_GEOS

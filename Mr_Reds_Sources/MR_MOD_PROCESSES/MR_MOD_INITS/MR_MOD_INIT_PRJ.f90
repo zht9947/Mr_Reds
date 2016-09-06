@@ -61,7 +61,7 @@
   SUBROUTINE MR_INIT_PRJ( FILE_PRJ_NAME , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_PRJ
-    
+
     USE MR_MOD_ACCESS_REC
     USE MR_MOD_AWAYOUT_REC_ELEMENTS
 
@@ -88,12 +88,12 @@
 
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
-    
+
     CHARACTER( 2**10 )               :: REC
-    
+
     INTEGER                          :: REC_ID
     CHARACTER( 2**03 )               :: REC_ID_CHAR
-    
+
     CHARACTER( 2**05 )               :: LABEL
     CHARACTER( 2**08 )               :: ALIAS
 
@@ -108,7 +108,7 @@
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ_NAME)
       RETURN
     END IF
-    
+
     DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
       CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
       REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
@@ -327,7 +327,7 @@
               CALL MR_CLOSE_FILE_PRJ( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
             END IF
-            
+
             SELECT CASE( TRIM(LABEL) )
             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
               BACKSPACE( FILE_PRJ_ID )
@@ -360,7 +360,7 @@
 
         CASE( "Constants and Reference Parameters" )
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
-            CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG ) 
+            CALL MR_ACCESS_REC( FILE_PRJ_ID , REC , ERROR , ERRMSG )
             REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
             IF( ERROR < 0 ) THEN
               ERRMSG = TRIM(ERRMSG)//" no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &

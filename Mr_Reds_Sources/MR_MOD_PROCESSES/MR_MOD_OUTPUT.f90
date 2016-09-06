@@ -43,7 +43,7 @@
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -86,14 +86,14 @@
 
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
-    
+
     REAL   (PARD_KIND)               :: DUMMY_BASE , DUMMY_REF
-    
+
     CHARACTER( 2**08 )               :: PATH_DSET_IN_MULTI_DSETS
-    
+
     CHARACTER( 2**03 )               :: K_CHAR
     INTEGER(KKID_KIND)               :: K
-    
+
     ERRMSG = ""
 
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "WRITE" , FILE_XMDF_ID , ERROR , ERRMSG )
@@ -111,14 +111,14 @@
 
   ! WRITE ZB, ZS AND H
     ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) , ZBV(1:NI1(FDRD_KIND),0:NJ) )
-    
+
     CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
     CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
-    
+
     ALLOCATE( ZBOO(0:NI0(FDRD_KIND),0:NJ) )
-      
+
     CALL MR_CALC_ZBOO( NI , NJ , ZBU , ZBV , ZBOO )
-      
+
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//DSET_NAME_ZB
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
@@ -134,13 +134,13 @@
       DEALLOCATE( ZBOO )
       RETURN
     END IF
-    
+
     DEALLOCATE( ZBU , ZBV )
-    
+
     ALLOCATE( ZSOO(0:NI0(FDRD_KIND),0:NJ) )
-    
+
     CALL MR_CALC_ZSOO( NI , NJ , ZSU , ZSV , ZSOO )
-      
+
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_ZS
     DUMMY_BASE = 0.0 ; DUMMY_REF = SR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
@@ -158,9 +158,9 @@
     END IF
 
     ALLOCATE( HOO(0:NI0(FDRD_KIND),0:NJ) )
-    
+
     CALL MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
-    
+
     DEALLOCATE( ZSOO , ZBOO )
 
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_H
@@ -197,7 +197,7 @@
 
   ! WRITE UV
     DO K = 1 , NK
-    
+
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_UV
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
@@ -212,12 +212,12 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-    
+
     END DO
-    
+
   ! WRITE W
     DO K = 1 , NK
-    
+
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_W
     DUMMY_BASE = 0.0 ; DUMMY_REF = WR
@@ -326,35 +326,35 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_ZSOO( NI , NJ , ZSU , ZSV , ZSOO )
-  
+
     USE MR_MOD_INTERP_XY
-  
+
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    
+
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: ZSU
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: ZSV
 
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO
-    
+
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSUO
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSVO
-    
+
     INTEGER(IJID_KIND) :: I , J
-  
+
     CALL MR_INTERP_XY_ZS_O_U( NI , NJ , ZSU , ZSUO )
     CALL MR_INTERP_XY_ZS_O_V( NI , NJ , ZSV , ZSVO )
-    
+
     DO J = 0 , NJ
      !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         ZSOO( I , J ) = ( ZSUO( I , J )  + ZSVO( I , J )  ) / 2.0
       END DO
     END DO
-  
+
   END SUBROUTINE MR_CALC_ZSOO
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -376,35 +376,35 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_ZBOO( NI , NJ , ZBU , ZBV , ZBOO )
-  
+
     USE MR_MOD_INTERP_XY
-  
+
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    
+
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: ZBU
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ) :: ZBV
-    
+
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBOO
-    
+
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBUO
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBVO
-    
+
     INTEGER(IJID_KIND) :: I , J
-  
+
     CALL MR_INTERP_XY_SS_O_U( NI , NJ , ZBU , ZBUO )
     CALL MR_INTERP_XY_SS_O_V( NI , NJ , ZBV , ZBVO )
-    
+
     DO J = 0 , NJ
      !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         ZBOO( I , J ) = ( ZBUO( I , J )  + ZBVO( I , J )  ) / 2.0
       END DO
     END DO
-    
+
   END SUBROUTINE MR_CALC_ZBOO
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -426,27 +426,27 @@
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
-  
+
     USE MR_MOD_FUNC_H
-  
+
     IMPLICIT NONE
-    
+
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    
+
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBOO
-    
+
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: HOO
-    
+
     INTEGER(IJID_KIND) :: I , J
-    
+
     DO J = 0 , NJ
      !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
         HOO( I , J ) = MR_FUNC_H( ZSOO( I , J ) , ZBOO( I , J ) )
       END DO
     END DO
-    
+
   END SUBROUTINE MR_CALC_HOO
 
   END MODULE MR_MOD_OUTPUT

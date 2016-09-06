@@ -28,11 +28,11 @@
 
     PUBLIC :: MR_AWAYOUT_LABEL
     PUBLIC :: MR_AWAYOUT_ALIAS
-    
+
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -77,12 +77,12 @@
       ERRMSG = "Error in drawing out label from record"
       RETURN
     END IF
-    
+
     REC( MAX(INDEX(REC,TRIM(LABEL))-1,1)   &
     &  : MIN(INDEX(REC,TRIM(LABEL))+LEN_TRIM(LABEL),LEN(REC)) ) = ""
 
   END SUBROUTINE MR_AWAYOUT_LABEL
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -115,7 +115,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    
+
     ALIAS = ""
 
     READ( REC , * , IOSTAT=ERROR ) ALIAS
@@ -132,5 +132,5 @@
     &  : MIN(INDEX(REC,TRIM(ALIAS))+LEN_TRIM(ALIAS),LEN(REC)) ) = ""
 
   END SUBROUTINE MR_AWAYOUT_ALIAS
-  
+
   END MODULE MR_MOD_AWAYOUT_REC_ELEMENTS

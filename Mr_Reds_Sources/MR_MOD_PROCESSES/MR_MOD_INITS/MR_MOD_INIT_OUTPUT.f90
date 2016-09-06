@@ -21,7 +21,7 @@
   MODULE MR_MOD_INIT_OUTPUT
 
     USE MR_KINDS
-    
+
     USE MR_DEF_RANKS
     USE MR_DEF_FIELD_VARS_DSET_NAMES
     USE MR_DEF_FIELD_VARS_UNITS
@@ -35,7 +35,7 @@
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -60,7 +60,7 @@
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
-    
+
     USE MR_MOD_CREATE_DSET
 
     IMPLICIT NONE
@@ -68,13 +68,13 @@
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
 
     INTEGER                          :: FILE_XMDF_ID , MULTI_DSETS_ID
-    
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
-    
+
     CHARACTER( 2**08 )               :: PATH_DSET_IN_MULTI_DSETS
     CHARACTER( 2**05 )               :: UNIT_DSET
 
@@ -144,7 +144,7 @@
 
   ! CREATE UV
     DO K = 1 , NK
-    
+
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_UV
     UNIT_DSET = UNIT_UV
@@ -175,7 +175,7 @@
     END IF
 
     END DO
-    
+
   ! CREATE TBUV
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBUV
     UNIT_DSET = UNIT_TBUV
@@ -204,7 +204,7 @@
     END IF
 
     END DO
-    
+
   ! WRITE R
     DO K = 1 , NK
 
@@ -219,9 +219,9 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-    
+
     END DO
-    
+
     CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)

@@ -65,7 +65,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     LOGICAL                          :: BE_OPENED
-    
+
     INTEGER                          :: IQID
 
     ERRMSG = ""
@@ -80,9 +80,9 @@
           ERROR = - ERROR
           ERRMSG = "Error in opening file"
         END IF
-        
+
         RETURN
-        
+
       END IF
     END DO
 
@@ -125,7 +125,7 @@
       ERROR = - ERROR
       ERRMSG = "Error in closing file"
     END IF
-    
+
     RETURN
 
   END SUBROUTINE MR_CLOSE_FILE_PRJ

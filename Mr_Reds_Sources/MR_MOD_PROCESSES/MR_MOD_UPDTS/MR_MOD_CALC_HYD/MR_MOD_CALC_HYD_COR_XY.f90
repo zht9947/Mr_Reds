@@ -79,7 +79,7 @@
         )   &
       )   &
     )
-    
+
   END SUBROUTINE MR_CALC_HYD_COR_XY
 
   END MODULE MR_MOD_CALC_HYD_COR_XY

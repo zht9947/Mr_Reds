@@ -150,7 +150,7 @@ MODULE XMDFERRORDEFINITIONS
   INTEGER,PARAMETER :: ERROR_GRID_EXTRUDE_TYPE_INVALID= -4603
   INTEGER,PARAMETER :: ERROR_GRID_NUMVALS_INCORRECT   = -4604
 
-  ! Errors that I don't want to name 
+  ! Errors that I don't want to name
 
   INTEGER,PARAMETER :: ERROR_OTHER                    = -9901
 
@@ -450,7 +450,7 @@ INTEGER, INTENT(OUT) :: error
 
   return
 END SUBROUTINE
-  
+
 !*************************
 
 SUBROUTINE XF_CLOSE (error)
@@ -531,7 +531,7 @@ SUBROUTINE XF_OPEN_FILE (a_Filename, a_ReadOnly, Id, error)
 
   namelen = LEN_TRIM(a_Filename)
   error = xfopenfile_f(a_Filename, namelen, Id, a_ReadOnly)
-  
+
 
 return
 
@@ -565,7 +565,7 @@ END SUBROUTINE
 !------------------------------------------------------------------------------
 ! SUBROUTINE  XF_GET_LIBRARY_VERSION
 ! PURPOSE     Returns the current version of XMDF
-! NOTES     
+! NOTES
 !------------------------------------------------------------------------------
 SUBROUTINE XF_GET_LIBRARY_VERSION (a_Version, error)
 
@@ -592,7 +592,7 @@ END SUBROUTINE
 !------------------------------------------------------------------------------
 ! SUBROUTINE  XF_GET_LIBRARY_VERSION_FILE
 ! PURPOSE     Obtain the version of XMDF from the library file
-! NOTES     
+! NOTES
 !------------------------------------------------------------------------------
 SUBROUTINE XF_GET_LIBRARY_VERSION_FILE (a_File, a_Version, error)
 
@@ -667,7 +667,7 @@ INTEGER, INTENT(OUT)        :: error
   END INTERFACE
 
   error = xfopencoordinategroup_f(a_ParentId, a_ChildId)
-  
+
   return
 END SUBROUTINE
 
@@ -703,7 +703,7 @@ SUBROUTINE XF_WRITE_PROPERTY_STRING (a_Id, a_Name, a_Attributes, error)
 
 INTEGER, INTENT(IN)   :: a_Id
 CHARACTER(LEN=*), INTENT(IN) :: a_Name, a_Attributes
-INTEGER          strlen, Number, tmplen 
+INTEGER          strlen, Number, tmplen
 INTEGER          error
 
 !            INTEGER, EXTERNAL :: _xfWritePropertyString_f
@@ -744,20 +744,20 @@ INTEGER, DIMENSION(*),         INTENT(IN)  :: a_Properties
 INTEGER,                       INTENT(IN)  :: a_Compression
 INTEGER,                       INTENT(OUT) :: error
 INTEGER                                       namelen
-  
+
 
 !            INTEGER, EXTERNAL :: _xfWritePropertyInt_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
   INTERFACE
-    INTEGER FUNCTION xfwritepropertyint_f(a_Id, a_Name, namelen, a_Number, & 
+    INTEGER FUNCTION xfwritepropertyint_f(a_Id, a_Name, namelen, a_Number, &
                                           a_Properties, a_Compression)
     !MS$ATTRIBUTES C,reference::xfwritepropertyint_f
     !DEC$ATTRIBUTES reference :: a_Name
     INTEGER,               INTENT(IN)  :: a_Id
     CHARACTER(LEN=*),      INTENT(IN)  :: a_Name
     INTEGER,               INTENT(IN)  :: a_Number
-    INTEGER, DIMENSION(*), INTENT(IN)  :: a_Properties 
+    INTEGER, DIMENSION(*), INTENT(IN)  :: a_Properties
     INTEGER,               INTENT(IN)  :: a_Compression
     INTEGER,               INTENT(IN)  :: namelen
 
@@ -774,7 +774,7 @@ END SUBROUTINE
 
 !------------------------------------------------------------------------------
 ! SUBROUTINE  XF_WRITE_PROPERTY_UINT
-! PURPOSE     writes a unsigned integer attribute (really a dataset) to the 
+! PURPOSE     writes a unsigned integer attribute (really a dataset) to the
 !             folder
 ! NOTES
 !------------------------------------------------------------------------------
@@ -808,7 +808,7 @@ INTEGER                                namelen
   END INTERFACE
 
   namelen = LEN_TRIM(a_Name)
-  error = xfwritepropertyunsignedint_f(a_Id, a_Name, namelen, a_Number, a_Properties, & 
+  error = xfwritepropertyunsignedint_f(a_Id, a_Name, namelen, a_Number, a_Properties, &
                                        a_Compression)
 
 return
@@ -822,7 +822,7 @@ SUBROUTINE XF_WRITE_PROPERTY_DOUBLE (a_Id, a_Name, a_Number, a_Properties, &
 INTEGER, INTENT(IN)                 :: a_Id
 CHARACTER(LEN=*), INTENT(IN)        :: a_Name
 INTEGER, INTENT(IN)                 :: a_Number
-REAL*8, DIMENSION(*), INTENT(IN)    :: a_Properties 
+REAL*8, DIMENSION(*), INTENT(IN)    :: a_Properties
 INTEGER, INTENT(IN)                 :: a_Compression
 INTEGER                             :: namelen
 INTEGER, INTENT(OUT)                :: error
@@ -832,14 +832,14 @@ INTEGER, INTENT(OUT)                :: error
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
   INTERFACE
-    INTEGER FUNCTION xfwritepropertydouble_f(a_Id, a_Name, namelen, a_Number, a_Properties, & 
+    INTEGER FUNCTION xfwritepropertydouble_f(a_Id, a_Name, namelen, a_Number, a_Properties, &
                                              a_Compression)
     !MS$ATTRIBUTES C,reference::xfwritepropertydouble_f
     !DEC$ATTRIBUTES reference :: a_Name
     INTEGER,              INTENT(IN)  :: a_Id
     CHARACTER(LEN=*),     INTENT(IN)  :: a_Name
     INTEGER,              INTENT(IN)  :: a_Number
-    REAL*8, DIMENSION(*), INTENT(IN)   :: a_Properties 
+    REAL*8, DIMENSION(*), INTENT(IN)   :: a_Properties
     INTEGER,              INTENT(IN)  :: a_Compression
     INTEGER,              INTENT(IN)  :: namelen
 
@@ -858,8 +858,8 @@ END SUBROUTINE
 
 !-----------------------------------------------------------------------------
 !  SUBROUTINE  xfwritepropertyfloat
-!  PURPOSE   
-!  NOTES     
+!  PURPOSE
+!  NOTES
 !-----------------------------------------------------------------------------
 SUBROUTINE XF_WRITE_PROPERTY_FLOAT (a_Id, a_Name, a_Number, a_Properties, &
                                     a_Compression, error)
@@ -876,7 +876,7 @@ INTEGER                         namelen
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
   INTERFACE
-    INTEGER FUNCTION xfwritepropertyfloat_f(a_Id, a_Name, namelen, a_Number, a_Properties, & 
+    INTEGER FUNCTION xfwritepropertyfloat_f(a_Id, a_Name, namelen, a_Number, a_Properties, &
                                             a_Compression)
     !MS$ATTRIBUTES C,reference::xfwritepropertyfloat_f
     !DEC$ATTRIBUTES reference :: a_Name
@@ -1049,8 +1049,8 @@ CHARACTER(LEN=*), INTENT(IN)  :: a_Name
 INTEGER,          INTENT(OUT) :: a_Type
 INTEGER,          INTENT(OUT) :: error
 INTEGER                          namelen
-    
-    
+
+
 !            INTEGER, EXTERNAL :: _xfGetPropertyType_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
@@ -1068,8 +1068,8 @@ INTEGER                          namelen
 
   namelen = LEN_TRIM(a_Name)
   error = xfgetpropertytype_f(a_GroupId, a_Name, namelen, a_Type)
-    
-    
+
+
   return
 
 END SUBROUTINE
@@ -1671,7 +1671,7 @@ SUBROUTINE XF_OPEN_PROPERTY_GROUP (a_ParentId, a_GroupId, error)
 
   error = xfopenpropertygroup_f (a_ParentId, a_GroupId)
 
-  return 
+  return
 END SUBROUTINE ! xfopenpropertygroup*/
 
 !------------------------------------------------------------------------------
@@ -3201,7 +3201,7 @@ INTEGER                       error
   error = xfcomputationalorigindefined_f (a_Id, a_bDefined)
 return
 
-END SUBROUTINE 
+END SUBROUTINE
 
 !********************************
 
@@ -3381,7 +3381,7 @@ INTEGER, INTENT(OUT)       :: error
     REAL*8, DIMENSION(*), INTENT(OUT)   :: a_iValues
 
 
-    END FUNCTION xfgetgridcoordsi_f 
+    END FUNCTION xfgetgridcoordsi_f
   END INTERFACE
 
   error = xfgetgridcoordsi_f (a_Id, a_NumVals, a_iValues)
@@ -3665,9 +3665,9 @@ return
 END SUBROUTINE
 
 ! --------------------------------------------------------------------------- */
-! FUNCTION  XF_CREATE_GEOMETRIC_PATH_GROUP 
-! PURPOSE    
-! NOTES     
+! FUNCTION  XF_CREATE_GEOMETRIC_PATH_GROUP
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_CREATE_GEOMETRIC_PATH_GROUP(a_ParentId, a_Path, a_Guid,        &
                                a_Compression, a_PathGroup, a_NullVal, error)
@@ -3741,13 +3741,13 @@ SUBROUTINE XF_WRITE_PARTICLE_TIMESTEP(a_Id, a_nDim, a_Time, a_nPaths, a_Locs, &
 
   error = xfwriteparticletimestep_f (a_Id, a_nDim, a_Time, a_nPaths, a_Locs)
 
-  return 
+  return
 END SUBROUTINE ! XF_WRITE_PARTICLE_TIMESTEP
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_GET_PATH_NULL_VAL
-! PURPOSE    
-! NOTES      
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_GET_PATH_NULL_VAL(GroupId, NullVal, error)
   INTEGER, INTENT(IN)   ::  GroupId
@@ -3770,19 +3770,19 @@ SUBROUTINE XF_GET_PATH_NULL_VAL(GroupId, NullVal, error)
   error = xfgetpathnullval_f (GroupId, NullVal)
 
 
-END SUBROUTINE ! XF_GET_PATH_NULL_VAL 
+END SUBROUTINE ! XF_GET_PATH_NULL_VAL
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_GET_NUMBER_OF_PATHS
-! PURPOSE    
-! NOTES      
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_GET_NUMBER_OF_PATHS(GroupId, NumPaths, error)
   INTEGER             , INTENT(IN)   :: GroupId
   INTEGER, INTENT(OUT)         :: NumPaths
   INTEGER, INTENT(OUT)         :: error
 
-  
+
   !            INTEGER, EXTERNAL :: _xfGetNumberOfPaths_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
@@ -3810,7 +3810,7 @@ SUBROUTINE XF_GET_NUMBER_OF_TIMES(GroupId, NumTimes, error)
   INTEGER             , INTENT(IN)   ::  GroupId
   INTEGER, INTENT(OUT)         ::  NumTimes
   INTEGER, INTENT(OUT)         ::  error
-  
+
 
   !            INTEGER, EXTERNAL :: _xfGetNumberOfTimes_f
 !  MS FORTRAN needs explicit interface for C functions called here.
@@ -3829,17 +3829,17 @@ SUBROUTINE XF_GET_NUMBER_OF_TIMES(GroupId, NumTimes, error)
 
 
   return
-END SUBROUTINE ! XF_GET_NUMBER_OF_TIMES 
+END SUBROUTINE ! XF_GET_NUMBER_OF_TIMES
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_GET_PATH_DIMENSIONALITY
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_GET_PATH_DIMENSIONALITY(GroupId, NumDims, error)
   INTEGER             , INTENT(IN)  ::  GroupId
   INTEGER, INTENT(OUT)        ::  NumDims, error
-  
+
 
   !            INTEGER, EXTERNAL :: _xfGetPathDimensionality_f
 !  MS FORTRAN needs explicit interface for C functions called here.
@@ -3862,8 +3862,8 @@ END SUBROUTINE ! xfgetpathdimensionality */
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_GET_PATH_TIMES_ARRAY
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_GET_PATH_TIMES_ARRAY(GroupId, NumTimes, Times, error)
   INTEGER,              INTENT(IN)    :: GroupId
@@ -3871,7 +3871,7 @@ SUBROUTINE XF_GET_PATH_TIMES_ARRAY(GroupId, NumTimes, Times, error)
   REAL*8, DIMENSION(*), INTENT(INOUT) :: Times
   INTEGER                                error
 
-  
+
 !            INTEGER, EXTERNAL :: _xfGetPathTimesArray_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
@@ -3888,13 +3888,13 @@ SUBROUTINE XF_GET_PATH_TIMES_ARRAY(GroupId, NumTimes, Times, error)
 
   error = xfgetpathtimesarray_f (GroupId, NumTimes, Times)
 
-  
+
 END SUBROUTINE ! xfgetpathtimesarray */
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_READ_PATH_LOCATIONS_AT_TIME
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_READ_PATH_LOCATIONS_AT_TIME(GroupId, TimeIndex, FirstPathIndex, &
                                           NumIndicies, Locs, error)
@@ -3926,8 +3926,8 @@ END SUBROUTINE ! XF_READ_PATH_LOCATIONS_AT_TIME */
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_READ_PATH_LOCS_FOR_PART
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_READ_PATH_LOCS_FOR_PART(GroupId, PathIndex,        &
                                    FirstTimeIndex, NumTimes, Locs, error)
@@ -3935,8 +3935,8 @@ SUBROUTINE XF_READ_PATH_LOCS_FOR_PART(GroupId, PathIndex,        &
   INTEGER, INTENT(IN)         :: PathIndex, FirstTimeIndex, NumTimes
   REAL*8, DIMENSION(*), INTENT(INOUT) :: Locs
   INTEGER, INTENT(OUT)        :: error
-  
-  
+
+
 !            INTEGER, EXTERNAL :: _xfReadPathLocsForParticle_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
@@ -3962,8 +3962,8 @@ END SUBROUTINE ! XF_READ_PATH_LOCS_FOR_PART
 
 ! --------------------------------------------------------------------------- */
 ! FUNCTION  XF_READ_PATH_LOCS_FOR_PARTS
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! --------------------------------------------------------------------------- */
 SUBROUTINE XF_READ_PATH_LOCS_FOR_PARTS(GroupId, NumPaths,  &
                            PathIndices, FirstTimeIndex, NumTimes, Locs, error)
@@ -3974,7 +3974,7 @@ SUBROUTINE XF_READ_PATH_LOCS_FOR_PARTS(GroupId, NumPaths,  &
   INTEGER,               INTENT(IN)          :: NumTimes
   REAL*8, DIMENSION(*),  INTENT(INOUT)       :: Locs
   INTEGER,               INTENT(OUT)         :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfReadPathLocsForParticles_f
 !  MS FORTRAN needs explicit interface for C functions called here.
@@ -3995,20 +3995,20 @@ SUBROUTINE XF_READ_PATH_LOCS_FOR_PARTS(GroupId, NumPaths,  &
   error = xfreadpathlocsforparticles_f (GroupId, NumPaths, PathIndices, &
                                              FirstTimeIndex, NumTimes, Locs)
 
-  
+
   return
 END SUBROUTINE ! XF_READ_PATH_LOCS_FOR_PARTS */
 
 ! ---------------------------------------------------------------------------
 ! FUNCTION  XF_SETUP_TO_WRITE_DATASETS
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_SETUP_TO_WRITE_DATASETS (a_Filename, a_MultiDatasetsGroupPath, &
                         a_PathInMultiDatasetsGroup, a_SpatialDataObjectGuid, &
                         a_OverwriteOptions, a_FileId, a_GroupId, error)
 CHARACTER(LEN=*), INTENT(IN)    :: a_Filename
-CHARACTER(LEN=*), INTENT(IN)    :: a_MultiDatasetsGroupPath 
+CHARACTER(LEN=*), INTENT(IN)    :: a_MultiDatasetsGroupPath
 CHARACTER(LEN=*)                   a_PathInMultiDatasetsGroup !please don't specify an intent.
 CHARACTER(LEN=*), INTENT(IN)    :: a_SpatialDataObjectGuid
 INTEGER,          INTENT(IN)    :: a_OverwriteOptions
@@ -4037,7 +4037,7 @@ INTEGER                         :: filelen, multilen, pathlen, spatlen
 
     CHARACTER(LEN=*),     INTENT(IN)    :: a_Filename, a_MultiDatasetsGroupPath
     CHARACTER(LEN=*),     INTENT(IN)    :: a_SpatialDataObjectGuid
-    CHARACTER(LEN=*)                    :: a_PathInMultiDatasetsGroup 
+    CHARACTER(LEN=*)                    :: a_PathInMultiDatasetsGroup
     INTEGER,              INTENT(IN)    :: filelen, multilen, pathlen, spatlen
 
 
@@ -4049,7 +4049,7 @@ INTEGER                         :: filelen, multilen, pathlen, spatlen
   multilen = LEN_TRIM(a_MultiDatasetsGroupPath)
   pathlen  = LEN_TRIM(a_PathInMultiDatasetsGroup)
   spatlen  = LEN_TRIM(a_SpatialDataObjectGuid)
-  
+
   error = xfsetuptowritedatasets_f (a_Filename, filelen, a_MultiDatasetsGroupPath, multilen, &
                                     a_PathInMultiDatasetsGroup, pathlen, &
                                     a_SpatialDataObjectGuid, spatlen, &
@@ -4061,8 +4061,8 @@ return
 END SUBROUTINE ! xfsetuptowritedatasets
 ! ---------------------------------------------------------------------------
 ! FUNCTION  xfcreatemultidatasetsgroup
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_CREATE_MULTI_DATASETS_GROUP (a_Id, a_Path, a_Guid, a_MultiId, error)
 INTEGER             ,   INTENT(IN)  :: a_Id
@@ -4085,7 +4085,7 @@ INTEGER                          pathlen, guidlen
     INTEGER,              INTENT(OUT)   :: a_MultiId
     CHARACTER(LEN=*),     INTENT(IN)    :: a_Path, a_Guid
     INTEGER                             :: pathlen, guidlen
-    
+
 
 
     END FUNCTION xfcreatemultidatasetsgroup_f
@@ -4103,8 +4103,8 @@ END SUBROUTINE ! xfcreatemultidatasetsgroup
 !******************************
 ! ---------------------------------------------------------------------------
 ! FUNCTION  xfgetgrouppathssizeformultidatasets
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_GET_GRP_PTHS_SZ_MLT_DSETS (a_Id, Num, Maxsize, error)
 INTEGER             , INTENT(IN)    :: a_Id
@@ -4121,7 +4121,7 @@ INTEGER,          INTENT(OUT) :: error
     !MS$ATTRIBUTES C,reference::xfgetgrppathssizeformltdsets_f
     INTEGER,              INTENT(IN)    :: a_Id
     INTEGER,              INTENT(IN)    :: Num, Maxsize
-    
+
 
 
     END FUNCTION xfgetgrppathssizeformltdsets_f
@@ -4131,20 +4131,20 @@ INTEGER,          INTENT(OUT) :: error
   error = xfgetgrppathssizeformltdsets_f (a_Id, Num, Maxsize)
 
 
-return 
+return
 END SUBROUTINE ! xfgetgrouppathssizeformultidatasets
 !******************************
 ! ---------------------------------------------------------------------------
 ! FUNCTION  xfgetallgrouppathsformultidatasets
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_GET_ALL_GRP_PATHS_MLT_DSETS (a_Id, a_Num, a_Maxsize, &
                                            a_Paths, error)
 INTEGER             , INTENT(IN)    :: a_Id
 INTEGER                          a_Num
 INTEGER                          a_Maxsize
-CHARACTER,     DIMENSION(*)   :: a_Paths 
+CHARACTER,     DIMENSION(*)   :: a_Paths
 INTEGER,       INTENT(OUT)    :: error
 INTEGER                          pathlen
 
@@ -4162,7 +4162,7 @@ INTEGER                          pathlen
     INTEGER,              INTENT(IN)    ::  a_Num, a_Maxsize
     CHARACTER,            DIMENSION(*)  ::  a_Paths
     INTEGER,              INTENT(IN)    ::  pathlen
-    
+
 
 
     END FUNCTION xfgetallgrppathsformltdsets_f
@@ -4179,8 +4179,8 @@ return
 END SUBROUTINE ! xfgetallgrouppathsformultidatasets
 ! ---------------------------------------------------------------------------
 ! FUNCTION  xfgetdatasetssdoguid
-! PURPOSE   
-! NOTES     
+! PURPOSE
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_GET_DATASETS_SDO_GUID (a_MultiDatasetsGroup, a_GUID, error)
 INTEGER             , INTENT(IN) :: a_MultiDatasetsGroup
@@ -4199,7 +4199,7 @@ INTEGER                       a_guidlen
     INTEGER,              INTENT(IN)    :: a_MultiDatasetsGroup
     CHARACTER(LEN=*)                    :: a_GUID
     INTEGER,              INTENT(IN)    :: a_guidlen
-    
+
 
 
     END FUNCTION xfgetdatasetssdoguid_f
@@ -4210,12 +4210,12 @@ INTEGER                       a_guidlen
   error = xfgetdatasetssdoguid_f (a_MultiDatasetsGroup, a_GUID, a_guidlen)
 
 
-return 
+return
 END SUBROUTINE ! xfgetdatasetssdoguid
 ! ---------------------------------------------------------------------------
 ! FUNCTION  XF_OPEN_MULTI_DATASETS_GROUP
 ! PURPOSE   Open or create a multi-datasets group inside a mesh or grid
-! NOTES     
+! NOTES
 ! ---------------------------------------------------------------------------
 SUBROUTINE XF_OPEN_MULTI_DATASETS_GROUP (a_Id, DatasetsGroupId, error)
 INTEGER             , INTENT(IN)  :: a_Id
@@ -4232,7 +4232,7 @@ INTEGER, INTENT(OUT)        :: error
     !MS$ATTRIBUTES C,reference::xfopenmultidatasetsgroup_f
     INTEGER,              INTENT(IN)    :: a_Id
     INTEGER,              INTENT(OUT)   :: DatasetsGroupId
-    
+
 
     END FUNCTION xfopenmultidatasetsgroup_f
   END INTERFACE
@@ -4241,7 +4241,7 @@ INTEGER, INTENT(OUT)        :: error
   error = xfopenmultidatasetsgroup_f (a_Id, DatasetsGroupId)
 
 
-return 
+return
 END SUBROUTINE ! xfopenmultidatasetsgroup
 
 !******************************
@@ -4270,7 +4270,7 @@ INTEGER                      :: namelen1, namelen2, namelen3
     CHARACTER(LEN=*), INTENT(IN) :: a_Path, a_Units, a_TimeUnits
     INTEGER, INTENT(IN)          :: a_Compression
     INTEGER, INTENT(OUT)         :: a_DatasetId
-    INTEGER, INTENT(IN)          :: namelen1, namelen2, namelen3 
+    INTEGER, INTENT(IN)          :: namelen1, namelen2, namelen3
 
     END FUNCTION xfcreatescalardataset_f
   END INTERFACE
@@ -4314,7 +4314,7 @@ INTEGER                      :: namelen1, namelen2, namelen3
     CHARACTER(LEN=*), INTENT(IN) :: a_Path, a_Units, a_TimeUnits
     INTEGER, INTENT(IN)          :: a_Compression
     INTEGER, INTENT(OUT)         :: a_DatasetId
-    INTEGER, INTENT(IN)          :: namelen1, namelen2, namelen3 
+    INTEGER, INTENT(IN)          :: namelen1, namelen2, namelen3
 
     END FUNCTION xfcreatevectordataset_f
   END INTERFACE
@@ -4338,23 +4338,23 @@ END SUBROUTINE
 SUBROUTINE XF_CREATE_SCALAR_DSET_EXTNDBL(a_DatasetsGroupId, a_Path, &
                             a_Units, a_TimeUnits, a_FillVal, a_Compression, &
                             a_DatasetId, error)
- 
+
   INTEGER,          INTENT(IN)    :: a_DatasetsGroupId
   CHARACTER(LEN=*), INTENT(IN)    :: a_Path, a_Units, a_TimeUnits
   REAL*4,           INTENT(IN)    :: a_FillVal
   INTEGER,          INTENT(IN)    :: a_Compression
-  INTEGER,          INTENT(OUT)   :: a_DatasetId 
+  INTEGER,          INTENT(OUT)   :: a_DatasetId
   INTEGER,          INTENT(OUT)   :: error
   INTEGER                            pathlen, unitlen, timelen
 
-  
+
 !            INTEGER, EXTERNAL :: _xfCreateScalarDsetExtndbl_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfcreatescalardsetextndbl_f(a_DatasetsGroupId, a_Path, pathlen, &
                                                       a_Units, unitlen, a_TimeUnits, &
-                                                      timelen, a_FillVal, a_Compression, & 
+                                                      timelen, a_FillVal, a_Compression, &
                                                       a_DatasetId)
     !MS$ATTRIBUTES C,reference::xfcreatescalardsetextndbl_f
     !DEC$ATTRIBUTES reference :: a_Path
@@ -4376,9 +4376,9 @@ SUBROUTINE XF_CREATE_SCALAR_DSET_EXTNDBL(a_DatasetsGroupId, a_Path, &
 
   error = xfcreatescalardsetextndbl_f (a_DatasetsGroupId, a_Path, pathlen, &
                                              a_Units, unitlen, a_TimeUnits, &
-                                             timelen, a_FillVal, a_Compression, & 
+                                             timelen, a_FillVal, a_Compression, &
                                              a_DatasetId)
-  
+
   return
 END SUBROUTINE
 
@@ -4402,9 +4402,9 @@ SUBROUTINE XF_EXTEND_SCALAR_DATASET (a_Id, a_NewSize, error)
     END FUNCTION xfextendscalardataset_f
   END INTERFACE
 
-  
+
   error = xfextendscalardataset_f (a_Id, a_NewSize)
-  
+
   return
 END SUBROUTINE
 
@@ -4652,7 +4652,7 @@ INTEGER,                                        INTENT(OUT) :: error
 return
 
 END SUBROUTINE
-       
+
        !********************************
 
 SUBROUTINE XF_INITIALIZE_VECTOR_TIMESTEP(a_Id, a_Time, a_NumValues, a_NumComponents, &
@@ -4727,7 +4727,7 @@ return
 
 END SUBROUTINE
 
-       
+
 !***********************
 
 SUBROUTINE XF_WRITE_ACTIVITY_TIMESTEP (a_Id, a_NumActive, a_Active, error)
@@ -5020,7 +5020,7 @@ INTEGER                          pathlen
     INTEGER,            INTENT(IN)       :: a_Number, a_MaxPathLength
     CHARACTER,          DIMENSION(*)     ::  a_Paths
     INTEGER,            INTENT(IN)       :: pathlen
-    
+
 
 
     END FUNCTION xfgetscalardatasetpaths_f
@@ -5349,7 +5349,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetdatasettimes_f(a_Id, a_nTimes, a_Times)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetdatasettimes_f
     INTEGER,              INTENT(IN)   :: a_Id
     INTEGER,              INTENT(IN)   :: a_nTimes
@@ -5382,7 +5382,7 @@ INTEGER,            INTENT(OUT)   ::  error
 
   INTERFACE
     INTEGER FUNCTION xfgetdatasetmins_f(a_Id, a_nTimes, a_Mins)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetdatasetmins_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_nTimes
@@ -5413,7 +5413,7 @@ INTEGER,            INTENT(OUT)   :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetdatasetmaxs_f(a_Id, a_nTimes, a_Maxs)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetdatasetmaxs_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_nTimes
@@ -5447,7 +5447,7 @@ INTEGER,               INTENT(OUT) :: error
   INTERFACE
     INTEGER FUNCTION xfreadactivitytimestep_f(a_Id, a_TimestepIndex, a_NumVals, &
                                               a_Activity)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadactivitytimestep_f
     INTEGER,                 INTENT(IN)   :: a_Id
       INTEGER,               INTENT(IN)   :: a_TimestepIndex, a_NumVals
@@ -5509,7 +5509,7 @@ INTEGER,               INTENT(OUT)       :: error
   INTERFACE
     INTEGER FUNCTION xfreadactivityvaluesatindex_f(a_Id, a_Index, a_FirstTime, &
                                                    a_NumTimes, a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadactivityvaluesatindex_f
     INTEGER,               INTENT(IN)   :: a_Id
     INTEGER,               INTENT(IN)   :: a_Index, a_FirstTime, a_NumTimes
@@ -5544,7 +5544,7 @@ INTEGER,               INTENT(OUT)        :: error
   INTERFACE
     INTEGER FUNCTION xfreadscalarvaluestimestep_f(a_Id, a_TimestepIndex, a_NumVals, &
                                                   a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadscalarvaluestimestep_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_TimestepIndex, a_NumVals
@@ -5579,7 +5579,7 @@ INTEGER,            INTENT(OUT)       :: error
   INTERFACE
     INTEGER FUNCTION xfreadscalarvaluesatindex_f(a_Id, a_Index, a_FirstTime, &
                                                  a_NumTimes, a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadscalarvaluesatindex_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_Index, a_FirstTime, a_NumTimes
@@ -5614,7 +5614,7 @@ INTEGER,            INTENT(OUT)       :: error
   INTERFACE
     INTEGER FUNCTION xfreadscalarvaluesatindicesfloat_f(a_Id, a_nIndices, a_Indices, a_FirstTime, &
                                                  a_NumTimes, a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadscalarvaluesatindicesfloat_f
     INTEGER             , INTENT(IN) :: a_Id
     INTEGER,           INTENT(IN)        :: a_nIndices
@@ -5650,7 +5650,7 @@ INTEGER, INTENT(OUT)        :: error
   INTERFACE
     INTEGER FUNCTION xfreadvectorvaluestimestep_f(a_Id, a_TimestepIndex, a_NumVals, &
                                                   a_NumComponents, a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadvectorvaluestimestep_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_TimestepIndex, a_NumVals, a_NumComponents
@@ -5688,7 +5688,7 @@ INTEGER,            INTENT(OUT)       :: error
   INTERFACE
     INTEGER FUNCTION xfreadvectorvaluesatindex_f(a_Id, a_Index, a_FirstTime, a_NumTimes, &
                                                  a_NumComponents, a_Values)
-    
+
     !MS$ATTRIBUTES C,reference::xfreadvectorvaluesatindex_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_Index, a_FirstTime, a_NumTimes, a_NumComponents
@@ -5719,7 +5719,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfscalardatalocation_f(a_Id, a_DataLoc)
-    
+
     !MS$ATTRIBUTES C,reference::xfscalardatalocation_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLoc
@@ -5749,7 +5749,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfvector2ddatalocations_f(a_Id, a_DataLocI, a_DataLocJ)
-    
+
     !MS$ATTRIBUTES C,reference::xfvector2ddatalocations_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLocI, a_DataLocJ
@@ -5779,7 +5779,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfvector3ddatalocations_f(a_Id, a_DataLocI, a_DataLocJ, a_DataLock)
-    
+
     !MS$ATTRIBUTES C,reference::xfvector3ddatalocations_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLocI, a_DataLocJ, a_DataLock
@@ -5809,7 +5809,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetscalardatalocation_f(a_Id, a_DataLoc)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetscalardatalocation_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLoc
@@ -5839,7 +5839,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetvector2ddatalocations_f(a_Id, a_DataLocI, a_DataLocJ)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetvector2ddatalocations_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLocI, a_DataLocJ
@@ -5869,7 +5869,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetvector3ddatalocations_f(a_Id, a_DataLocI, a_DataLocJ, a_DataLocK)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetvector3ddatalocations_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(IN)   :: a_DataLocI, a_DataLocJ, a_DataLocK
@@ -5898,7 +5898,7 @@ SUBROUTINE XF_VECTORS_IN_LOCAL_COORDS (a_Id, error)
 
   INTERFACE
     INTEGER FUNCTION xfvectorsinlocalcoords_f(a_Id)
-    
+
     !MS$ATTRIBUTES C,reference::xfvectorsinlocalcoords_f
     INTEGER,            INTENT(IN)   :: a_Id
 
@@ -5926,7 +5926,7 @@ SUBROUTINE XF_ARE_VECTORS_IN_LOCAL_COORDS (a_Id, a_LocalCoords, error)
 
   INTERFACE
     INTEGER FUNCTION xfarevectorsinlocalcoords_f(a_Id, a_LocalCoords)
-    
+
     !MS$ATTRIBUTES C,reference::xfarevectorsinlocalcoords_f
     INTEGER,            INTENT(IN)   :: a_Id
     INTEGER,            INTENT(OUT)  :: a_LocalCoords
@@ -5937,7 +5937,7 @@ SUBROUTINE XF_ARE_VECTORS_IN_LOCAL_COORDS (a_Id, a_LocalCoords, error)
 
 
   error = xfarevectorsinlocalcoords_f (a_Id, a_LocalCoords)
- 
+
 return
 END SUBROUTINE XF_ARE_VECTORS_IN_LOCAL_COORDS
 
@@ -5956,7 +5956,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgethorizdatum_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgethorizdatum_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -5986,7 +5986,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgethorizunits_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgethorizunits_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6017,7 +6017,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetvertdatum_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetvertdatum_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6047,7 +6047,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetvertunits_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetvertunits_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6077,7 +6077,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetlat_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetlat_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6107,7 +6107,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetlon_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetlon_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6118,7 +6118,7 @@ INTEGER, INTENT(OUT)       :: error
 
 
   error = xfgetlon_f (a_CoordId, a_val)
-  
+
   return
 END SUBROUTINE
 !------------------------------------------------------------------------------
@@ -6136,7 +6136,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetutmzone_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetutmzone_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6166,7 +6166,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetspczone_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetspczone_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6197,7 +6197,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgethpgnarea_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgethpgnarea_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(OUT)  :: a_val
@@ -6229,7 +6229,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetcpplat_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetcpplat_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(OUT)  :: a_val
@@ -6260,7 +6260,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetcpplon_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetcpplon_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(OUT)  :: a_val
@@ -6289,7 +6289,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetellipse_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetellipse_f
     INTEGER,            INTENT(IN)   :: a_CoordId
       INTEGER,            INTENT(OUT)  :: a_val
@@ -6320,7 +6320,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetmajorr_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetmajorr_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(OUT)  :: a_val
@@ -6350,7 +6350,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfgetminorr_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetminorr_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(OUT)  :: a_val
@@ -6379,7 +6379,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsethorizdatum_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsethorizdatum_f
     INTEGER,            INTENT(IN)   :: a_CoordId
       INTEGER,            INTENT(IN)   :: a_val
@@ -6409,7 +6409,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsethorizunits_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsethorizunits_f
     INTEGER,            INTENT(IN)   :: a_CoordId
       INTEGER,            INTENT(IN)   :: a_val
@@ -6438,7 +6438,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetvertdatum_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetvertdatum_f
     INTEGER,            INTENT(IN)   :: a_CoordId
       INTEGER,            INTENT(IN)   :: a_val
@@ -6467,7 +6467,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetvertunits_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetvertunits_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6497,7 +6497,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetlat_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetlat_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6526,7 +6526,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetlon_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetlon_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6555,7 +6555,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetutmzone_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetutmzone_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6584,7 +6584,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetspczone_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetspczone_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6613,7 +6613,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsethpgnarea_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsethpgnarea_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6643,7 +6643,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetcpplat_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetcpplat_f
     INTEGER,  INTENT(IN)   :: a_CoordId
       REAL*8,   INTENT(IN)   :: a_val
@@ -6673,7 +6673,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetcpplon_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetcpplon_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(IN)   :: a_val
@@ -6702,7 +6702,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetellipse_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetellipse_f
     INTEGER,            INTENT(IN)   :: a_CoordId
     INTEGER,            INTENT(IN)   :: a_val
@@ -6733,7 +6733,7 @@ INTEGER, INTENT(OUT)       :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetmajorr_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetmajorr_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(IN)   :: a_val
@@ -6765,7 +6765,7 @@ INTEGER, INTENT(OUT)  :: error
 
   INTERFACE
     INTEGER FUNCTION xfsetminorr_f(a_CoordId, a_val)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetminorr_f
     INTEGER, INTENT(IN)   :: a_CoordId
       REAL*8,  INTENT(IN)   :: a_val
@@ -6805,15 +6805,15 @@ SUBROUTINE XF_CALENDAR_TO_JULIAN (era, yr, mo, day, hr, &
   INTEGER, INTENT(IN)       :: sec
   REAL*8,  INTENT(OUT)      :: julian
   INTEGER, INTENT(OUT)      :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfCalendarToJulian_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
-    INTEGER FUNCTION xfcalendartojulian_f(era, yr, mo, day, hr, & 
+    INTEGER FUNCTION xfcalendartojulian_f(era, yr, mo, day, hr, &
                                           min, sec, julian)
-    
+
     !MS$ATTRIBUTES C,reference::xfcalendartojulian_f
     REAL*8,  INTENT(OUT)  :: julian
     INTEGER, INTENT(IN)   :: era, yr, mo, day, hr, min, sec
@@ -6824,7 +6824,7 @@ SUBROUTINE XF_CALENDAR_TO_JULIAN (era, yr, mo, day, hr, &
 
 
   error = xfcalendartojulian_f (era, yr, mo, day, hr, min, &
-                                sec, julian) 
+                                sec, julian)
 
 
   return
@@ -6856,15 +6856,15 @@ SUBROUTINE XF_JULIAN_TO_CALENDAR (era, yr, mo, day, hr, &
   INTEGER, INTENT(OUT) :: sec
   REAL*8,  INTENT(IN)  :: julian
   INTEGER, INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfJulianToCalendar_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
-    INTEGER FUNCTION xfjuliantocalendar_f(era, yr, mo, day, hr, & 
+    INTEGER FUNCTION xfjuliantocalendar_f(era, yr, mo, day, hr, &
                                           min, sec, julian)
-    
+
     !MS$ATTRIBUTES C,reference::xfjuliantocalendar_f
     REAL*8,   INTENT(IN)    :: julian
     INTEGER,  INTENT(OUT)   :: era, yr, mo, day, hr, min, sec
@@ -6875,7 +6875,7 @@ SUBROUTINE XF_JULIAN_TO_CALENDAR (era, yr, mo, day, hr, &
 
 
   error = xfjuliantocalendar_f (era, yr, mo, day, hr, min, &
-                                sec, julian) 
+                                sec, julian)
 
   return
 
@@ -6888,18 +6888,18 @@ SUBROUTINE XF_DATASET_REFTIME (a_Id, a_Reftime, error)
   INTEGER, INTENT(IN)  :: a_Id
   REAL*8,  INTENT(IN)  :: a_Reftime
   INTEGER, INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfDatasetReftime_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfdatasetreftime_f(a_Id, a_Reftime)
-    
+
     !MS$ATTRIBUTES C,reference::xfdatasetreftime_f
     INTEGER, INTENT(IN)    :: a_Id
     REAL*8,  INTENT(IN)    :: a_Reftime
-    
+
 
 
     END FUNCTION xfdatasetreftime_f
@@ -6919,21 +6919,21 @@ SUBROUTINE XF_GET_NUM_OPEN_IDENTIFIERS (a_Id, a_Num, error)
 INTEGER,     INTENT(IN)  :: a_Id
 INTEGER,     INTENT(OUT) :: a_Num
 INTEGER,     INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfGetNumOpenIdentifiers_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnumopenidentifiers_f (a_Id, a_Num)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnumopenidentifiers_f
     INTEGER,     INTENT(IN)  :: a_Id, a_Num
 
 
     END FUNCTION xfgetnumopenidentifiers_f
   END INTERFACE
-  
+
   a_Num = 0
   error = xfgetnumopenidentifiers_f (a_Id, a_Num)
   return
@@ -6943,8 +6943,8 @@ END SUBROUTINE
 
 !******************************************************************************
 !* FUNCTION  XFI_CLOSE_OPEN_IDENTIFIERS
-!* PURPOSE   Closes all open identifiers for a file 
-!* NOTES     
+!* PURPOSE   Closes all open identifiers for a file
+!* NOTES
 !******************2***********************************************************
 SUBROUTINE XFI_CLOSE_OPEN_IDENTIFIERS (a_Id, error)
 INTEGER             ,       INTENT(IN) :: a_Id
@@ -6956,12 +6956,12 @@ INTEGER,              INTENT(OUT):: error
 
   INTERFACE
     INTEGER FUNCTION xfpcloseopenidentifiers_f (a_Id)
-    
+
     !MS$ATTRIBUTES C,reference::xfpcloseopenidentifiers_f
     INTEGER,     INTENT(IN)  :: a_Id
 
 
-    END FUNCTION xfpcloseopenidentifiers_f 
+    END FUNCTION xfpcloseopenidentifiers_f
   END INTERFACE
 
 
@@ -6976,21 +6976,21 @@ END SUBROUTINE ! XFICloseOpenIdentifiers
 !******************************************************************************
 !* FUNCTION  XF_SET_NUM_OF_XSECTS
 !* PURPOSE   Set the number of Cross Sections
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_NUM_OF_XSECTS (a_Id, a_nXSects, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_nXSects, a_compression
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetnumberofxsects_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetnumberofxsects_f (a_Id, a_nXSects, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetnumberofxsects_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_nXSects, a_compression
@@ -7009,21 +7009,21 @@ END SUBROUTINE ! XF_SET_NUM_OF_XSECTS
 !******************************************************************************
 !* FUNCTION  XF_GET_NUM_OF_XSECTS
 !* PURPOSE   Set the number of Cross Sections
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_NUM_OF_XSECTS (a_Id, a_nXSects, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_nXSects
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetnumberofxsects_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnumberofxsects_f (a_Id, a_nXSects)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnumberofxsects_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_nXSects
@@ -7043,21 +7043,21 @@ END SUBROUTINE ! XF_GET_NUM_OF_XSECTS
 !******************************************************************************
 !* FUNCTION  XF_SET_CS_ID
 !* PURPOSE   Set the Cross Sections ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_CS_ID (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetcsid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetcsid_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetcsid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
@@ -7076,21 +7076,21 @@ END SUBROUTINE ! XF_SET_CS_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_CS_ID
 !* PURPOSE   Get the Cross Sections ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_CS_ID (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetcsid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetcsid_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetcsid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -7110,7 +7110,7 @@ END SUBROUTINE ! XF_GET_CS_ID
 !******************************************************************************
 !* FUNCTION  XF_SET_CS_NAME
 !* PURPOSE   Set the Cross Sections Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_CS_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -7118,14 +7118,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetcsname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetcsname_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetcsname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7146,7 +7146,7 @@ END SUBROUTINE ! XF_SET_CS_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_CS_NAME
 !* PURPOSE   Get the Cross Sections Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_CS_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -7154,14 +7154,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetcsid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetcsname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetcsname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7183,21 +7183,21 @@ END SUBROUTINE ! XF_GET_CS_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_CS_NAME_LEN
 !* PURPOSE   Get the Cross Sections Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_CS_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetcsnamelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetcsnamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetcsnamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -7217,7 +7217,7 @@ END SUBROUTINE ! XF_GET_CS_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_REACH_NAME
 !* PURPOSE   Set the Reach Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_REACH_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -7225,14 +7225,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetreachname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetreachname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetreachname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7253,7 +7253,7 @@ END SUBROUTINE ! XF_SET_REACH_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_REACH_NAME
 !* PURPOSE   Get the Reach Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_REACH_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -7261,14 +7261,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetreachname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetreachname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetreachname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7290,21 +7290,21 @@ END SUBROUTINE ! XF_GET_REACH_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_REACH_NAME_LEN
 !* PURPOSE   Get the Reach Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_REACH_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfGetReachNameLen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetreachnamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetreachnamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -7324,7 +7324,7 @@ END SUBROUTINE ! XF_GET_REACH_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_TOPO_ID
 !* PURPOSE   Set the Topo Id
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_TOPO_ID (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -7332,14 +7332,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsettopoid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsettopoid_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsettopoid_f
     !DEC$ATTRIBUTES reference :: a_propid
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7360,7 +7360,7 @@ END SUBROUTINE ! XF_SET_TOPO_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_TOPO_ID
 !* PURPOSE   Get the Topo Id
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_TOPO_ID (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -7368,14 +7368,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgettopoid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgettopoid_f (a_Id, a_NumVals, a_StrLen, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgettopoid_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7397,21 +7397,21 @@ END SUBROUTINE ! XF_GET_TOPO_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_TOPO_ID_LEN
 !* PURPOSE   Get the Topo Id String Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_TOPO_ID_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgettopoidlen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgettopoidlen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgettopoidlen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -7431,7 +7431,7 @@ END SUBROUTINE ! XF_GET_TOPO_ID_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_STATION
 !* PURPOSE   Set the Station
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_STATION (a_Id, a_NumVals, a_PropId, a_compression, error)
@@ -7439,14 +7439,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetstation_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetstation_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetstation_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression
@@ -7466,7 +7466,7 @@ END SUBROUTINE ! XF_SET_STATION
 !******************************************************************************
 !* FUNCTION  XF_GET_STATION
 !* PURPOSE   Get the Station
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_STATION (a_Id, a_NumVals, a_PropId, error)
@@ -7474,14 +7474,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetstation_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetstation_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetstation_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals
@@ -7501,21 +7501,21 @@ END SUBROUTINE ! XF_GET_STATION
 !******************************************************************************
 !* FUNCTION  XF_SET_TYPE
 !* PURPOSE   Set the Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_TYPE (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsettype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsettype_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsettype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
@@ -7534,21 +7534,21 @@ END SUBROUTINE ! XF_SET_TYPE
 !******************************************************************************
 !* FUNCTION  XF_GET_TYPE
 !* PURPOSE   Get the Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_TYPE (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgettype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgettype_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgettype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -7567,21 +7567,21 @@ END SUBROUTINE ! XF_GET_TYPE
 !******************************************************************************
 !* FUNCTION  XF_SET_PTYPE
 !* PURPOSE   Set the Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_PTYPE (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetptype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetptype_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetptype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
@@ -7600,21 +7600,21 @@ END SUBROUTINE ! XF_SET_PTYPE
 !******************************************************************************
 !* FUNCTION  XF_GET_PTYPE
 !* PURPOSE   Get the Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_PTYPE (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgettype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgettype_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgettype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -7634,21 +7634,21 @@ END SUBROUTINE ! XF_GET_PTYPE
 !******************************************************************************
 !* FUNCTION  XF_SET_P_CS_DB_LINK
 !* PURPOSE   Set the Cross Section Database Link
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_P_CS_DB_LINK (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetpcsdblink_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetpcsdblink_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetpcsdblink_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId, a_compression
@@ -7667,21 +7667,21 @@ END SUBROUTINE ! XF_SET_P_CS_DB_LINK
 !******************************************************************************
 !* FUNCTION  XF_GET_P_CS_DB_LINK
 !* PURPOSE   Get the Cross Section Database Link
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_P_CS_DB_LINK (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetpcsdblink_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetpcsdblink_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetpcsdblink_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -7701,7 +7701,7 @@ END SUBROUTINE ! XF_GET_P_CS_DB_LINK
 !******************************************************************************
 !* FUNCTION  XF_SET_NOTE
 !* PURPOSE   Set the Cross Sections Note
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_NOTE (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -7709,14 +7709,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetnote_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetnote_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetnote_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7737,7 +7737,7 @@ END SUBROUTINE ! XF_SET_NOTE
 !******************************************************************************
 !* FUNCTION  XF_GET_NOTE
 !* PURPOSE   Get the Cross Sections Note
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_NOTE (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -7745,14 +7745,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetnote_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnote_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnote_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -7774,21 +7774,21 @@ END SUBROUTINE ! XF_GET_NOTE
 !******************************************************************************
 !* FUNCTION  XF_GET_NOTE_LEN
 !* PURPOSE   Get the Cross Sections Note Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_NOTE_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetnotelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnotelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnotelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -7807,7 +7807,7 @@ END SUBROUTINE ! XF_GET_NOTE_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_GEOM_X
 !* PURPOSE   Set the Cross Section Geometry X
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_GEOM_X (a_Id, a_index, a_NumVals, a_iValues, a_compression, error)
@@ -7815,14 +7815,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectgeomx_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectgeomx_f (a_Id, a_index, a_NumVals, a_iValues, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectgeomx_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -7842,7 +7842,7 @@ END SUBROUTINE ! XF_SET_XSECT_GEOM_X
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_GEOM_X
 !* PURPOSE   Get the Cross Section Geometry X
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_GEOM_X (a_Id, a_index, a_NumVals, a_iValues, error)
@@ -7850,14 +7850,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectgeomx_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectgeomx_f (a_Id, a_index, a_NumVals, a_iValues)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectgeomx_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -7877,7 +7877,7 @@ END SUBROUTINE ! XF_GET_XSECT_GEOM_X
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_GEOM_Y
 !* PURPOSE   Set the Cross Section Geometry Y
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_GEOM_Y (a_Id, a_index, a_NumVals, a_iValues, a_compression, error)
@@ -7885,14 +7885,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectgeomy_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectgeomy_f (a_Id, a_index, a_NumVals, a_iValues, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectgeomy_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -7912,7 +7912,7 @@ END SUBROUTINE ! XF_SET_XSECT_GEOM_Y
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_GEOM_Y
 !* PURPOSE   Get the Cross Section Geometry Y
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_GEOM_Y (a_Id, a_index, a_NumVals, a_iValues, error)
@@ -7920,14 +7920,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectgeomy_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectgeomy_f (a_Id, a_index, a_NumVals, a_iValues)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectgeomy_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -7948,7 +7948,7 @@ END SUBROUTINE ! XF_GET_XSECT_GEOM_Y
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_GEOM_D
 !* PURPOSE   Set the Cross Section Geometry D
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_GEOM_D (a_Id, a_index, a_NumVals, a_iValues, a_compression, error)
@@ -7956,14 +7956,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectgeomd_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectgeomd_f (a_Id, a_index, a_NumVals, a_iValues, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectgeomd_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -7983,7 +7983,7 @@ END SUBROUTINE ! XF_SET_XSECT_GEOM_D
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_GEOM_D
 !* PURPOSE   Get the Cross Section Geometry D
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_GEOM_D (a_Id, a_index, a_NumVals, a_iValues, error)
@@ -7991,14 +7991,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectgeomd_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectgeomd_f (a_Id, a_index, a_NumVals, a_iValues)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectgeomd_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8019,7 +8019,7 @@ END SUBROUTINE ! XF_GET_XSECT_GEOM_D
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_GEOM_Z
 !* PURPOSE   Set the Cross Section Geometry Z
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_GEOM_Z (a_Id, a_index, a_NumVals, a_iValues, a_compression, error)
@@ -8027,14 +8027,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectgeomz_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectgeomz_f (a_Id, a_index, a_NumVals, a_iValues, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectgeomz_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8054,7 +8054,7 @@ END SUBROUTINE ! XF_SET_XSECT_GEOM_Z
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_GEOM_Z
 !* PURPOSE   Get the Cross Section Geometry Z
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_GEOM_Z (a_Id, a_index, a_NumVals, a_iValues, error)
@@ -8062,14 +8062,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_iValues
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectgeomz_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectgeomz_f (a_Id, a_index, a_NumVals, a_iValues)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectgeomz_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8090,7 +8090,7 @@ END SUBROUTINE ! XF_GET_XSECT_GEOM_Z
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_FROM
 !* PURPOSE   Set the Cross Section Line Property From
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_FROM (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -8098,14 +8098,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropfrom_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropfrom_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropfrom_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8125,7 +8125,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_FROM
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_FROM
 !* PURPOSE   Get the Cross Section Line Property From
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_FROM (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -8133,14 +8133,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropfrom_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropfrom_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropfrom_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8161,7 +8161,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_FROM
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_TO
 !* PURPOSE   Set the Cross Section Line Property To
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_TO (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -8169,14 +8169,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropto_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropto_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropto_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8196,7 +8196,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_TO
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_TO
 !* PURPOSE   Get the Cross Section Line Property To
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_TO (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -8204,14 +8204,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropto_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropto_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropto_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8231,7 +8231,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_TO
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_TYPE
 !* PURPOSE   Set the Cross Section Line Property Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_TYPE (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -8239,14 +8239,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlineproptype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlineproptype_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlineproptype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8266,7 +8266,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_TYPE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_TYPE
 !* PURPOSE   Get the Cross Section Line Property Type
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_TYPE (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -8274,14 +8274,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlineproptype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlineproptype_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlineproptype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8302,7 +8302,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_TYPE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_IVALUE
 !* PURPOSE   Set the Cross Section Line Property I Value
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_IVALUE (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -8310,14 +8310,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropivalue_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropivalue_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropivalue_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8337,7 +8337,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_IVALUE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_IVALUE
 !* PURPOSE   Get the Cross Section Line Property I Value
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_IVALUE (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -8345,14 +8345,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropivalue_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropivalue_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropivalue_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8373,7 +8373,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_IVALUE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_FVALUE
 !* PURPOSE   Set the Cross Section Line Property F Value
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_FVALUE (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -8381,14 +8381,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropfvalue_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropfvalue_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropfvalue_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index, a_compression
@@ -8408,7 +8408,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_FVALUE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_FVALUE
 !* PURPOSE   Get the Cross Section Line Property F Value
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_FVALUE (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -8416,14 +8416,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_index
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropfvalue_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropfvalue_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropfvalue_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_index
@@ -8444,21 +8444,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_FVALUE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ID
 !* PURPOSE   Set the Cross Section Line Property ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ID (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropid_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
@@ -8477,21 +8477,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ID
 !* PURPOSE   Get the Cross Section Line Property ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ID (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropid_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -8511,7 +8511,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ID
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_NAME
 !* PURPOSE   Set the Cross Sections Line Properties Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -8519,14 +8519,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropname_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -8547,7 +8547,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_NAME
 !* PURPOSE   Get the Cross Sections Line Properties Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -8555,14 +8555,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -8584,21 +8584,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_NAME_LEN
 !* PURPOSE   Get the Cross Sections Line Properties Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropnamelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropnamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropnamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -8618,7 +8618,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_DESC
 !* PURPOSE   Set the Cross Sections Line Properties Description
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -8626,14 +8626,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropdesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropdesc_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropdesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -8654,7 +8654,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_DESC
 !* PURPOSE   Get the Cross Sections Line Properties Description
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -8662,14 +8662,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropdesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropdesc_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropdesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -8691,21 +8691,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_DESC_LEN
 !* PURPOSE   Get the Cross Sections Description Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_DESC_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropdesclen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropdesclen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropdesclen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -8725,21 +8725,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_DESC_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_CATEGORY
 !* PURPOSE   Set the Cross Section Line Property Category
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_CATEGORY (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropcategory_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropcategory_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropcategory_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
@@ -8758,21 +8758,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_CATEGORY
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_CATEGORY
 !* PURPOSE   Get the Cross Section Line Property Category
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_CATEGORY (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropcategory_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropcategory_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropcategory_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -8792,7 +8792,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_CATEGORY
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_DEFAULT
 !* PURPOSE   Set the Cross Section Line Property Default
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_DEFAULT (a_Id, a_NumVals, a_PropId, a_compression, error)
@@ -8800,14 +8800,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropfdefault_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropfdefault_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropfdefault_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression
@@ -8827,7 +8827,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_DEFAULT
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_DEFAULT
 !* PURPOSE   Get the Cross Section Line Property Default
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_DEFAULT (a_Id, a_NumVals, a_PropId, error)
@@ -8835,14 +8835,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropfdefault_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropfdefault_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropfdefault_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals
@@ -8863,21 +8863,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_DEFAULT
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_EXCLUSIVE
 !* PURPOSE   Set the Cross Section Line Property Exclusive
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_EXCLUSIVE (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropexclusive_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropexclusive_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropexclusive_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
@@ -8896,21 +8896,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_EXCLUSIVE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_EXCLUSIVE
 !* PURPOSE   Get the Cross Section Line Property Exclusive
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_EXCLUSIVE (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropexclusive_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropexclusive_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropexclusive_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -8930,21 +8930,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_EXCLUSIVE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ENUM_GROUP
 !* PURPOSE   Set the Cross Section Line Property Enumeration Group Number
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ENUM_GROUP (a_Id, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfSetNumberOfLnPropEnumGroup_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetnumberoflnpropenumgroup_f (a_Id, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetnumberoflnpropenumgroup_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_compression, a_PropId
@@ -8963,21 +8963,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ENUM_GROUP
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM_GROUP
 !* PURPOSE   Get the Cross Section Line Property Enumeration Group Number
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM_GROUP (a_Id, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetnumberoflnpropenumgroup_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnumberoflnpropenumgroup_f (a_Id, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnumberoflnpropenumgroup_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_PropId
@@ -8997,21 +8997,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM_GROUP
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ENUM
 !* PURPOSE   Set the Cross Section Line Property Enumeration Number
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ENUM (a_Id, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetnumberoflinepropenum
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetnumberoflinepropenum_f (a_Id, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetnumberoflinepropenum_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_compression, a_PropId
@@ -9030,21 +9030,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ENUM
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM
 !* PURPOSE   Get the Cross Section Line Property Enumeration Number
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM (a_Id, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetnumberoflinepropenum_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetnumberoflinepropenum_f (a_Id, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetnumberoflinepropenum_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_PropId
@@ -9064,21 +9064,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ENUM_ID
 !* PURPOSE   Set the Cross Section Line Property Exclusive
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ENUM_ID (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropenumid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropenumid_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropenumid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression, a_PropId
@@ -9097,21 +9097,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ENUM_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM_ID
 !* PURPOSE   Get the Cross Section Line Property Enumeration ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM_ID (a_Id, a_index, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropenumid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropenumid_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropenumid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
@@ -9131,21 +9131,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM_ID
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ENUM_MAT_ID
 !* PURPOSE   Set the Cross Section Line Property Enumeration Material ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ENUM_MAT_ID (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropenummatid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropenummatid_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropenummatid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression, a_PropId
@@ -9164,21 +9164,21 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ENUM_MAT_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM_MAT_ID
 !* PURPOSE   Get the Cross Section Line Property Enumeration Material ID
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM_MAT_ID (a_Id, a_index, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropenummatid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropenummatid_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropenummatid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
@@ -9198,7 +9198,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM_MAT_ID
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_LINE_ENUM_NAME
 !* PURPOSE   Set the Cross Sections Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_LINE_ENUM_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -9206,14 +9206,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectlinepropenumname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectlinepropenumname_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectlinepropenumname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9234,7 +9234,7 @@ END SUBROUTINE ! XF_SET_XSECT_LINE_ENUM_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM_NAME
 !* PURPOSE   Get the Cross Section Line Property Enumeration Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -9242,14 +9242,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlinepropenumname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlinepropenumname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlinepropenumname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9271,21 +9271,21 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_LINE_ENUM_NAME_LEN
 !* PURPOSE   Get the Cross Sections Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_LINE_ENUM_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectlnpropenumnamelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectlnpropenumnamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectlnpropenumnamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -9305,7 +9305,7 @@ END SUBROUTINE ! XF_GET_XSECT_LINE_ENUM_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_MEASURE
 !* PURPOSE   Set the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_MEASURE (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
@@ -9313,14 +9313,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  ::  a_index,a_NumVals, a_compression
 REAL*4,             INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectpointpropmeasure_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointpropmeasure_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointpropmeasure_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression
@@ -9340,7 +9340,7 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_MEASURE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_MEASURE
 !* PURPOSE   Get the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_MEASURE (a_Id, a_index, a_NumVals, a_PropId, error)
@@ -9348,14 +9348,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals
 REAL*8,           INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropmeasure_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropmeasure_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropmeasure_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals
@@ -9376,21 +9376,21 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_MEASURE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_TYPE
 !* PURPOSE   Set the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_TYPE (a_Id, a_index, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index,a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectpointproptype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointproptype_f (a_Id, a_index, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointproptype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_compression, a_PropId
@@ -9409,21 +9409,21 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_TYPE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_TYPE
 !* PURPOSE   Get the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_TYPE (a_Id, a_index, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: xfgetxsectpointproptype_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointproptype_f (a_Id, a_index, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointproptype_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_index, a_NumVals, a_PropId
@@ -9443,21 +9443,21 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_TYPE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_ID
 !* PURPOSE   Set the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_ID (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectpointpropid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointpropid_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointpropid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
@@ -9476,21 +9476,21 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_ID
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_ID
 !* PURPOSE   Get the Cross Section Point Property Measure
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_ID (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropid_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropid_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropid_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -9509,7 +9509,7 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_ID
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_NAME
 !* PURPOSE   Set the Cross Sections Point Property Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -9517,14 +9517,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectpointpropname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointpropname_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointpropname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9545,7 +9545,7 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_NAME
 !* PURPOSE   Get the Cross Sections Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -9553,14 +9553,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropname_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropname_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropname_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9582,21 +9582,21 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_NAME_LEN
 !* PURPOSE   Get the Cross Sections Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropnamelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropnamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropnamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -9615,7 +9615,7 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_DESC
 !* PURPOSE   Set the Cross Sections Point Property Description
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -9623,14 +9623,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsectpointpropdesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointpropdesc_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointpropdesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9651,7 +9651,7 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_DESC
 !* PURPOSE   Get the Cross Sections Description
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -9659,14 +9659,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropdesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropdesc_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropdesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9688,21 +9688,21 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_DESC_LEN
 !* PURPOSE   Get the Cross Sections Description Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_DESC_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropdesclen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropdesclen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropdesclen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -9722,21 +9722,21 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_POINT_EXCLUSIVE
 !* PURPOSE   Set the Cross Section Point Property Exclusive
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_POINT_EXCLUSIVE (a_Id, a_NumVals, a_PropId, a_compression, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfSetXSectPointPropExclusive_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsectpointpropexclusive_f (a_Id, a_NumVals, a_PropId, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsectpointpropexclusive_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_compression, a_PropId
@@ -9755,21 +9755,21 @@ END SUBROUTINE ! XF_SET_XSECT_POINT_EXCLUSIVE
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_POINT_EXCLUSIVE
 !* PURPOSE   Get the Cross Section Point Property Exclusive
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_POINT_EXCLUSIVE (a_Id, a_NumVals, a_PropId, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsectpointpropexclusive_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsectpointpropexclusive_f (a_Id, a_NumVals, a_PropId)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsectpointpropexclusive_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_PropId
@@ -9789,7 +9789,7 @@ END SUBROUTINE ! XF_GET_XSECT_POINT_EXCLUSIVE
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_TOPO_NAME
 !* PURPOSE   Set the Cross Sections Topo Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_TOPO_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -9797,14 +9797,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsecttoponame_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsecttoponame_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsecttoponame_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9825,7 +9825,7 @@ END SUBROUTINE ! XF_SET_XSECT_TOPO_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_TOPO_NAME
 !* PURPOSE   Get the Cross Sections Topo Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_TOPO_NAME (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -9833,14 +9833,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsecttoponame_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsecttoponame_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsecttoponame_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9862,21 +9862,21 @@ END SUBROUTINE ! XF_GET_XSECT_TOPO_NAME
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_TOPO_NAME_LEN
 !* PURPOSE   Get the Cross Sections Topo Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_TOPO_NAME_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsecttoponamelen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsecttoponamelen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsecttoponamelen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
@@ -9896,7 +9896,7 @@ END SUBROUTINE ! XF_GET_XSECT_TOPO_NAME_LEN
 !******************************************************************************
 !* FUNCTION  XF_SET_XSECT_TOPO_DESC
 !* PURPOSE   Set the Cross Sections Topo Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_SET_XSECT_TOPO_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression, error)
@@ -9904,14 +9904,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen, a_compression
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfsetxsecttopodesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfsetxsecttopodesc_f (a_Id, a_NumVals, a_PropId, a_StrLen, a_compression)
-    
+
     !MS$ATTRIBUTES C,reference::xfsetxsecttopodesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9932,7 +9932,7 @@ END SUBROUTINE ! XF_SET_XSECT_TOPO_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_TOPO_DESC
 !* PURPOSE   Get the Cross Sections Topo Name
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_TOPO_DESC (a_Id, a_NumVals, a_PropId, a_StrLen, error)
@@ -9940,14 +9940,14 @@ INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 CHARACTER(LEN=*), INTENT(IN)  :: a_PropId
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsecttopodesc_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsecttopodesc_f (a_Id, a_NumVals, a_PropId, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsecttopodesc_f
     !DEC$ATTRIBUTES reference :: a_PropId
     INTEGER,          INTENT(IN)  :: a_Id
@@ -9969,21 +9969,21 @@ END SUBROUTINE ! XF_GET_XSECT_TOPO_DESC
 !******************************************************************************
 !* FUNCTION  XF_GET_XSECT_TOPO_DESC_LEN
 !* PURPOSE   Get the Cross Sections Topo Name Length
-!* NOTES  
+!* NOTES
 !************************************************************************************
 
 SUBROUTINE XF_GET_XSECT_TOPO_DESC_LEN (a_Id, a_NumVals, a_StrLen, error)
 INTEGER,          INTENT(IN)  :: a_Id
 INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen
 INTEGER,          INTENT(OUT) :: error
-  
+
 
 !            INTEGER, EXTERNAL :: _xfgetxsecttopodesclen_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 
   INTERFACE
     INTEGER FUNCTION xfgetxsecttopodesclen_f (a_Id, a_NumVals, a_StrLen)
-    
+
     !MS$ATTRIBUTES C,reference::xfgetxsecttopodesclen_f
     INTEGER,          INTENT(IN)  :: a_Id
     INTEGER,          INTENT(IN)  :: a_NumVals, a_StrLen

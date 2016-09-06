@@ -360,7 +360,7 @@
   SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_II_JJ
 
     IMPLICIT NONE
-   
+
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
@@ -466,7 +466,7 @@
   SUBROUTINE MR_CALC_QADV_N_QDIF_XY_UV_U_IM_JJ
 
     IMPLICIT NONE
-   
+
     REAL   (CARD_KIND)               :: CRU , DRU
     REAL   (CARD_KIND)               :: DDU , D2U , DCU
 
@@ -699,7 +699,7 @@
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),1:NJ) :: QADV_XY_SS_U , QDIF_XY_SS_U
 
     INTEGER(IJID_KIND) :: I , J
-    
+
     DO J = 1 , NJ
 
       I = 0

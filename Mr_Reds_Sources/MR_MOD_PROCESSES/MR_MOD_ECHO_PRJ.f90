@@ -21,7 +21,7 @@
   MODULE MR_MOD_ECHO_PRJ
 
     USE MR_KINDS
-    
+
     USE MR_DEF_PRJ_METADATA
 
     USE MR_DEF_RANKS
@@ -38,7 +38,7 @@
 !***********************************************************************************************************************************
 
   CONTAINS
-  
+
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -62,20 +62,20 @@
   SUBROUTINE MR_ECHO_PRJ
 
     IMPLICIT NONE
-    
+
     CHARACTER(LEN=1)   :: ECHO_Y_OR_N
-    
+
     WRITE(*,'( )')
     WRITE(*,'(2X,"Please check the project settings below:")')
-    
+
     WRITE(*,'( )')
     WRITE(*,'(4X,"   <TITLE> ", A )') TRIM(PRJ_TITLE)
     WRITE(*,'(4X,"<ABSTRACT> ", A )') TRIM(PRJ_ABSTRACT)
-    
+
     WRITE(*,'( )')
     WRITE(*,'(4X,"     GRID ",I5," x ",I5," x ",I5)') NI , NJ , NK
     WRITE(*,'(4X,"       GRAIN SIZE ",F7.3," mm")') D0*1000.0
-    
+
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
     WRITE(*,'(4X,"                       Computational time interval [s]              : ",G13.6)') DT/COR
@@ -83,7 +83,7 @@
     WRITE(*,'(4X,"          Total number of time steps for computing                  : ",I9   )') NTSS
     WRITE(*,'(4X,"    Inteval of number of time steps for outputting                  : ",I9   )') ITS_OUTPUT
     WRITE(*,'(4X,"                            Time relaxation factor                  : ",G13.6)') PHI
-    
+
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Constants and Reference Parameters----")')
     WRITE(*,'(4X,"  ----Water Physical Properties----")')
@@ -103,15 +103,15 @@
     WRITE(*,'(4X,"     Reference horizontal eddy kinematic viscosity [m^2/s]          : ",G13.6)') VXYR
     WRITE(*,'(4X,"       Reference vertical eddy kinematic viscosity [m^2/s]          : ",G13.6)') VZR
     WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ",G13.6)') RR
-    
+
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Flow Plane Slope----")')
     WRITE(*,'(4X,"    Please confirm the flow plane slope")')
     WRITE(*,'(4X,"    be coincidence with X axis!")')
     WRITE(*,'(4X,"                                  Flow plane slope                  : ",G13.6)') SLOPE
-    
+
     WRITE(*,'( )')
-    DO 
+    DO
       WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
       READ(*,*) ECHO_Y_OR_N
       SELECT CASE( ECHO_Y_OR_N )
@@ -123,7 +123,7 @@
         CYCLE
       END SELECT
     END DO
-    
+
   END SUBROUTINE MR_ECHO_PRJ
 
   END MODULE MR_MOD_ECHO_PRJ
