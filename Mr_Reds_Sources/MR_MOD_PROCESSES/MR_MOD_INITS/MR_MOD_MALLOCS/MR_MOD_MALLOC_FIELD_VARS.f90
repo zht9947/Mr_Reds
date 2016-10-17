@@ -95,6 +95,13 @@
 
     ALLOCATE(   SSS(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
 
+    ALLOCATE(    KI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
+    ALLOCATE(   KIB(1:NI1(FDRD_KIND),1:NJ           ) )
+
+    ALLOCATE(    DI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
+    ALLOCATE(   DIB(1:NI1(FDRD_KIND),1:NJ           ) )
+    ALLOCATE(   DIS(1:NI1(FDRD_KIND),1:NJ           ) )
+
     ALLOCATE( VXYUV(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK  ) )
     ALLOCATE(  VXYU(0:NI0(FDRD_KIND),1:NJ,    1:NK  ) , VXYV(1:NI1(FDRD_KIND),0:NJ,    1:NK  ) )
 
@@ -106,10 +113,6 @@
 
     ALLOCATE(  DZWW(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
     ALLOCATE(   DZW(1:NI1(FDRD_KIND),1:NJ,    0:NK  ) )
-
-    ALLOCATE(    KI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
-
-    ALLOCATE(    DI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
 
   END SUBROUTINE MR_MALLOC_FIELD_VARS
 

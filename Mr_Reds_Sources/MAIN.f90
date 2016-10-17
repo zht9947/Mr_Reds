@@ -37,6 +37,8 @@
 !  USE MR_MOD_CALC_A_B_C_D
 !
 !  USE MR_MOD_UPDT_TBUV
+!  USE MR_MOD_UPDT_KIB_N_DIB
+!  USE MR_MOD_UPDT_KI_N_DI
 !  USE MR_MOD_UPDT_HYD
 !  USE MR_MOD_UPDT_H
 !  USE MR_MOD_UPDT_VZW
@@ -69,6 +71,8 @@
 !  real   (fdrd_kind) , allocatable , dimension(:,:      ) :: h0
 !  real   (fdrd_kind) , allocatable , dimension(:,:,:    ) :: uva0
 !  real   (fdrd_kind) , allocatable , dimension(:,:,:,:  ) :: uv0
+!  real   (fdrd_kind) , allocatable , dimension(:,:,  :  ) :: ki0
+!  real   (fdrd_kind) , allocatable , dimension(:,:,  :  ) :: di0
 !
 !  real   (card_kind) , allocatable , dimension(:,:,:    ) :: alfa , beta
 !
@@ -118,6 +122,8 @@
 !  ALLOCATE(    H0(1:NI1(FDRD_KIND),1:NJ           ) )
 !  ALLOCATE(  UVA0(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
 !  ALLOCATE(   UV0(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK  ) )
+!  ALLOCATE(   ki0(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
+!  ALLOCATE(   di0(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
 !
 !  ALLOCATE(  ALFA(1:NI1(CARD_KIND),1:NJ,1:2       ) ,   BETA(1:NI1(CARD_KIND),1:NJ,1:2       ) )
 !
@@ -130,16 +136,16 @@
 !  ALLOCATE(HYD_A3(1:NI1(CARD_KIND),1:NJ,    2:NK  ) , HYD_B3(1:NI1(CARD_KIND),1:NJ,    1:NK  ) , HYD_C3(1:NI1(CARD_KIND),1:NJ,    1:NK-1) )
 !  ALLOCATE(HYD_D3(1:NI1(CARD_KIND),1:NJ,1:2,1:NK  ) )
 !
-!  ALLOCATE( UVT(1:NI1(FDRD_KIND),1:NJ,1:2) )
-!  ALLOCATE( UUT(0:NI0(FDRD_KIND),1:NJ,1:2) )
-!  ALLOCATE( VVT(1:NI1(FDRD_KIND),0:NJ,1:2) )
+!  ALLOCATE(  UVT(1:NI1(FDRD_KIND),1:NJ,1:2)  )
+!  ALLOCATE(  UUT(0:NI0(FDRD_KIND),1:NJ,1:2)  )
+!  ALLOCATE(  VVT(1:NI1(FDRD_KIND),0:NJ,1:2)  )
 !
-!  ALLOCATE( QADV_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) , QDIF_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) )
-!  ALLOCATE( QADV_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) , QDIF_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) )
+!  ALLOCATE(  QADV_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) , QDIF_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2)  )
+!  ALLOCATE(  QADV_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) , QDIF_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2)  )
 !
-!  ALLOCATE( TSUV(1:NI1(FDRD_KIND),1:NJ,1:2) ) ; TSUV = 0.0
+!  ALLOCATE(  TSUV(1:NI1(FDRD_KIND),1:NJ,1:2) ) ; TSUV = 0.0
 !
-!  ALLOCATE( QADV_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) , QDIF_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) )
+!  ALLOCATE(  QADV_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) , QDIF_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK)  )
 !
 !
 !  WRITE(*,'( )')
@@ -285,7 +291,7 @@
 !  !  end if
 !  !end do
 !
-!  pause
+!  !pause
 !
 !  CALL MR_INIT_FIELD_VARS_N_ACTIVITY
 !
@@ -299,6 +305,9 @@
 !
 !    h0 = h
 !    uva0 = uva
+!    uv0 = uv
+!    ki0 = ki
+!    di0 = di
 !
 !    print'("***********************************")'
 !
@@ -308,6 +317,24 @@
 !    print'("TBUV : ")'
 !    do j = njxx, 1, -1
 !      print'(<nixx>(35X,"(",es10.3,",",es10.3,")",:,1X))', ( TUVR*tbuv(i,j,1:2) , i=1,nixx )
+!    end do
+!
+!    call mr_updt_kib_n_dib
+!
+!    call mr_updt_ki_n_di
+!    print'("ki : ")'
+!    do k = 1, nk
+!      print'("k=",i3)',k
+!      do j = njxx, 1, -1
+!        print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( ki(i,j,k), i=1,nixx )
+!      end do
+!    end do
+!    print'("di : ")'
+!    do k = 1, nk
+!      print'("k=",i3)',k
+!      do j = njxx, 1, -1
+!        print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( di(i,j,k), i=1,nixx )
+!      end do
 !    end do
 !
 !  !! QADV and QDIF xy
@@ -356,7 +383,7 @@
 !  !      print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( qdif_z_uv_w(i,j,1:2, k ), i=1,nixx )
 !  !    end do
 !  !  end do
-!
+!  
 !  ! ALFA and BETA
 !  ! block
 !    call mr_calc_raw_hyd_d3( ni , nj , nk , hyd_d3 )
@@ -367,7 +394,7 @@
 !    !    print'( <nixx>(35X,"(",f10.5,",",f10.5,")",:,1X) )', ( hyd_d3(i,j,1:2,k), i=1,nixx )
 !    !  end do
 !    !end do
-!
+!  
 !    call mr_calc_alfa_n_beta( ni , nj , nk , hyd_d3 , alfa , beta )
 !    !print'("HYD_D3 : ")'
 !    !do k = 1, nk
@@ -386,7 +413,7 @@
 !      print'( <nixx>(35X,"(",es10.3,",",es10.3,")",:,1X) )', ( beta(i,j,1:2), i=1,nixx )
 !    end do
 !    print'("===================================")'
-!
+!  
 !    call mr_calc_d1( ni , nj , zs , alfa , beta , d1 )
 !    call mr_calc_a1_b1_c1( ni , nj , alfa , a1 , b1 , c1 )
 !    zs = mr_tdma1( ni , nj , a1 , b1 , c1 , d1 )
@@ -402,9 +429,9 @@
 !    do j = njxx, 1, -1
 !      print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,nixx )
 !    end do
-!
+!  
 !    print*
-!
+!  
 !    call mr_calc_d2( ni , nj , zs , beta , d2 )
 !    call mr_calc_a2_b2_c2( ni , nj , alfa , a2 , b2 , c2 )
 !    zs = mr_tdma2( ni , nj , a2 , b2 , c2 , d2 )
@@ -421,15 +448,15 @@
 !    do j = njxx, 1, -1
 !      print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( zs(i,j), i=1,nixx )
 !    end do
-!
+!  
 !    print*
 !    print*,"Sum ZS = ",sum(zs(1:ni,1:nj))
 !    print*
-!
-!
+!  
+!  
 !    call mr_interp_xy_zs_u( ni , nj , zs , zsu )
 !    call mr_interp_xy_zs_v( ni , nj , zs , zsv )
-!
+!  
 !    PRINT'("ZS, ZSU & ZSV : ")'
 !    do j = njxx, 0, -1
 !      print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( zsv(i,j), i=1,nixx )
@@ -437,9 +464,9 @@
 !        print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', zsu(0,j), ( (zs(i,j), zsu(i,j)), i=1,nixx )
 !      end if
 !    end do
-!
+!  
 !    call mr_calc_uva( ni , nj , zsu , zsv , alfa , beta , uva )
-!
+!  
 !    call mr_interp_xy_uv_u_by_rcprac( ni , nj , zs , alfa , beta , ua )
 !    call mr_interp_xy_uv_v_by_rcprac( ni , nj , zs , alfa , beta , va )
 !    print'("UVA, UA & VA : ")'
@@ -449,9 +476,9 @@
 !        print'( (10x," ",f10.5," ",10x,"   "), <nixx>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', ua(0,j), ( (uva(i,j,1:2), ua(i,j)), i=1,nixx )
 !      end if
 !    end do
-!
+!  
 !    !print'("===================================")'
-!
+!  
 !    call mr_calc_hyd_a3_b3_c3( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 )
 !    !do k = 1, nk
 !    !  print'("k=",i3)', k
@@ -465,9 +492,9 @@
 !    !    end if
 !    !  end do
 !    !end do
-!
+!  
 !    !print*
-!
+!  
 !    uv = mr_tdma3_uv( ni , nj , nk , hyd_a3 , hyd_b3 , hyd_c3 , hyd_d3 )
 !    !print'("UV Deviation : ")'
 !    !do k = 1, nk
@@ -478,7 +505,7 @@
 !    !end do
 !    !
 !    !print*
-!
+!  
 !    do k = 1 , nk
 !      call mr_interp_xy_uv_u_by_linear( ni , nj , uv(:,:,1:2, k ) , u(:,:, k ) )
 !      call mr_interp_xy_uv_v_by_linear( ni , nj , uv(:,:,1:2, k ) , v(:,:, k ) )
@@ -491,25 +518,25 @@
 !    !    print'( <nixx>(35X," ",es10.3," ",10X" ",:,1X) )', ( w(i,j,k), i=1,nixx )
 !    !  end do
 !    !end do
-!
+!  
 !    do k = 1 , nk
 !      u(:,:, k ) = u(:,:, k ) + ua(:,:)
 !      v(:,:, k ) = v(:,:, k ) + va(:,:)
-!
+!  
 !      uv(:,:,1:2, k ) = uv(:,:,1:2, k ) + uva(:,:,1:2)
-!
+!  
 !    end do
-!    !print'("UV, U & V : ")'
-!    !do k = 1, nk
-!    !  print'("k=",i3)', k
-!    !  do j = njxx, 0, -1
-!    !    print'( <nixx>(35x," ",10x," ",f10.5," ",:,1x) )', ( v(i,j,k), i=1,nixx )
-!    !    if(j/=0) then
-!    !      print'( (10x," ",f10.5," ",10x,"   "), <nixx>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', u(0,j,k), ( (uv(i,j,1:2,k), u(i,j,k)), i=1,nixx )
-!    !    end if
-!    !  end do
-!    !end do
-!
+!    print'("UV, U & V : ")'
+!    do k = 1, nk
+!      print'("k=",i3)', k
+!      do j = njxx, 0, -1
+!        print'( <nixx>(35x," ",10x," ",f10.5," ",:,1x) )', ( v(i,j,k), i=1,nixx )
+!        if(j/=0) then
+!          print'( (10x," ",f10.5," ",10x,"   "), <nixx>("(",f10.5,",",f10.5,")",1x,10x," ",f10.5," ",10x,"   ") )', u(0,j,k), ( (uv(i,j,1:2,k), u(i,j,k)), i=1,nixx )
+!        end if
+!      end do
+!    end do
+!  
 !  ! end block
 !
 !    !call mr_updt_hyd
@@ -518,22 +545,23 @@
 !    !end if
 !
 !    call mr_updt_h
-!    print'("H, HU & HV : ")'
-!    do j = njxx, 0, -1
-!      print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,nixx )
-!      if(j/=0) then
-!        print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,nixx )
-!      end if
-!    end do
+!    !print'("H, HU & HV : ")'
+!    !do j = njxx, 0, -1
+!    !  print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,nixx )
+!    !  if(j/=0) then
+!    !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,nixx )
+!    !  end if
+!    !end do
 !
 !    call mr_updt_vzw
-!    !print'("vzw : ")'
-!    !do k = 0, nk
-!    !  print'("k=",i3)',k
-!    !  do j = njxx, 1, -1
-!    !    print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( vzw(i,j,k), i=1,nixx )
-!    !  end do
-!    !end do
+!    print'("vzw : ")'
+!    do k = 0, nk
+!      print'("k=",i3)',k
+!      do j = njxx, 1, -1
+!        print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( vzw(i,j,k), i=1,nixx )
+!      end do
+!    end do
+!
 !
 !    print*
 !
@@ -545,7 +573,11 @@
 !
 !
 !
-!    if( its>10 .and. maxval(abs(uva(1:ni,1:nj,1:2)-uva0(1:ni,1:nj,1:2)))<epsilon(uva) .and. maxval(abs(h(1:ni,1:nj)-h0(1:ni,1:nj)))<epsilon(h) ) then
+!    if( its>10 .and. maxval(abs(uva(1:ni,1:nj,1:2     )-uva0(1:ni,1:nj,1:2     )))<epsilon(uva) .and. maxval(abs(h(1:ni,1:nj)-h0(1:ni,1:nj)))<epsilon(h)   &
+!               .and. maxval(abs( uv(1:ni,1:nj,1:2,1:nk)- uv0(1:ni,1:nj,1:2,1:nk)))<epsilon(uv )   &
+!               .and. maxval(abs( ki(1:ni,1:nj,    1:nk)- ki0(1:ni,1:nj,    1:nk)))<epsilon(ki )   &
+!               .and. maxval(abs( di(1:ni,1:nj,    1:nk)- di0(1:ni,1:nj,    1:nk)))<epsilon(di )   &
+!                     ) then
 !      exit
 !    end if
 !

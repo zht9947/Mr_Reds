@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -18,19 +19,27 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
+  MODULE MR_MOD_UPDT_KIB_N_DIB
 
     USE MR_KINDS
 
     USE MR_DEF_RANKS
+
+    USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_ACTIVITY
+    USE MR_DEF_TIMING
+
+    USE MR_MCS_K_EPS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_INIT_FIELD_VARS_N_ACTIVITY
+    PUBLIC :: MR_UPDT_KIB_N_DIB
+
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBUV_SQR , TBUV_MOD
 
 !***********************************************************************************************************************************
 
@@ -56,43 +65,30 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY
+  SUBROUTINE MR_UPDT_KIB_N_DIB
+
+    USE MR_MOD_OPERATOR_UV
+    USE MR_MOD_OPERATOR_SS
 
     IMPLICIT NONE
 
-    ZB    = - 0.026
-    ZS    =   0.0        ;  ZSU =   0.0        ;  ZSV =   0.0
-    H     =   0.026      ;   HU =   0.026      ;   HV =   0.026
-    R     =   0.0
-    RI    =   0.0
-    UVA   =   0.0000     ;   UA =   0.0000     ;   VA =   0.0000
-    UV    =   0.0000     ;    U =   0.0000     ;    V =   0.0000
-    WW    =   0.000
-    W     =   0.000
-    TBUV  =   0.0
-    TBFUV =   0.0        ; TBFU =   0.0        ; TBFV =   0.0
-    QSBUV =   0.0        ; QSBU =   0.0        ; QSBV =   0.0
-    KI    =   0.0
-    KIB   =   0.0
-    DI    =   0.0
-    DIB   =   0.0
-    DIS   =   0.0
-    VXYUV =   1.000e+0   ; VXYU =   1.000e+0   ; VXYV =   1.000e+0
-    VZWW  =   1.000e-6
-    VZW   =   1.000e-6
-    DXYUV =   1.000e+0   ; DXYU =   1.000e+0   ; DXYV =   1.000e+0
-    DZWW  =   1.000e-6
-    DZW   =   1.000e-6
+    INTEGER(IJID_KIND) :: I , J
 
+    ALLOCATE( TBUV_SQR(1:NI1(FDRD_KIND),1:NJ) , TBUV_MOD(1:NI1(FDRD_KIND),1:NJ) )
 
-    ACTIVITY = BEACTIVE
+      TBUV_SQR = .MRUVSQR. ( JUV .MRUVTFM. TBUV )
+      TBUV_MOD = .MRSSQRT. ( TBUV_SQR )
 
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          KIB( I , J ) = TBUV_MOD( I , J ) / ( SQRT( CV0 ) )
+          DIB( I , J ) = TBUV_SQR( I , J ) / ( KAR * EKZ * (70.0*V0/VZR) )
+        END DO
+      END DO
 
-    WHERE( ACTIVITY == NOACTIVE )
-      ZB = HUGE(ZB)
-       H = EPSILON(H)
-    END WHERE
+    DEALLOCATE( TBUV_SQR , TBUV_MOD )
 
-  END SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY
+  END SUBROUTINE MR_UPDT_KIB_N_DIB
 
-  END MODULE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
+  END MODULE MR_MOD_UPDT_KIB_N_DIB

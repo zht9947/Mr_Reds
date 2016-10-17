@@ -25,12 +25,12 @@
 !               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
 !                             BSB    :    BED-LOAD SEDIMENT SIZE FRACTION
 !                             SSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
+!                              KI    :    TURBULENCE KINETIC ENERGY
+!                              DI    :    TURBULENCE DISSIPATION
 !               VXYUV, VXYU, VXYV    :    HORIZONTAL EDDY KINEMATIC VISCOSITY VECTOR
 !                       VZWW, VZW    :    VERTICAL EDDY KINEMATIC VISCOSITY SCALAR
 !               DXYUV, DXYU, DXYV    :    HORIZONTAL EDDY KINEMATIC DIFFUSIVITY VECTOR
 !                       DZWW , DZ    :    VERTICAL EDDY KINEMATIC DIFFUSIVITY SCALAR
-!                              KI    :    TURBULENCE KINETIC ENERGY
-!                              DI    :    TURBULENCE DISSIPATION
 !
 ! RECORD OF REVISIONS:
 !
@@ -65,6 +65,10 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: BSB
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: SSS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: KIB
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIB , DIS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: VXYUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VXYU , VXYV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZWW
@@ -73,7 +77,5 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DXYU , DXYV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DZWW
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DZW
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
 
   END MODULE MR_DEF_FIELD_VARS

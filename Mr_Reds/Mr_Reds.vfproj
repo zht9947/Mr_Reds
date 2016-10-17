@@ -30,6 +30,8 @@
 		<Filter Name="MR_DEFS">
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<Filter Name="MR_MCONSTS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_MCONSTS\MR_MCS_K_EPS.f90"/></Filter>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
@@ -94,6 +96,19 @@
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_OUTPUT.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/></Filter>
 		<Filter Name="MR_MOD_UPDTS">
+		<Filter Name="MR_MOD_CALC_EQKD">
+		<Filter Name="MR_MOD_CALC_EQD">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQD\MR_MOD_CALC_EQD_A3_B3_C3_D3.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQD\MR_MOD_CALC_EQD_ADV_N_DIF_XY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQD\MR_MOD_CALC_EQD_ADV_N_DIF_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQD\MR_MOD_CALC_EQD_SRC_XY.f90"/></Filter>
+		<Filter Name="MR_MOD_CALC_EQK">
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQK\MR_MOD_CALC_EQK_A3_B3_C3_D3.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQK\MR_MOD_CALC_EQK_ADV_N_DIF_XY.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQK\MR_MOD_CALC_EQK_ADV_N_DIF_Z.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQK\MR_MOD_CALC_EQK_SRC_XY.f90"/></Filter>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQKD_GRO.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_EQKD\MR_MOD_CALC_EQKD_PRO.f90"/></Filter>
 		<Filter Name="MR_MOD_CALC_HYD">
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_A_B_C_D - for Anti-Symmetry BC.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_ALFA_N_BETA.f90"/>
@@ -104,6 +119,8 @@
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_COR_XY.f90"/></Filter>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_H.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_HYD - To be revised.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_KI_N_DI.f90"/>
+		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_KIB_N_DIB.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_TBUV.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_VZW.f90"/></Filter>
 		<File RelativePath="..\Mr_Reds_Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>

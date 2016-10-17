@@ -33,8 +33,8 @@
 
     PRIVATE
 
-    PUBLIC :: MR_CALC_QADV_N_QDIF_Z_UV_W
-    PUBLIC :: MR_CALC_QADV_N_QDIF_Z_SS_W
+    PUBLIC :: MR_CALC_QADV_N_QDIF_Z_UV_W , MR_CALC_T_Z_UV_W
+    PUBLIC :: MR_CALC_QADV_N_QDIF_Z_SS_W , MR_CALC_T_Z_SS_W
 
 !***********************************************************************************************************************************
 
@@ -435,6 +435,93 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_UV_W( NI , NJ , NK , UV , EKZ , VZW , T_Z_UV_W , TUV0 , TUVN )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK) :: UV
+
+    REAL   (PARD_KIND) , INTENT(IN ) :: EKZ
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    0:NK) :: VZW
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: T_Z_UV_W
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: TUV0 , TUVN
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+    INTEGER(KKID_KIND) :: K
+
+    K = 0
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+            ELSE
+              T_Z_UV_W( I , J ,DIM, K ) = TUV0( I , J ,DIM)
+            END IF
+          END DO
+        END DO
+      END DO
+    !END K = 0
+
+    DO K = 1 , NK-1
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+            ELSE
+              T_Z_UV_W( I , J ,DIM, K ) = EKZ * VZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+              & ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+            END IF
+          END DO
+        END DO
+      END DO
+    END DO
+
+    K = NK
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+            ELSE
+              T_Z_UV_W( I , J ,DIM, K ) = TUVN( I , J ,DIM)
+            END IF
+          END DO
+        END DO
+      END DO
+    !END K = NK
+
+  END SUBROUTINE MR_CALC_T_Z_UV_W
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
   SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W( NI , NJ , NK , SS , RB , W , QADV_Z_SS_W , SCZ , DZW , QDIF_Z_SS_W , TSS0 , TSSN )
 
     IMPLICIT NONE
@@ -778,5 +865,85 @@
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN
 
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_SS_W( NI , NJ , NK , SS , SCZ , DZW , T_Z_SS_W , TSS0 , TSSN )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: SS
+
+    REAL   (PARD_KIND) , INTENT(IN ) :: SCZ
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: DZW
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: T_Z_SS_W
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: TSS0 , TSSN
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER(KKID_KIND) :: K
+
+    K = 0
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+            T_Z_SS_W( I , J , K ) = 0.0
+          ELSE
+            T_Z_SS_W( I , J , K ) = TSS0( I , J )
+          END IF
+        END DO
+      END DO
+    !END K = 0
+
+    DO K = 1 , NK-1
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+            T_Z_SS_W( I , J , K ) = 0.0
+          ELSE
+            T_Z_SS_W( I , J , K ) = SCZ * DZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+            & ( SS( I , J ,K+1) - SS( I , J , K ) )
+          END IF
+        END DO
+      END DO
+    END DO
+
+    K = NK
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+            T_Z_SS_W( I , J , K ) = 0.0
+          ELSE
+            T_Z_SS_W( I , J , K ) = TSSN( I , J )
+          END IF
+        END DO
+      END DO
+    !END K = NK
+
+  END SUBROUTINE MR_CALC_T_Z_SS_W
 
   END MODULE MR_MOD_CALC_QADV_N_QDIF_Z

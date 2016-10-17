@@ -19,27 +19,21 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_UPDT_VZW
+  MODULE MR_MOD_CALC_EQKD_GRO
 
     USE MR_KINDS
-
-    USE MR_DEF_RANKS
 
     USE MR_DEF_CURVED_GEOS
     USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_FIELD_VARS
-    USE MR_DEF_ACTIVITY
-    USE MR_DEF_TIMING
-
-    USE MR_MCS_K_EPS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_UPDT_VZW
+    PUBLIC :: MR_CALC_EQKD_GRO
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: VZB , VZS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TSUV
 
 !***********************************************************************************************************************************
 
@@ -60,42 +54,33 @@
 !
 ! RECORD OF REVISIONS:
 !
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      DATE       |    GROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_VZW
+  SUBROUTINE MR_CALC_EQKD_GRO( NI , NJ , NK , EQKD_GRO )
 
-    USE MR_MOD_INTERP_Z
+  ! USE MR_MOD_OPERATOR_UV
+
+  ! USE MR_MOD_CALC_QADV_N_QDIF_Z
+  ! USE MR_MOD_INTERP_Z
 
     IMPLICIT NONE
 
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
+
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    1:NK) :: EQKD_GRO
+
+  ! REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    0:NK) :: EQKD_GRO_W
+
     INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
 
-    DO K = 1 , NK
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          VZWW( I , J , K ) = V0 / VZR + CV0 / EKZ * KI( I , J , K ) * KI( I , J , K ) / MAX( DI( I , J , K ) , EPSILON(DI) )
-        END DO
-      END DO
-    END DO
+    EQKD_GRO = 0.0
 
-    ALLOCATE( VZB(1:NI1(FDRD_KIND),1:NJ) , VZS(1:NI1(FDRD_KIND),1:NJ) )
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          VZB( I , J ) = V0 / VZR + CV0 / EKZ * KIB( I , J ) * KIB( I , J ) / MAX( DIB( I , J ) , EPSILON(DIB) )
-          VZS( I , J ) = V0 / VZR + CV0 / EKZ * KI( I , J ,NK ) * KI( I , J ,NK ) / MAX( DIS( I , J ) , EPSILON(DIS) )
-        END DO
-      END DO
+  END SUBROUTINE MR_CALC_EQKD_GRO
 
-      CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW , VZB , VZS )
-
-    DEALLOCATE( VZB , VZS )
-
-  END SUBROUTINE MR_UPDT_VZW
-
-  END MODULE MR_MOD_UPDT_VZW
+  END MODULE MR_MOD_CALC_EQKD_GRO
