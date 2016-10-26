@@ -113,6 +113,8 @@
 !  ELSE
 !    WRITE(*,'("Done! ")')
 !  END IF
+!  
+!  PRINT*, TUVR*TCRS
 !
 !  CALL MR_ECHO_PRJ
 !
@@ -136,16 +138,16 @@
 !  ALLOCATE(HYD_A3(1:NI1(CARD_KIND),1:NJ,    2:NK  ) , HYD_B3(1:NI1(CARD_KIND),1:NJ,    1:NK  ) , HYD_C3(1:NI1(CARD_KIND),1:NJ,    1:NK-1) )
 !  ALLOCATE(HYD_D3(1:NI1(CARD_KIND),1:NJ,1:2,1:NK  ) )
 !
-!  ALLOCATE(  UVT(1:NI1(FDRD_KIND),1:NJ,1:2)  )
-!  ALLOCATE(  UUT(0:NI0(FDRD_KIND),1:NJ,1:2)  )
-!  ALLOCATE(  VVT(1:NI1(FDRD_KIND),0:NJ,1:2)  )
+!  ALLOCATE( UVT(1:NI1(FDRD_KIND),1:NJ,1:2) )
+!  ALLOCATE( UUT(0:NI0(FDRD_KIND),1:NJ,1:2) )
+!  ALLOCATE( VVT(1:NI1(FDRD_KIND),0:NJ,1:2) )
 !
-!  ALLOCATE(  QADV_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) , QDIF_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2)  )
-!  ALLOCATE(  QADV_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) , QDIF_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2)  )
+!  ALLOCATE( QADV_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) , QDIF_XY_UV_U(0:NI0(FDRD_KIND),1:NJ,1:2) )
+!  ALLOCATE( QADV_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) , QDIF_XY_UV_V(1:NI1(FDRD_KIND),0:NJ,1:2) )
 !
-!  ALLOCATE(  TSUV(1:NI1(FDRD_KIND),1:NJ,1:2) ) ; TSUV = 0.0
+!  ALLOCATE( TSUV(1:NI1(FDRD_KIND),1:NJ,1:2) ) ; TSUV = 0.0
 !
-!  ALLOCATE(  QADV_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) , QDIF_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK)  )
+!  ALLOCATE( QADV_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) , QDIF_Z_UV_W(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) )
 !
 !
 !  WRITE(*,'( )')
@@ -204,34 +206,34 @@
 ! !   end if
 ! ! end do
 ! !!***
-!  PRINT'("J11 : ")'
-!  do j = njxx, 0, -1
-!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,1), ( (jvv(i,j,1,1), joo(i,j,1,1)), i=1,nixx )
-!    if(j/=0) then
-!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,nixx )
-!    end if
-!  end do
-!  PRINT'("J12 : ")'
-!  do j = njxx, 0, -1
-!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,2), ( (jvv(i,j,1,2), joo(i,j,1,2)), i=1,nixx )
-!    if(j/=0) then
-!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,nixx )
-!    end if
-!  end do
-!  PRINT'("J21 : ")'
-!  do j = njxx, 0, -1
-!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,1), ( (jvv(i,j,2,1), joo(i,j,2,1)), i=1,nixx )
-!    if(j/=0) then
-!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,nixx )
-!    end if
-!  end do
-!  PRINT'("J22 : ")'
-!  do j = njxx, 0, -1
-!    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,2), ( (jvv(i,j,2,2), joo(i,j,2,2)), i=1,nixx )
-!    if(j/=0) then
-!      print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,nixx )
-!    end if
-!  end do
+!  !PRINT'("J11 : ")'
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,1), ( (jvv(i,j,1,1), joo(i,j,1,1)), i=1,nixx )
+!  !  if(j/=0) then
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,1), ( (juv(i,j,1,1), juu(i,j,1,1)), i=1,nixx )
+!  !  end if
+!  !end do
+!  !PRINT'("J12 : ")'
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,1,2), ( (jvv(i,j,1,2), joo(i,j,1,2)), i=1,nixx )
+!  !  if(j/=0) then
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,1,2), ( (juv(i,j,1,2), juu(i,j,1,2)), i=1,nixx )
+!  !  end if
+!  !end do
+!  !PRINT'("J21 : ")'
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,1), ( (jvv(i,j,2,1), joo(i,j,2,1)), i=1,nixx )
+!  !  if(j/=0) then
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,1), ( (juv(i,j,2,1), juu(i,j,2,1)), i=1,nixx )
+!  !  end if
+!  !end do
+!  !PRINT'("J22 : ")'
+!  !do j = njxx, 0, -1
+!  !  print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', joo(0,j,2,2), ( (jvv(i,j,2,2), joo(i,j,2,2)), i=1,nixx )
+!  !  if(j/=0) then
+!  !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', juu(0,j,2,2), ( (juv(i,j,2,2), juu(i,j,2,2)), i=1,nixx )
+!  !  end if
+!  !end do
 !
 ! ! PRINT'("I11 : ")'
 ! ! do j = njxx, 0, -1
@@ -318,24 +320,26 @@
 !    do j = njxx, 1, -1
 !      print'(<nixx>(35X,"(",es10.3,",",es10.3,")",:,1X))', ( TUVR*tbuv(i,j,1:2) , i=1,nixx )
 !    end do
+!    
+!  ! PAUSE
 !
 !    call mr_updt_kib_n_dib
 !
 !    call mr_updt_ki_n_di
-!    print'("ki : ")'
-!    do k = 1, nk
-!      print'("k=",i3)',k
-!      do j = njxx, 1, -1
-!        print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( ki(i,j,k), i=1,nixx )
-!      end do
-!    end do
-!    print'("di : ")'
-!    do k = 1, nk
-!      print'("k=",i3)',k
-!      do j = njxx, 1, -1
-!        print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( di(i,j,k), i=1,nixx )
-!      end do
-!    end do
+!    !print'("ki : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)',k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( ki(i,j,k), i=1,nixx )
+!    !  end do
+!    !end do
+!    !print'("di : ")'
+!    !do k = 1, nk
+!    !  print'("k=",i3)',k
+!    !  do j = njxx, 1, -1
+!    !    print'( <nixx>(35X," ",es10.3," ",10X," ",:,1X) )', ( di(i,j,k), i=1,nixx )
+!    !  end do
+!    !end do
 !
 !  !! QADV and QDIF xy
 !  !  do k = 1, nk
@@ -545,13 +549,13 @@
 !    !end if
 !
 !    call mr_updt_h
-!    !print'("H, HU & HV : ")'
-!    !do j = njxx, 0, -1
-!    !  print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,nixx )
-!    !  if(j/=0) then
-!    !    print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,nixx )
-!    !  end if
-!    !end do
+!    print'("H, HU & HV : ")'
+!    do j = njxx, 0, -1
+!      print'( <nixx>(35x," ",f10.5," ",10X," ",:,1x) )', ( hv(i,j), i=1,nixx )
+!      if(j/=0) then
+!        print'( (10x," ",f10.5," ",10x,"   "), <nixx>(" ",f10.5," ",10X," ",1x,10x," ",f10.5," ",10x,"   ") )', hu(0,j), ( (h(i,j), hu(i,j)), i=1,nixx )
+!      end if
+!    end do
 !
 !    call mr_updt_vzw
 !    print'("vzw : ")'

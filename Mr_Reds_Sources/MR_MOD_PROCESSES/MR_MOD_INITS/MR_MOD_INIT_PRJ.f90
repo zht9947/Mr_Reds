@@ -71,6 +71,8 @@
     USE MR_MOD_READ_TIMING
     USE MR_MOD_READ_CONSTS_N_REF_PARS
 
+    USE MR_MOD_FUNC_TCRS
+
     USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
@@ -207,8 +209,6 @@
 
       ! CONVERT UNIT FROM MILLIMETERS TO METERS
         D0 = D0 / 1000.0
-
-      ! CALCULATE DS, TCRS, WS & RBS
 
       CASE( "TAB" )
         CALL MR_AWAYOUT_ALIAS( REC , ALIAS , ERROR , ERRMSG )
@@ -727,10 +727,18 @@
           EKZ = VZR / ( COR * ZR * ZR )
           SCXY = DXYR / ( COR * XYR * XYR )
           SCZ = DZR / ( COR * ZR * ZR )
+          RE = UVR * ZR / V0
+          RET = RE / SQRT( RBT )
           FR2 = UVR * UVR / ( GR * ZR )
           FRD2 = FR2 * R0 / ( RR - R0 )
           ALPAR = FR2 / RB
           BPAR = RB / ALPAR
+
+         !BLOCK
+        ! CALCULATE DS, TCRS, WS & RBS
+          DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0/3.0)
+          TCRS = MR_FUNC_TCRS( D0 , DS )
+         !END BLOCK
 
         END SELECT
 

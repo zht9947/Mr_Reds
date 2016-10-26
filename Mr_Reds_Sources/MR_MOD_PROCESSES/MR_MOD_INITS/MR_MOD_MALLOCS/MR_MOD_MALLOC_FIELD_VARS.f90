@@ -86,14 +86,11 @@
     ALLOCATE(  TBUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
 
     ALLOCATE( TBFUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
-    ALLOCATE(  TBFU(0:NI0(FDRD_KIND),1:NJ           ) , TBFV(1:NI1(FDRD_KIND),0:NJ           ) )
 
     ALLOCATE( QSBUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
     ALLOCATE(  QSBU(0:NI0(FDRD_KIND),1:NJ           ) , QSBV(1:NI1(FDRD_KIND),0:NJ           ) )
 
-    ALLOCATE(   BSB(1:NI1(FDRD_KIND),1:NJ           ) )
-
-    ALLOCATE(   SSS(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
+    ALLOCATE(   CSS(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
 
     ALLOCATE(    KI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
     ALLOCATE(   KIB(1:NI1(FDRD_KIND),1:NJ           ) )

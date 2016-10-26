@@ -24,6 +24,7 @@
     USE MR_KINDS
 
     USE MR_DEF_RANKS
+    USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_CURVED_GEOS
     USE MR_DEF_FIELD_VARS
 
@@ -33,7 +34,9 @@
 
     PUBLIC :: MR_UPDT_TBUV
 
-    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: UVAM
+    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:,  :  ) :: UV_MOD
+    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: TBUV_MOD
+    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: TBFUV_MOD
 
 !***********************************************************************************************************************************
 
@@ -71,20 +74,34 @@
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
-    ALLOCATE( UVAM(1:NI1(FDRD_KIND),1:NJ) )
+    ALLOCATE( UV_MOD(1:NI1(FDRD_KIND),1:NJ,1:1) , TBUV_MOD(1:NI1(FDRD_KIND),1:NJ) , TBFUV_MOD(1:NI1(FDRD_KIND),1:NJ) )
 
-      UVAM = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UVA ) )
+      UV_MOD(:,:, 1 ) = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UV(:,:,1:2, 1 ) ) )
 
+      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
       DO DIM = 1 , 2
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( 9.1699E-3 , H( I , J ) , UVA( I , J ,DIM) , UVAM( I , J ) )
+            TBFUV( I , J ,DIM) = MR_FUNC_TBFUV_COMP( TBFUV_MOD( I , J ) , D0 , H( I , J ) ,   &
+            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
           END DO
         END DO
       END DO
 
-    DEALLOCATE( UVAM )
+      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
+      TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
+      DO DIM = 1 , 2
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( TBUV_MOD( I , J ) , TBFUV_MOD( I , J ) , D0 , TCRS , H( I , J ) ,   &
+            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+          END DO
+        END DO
+      END DO
+
+    DEALLOCATE( UV_MOD , TBUV_MOD , TBFUV_MOD )
 
   END SUBROUTINE MR_UPDT_TBUV
 

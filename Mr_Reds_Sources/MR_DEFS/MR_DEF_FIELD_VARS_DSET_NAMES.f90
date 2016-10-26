@@ -21,7 +21,7 @@
   MODULE MR_DEF_FIELD_VARS_DSET_NAMES
 
     USE MR_KINDS
-
+    
     USE MR_DEF_FIELD_VARS_UNITS
 
     IMPLICIT NONE
@@ -32,17 +32,16 @@
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_R       = "Density "                      !// "(" // UNIT_R       // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_UVA     = "Depth-Averaged Velosity "      !// "(" // UNIT_UVA     // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_UV      = "Horizontal Velosity "          !// "(" // UNIT_UV      // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_W       = "Vertical Velosity "            !// "(" // UNIT_W       // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBUV    = "Bed Shear Stress "             !// "(" // UNIT_TBUV    // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBFUV   = "Bed Shear Stress by Friction " !// "(" // UNIT_TBFUV   // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_WW      = "Vertical Velosity "            !// "(" // UNIT_WW      // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBUV    = "Total Bed Shear Stress "       !// "(" // UNIT_TBUV    // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBFUV   = "Frictional Bed Shear Stress "  !// "(" // UNIT_TBFUV   // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_QSBUV   = ""                              !// "(" // UNIT_QSBUV   // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_BBS     = ""                              !// "(" // UNIT_BBS     // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_CSS     = ""                              !// "(" // UNIT_CSS     // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_KI      = "Turbulence Kinetic Energy "    !// "(" // UNIT_KI      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DI      = "Turbulence Dissipation "       !// "(" // UNIT_DI      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_VXYUV   = "Horizontal Eddy Viscosity "    !// "(" // UNIT_VXYUV   // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_VZWW    = "Vertical Eddy Viscosity "      !// "(" // UNIT_VZWW    // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DXYUV   = "Horizontal Eddy Diffusivity "  !// "(" // UNIT_DXYUV   // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DZW     = "Vertical Eddy Diffusivity "    !// "(" // UNIT_DZW     // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DZWW    = "Vertical Eddy Diffusivity "    !// "(" // UNIT_DZWW    // ")"
 
   END MODULE MR_DEF_FIELD_VARS_DSET_NAMES

@@ -20,13 +20,14 @@
 !                     UVA, UA, VA    :    DEPTH-AVERAGED VELOSITY
 !                        UV, U, V    :    HORIZONTAL VELOSITY VECTOR, MAY ALSO BE THE DEVIATION OF THE HORIZONTAL VELOSITY VECTOR
 !                          WW , W    :    VERTICAL VELOSITY SCALAR
-!                  TBUV, TBU, TBV    :    BED SHEAR STRESS
-!         TBFRIUV, TBFRIU, TBFRIV    :    BED SHEAR STRESS COMPONENT DUE TO THE FACTUAL FRICTION
+!                            TBUV    :    TOTAL BED SHEAR STRESS
+!                           TBFUV    :    FRACTIONAL BED SHEAR STRESS
 !               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
-!                             BSB    :    BED-LOAD SEDIMENT SIZE FRACTION
-!                             SSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
+!                             CSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
 !                              KI    :    TURBULENCE KINETIC ENERGY
+!                             KIB    :    TURBULENCE KINETIC ENERGY AT BED
 !                              DI    :    TURBULENCE DISSIPATION
+!                        DIB, DIS    :    TURBULENCE DISSIPATION AT BED AND FREE SURFACE
 !               VXYUV, VXYU, VXYV    :    HORIZONTAL EDDY KINEMATIC VISCOSITY VECTOR
 !                       VZWW, VZW    :    VERTICAL EDDY KINEMATIC VISCOSITY SCALAR
 !               DXYUV, DXYU, DXYV    :    HORIZONTAL EDDY KINEMATIC DIFFUSIVITY VECTOR
@@ -60,11 +61,9 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: W
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBFUV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBFU , TBFV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: QSBUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: BSB
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: SSS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: CSS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: KIB
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
