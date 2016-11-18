@@ -17,9 +17,9 @@
 !                       H, HU, HV    :    DEPTH
 !                               R    :    WATER-SEDIMENT MIXTURE DENSITY
 !                              RI    :    LOCAL DEPTH-AVERAGED WATER-SEDIMENT MIXTURE DENSITY
-!                     UVA, UA, VA    :    DEPTH-AVERAGED VELOSITY
-!                        UV, U, V    :    HORIZONTAL VELOSITY VECTOR, MAY ALSO BE THE DEVIATION OF THE HORIZONTAL VELOSITY VECTOR
-!                          WW , W    :    VERTICAL VELOSITY SCALAR
+!                     UVA, UA, VA    :    DEPTH-AVERAGED VELOCITY
+!                        UV, U, V    :    HORIZONTAL VELOCITY VECTOR, MAY ALSO BE THE DEVIATION OF THE HORIZONTAL VELOCITY VECTOR
+!                          WW , W    :    VERTICAL VELOCITY SCALAR
 !                            TBUV    :    TOTAL BED SHEAR STRESS
 !                           TBFUV    :    FRACTIONAL BED SHEAR STRESS
 !               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
@@ -27,7 +27,7 @@
 !                              KI    :    TURBULENCE KINETIC ENERGY
 !                             KIB    :    TURBULENCE KINETIC ENERGY AT BED
 !                              DI    :    TURBULENCE DISSIPATION
-!                        DIB, DIS    :    TURBULENCE DISSIPATION AT BED AND FREE SURFACE
+!                        DIB, DIS    :    TURBULENCE DISSIPATION AT BED AND FREE SURFACE RESPECTIVELY
 !               VXYUV, VXYU, VXYV    :    HORIZONTAL EDDY KINEMATIC VISCOSITY VECTOR
 !                       VZWW, VZW    :    VERTICAL EDDY KINEMATIC VISCOSITY SCALAR
 !               DXYUV, DXYU, DXYV    :    HORIZONTAL EDDY KINEMATIC DIFFUSIVITY VECTOR

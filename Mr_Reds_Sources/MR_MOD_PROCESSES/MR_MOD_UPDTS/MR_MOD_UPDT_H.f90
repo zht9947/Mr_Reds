@@ -34,6 +34,9 @@
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZBU , ZBV
 
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HSTOR
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HSTORU , HSTORV
+
 !***********************************************************************************************************************************
 
   CONTAINS
@@ -68,36 +71,38 @@
 
     INTEGER(IJID_KIND) :: I , J
 
-    DO J = 1 , NJ
-     !DIR$ VECTOR ALIGNED
-      DO I = 1 , NI
-        H( I , J ) = MR_FUNC_H( ZS( I , J ) , ZB( I , J ) )
-      END DO
-    END DO
-
-    ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) )
-      CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
-
+    ALLOCATE( HSTOR(1:NI1(FDRD_KIND),1:NJ) ) ; HSTOR = 0.0
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
-        DO I = 0 , NI
-          HU( I , J ) = MR_FUNC_H( ZSU( I , J ) , ZBU( I , J ) )
-        END DO
-      END DO
-
-    DEALLOCATE( ZBU )
-
-    ALLOCATE( ZBV(1:NI1(FDRD_KIND),0:NJ) )
-      CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
-
-      DO J = 0 , NJ
-       !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          HV( I , J ) = MR_FUNC_H( ZSV( I , J ) , ZBV( I , J ) )
+          H( I , J ) = MR_FUNC_H( HSTOR( I , J ) , ZS( I , J ) , ZB( I , J ) )
         END DO
       END DO
+    DEALLOCATE( HSTOR )
 
-    DEALLOCATE( ZBV )
+    ALLOCATE( HSTORU(0:NI0(FDRD_KIND),1:NJ) ) ; HSTORU = 0.0
+      ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) )
+        CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 0 , NI
+            HU( I , J ) = MR_FUNC_H( HSTORU( I , J ) , ZSU( I , J ) , ZBU( I , J ) )
+          END DO
+        END DO
+      DEALLOCATE( ZBU )
+    DEALLOCATE( HSTORU )
+
+    ALLOCATE( HSTORV(1:NI1(FDRD_KIND),0:NJ) ) ; HSTORV = 0.0
+      ALLOCATE( ZBV(1:NI1(FDRD_KIND),0:NJ) )
+        CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
+        DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            HV( I , J ) = MR_FUNC_H( HSTORV( I , J ) , ZSV( I , J ) , ZBV( I , J ) )
+          END DO
+        END DO
+      DEALLOCATE( ZBV )
+    DEALLOCATE( HSTORV )
 
   END SUBROUTINE MR_UPDT_H
 

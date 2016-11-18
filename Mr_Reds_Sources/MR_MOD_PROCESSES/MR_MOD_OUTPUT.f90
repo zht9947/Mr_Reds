@@ -40,6 +40,8 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: ZSOO
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: HOO
 
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: HSTOROO
+
 !***********************************************************************************************************************************
 
   CONTAINS
@@ -158,9 +160,9 @@
     END IF
 
     ALLOCATE( HOO(0:NI0(FDRD_KIND),0:NJ) )
-
-    CALL MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
-
+      ALLOCATE( HSTOROO(0:NI0(FDRD_KIND),0:NJ) ) ; HSTOROO = 0.0
+        CALL MR_CALC_HOO( NI , NJ , HSTOROO , ZSOO , ZBOO , HOO )
+      DEALLOCATE( HSTOROO )
     DEALLOCATE( ZSOO , ZBOO )
 
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_H
@@ -482,7 +484,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_HOO( NI , NJ , ZSOO , ZBOO , HOO )
+  SUBROUTINE MR_CALC_HOO( NI , NJ , HSTOROO , ZSOO , ZBOO , HOO )
 
     USE MR_MOD_FUNC_H
 
@@ -490,8 +492,8 @@
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZBOO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: HSTOROO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: ZSOO , ZBOO
 
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(FDRD_KIND),0:NJ) :: HOO
 
@@ -500,7 +502,7 @@
     DO J = 0 , NJ
      !DIR$ VECTOR ALIGNED
       DO I = 0 , NI
-        HOO( I , J ) = MR_FUNC_H( ZSOO( I , J ) , ZBOO( I , J ) )
+        HOO( I , J ) = MR_FUNC_H( HSTOROO( I , J ) , ZSOO( I , J ) , ZBOO( I , J ) )
       END DO
     END DO
 

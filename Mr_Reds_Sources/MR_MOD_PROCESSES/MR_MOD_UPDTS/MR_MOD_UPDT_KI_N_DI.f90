@@ -96,7 +96,7 @@
         ALLOCATE( EQK_A3(1:NI1(CARD_KIND),1:NJ,2:NK), EQK_B3(1:NI1(CARD_KIND),1:NJ,1:NK), EQK_C3(1:NI1(CARD_KIND),1:NJ,1:NK-1) )
           CALL MR_CALC_EQK_A3_B3_C3( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 )
           !BLOCK
-            KI = MR_TDMA3_SS( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 , EQK_D3 )
+            KI = MAX( MR_TDMA3_SS( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 , EQK_D3 ) , EPSILON(KI) )
           !END BLOCK
         DEALLOCATE( EQK_A3 , EQK_B3 , EQK_C3 )
       DEALLOCATE( EQK_D3 )
@@ -106,7 +106,7 @@
         ALLOCATE( EQD_A3(1:NI1(CARD_KIND),1:NJ,2:NK), EQD_B3(1:NI1(CARD_KIND),1:NJ,1:NK), EQD_C3(1:NI1(CARD_KIND),1:NJ,1:NK-1) )
           CALL MR_CALC_EQD_A3_B3_C3( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 )
           !BLOCK
-            DI = MR_TDMA3_SS( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 , EQD_D3 )
+            DI = MAX( MR_TDMA3_SS( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 , EQD_D3 ) , EPSILON(DI) )
           !END BLOCK
         DEALLOCATE( EQD_A3 , EQD_B3 , EQD_C3 )
       DEALLOCATE( EQD_D3 )

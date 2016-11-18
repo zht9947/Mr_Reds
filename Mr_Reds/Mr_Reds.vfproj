@@ -31,6 +31,7 @@
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<Filter Name="MR_MCONSTS">
+		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_MCONSTS\MR_MCS_BED_STOR.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_MCONSTS\MR_MCS_K_EPS.f90"/></Filter>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\Mr_Reds_Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
