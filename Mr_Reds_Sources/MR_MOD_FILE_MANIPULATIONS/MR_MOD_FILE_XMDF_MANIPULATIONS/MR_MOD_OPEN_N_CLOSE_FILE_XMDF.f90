@@ -55,12 +55,12 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , ACTION , FILE_XMDF_ID , ERROR , ERRMSG )
+  SUBROUTINE MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , FILE_XMDF_ACTION , FILE_XMDF_ID , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
-    CHARACTER(   *   ) , INTENT(IN ) :: ACTION
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_ACTION
 
     INTEGER            , INTENT(OUT) :: FILE_XMDF_ID
 
@@ -68,7 +68,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    SELECT CASE( ACTION )
+    SELECT CASE( FILE_XMDF_ACTION )
     CASE( "READ" , "R" , "Read" , "read", "r" )
       CALL XF_OPEN_FILE( TRIM(FILE_XMDF_NAME) , .TRUE. , FILE_XMDF_ID , ERROR )
       IF( ERROR < 0 ) THEN

@@ -78,37 +78,37 @@
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
-    WRITE(*,'(4X,"                       Computational time interval [s]              : ",G13.6)') DT/COR
-    WRITE(*,'(4X,"                                    Time beginning [s]              : ",G13.6)') T_START
-    WRITE(*,'(4X,"          Total number of time steps for computing                  : ",I9   )') NTSS
-    WRITE(*,'(4X,"    Inteval of number of time steps for outputting                  : ",I9   )') ITS_OUTPUT
-    WRITE(*,'(4X,"                            Time relaxation factor                  : ",G13.6)') PHI
+    WRITE(*,'(4X,"                       Computational time interval [s]              : ", F16.6       )') DT/COR
+    WRITE(*,'(4X,"                                    Time beginning [s]              : ", F15.5       )') T_START
+    WRITE(*,'(4X,"          Total number of time steps for computing                  : ", I09         )') NTSS
+    WRITE(*,'(4X,"    Inteval of number of time steps for outputting                  : ", I09         )') ITS_OUTPUT
+    WRITE(*,'(4X,"                            Time relaxation factor                  : ", F13.3       )') PHI
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Constants and Reference Parameters----")')
     WRITE(*,'(4X,"  ----Water Physical Properties----")')
-    WRITE(*,'(4X,"                                     Water density [kg/m^3]         : ",G13.6)') R0
-    WRITE(*,'(4X,"                         Water kinematic viscosity [m^2/s]          : ",G13.6)') V0
+    WRITE(*,'(4X,"                                     Water density [kg/m^3]         : ", F16.6,"E+03")') R0/1.0E+03
+    WRITE(*,'(4X,"                         Water kinematic viscosity [m^2/s]          : ", F16.6,"E-06")') V0/1.0E-06
     WRITE(*,'(4X,"  ----Sediment Physical Properties----")')
-    WRITE(*,'(4X,"                         Sediment specific gravity                  : ",G13.6)') SS
-    WRITE(*,'(4X,"                                 Sediment porosity                  : ",G13.6)') PS
+    WRITE(*,'(4X,"                         Sediment specific gravity                  : ", F16.6       )') SS
+    WRITE(*,'(4X,"                                 Sediment porosity                  : ", F16.6       )') PS
     WRITE(*,'(4X,"  ----Physical Constants----")')
-    WRITE(*,'(4X,"                               Von Karman constant                  : ",G13.6)') KAR
-    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",G13.6)') COR
-    WRITE(*,'(4X,"                        Gravitational acceleration [m/s^2]          : ",G13.6)') GR
+    WRITE(*,'(4X,"                               Von Karman constant                  : ", F16.6       )') KAR
+    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",EN20.6       )') COR
+    WRITE(*,'(4X,"                        Gravitational acceleration [m/s^2]          : ", F16.6       )') GR
     WRITE(*,'(4X,"  ----Reference Parameters----")')
-    WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ",G13.6)') XYR
-    WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ",G13.6)') ZR
-    WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ",G13.6)') UVR
-    WRITE(*,'(4X,"     Reference horizontal eddy kinematic viscosity [m^2/s]          : ",G13.6)') VXYR
-    WRITE(*,'(4X,"       Reference vertical eddy kinematic viscosity [m^2/s]          : ",G13.6)') VZR
-    WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ",G13.6)') RR
+    WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ", F16.6       )') XYR
+    WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ", F16.6       )') ZR
+    WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ", F16.6       )') UVR
+    WRITE(*,'(4X,"     Reference horizontal eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VXYR
+    WRITE(*,'(4X,"       Reference vertical eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VZR
+    WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ", F16.6,"E+03")') RR/1.0E+03
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Flow Plane Slope----")')
     WRITE(*,'(4X,"    Please confirm the flow plane slope")')
     WRITE(*,'(4X,"    be coincidence with X axis!")')
-    WRITE(*,'(4X,"                                  Flow plane slope                  : ",G13.6)') SLOPE
+    WRITE(*,'(4X,"                                  Flow plane slope                  : ",ES20.6       )') SLOPE
 
     WRITE(*,'( )')
     DO

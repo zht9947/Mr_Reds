@@ -18,7 +18,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_READ_TIMING
+  MODULE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
 
     USE MR_KINDS
 
@@ -26,9 +26,9 @@
 
     PRIVATE
 
-    PUBLIC :: MR_READ_ITS
-    PUBLIC :: MR_READ_T
-    PUBLIC :: MR_READ_TIME_FACTOR
+    PUBLIC :: MR_CREATE_FILE_DEFAULT
+    PUBLIC :: MR_OPEN_FILE_DEFAULT
+    PUBLIC :: MR_CLOSE_FILE_DEFAULT
 
 !***********************************************************************************************************************************
 
@@ -54,29 +54,41 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_ITS( V_STRING , VALUE , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , FILE_ID , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: V_STRING
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
 
-    INTEGER(TSID_KIND) , INTENT(OUT) :: VALUE
+    INTEGER            , INTENT(OUT) :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    ERRMSG = ""
-    READ( V_STRING , * , IOSTAT=ERROR ) VALUE
-    IF( ERROR == -1 ) THEN
-      ERRMSG = "No digits when reading value of"
-      RETURN
-    ELSE IF( ERROR > 0 ) THEN
-      ERROR = - ERROR
-      ERRMSG = "Error in reading value of"
-      RETURN
-    END IF
+    LOGICAL                          :: BE_OPENED
 
-  END SUBROUTINE MR_READ_ITS
+    INTEGER                          :: IQID
+
+    ERRMSG = ""
+    CALL SYSTEM_CLOCK( FILE_ID )
+    DO IQID = 1 , HUGE(FILE_ID)
+      INQUIRE( FILE_ID , OPENED=BE_OPENED )
+      IF( BE_OPENED ) THEN
+        FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
+      ELSE
+        OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='READWRITE' , IOSTAT=ERROR )
+        IF( ERROR > 0 ) THEN
+          ERROR = - ERROR
+          ERRMSG = "Error in opening file"
+          RETURN
+        END IF
+        RETURN
+      END IF
+    END DO
+
+    ERROR = -1 ; ERRMSG = "No available unit assigned for file"
+
+  END SUBROUTINE MR_CREATE_FILE_DEFAULT
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -98,29 +110,52 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_T( V_STRING , VALUE , ERROR , ERRMSG )
+  SUBROUTINE MR_OPEN_FILE_DEFAULT( FILE_NAME , FILE_ACTION , FILE_ID , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: V_STRING
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_ACTION
 
-    REAL   (TMRD_KIND) , INTENT(OUT) :: VALUE
+    INTEGER            , INTENT(OUT) :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    ERRMSG = ""
-    READ( V_STRING , * , IOSTAT=ERROR ) VALUE
-    IF( ERROR == -1 ) THEN
-      ERRMSG = "No digits when reading value of"
-      RETURN
-    ELSE IF( ERROR > 0 ) THEN
-      ERROR = - ERROR
-      ERRMSG = "Error in reading value of"
-      RETURN
-    END IF
+    LOGICAL                          :: BE_OPENED
 
-  END SUBROUTINE MR_READ_T
+    INTEGER                          :: IQID
+
+    ERRMSG = ""
+    CALL SYSTEM_CLOCK( FILE_ID )
+    DO IQID = 1 , HUGE(FILE_ID)
+      INQUIRE( FILE_ID , OPENED=BE_OPENED )
+      IF( BE_OPENED ) THEN
+        FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
+      ELSE
+        SELECT CASE( FILE_ACTION )
+        CASE( "READ" , "R" , "Read" , "read", "r" )
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ' , IOSTAT=ERROR )
+          IF( ERROR > 0 ) THEN
+            ERROR = - ERROR
+            ERRMSG = "Error in opening file"
+            RETURN
+          END IF
+        CASE DEFAULT
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READWRITE' , IOSTAT=ERROR )
+          IF( ERROR > 0 ) THEN
+            ERROR = - ERROR
+            ERRMSG = "Error in opening file"
+            RETURN
+          END IF
+        END SELECT
+        RETURN
+      END IF
+    END DO
+
+    ERROR = -1 ; ERRMSG = "No available unit assigned for file"
+
+  END SUBROUTINE MR_OPEN_FILE_DEFAULT
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -142,28 +177,24 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_TIME_FACTOR( V_STRING , VALUE , ERROR , ERRMSG )
+  SUBROUTINE MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: V_STRING
-
-    REAL   (PARD_KIND) , INTENT(OUT) :: VALUE
+    INTEGER            , INTENT(IN ) :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    READ( V_STRING , * , IOSTAT=ERROR ) VALUE
-    IF( ERROR == -1 ) THEN
-      ERRMSG = "No digits when reading value of"
-      RETURN
-    ELSE IF( ERROR > 0 ) THEN
+    CLOSE( FILE_ID , IOSTAT=ERROR )
+    IF( ERROR > 0 ) THEN
       ERROR = - ERROR
-      ERRMSG = "Error in reading value of"
-      RETURN
+      ERRMSG = "Error in closing file"
     END IF
 
-  END SUBROUTINE MR_READ_TIME_FACTOR
+    RETURN
 
-  END MODULE MR_MOD_READ_TIMING
+  END SUBROUTINE MR_CLOSE_FILE_DEFAULT
+
+  END MODULE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
