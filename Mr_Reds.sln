@@ -5,6 +5,8 @@ VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds", "Mr_Reds\Mr_Reds.vfproj", "{F16170EF-F95A-47D6-9743-CD7CBAB3472B}"
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Average", "Mr_Reds_Average\Mr_Reds_Average.vfproj", "{EF0FF827-D9B6-4C0B-981D-1F37075790B0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -15,6 +17,10 @@ Global
 		{F16170EF-F95A-47D6-9743-CD7CBAB3472B}.Debug|Win32.Build.0 = Debug|Win32
 		{F16170EF-F95A-47D6-9743-CD7CBAB3472B}.Release|Win32.ActiveCfg = Release|Win32
 		{F16170EF-F95A-47D6-9743-CD7CBAB3472B}.Release|Win32.Build.0 = Release|Win32
+		{EF0FF827-D9B6-4C0B-981D-1F37075790B0}.Debug|Win32.ActiveCfg = Debug|Win32
+		{EF0FF827-D9B6-4C0B-981D-1F37075790B0}.Debug|Win32.Build.0 = Debug|Win32
+		{EF0FF827-D9B6-4C0B-981D-1F37075790B0}.Release|Win32.ActiveCfg = Release|Win32
+		{EF0FF827-D9B6-4C0B-981D-1F37075790B0}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

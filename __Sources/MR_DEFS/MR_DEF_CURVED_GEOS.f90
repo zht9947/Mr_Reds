@@ -20,7 +20,7 @@
 !                   FUV, FUU, FVV    :        ©¦ d¦Î  d¦Ç ©¦
 !                                             ©¸©¤      ©¤©¼
 !
-!                      MM, MU, MV    :    DETERMINANT OF JACOBIAN MATRIX
+!                      MW, MU, MV    :    DETERMINANT OF JACOBIAN MATRIX
 !
 ! RECORD OF REVISIONS:
 !

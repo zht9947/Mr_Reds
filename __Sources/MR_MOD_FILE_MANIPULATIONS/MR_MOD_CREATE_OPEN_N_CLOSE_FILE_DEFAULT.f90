@@ -76,14 +76,17 @@
       IF( BE_OPENED ) THEN
         FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
       ELSE
-        OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='READWRITE' , IOSTAT=ERROR )
+        OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='WRITE' , IOSTAT=ERROR )
         IF( ERROR > 0 ) THEN
           ERROR = - ERROR
-          ERRMSG = "Error in opening file"
+          ERRMSG = "Error in creating file"
           RETURN
         END IF
+
         RETURN
+
       END IF
+
     END DO
 
     ERROR = -1 ; ERRMSG = "No available unit assigned for file"
@@ -135,7 +138,14 @@
       ELSE
         SELECT CASE( FILE_ACTION )
         CASE( "READ" , "R" , "Read" , "read", "r" )
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ' , IOSTAT=ERROR )
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ'  , POSITION='REWIND' , IOSTAT=ERROR )
+          IF( ERROR > 0 ) THEN
+            ERROR = - ERROR
+            ERRMSG = "Error in opening file"
+            RETURN
+          END IF
+        CASE( "WRITE" , "W" , "Write" , "write", "w" )
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='WRITE' , POSITION='APPEND' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
             ERRMSG = "Error in opening file"
@@ -149,8 +159,11 @@
             RETURN
           END IF
         END SELECT
+
         RETURN
+
       END IF
+
     END DO
 
     ERROR = -1 ; ERRMSG = "No available unit assigned for file"

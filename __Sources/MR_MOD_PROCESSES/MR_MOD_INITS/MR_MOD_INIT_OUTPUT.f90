@@ -76,7 +76,7 @@
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
 
     CHARACTER( 2**08 )               :: PATH_DSET_IN_MULTI_DSETS
-    CHARACTER( 2**05 )               :: UNIT_DSET
+    CHARACTER( 2**04 )               :: UNIT_DSET
 
     CHARACTER( 2**03 )               :: K_CHAR
     INTEGER(KKID_KIND)               :: K
