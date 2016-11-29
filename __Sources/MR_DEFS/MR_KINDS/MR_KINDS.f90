@@ -9,7 +9,7 @@
 !
 ! DEFINITION OF VARIABLES:
 !
-!                       TSID_KIND    :    KIND OF TIME STEP ID     , MARKED AS 'ITS'
+!                       TSID_KIND    :    KIND OF TIMESTEP ID      , MARKED AS 'ITS'
 !                       EMID_KIND    :    KIND OF ELEMENT ID       , MARKED AS 'EMID'
 !                       NDID_KIND    :    KIND OF NODE ID          , MARKED AS 'NDID'
 !                       IJID_KIND    :    KIND OF CELL ID          , MARKED AS 'I' FOR COLUMN ID & 'J' FOR ROW ID

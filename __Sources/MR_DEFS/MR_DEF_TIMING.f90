@@ -16,8 +16,8 @@
 !
 !                         T_START    :    STARTING TIME
 !
-!                            NTSS    :    TOTAL NUMBER OF TIME STEPS FOR COMPUTING
-!                      ITS_OUTPUT    :    INTEVAL OF NUMBER OF TIME STEPS FOR OUTPUTTING
+!                            NTSS    :    TOTAL NUMBER OF TIMESTEPS
+!                     NTSS_OUTPUT    :    NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
 !
 !                             PHI    :    TIME RELAXATION FACTOR
 !
@@ -39,7 +39,7 @@
     REAL   (TMRD_KIND) :: T_START
 
     INTEGER(TSID_KIND) :: NTSS
-    INTEGER(TSID_KIND) :: ITS_OUTPUT
+    INTEGER(TSID_KIND) :: NTSS_OUTPUT
 
     REAL   (PARD_KIND) :: PHI
 

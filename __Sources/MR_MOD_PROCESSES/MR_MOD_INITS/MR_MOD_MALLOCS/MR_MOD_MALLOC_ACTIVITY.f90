@@ -23,6 +23,7 @@
 
     USE MR_KINDS
 
+    USE MR_DEF_RANKS
     USE MR_DEF_ACTIVITY
 
     IMPLICIT NONE
@@ -55,11 +56,9 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_ACTIVITY( NI , NJ )
+  SUBROUTINE MR_MALLOC_ACTIVITY
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
     ALLOCATE( ACTIVITY(1:NI1(ACID_KIND),1:NJ) )
 

@@ -59,11 +59,13 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_ECHO_PRJ
+  SUBROUTINE MR_ECHO_PRJ( FLAG_PRJ_SETS_CORRECT )
 
     IMPLICIT NONE
 
-    CHARACTER(LEN=1)   :: ECHO_Y_OR_N
+    LOGICAL            , INTENT(OUT)  :: FLAG_PRJ_SETS_CORRECT
+
+    CHARACTER( LEN=1 ) :: PRJ_SETS_CORRECT_Y_OR_N
 
     WRITE(*,'( )')
     WRITE(*,'(2X,"Please check the project settings below:")')
@@ -80,8 +82,8 @@
     WRITE(*,'(4X,"----Timing----")')
     WRITE(*,'(4X,"                       Computational time interval [s]              : ", F16.6       )') DT/COR
     WRITE(*,'(4X,"                                    Time beginning [s]              : ", F15.5       )') T_START
-    WRITE(*,'(4X,"          Total number of time steps for computing                  : ", I09         )') NTSS
-    WRITE(*,'(4X,"    Inteval of number of time steps for outputting                  : ", I09         )') ITS_OUTPUT
+    WRITE(*,'(4X,"           Total number of timesteps for computing                  : ", I09         )') NTSS
+    WRITE(*,'(4X,"     Inteval of number of timesteps for outputting                  : ", I09         )') NTSS_OUTPUT
     WRITE(*,'(4X,"                            Time relaxation factor                  : ", F13.3       )') PHI
 
     WRITE(*,'( )')
@@ -113,12 +115,14 @@
     WRITE(*,'( )')
     DO
       WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
-      READ(*,*) ECHO_Y_OR_N
-      SELECT CASE( ECHO_Y_OR_N )
+      READ(*,*) PRJ_SETS_CORRECT_Y_OR_N
+      SELECT CASE( PRJ_SETS_CORRECT_Y_OR_N )
       CASE( "Y" , "y" )
+        FLAG_PRJ_SETS_CORRECT = .TRUE.
         RETURN
       CASE( "N" , "n" )
-        STOP
+        FLAG_PRJ_SETS_CORRECT = .FALSE.
+        RETURN
       CASE DEFAULT
         CYCLE
       END SELECT

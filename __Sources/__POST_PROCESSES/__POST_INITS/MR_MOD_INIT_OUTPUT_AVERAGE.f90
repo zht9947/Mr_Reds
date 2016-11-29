@@ -1,4 +1,3 @@
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -19,18 +18,20 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CURVED_GEOS
+  MODULE MR_MOD_INIT_OUTPUT_AVERAGE
 
     USE MR_KINDS
 
     USE MR_DEF_RANKS
-    USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_FIELD_VARS_DSET_NAMES
+    USE MR_DEF_FIELD_VARS_UNITS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_CURVED_GEOS
+    PUBLIC :: MR_INIT_OUTPUT_AVERAGE
 
 !***********************************************************************************************************************************
 
@@ -56,25 +57,38 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_CURVED_GEOS
+  SUBROUTINE MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE_NAME , ERROR , ERRMSG )
+
+    USE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
 
     IMPLICIT NONE
 
-    ALLOCATE( JUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( JUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , JVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( JOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_AVERAGE_NAME
 
-    ALLOCATE( IUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( IUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , IVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( IOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    INTEGER                          :: FILE_AVERAGE_ID , MULTI_DSETS_ID
 
-    ALLOCATE( FUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( FUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , FVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
+    INTEGER            , INTENT(OUT) :: ERROR
+    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    ALLOCATE(  MW(1:NI1(GJRD_KIND),1:NJ)         )
-    ALLOCATE(  MU(0:NI0(GJRD_KIND),1:NJ)         ,  MV(1:NI1(GJRD_KIND),0:NJ)         )
-    ALLOCATE(  MO(0:NI0(GJRD_KIND),0:NJ)         )
+    ERRMSG = ""
 
-  END SUBROUTINE MR_MALLOC_CURVED_GEOS
+    CALL MR_CREATE_FILE_DEFAULT( FILE_AVERAGE_NAME , FILE_AVERAGE_ID , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
+      RETURN
+    END IF
 
-  END MODULE MR_MOD_MALLOC_CURVED_GEOS
+    WRITE( FILE_AVERAGE_ID , '("Statistics of Flow Status:")' )
+    WRITE( FILE_AVERAGE_ID , '( )' )
+    WRITE( FILE_AVERAGE_ID , '(4X,"                                     Water density [kg/m^3]         : ",ES13.6)' )
+    WRITE( FILE_AVERAGE_ID , '(4X,"                        Gravitational acceleration [m/s^2]          : ",ES13.6)' )
+
+    CALL MR_CLOSE_FILE_DEFAULT( FILE_AVERAGE_ID , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
+      RETURN
+    END IF
+
+  END SUBROUTINE MR_INIT_OUTPUT_AVERAGE
+
+  END MODULE MR_MOD_INIT_OUTPUT_AVERAGE

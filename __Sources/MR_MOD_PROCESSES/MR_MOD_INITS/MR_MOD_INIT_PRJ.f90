@@ -62,13 +62,9 @@
 
     USE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
 
-    USE MR_MOD_FUNC_TCRS
-
     USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
-    USE MR_MOD_MALLOC_GRID_SYS
-    USE MR_MOD_MALLOC_CURVED_GEOS
-    USE MR_MOD_MALLOC_FIELD_VARS
-    USE MR_MOD_MALLOC_ACTIVITY
+
+    USE MR_MOD_FUNC_TCRS
 
     IMPLICIT NONE
 
@@ -178,7 +174,7 @@
           END IF
 
         ! ALLOCATE MEMORIES FOR LAYER CLASSFIED PARAMETERS
-          CALL MR_MALLOC_KK_CONSTS_N_REF_PARS( NK )
+          CALL MR_MALLOC_KK_CONSTS_N_REF_PARS
 
         CASE( "DKS" )
           BACKSPACE( FILE_PRJ_ID )
@@ -269,26 +265,26 @@
                           RETURN
                         END IF
 
-                      CASE( "Total number of time steps for computing" )
+                      CASE( "Total number of timesteps" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Total number of time steps for computing"" "   &
+                          ERRMSG = "Error in reading ""Total number of timesteps"" "   &
                           //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         END IF
 
-                      CASE( "Inteval of number of time steps for outputting" )
+                      CASE( "Number of timesteps between two outputs" )
                         BACKSPACE( FILE_PRJ_ID )
 
-                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , ITS_OUTPUT
+                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS_OUTPUT
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Inteval of number of time steps for outputting"" "   &
+                          ERRMSG = "Error in reading ""Number of timesteps between two outputs"" "   &
                           //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -794,12 +790,6 @@
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ_NAME)
       RETURN
     END IF
-
-  ! ALLOCATE MEMORIES FOR PROJECT
-    CALL MR_MALLOC_GRID_SYS( NI , NJ )
-    CALL MR_MALLOC_CURVED_GEOS( NI , NJ )
-    CALL MR_MALLOC_FIELD_VARS( NI , NJ , NK )
-    CALL MR_MALLOC_ACTIVITY( NI , NJ )
 
   ! CALCULATE REFERENCE PARAMETERS
     WR = UVR / XYR * ZR

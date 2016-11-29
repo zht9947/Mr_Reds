@@ -1,4 +1,3 @@
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -19,18 +18,22 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CURVED_GEOS
+  MODULE MR_MOD_DETER_START_MODE
 
     USE MR_KINDS
 
+    USE MR_DEF_PRJ_METADATA
+
     USE MR_DEF_RANKS
-    USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_SLOPE
+    USE MR_DEF_TIMING
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_CURVED_GEOS
+    PUBLIC :: MR_DETER_START_MODE
 
 !***********************************************************************************************************************************
 
@@ -56,25 +59,30 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_CURVED_GEOS
+  SUBROUTINE MR_DETER_START_MODE( FLAG_COLD_START )
 
     IMPLICIT NONE
 
-    ALLOCATE( JUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( JUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , JVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( JOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    LOGICAL            , INTENT(OUT)  :: FLAG_COLD_START
 
-    ALLOCATE( IUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( IUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , IVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( IOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    CHARACTER( LEN=1 ) :: COLD_START_Y_OR_N
 
-    ALLOCATE( FUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( FUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , FVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
+    WRITE(*,'( )')
+    DO
+      WRITE(*,'("Cold start? (Y/N): ", $ )')
+      READ(*,*) COLD_START_Y_OR_N
+      SELECT CASE( COLD_START_Y_OR_N )
+      CASE( "Y" , "y" )
+        FLAG_COLD_START = .TRUE.
+        RETURN
+      CASE( "N" , "n" )
+        FLAG_COLD_START = .FALSE.
+        RETURN
+      CASE DEFAULT
+        CYCLE
+      END SELECT
+    END DO
 
-    ALLOCATE(  MW(1:NI1(GJRD_KIND),1:NJ)         )
-    ALLOCATE(  MU(0:NI0(GJRD_KIND),1:NJ)         ,  MV(1:NI1(GJRD_KIND),0:NJ)         )
-    ALLOCATE(  MO(0:NI0(GJRD_KIND),0:NJ)         )
+  END SUBROUTINE MR_DETER_START_MODE
 
-  END SUBROUTINE MR_MALLOC_CURVED_GEOS
-
-  END MODULE MR_MOD_MALLOC_CURVED_GEOS
+  END MODULE MR_MOD_DETER_START_MODE

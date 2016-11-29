@@ -23,6 +23,7 @@
 
     USE MR_KINDS
 
+    USE MR_DEF_RANKS
     USE MR_DEF_FIELD_VARS
 
     IMPLICIT NONE
@@ -55,12 +56,9 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_FIELD_VARS( NI , NJ , NK )
+  SUBROUTINE MR_MALLOC_FIELD_VARS
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
     ALLOCATE(    ZB(1:NI1(FDRD_KIND),1:NJ           ) )
 

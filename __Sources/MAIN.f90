@@ -13,7 +13,6 @@
 !  USE MR_DEF_FIELD_VARS_UNITS
 !  USE MR_DEF_ACTIVITY
 !  USE MR_DEF_TIMING
-!  USE MR_DEF_FILES
 !
 !  USE MR_MOD_OPERATOR_SS
 !  USE MR_MOD_OPERATOR_UV
@@ -44,9 +43,16 @@
 !  USE MR_MOD_UPDT_VZW
 !
 !  USE MR_MOD_INIT_PRJ
+!
+!  USE MR_MOD_MALLOC_GRID_SYS
+!  USE MR_MOD_MALLOC_CURVED_GEOS
+!  USE MR_MOD_MALLOC_FIELD_VARS
+!  USE MR_MOD_MALLOC_ACTIVITY
+!
 !  USE MR_MOD_INIT_GRID_SYS
 !  USE MR_MOD_INIT_CURVED_GEOS
 !  USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
+!
 !  USE MR_MOD_INIT_OUTPUT
 !
 !  USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
@@ -57,6 +63,7 @@
 !  USE MR_MOD_OUTPUT
 !
 !  USE MR_MOD_ECHO_PRJ
+!  USE MR_MOD_DETER_START_MODE
 !
 !  implicit none
 !
@@ -95,15 +102,28 @@
 !  real   (fdrd_kind) , allocatable , dimension(:,:,:) :: tsuv
 !  real   (fdrd_kind) , allocatable , dimension(:,:,:,:) :: qadv_z_uv_w , qdif_z_uv_w
 !
+!  CHARACTER( 2**08 ) :: FILE_PRJ
+!  CHARACTER( 2**08 ) :: FILE_XMDF
+!
 !  INTEGER(TSID_KIND) :: ITS
 !
 !  REAL   (TMRD_KIND) :: T
 !
+!  LOGICAL            :: FLAG_PRJ_SETS_CORRECT
+!  LOGICAL            :: FLAG_COLD_START
+!
 !  INTEGER            :: ERROR
 !  CHARACTER( 2**10 ) :: ERRMSG
 !
-!  FILE_PRJ = "C:\Users\ZHT9947\Desktop\Case.txt"
-!  FILE_XMDF = "R:\Case.h5"
+! !BLOCK
+!! GET PATH\NAMES OF INPUT FILES FROM COMMAND LINE
+!! AND MEANWHILE SET PATH\NAMES OF OUTPUT FILES
+!  CALL MR_INIT_FILES( ERROR , ERRMSG )
+!  IF( ERROR < 0 ) THEN
+!    WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+!    STOP
+!  END IF
+! !END BLOCK
 !
 !  WRITE(*,'("Initialize project... ", $ )')
 !  CALL MR_INIT_PRJ( TRIM(FILE_PRJ) , ERROR , ERRMSG )
@@ -113,10 +133,21 @@
 !  ELSE
 !    WRITE(*,'("Done! ")')
 !  END IF
-!  
-!  PRINT*, TUVR*TCRS
 !
-!  CALL MR_ECHO_PRJ
+!  print'("Critical shear stress:",es13.6)', TUVR*TCRS
+!
+!  CALL MR_ECHO_PRJ( FLAG_PRJ_SETS_CORRECT )
+!  IF( .NOT. FLAG_PRJ_SETS_CORRECT ) THEN
+!    STOP
+!  END IF
+!
+! !BLOCK
+!! ALLOCATE MEMORIES FOR PROJECT
+!  CALL MR_MALLOC_GRID_SYS
+!  CALL MR_MALLOC_CURVED_GEOS
+!  CALL MR_MALLOC_FIELD_VARS
+!  CALL MR_MALLOC_ACTIVITY
+!  !END BLOCK
 !
 !  nixx = 4 ; njxx = 3
 !  ni111=nixx+1 ; ni222=nixx-2
@@ -295,7 +326,23 @@
 !
 !  !pause
 !
-!  CALL MR_INIT_FIELD_VARS_N_ACTIVITY
+!  WRITE(*,'("Initialize field variables and activities... ", $ )')
+!  CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD_MODE
+!  WRITE(*,'("Done! ")')
+!
+!  WRITE(*,'("Initialize output... ", $ )')
+!  CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
+!  IF( ERROR < 0 ) THEN
+!    WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+!    STOP
+!  ELSE
+!    CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG )
+!    IF( ERROR < 0 ) THEN
+!      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+!      STOP
+!    END IF
+!  END IF
+!  WRITE(*,'("Done! ")')
 !
 !  WRITE(*,'( )')
 !
@@ -571,19 +618,19 @@
 !
 !
 !    t = t + dt
-!    if( mod(its,its_output) == 0 ) then
+!    if( mod(its,ntss_output) == 0 ) then
 !      continue
 !    end if
 !
 !
 !
-!    if( its>10 .and. maxval(abs(uva(1:ni,1:nj,1:2     )-uva0(1:ni,1:nj,1:2     )))<epsilon(uva) .and. maxval(abs(h(1:ni,1:nj)-h0(1:ni,1:nj)))<epsilon(h)   &
-!               .and. maxval(abs( uv(1:ni,1:nj,1:2,1:nk)- uv0(1:ni,1:nj,1:2,1:nk)))<epsilon(uv )   &
-!               .and. maxval(abs( ki(1:ni,1:nj,    1:nk)- ki0(1:ni,1:nj,    1:nk)))<epsilon(ki )   &
-!               .and. maxval(abs( di(1:ni,1:nj,    1:nk)- di0(1:ni,1:nj,    1:nk)))<epsilon(di )   &
-!                     ) then
-!      exit
-!    end if
+!    !if( its>10 .and. maxval(abs(uva(1:ni,1:nj,1:2     )-uva0(1:ni,1:nj,1:2     )))<epsilon(uva) .and. maxval(abs(h(1:ni,1:nj)-h0(1:ni,1:nj)))<epsilon(h)   &
+!    !           .and. maxval(abs( uv(1:ni,1:nj,1:2,1:nk)- uv0(1:ni,1:nj,1:2,1:nk)))<epsilon(uv )   &
+!    !           .and. maxval(abs( ki(1:ni,1:nj,    1:nk)- ki0(1:ni,1:nj,    1:nk)))<epsilon(ki )   &
+!    !           .and. maxval(abs( di(1:ni,1:nj,    1:nk)- di0(1:ni,1:nj,    1:nk)))<epsilon(di )   &
+!    !                 ) then
+!    !  exit
+!    !end if
 !
 !    !if( maxval(abs(h-h0))<epsilon(h) ) then
 !    !  exit
@@ -598,5 +645,44 @@
 !  end do
 !
 !  !print'(f10.8)',epsilon(h)
+!
+!contains
+!
+!  subroutine mr_init_files( error , errmsg )
+!
+!    implicit none
+!
+!    integer            , intent(out) :: error
+!    character(   *   ) , intent(out) :: errmsg
+!
+!    if( command_argument_count() < 2 ) then
+!      error = - 1
+!      errmsg = "not enough command arguments as input files"
+!      return
+!    end if
+!
+!  ! get project file's path\name
+!    call get_command_argument( 1 , file_prj , status=error )
+!    if( error == - 1 ) then
+!      errmsg = "project file's path too long"
+!      return
+!    else if( error /= 0 ) then
+!      error = - abs(error)
+!      errmsg = "error in getting command argument no.1 as project file"
+!      return
+!    end if
+!
+!  ! get xmdf file's path\name
+!    call get_command_argument( 2 , file_xmdf , status=error )
+!    if( error == - 1 ) then
+!      errmsg = "xmdf file's path too long!"
+!      return
+!    else if( error /= 0 ) then
+!      error = - abs(error)
+!      errmsg = "error in getting command argument no.2 as xmdf file"
+!      return
+!    end if
+!
+!  end subroutine mr_init_files
 !
 !end program main

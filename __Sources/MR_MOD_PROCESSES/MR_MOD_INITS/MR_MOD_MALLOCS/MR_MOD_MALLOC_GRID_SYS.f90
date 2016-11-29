@@ -23,6 +23,7 @@
 
     USE MR_KINDS
 
+    USE MR_DEF_RANKS
     USE MR_DEF_GRID_SYS
 
     IMPLICIT NONE
@@ -55,11 +56,9 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_GRID_SYS( NI , NJ )
+  SUBROUTINE MR_MALLOC_GRID_SYS
 
     IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
     ALLOCATE( EMIDW(1:NI1(EMID_KIND),1:NJ) )
 

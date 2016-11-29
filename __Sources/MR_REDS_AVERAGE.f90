@@ -18,43 +18,33 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  PROGRAM MR_REDS
+  PROGRAM MR_REDS_AVERAGE
 
     USE MR_KINDS
-
-    USE MR_DEF_RANKS
-    USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_TIMING
 
     USE MR_MOD_INIT_PRJ
 
     USE MR_MOD_MALLOC_GRID_SYS
-    USE MR_MOD_MALLOC_CURVED_GEOS
-    USE MR_MOD_MALLOC_FIELD_VARS
+    USE MR_MOD_MALLOC_CURVED_GEOS_AVERAGE
+    USE MR_MOD_MALLOC_FIELD_VARS_AVERAGE
     USE MR_MOD_MALLOC_ACTIVITY
 
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
-    USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
 
-    USE MR_MOD_INIT_OUTPUT
+    USE MR_MOD_INIT_OUTPUT_AVERAGE
 
-    USE MR_MOD_UPDT_TBUV
-    USE MR_MOD_UPDT_KIB_N_DIB
-    USE MR_MOD_UPDT_KI_N_DI
-    USE MR_MOD_UPDT_HYD
-    USE MR_MOD_UPDT_H
-    USE MR_MOD_UPDT_VZW
-
-    USE MR_MOD_OUTPUT
+    USE MR_MOD_GET_TIMES_AVERAGE
+    USE MR_MOD_INPUT_AVERAGE
+    USE MR_MOD_OUTPUT_AVERAGE
 
     USE MR_MOD_ECHO_PRJ
-    USE MR_MOD_DETER_START_MODE
 
     IMPLICIT NONE
 
     CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
+    CHARACTER( 2**08 ) :: FILE_AVERAGE
 
     INTEGER(TSID_KIND) :: ITS
 
@@ -92,12 +82,10 @@
    !BLOCK
   ! ALLOCATE MEMORIES FOR PROJECT
     CALL MR_MALLOC_GRID_SYS
-    CALL MR_MALLOC_CURVED_GEOS
-    CALL MR_MALLOC_FIELD_VARS
+    CALL MR_MALLOC_CURVED_GEOS_AVERAGE
+    CALL MR_MALLOC_FIELD_VARS_AVERAGE
     CALL MR_MALLOC_ACTIVITY
    !END BLOCK
-
-    CALL MR_DETER_START_MODE( FLAG_COLD_START )
 
     WRITE(*,'( )')
 
@@ -117,74 +105,43 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize field variables and activities... ", $ )')
-    IF( FLAG_COLD_START ) THEN
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD_MODE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'("Initialize output... ", $ )')
-      CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      ELSE
-        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG )
-        IF( ERROR < 0 ) THEN
-          WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
-          STOP
-        END IF
-      END IF
-    ELSE
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT_MODE( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-
+    WRITE(*,'("Initialize output... ", $ )')
+    CALL MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-
     END IF
     WRITE(*,'("Done! ")')
 
     WRITE(*,'( )')
 
-    T = T_START
-
-    WRITE(*,'(8X,"Compute...  0.00%", A , $ )') ACHAR(13)
-
-    DO ITS = 1 , NTSS
-
-      CALL MR_UPDT_TBUV
-      CALL MR_UPDT_KIB_N_DIB
-
-      CALL MR_UPDT_KI_N_DI
-
-      CALL MR_UPDT_HYD
-      IF( MOD( ITS , NTSS_OUTPUT ) == 0 ) THEN
-        CALL MR_UPDT_WW
+    WRITE(*,'("Input... ", $ )')
+    CALL MR_GET_NTSS_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    ELSE
+      CALL MR_INPUT_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
       END IF
+    END IF
+    WRITE(*,'("Done! ")')
 
-      CALL MR_UPDT_H
-
-      CALL MR_UPDT_VZW
-
-      T = T + DT/COR
-      IF( MOD( ITS , NTSS_OUTPUT ) == 0 ) THEN
-
-        CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
-        IF( ERROR < 0 ) THEN
-          WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
-          STOP
-        END IF
-
+    WRITE(*,'("Output... ", $ )')
+    CALL MR_GET_T_NTSS_AVERAGE( FILE_XMDF , T , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    ELSE
+      CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
       END IF
-
-      WRITE(*,'(8X,"Compute...",F6.2,"%", A , $ )') REAL(ITS)/REAL(NTSS)*100.00 , ACHAR(13)
-
-    END DO
-
-    WRITE(*,'(8X,"Compute... Done! ")')
-
-    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF)
+    END IF
+    WRITE(*,'("Done! ")')
 
 !***********************************************************************************************************************************
 
@@ -245,6 +202,9 @@
       RETURN
     END IF
 
+  ! SET AVERAGE FILE'S PATH\NAME
+    FILE_AVERAGE = TRIM(FILE_XMDF)//".average.txt"
+
   END SUBROUTINE MR_INIT_FILES
 
-  END PROGRAM MR_REDS
+  END PROGRAM MR_REDS_AVERAGE

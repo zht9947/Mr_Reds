@@ -23,6 +23,7 @@
 
     USE MR_KINDS
 
+    USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
 
     IMPLICIT NONE
@@ -55,11 +56,9 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS( NK )
+  SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS
 
     IMPLICIT NONE
-
-    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
     ALLOCATE( SIGMA(1:NK) )
 
