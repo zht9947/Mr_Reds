@@ -23,7 +23,6 @@
     USE MR_KINDS
 
     USE MR_DEF_PRJ_METADATA
-
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_SLOPE
@@ -59,11 +58,9 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_ECHO_PRJ( FLAG_PRJ_SETS_CORRECT )
+  SUBROUTINE MR_ECHO_PRJ
 
     IMPLICIT NONE
-
-    LOGICAL            , INTENT(OUT)  :: FLAG_PRJ_SETS_CORRECT
 
     CHARACTER( LEN=1 ) :: PRJ_SETS_CORRECT_Y_OR_N
 
@@ -118,13 +115,9 @@
       READ(*,*) PRJ_SETS_CORRECT_Y_OR_N
       SELECT CASE( PRJ_SETS_CORRECT_Y_OR_N )
       CASE( "Y" , "y" )
-        FLAG_PRJ_SETS_CORRECT = .TRUE.
         RETURN
       CASE( "N" , "n" )
-        FLAG_PRJ_SETS_CORRECT = .FALSE.
-        RETURN
-      CASE DEFAULT
-        CYCLE
+        STOP
       END SELECT
     END DO
 

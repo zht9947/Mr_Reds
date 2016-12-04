@@ -18,15 +18,19 @@
 !
 !                                      \\ ABOVE ARE FOR RANKS AND LOOP VARIABLES
 !
-!                       ACID_KIND    :    KIND OF 'ACTIVITY'
+!                       NRID_KIND    :    KIND OF ENUMERATORS
+!
+!                                      \\ ABOVE ARE FOR ENUMERATOR DATA
+!
+!                       ACID_KIND    :    KIND OF ACTIVITY
 !
 !                                      \\ ABOVE ARE FOR INTEGER DATA
 !
 !                       TMRD_KIND    :    KIND OF TIME
+!                       PARD_KIND    :    KIND OF CONSTANTS AND REFERENCE PARAMETERS
 !                       XYRD_KIND    :    KIND OF COORDINATES
 !                       GJRD_KIND    :    KIND OF CURVED GEOMETRIES
 !                       FDRD_KIND    :    KIND OF FIELD VARIABLES
-!                       PARD_KIND    :    KIND OF CONSTANTS AND REFERENCE PARAMETERS
 !
 !                                      \\ ABOVE ARE FOR REAL DATA
 !
@@ -51,13 +55,15 @@
     INTEGER , PARAMETER :: IJID_KIND = 4
     INTEGER , PARAMETER :: KKID_KIND = 4
 
+    INTEGER , PARAMETER :: NRID_KIND = 1
+
     INTEGER , PARAMETER :: ACID_KIND = 1
 
     INTEGER , PARAMETER :: TMRD_KIND = 8
+    INTEGER , PARAMETER :: PARD_KIND = 8
     INTEGER , PARAMETER :: XYRD_KIND = 8
     INTEGER , PARAMETER :: GJRD_KIND = 8
     INTEGER , PARAMETER :: FDRD_KIND = 4
-    INTEGER , PARAMETER :: PARD_KIND = 8
 
     INTEGER , PARAMETER :: CARD_KIND = 8
 

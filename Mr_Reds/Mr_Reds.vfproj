@@ -4,7 +4,7 @@
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
 		<Configuration Name="Debug|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" PreprocessorDefinitions="INPUT_ZERO_W" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
 				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)__Library\lib" IgnoreDefaultLibraryNames="libcmt" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.1.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -33,6 +33,8 @@
 		<Filter Name="MR_MCONSTS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_MCONSTS\MR_MCS_BED_STOR.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_MCONSTS\MR_MCS_K_EPS.f90"/></Filter>
+		<Filter Name="MR_NUMERATORS">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_NUMERATORS\MR_NUM_START_MODE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
@@ -49,6 +51,7 @@
 		<Filter Name="XMDF">
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_CREATE_DSET.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_GET_DSET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_GET_RANKS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_COORS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_GRID_SYS.f90"/>
@@ -111,6 +114,7 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_ADV_N_DIF_Z.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_BAR_XY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_COR_XY.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_DIS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_H.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_HYD - To be revised.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_KI_N_DI.f90"/>

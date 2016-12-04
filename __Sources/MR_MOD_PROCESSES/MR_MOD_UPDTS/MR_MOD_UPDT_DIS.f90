@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -18,20 +19,19 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_INIT_OUTPUT_AVERAGE
+  MODULE MR_MOD_UPDT_DIS
 
     USE MR_KINDS
 
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_FIELD_VARS_DSET_NAMES
-    USE MR_DEF_FIELD_VARS_UNITS
+    USE MR_DEF_FIELD_VARS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_INIT_OUTPUT_AVERAGE
+    PUBLIC :: MR_UPDT_DIS
 
 !***********************************************************************************************************************************
 
@@ -57,38 +57,19 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE_NAME , ERROR , ERRMSG )
-
-    USE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
+  SUBROUTINE MR_UPDT_DIS
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_AVERAGE_NAME
+    INTEGER(IJID_KIND) :: I , J
 
-    INTEGER                          :: FILE_AVERAGE_ID , MULTI_DSETS_ID
+    DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        DIS( I , J ) = 2.33 / ( RBT**0.5 ) * ( KI( I , J ,NK )**1.5 ) / H( I , J )
+      END DO
+    END DO
 
-    INTEGER            , INTENT(OUT) :: ERROR
-    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+  END SUBROUTINE MR_UPDT_DIS
 
-    ERRMSG = ""
-
-    CALL MR_CREATE_FILE_DEFAULT( FILE_AVERAGE_NAME , FILE_AVERAGE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
-
-    WRITE( FILE_AVERAGE_ID , '("Statistics of Flow Status:")' )
-    WRITE( FILE_AVERAGE_ID , '( )' )
-    WRITE( FILE_AVERAGE_ID , '(4X,"                                   Water density [kg/m^3]         : ", ES13.6 )' ) R0
-    WRITE( FILE_AVERAGE_ID , '(4X,"                      Gravitational acceleration [m/s^2]          : ", ES13.6 )' ) GR
-
-    CALL MR_CLOSE_FILE_DEFAULT( FILE_AVERAGE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
-
-  END SUBROUTINE MR_INIT_OUTPUT_AVERAGE
-
-  END MODULE MR_MOD_INIT_OUTPUT_AVERAGE
+  END MODULE MR_MOD_UPDT_DIS

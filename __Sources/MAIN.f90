@@ -388,6 +388,8 @@
 !    !  end do
 !    !end do
 !
+!    call mr_updt_dis
+!
 !  !! QADV and QDIF xy
 !  !  do k = 1, nk
 !  !
@@ -591,9 +593,6 @@
 !  ! end block
 !
 !    !call mr_updt_hyd
-!    !if( mod(its,its_output) == 0 ) then
-!    !  call mr_updt_ww
-!    !end if
 !
 !    call mr_updt_h
 !    print'("H, HU & HV : ")'

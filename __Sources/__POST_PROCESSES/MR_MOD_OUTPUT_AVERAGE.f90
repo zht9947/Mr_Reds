@@ -100,7 +100,7 @@
       RETURN
     END IF
 
-    WRITE( FILE_AVERAGE_ID , '("------------------------------------------------------------------------")'   )
+    WRITE( FILE_AVERAGE_ID , '("----------------------------------------------------------------------")' )
     WRITE( FILE_AVERAGE_ID , '("T = ",F15.5)' ) T
 
   ! WRITE AVERAGED H
@@ -108,7 +108,7 @@
     CALL MR_AVERAGE_SS( NI , NJ , H , SS_AVERAGE )
     SS_AVERAGE = SS_AVERAGE * ( DUMMY_REF - DUMMY_BASE ) + DUMMY_BASE
     DUMMY_CHAR_LEN = LEN_TRIM(DSET_NAME_H)
-    WRITE( FILE_AVERAGE_ID , '(T66,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T88," : ",ES13.6)' )   &
+    WRITE( FILE_AVERAGE_ID , '(T53,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T70," : ",ES13.6)' )   &
     & TRIM(DSET_NAME_H)    , TRIM(UNIT_H)    ,   &
     & SS_AVERAGE
 
@@ -119,7 +119,7 @@
     CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UVA ) ) ) , SS_AVERAGE )
     SS_AVERAGE = SS_AVERAGE * ( DUMMY_REF - DUMMY_BASE ) + DUMMY_BASE
     DUMMY_CHAR_LEN = LEN_TRIM(DSET_NAME_UVA)
-    WRITE( FILE_AVERAGE_ID , '(T66,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T88," : ",ES13.6," , ","(",ES13.6,",",ES13.6,")" )' )   &
+    WRITE( FILE_AVERAGE_ID , '(T53,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T70," : ",ES13.6," , ","(",ES13.6,",",ES13.6,")" )' )   &
     & TRIM(DSET_NAME_UVA)  , TRIM(UNIT_UVA)  ,   &
     & SS_AVERAGE , UV_AVERAGE
 
@@ -130,7 +130,7 @@
     CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) ) ) , SS_AVERAGE )
     SS_AVERAGE = SS_AVERAGE * ( DUMMY_REF - DUMMY_BASE ) + DUMMY_BASE
     DUMMY_CHAR_LEN = LEN_TRIM(DSET_NAME_TBUV)
-    WRITE( FILE_AVERAGE_ID , '(T66,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T88," : ",ES13.6," , ","(",ES13.6,",",ES13.6,")" )' )   &
+    WRITE( FILE_AVERAGE_ID , '(T53,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T70," : ",ES13.6," , ","(",ES13.6,",",ES13.6,")" )' )   &
     & TRIM(DSET_NAME_TBUV) , TRIM(UNIT_TBUV) ,   &
     & SS_AVERAGE , UV_AVERAGE
 

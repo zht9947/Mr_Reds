@@ -77,7 +77,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    CALL XF_READ_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , INT(ITS,4) , NEM , ACTIVITY_ARRAY , ERROR )
+    CALL XF_READ_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , INT(ITS+1,4) , NEM , ACTIVITY_ARRAY , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in reading activity"
       RETURN
@@ -193,7 +193,7 @@
       ERRMSG = "Error in openning vector dataset group"
     ELSE
 
-      CALL XF_READ_VECTOR_VALUES_TIMESTEP( DSET_UV_ID , INT(ITS,4) , NND , 2 , UV_ARRAY , ERROR )
+      CALL XF_READ_VECTOR_VALUES_TIMESTEP( DSET_UV_ID , INT(ITS+1,4) , NND , 2 , UV_ARRAY , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in reading vector values from dataset group"
       ELSE
@@ -556,7 +556,7 @@
       ERRMSG = "Error in openning scalar dataset group"
     ELSE
 
-      CALL XF_READ_SCALAR_VALUES_TIMESTEP( DSET_SS_ID , INT(ITS,4) , NND , SS_ARRAY , ERROR )
+      CALL XF_READ_SCALAR_VALUES_TIMESTEP( DSET_SS_ID , INT(ITS+1,4) , NND , SS_ARRAY , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in reading scalar values from dataset group"
       ELSE

@@ -33,9 +33,8 @@
 
     PRIVATE
 
-    PUBLIC :: MR_UPDT_HYD , MR_UPDT_WW
-
-    PUBLIC :: MR_CALC_UVA , MR_CALC_WW , MR_CALC_W   !Just for test
+    PUBLIC :: MR_UPDT_HYD
+    PUBLIC :: MR_CALC_UVA , MR_CALC_W   !JUST FOR TEST
 
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: ALFA , BETA
 
@@ -92,7 +91,7 @@
 
       ALLOCATE( ALFA(1:NI1(CARD_KIND),1:NJ,1:2) , BETA(1:NI1(CARD_KIND),1:NJ,1:2) )
 
-        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS CALL
+        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS CALLING
 
         ALLOCATE( D1(1:NI1(CARD_KIND),1:NJ) )
           CALL MR_CALC_D1( NI , NJ , ZS , ALFA , BETA , D1 )
@@ -285,92 +284,5 @@
     END DO
 
   END SUBROUTINE MR_CALC_W
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_WW
-
-    IMPLICIT NONE
-
-    CALL MR_CALC_WW( NI , NJ , NK , UA , VA , W , WW )
-
-  END SUBROUTINE MR_UPDT_WW
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_WW( NI , NJ , NK , UA , VA , W , WW )
-
-    USE MR_MOD_OPERATOR_SS
-    USE MR_MOD_CALC_GRAD_XY
-
-    IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
-
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ     ) :: UA
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ     ) :: VA
-
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
-
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: WW
-
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVA
-
-    INTEGER(IJID_KIND) :: I , J
-    INTEGER(KKID_KIND) :: K
-
-    CALL MR_CALC_REDC_GRAD_XY_SS( NI , NJ ,   &
-    & ( MU .MRSSSCL. ( UA .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VA .MRSSMTP. HV ) ) , REDC_GRAD_UVA )
-
-    DO K = 1 , NK
-
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          WW( I , J , K ) = 0.5 * ( W( I , J , K ) + W( I , J ,K-1) ) * H( I , J ) -   &
-          & ( 1.0 + SIGMA( K ) ) * REDC_GRAD_UVA( I , J ) / MW( I , J )
-        END DO
-      END DO
-
-    END DO
-
-  END SUBROUTINE MR_CALC_WW
 
   END MODULE MR_MOD_UPDT_HYD

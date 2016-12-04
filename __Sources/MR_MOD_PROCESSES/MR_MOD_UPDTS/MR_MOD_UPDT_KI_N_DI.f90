@@ -24,14 +24,7 @@
     USE MR_KINDS
 
     USE MR_DEF_RANKS
-
-    USE MR_DEF_CURVED_GEOS
-    USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_FIELD_VARS
-    USE MR_DEF_ACTIVITY
-    USE MR_DEF_TIMING
-
-    USE MR_MCS_K_EPS
 
     IMPLICIT NONE
 
@@ -45,8 +38,6 @@
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: EQK_D3
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: EQD_A3 , EQD_B3 , EQD_C3
     REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: EQD_D3
-
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: VZB , VZS
 
 !***********************************************************************************************************************************
 
@@ -112,13 +103,6 @@
       DEALLOCATE( EQD_D3 )
 
     DEALLOCATE( EQKD_PRO , EQKD_GRO )
-
-    DO J = 1 , NJ
-     !DIR$ VECTOR ALIGNED
-      DO I = 1 , NI
-        DIS( I , J ) = 2.33 / ( RBT**0.5 ) * ( KI( I , J ,NK )**1.5 ) / H( I , J )
-      END DO
-    END DO
 
   END SUBROUTINE MR_UPDT_KI_N_DI
 

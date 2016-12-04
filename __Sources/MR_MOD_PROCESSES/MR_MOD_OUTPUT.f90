@@ -25,6 +25,7 @@
 
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_CURVED_GEOS
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_FIELD_VARS_DSET_NAMES
     USE MR_DEF_ACTIVITY
@@ -35,12 +36,15 @@
 
     PUBLIC :: MR_OUTPUT
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: ZBU , ZBV , ZBOO
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZBU , ZBV , ZBOO
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: ZSOO
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: HOO
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZSOO
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HOO
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:    ) :: HSTOROO
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HSTOROO
+
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: WW
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZWW
 
 !***********************************************************************************************************************************
 
@@ -74,6 +78,7 @@
     USE MR_MOD_WRITE_FIELD_VARS_N_ACTIVITY
 
     USE MR_MOD_INTERP_XY
+    USE MR_MOD_INTERP_Z
 
     IMPLICIT NONE
 
@@ -111,16 +116,108 @@
       RETURN
     END IF
 
+  ! WRITE TBFUV
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBFUV
+    DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
+    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & UV=TBFUV ,   &
+    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when outputting TBFUV(:,:) "   &
+      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+  ! WRITE TBUV
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBUV
+    DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
+    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & UV=TBUV ,   &
+    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when outputting TBUV(:,:) "   &
+      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+  ! WRITE KI
+    DO K = 1 , NK
+
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
+    //"K-Epsilon Model/"//DSET_NAME_KI
+    DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
+    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=KI(:,:, K ) ,   &
+    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when outputting KI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+    END DO
+
+  ! WRITE DI
+    DO K = 1 , NK
+
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
+    //"K-Epsilon Model/"//DSET_NAME_DI
+    DUMMY_BASE = 0.0 ; DUMMY_REF = DIR
+    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=DI(:,:, K ) ,   &
+    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when outputting DI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+    END DO
+
+  ! WRITE R
+    DO K = 1 , NK
+
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_R
+    DUMMY_BASE = R0 ; DUMMY_REF = RR
+    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=R(:,:, K ) ,   &
+    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when outputting R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+    END DO
+
+   !BLOCK
   ! WRITE ZB, ZS AND H
     ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) , ZBV(1:NI1(FDRD_KIND),0:NJ) )
-
-    CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
-    CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
+      CALL MR_INTERP_XY_SS_U( NI , NJ , ZB , ZBU )
+      CALL MR_INTERP_XY_SS_V( NI , NJ , ZB , ZBV )
 
     ALLOCATE( ZBOO(0:NI0(FDRD_KIND),0:NJ) )
+      CALL MR_CALC_ZBOO( NI , NJ , ZBU , ZBV , ZBOO )
 
-    CALL MR_CALC_ZBOO( NI , NJ , ZBU , ZBV , ZBOO )
-
+  ! WRITE ZB
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//DSET_NAME_ZB
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
@@ -140,9 +237,9 @@
     DEALLOCATE( ZBU , ZBV )
 
     ALLOCATE( ZSOO(0:NI0(FDRD_KIND),0:NJ) )
+      CALL MR_CALC_ZSOO( NI , NJ , ZSU , ZSV , ZSOO )
 
-    CALL MR_CALC_ZSOO( NI , NJ , ZSU , ZSV , ZSOO )
-
+  ! WRITE ZS
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_ZS
     DUMMY_BASE = 0.0 ; DUMMY_REF = SR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
@@ -163,8 +260,10 @@
       ALLOCATE( HSTOROO(0:NI0(FDRD_KIND),0:NJ) ) ; HSTOROO = 0.0
         CALL MR_CALC_HOO( NI , NJ , HSTOROO , ZSOO , ZBOO , HOO )
       DEALLOCATE( HSTOROO )
+
     DEALLOCATE( ZSOO , ZBOO )
 
+  ! WRITE H
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_H
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
@@ -181,6 +280,7 @@
     END IF
 
     DEALLOCATE( HOO )
+   !END BLOCK
 
   ! WRITE UVA
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_UVA
@@ -217,7 +317,12 @@
 
     END DO
 
-  ! WRITE W
+   !BLOCK
+  ! CONVERT W TO WW
+    ALLOCATE( WW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
+      CALL MR_CONVERT_W_TO_WW( NI , NJ , NK , UA , VA , W , WW )
+
+  ! WRITE WW
     DO K = 1 , NK
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
@@ -237,35 +342,13 @@
 
     END DO
 
-  ! WRITE TBUV
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBUV
-    DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & UV=TBUV ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting TBUV(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
+    DEALLOCATE( WW )
+   !END BLOCK
 
-  ! WRITE TBFUV
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBFUV
-    DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & UV=TBFUV ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting TBFUV(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
+   !BLOCK
+  ! ANTI-INTERPOLATE VZW TO VZWW
+    ALLOCATE( VZWW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
+      CALL MR_ANTI_INTERP_Z_SS_W( NI , NJ , NK , VZW , VZWW )
 
   ! WRITE VZWW
     DO K = 1 , NK
@@ -287,67 +370,8 @@
 
     END DO
 
-  ! WRITE KI
-    DO K = 1 , NK
-
-    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
-    //"K-Epsilon Model/"//DSET_NAME_KI
-    DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=KI(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting KI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    END DO
-
-  ! WRITE DI
-    DO K = 1 , NK
-
-    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"  &
-    //"K-Epsilon Model/"//DSET_NAME_DI
-    DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=DI(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting DI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    END DO
-
-  ! WRITE R
-    DO K = 1 , NK
-
-    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_R
-    DUMMY_BASE = R0 ; DUMMY_REF = RR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=R(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    END DO
+    DEALLOCATE( VZWW )
+   !END BLOCK
 
     CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -507,5 +531,68 @@
     END DO
 
   END SUBROUTINE MR_CALC_HOO
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CONVERT_W_TO_WW( NI , NJ , NK , UA , VA , W , WW )
+
+    USE MR_MOD_OPERATOR_SS
+    USE MR_MOD_CALC_GRAD_XY
+
+    USE MR_MOD_INTERP_Z
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ     ) :: UA
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ     ) :: VA
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
+
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: WW
+
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVA
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER(KKID_KIND) :: K
+
+    CALL MR_ANTI_INTERP_Z_SS_W( NI , NJ , NK , W , WW )
+
+    CALL MR_CALC_REDC_GRAD_XY_SS( NI , NJ ,   &
+    & ( MU .MRSSSCL. ( UA .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VA .MRSSMTP. HV ) ) , REDC_GRAD_UVA )
+
+    DO K = 1 , NK
+
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          WW( I , J , K ) = WW( I , J , K ) * H( I , J ) -   &
+          & ( 1.0 + SIGMA( K ) ) * REDC_GRAD_UVA( I , J ) / MW( I , J )
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_CONVERT_W_TO_WW
 
   END MODULE MR_MOD_OUTPUT

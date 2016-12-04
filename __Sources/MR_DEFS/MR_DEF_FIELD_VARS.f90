@@ -12,26 +12,27 @@
 !
 ! DEFINITION OF VARIABLES:
 !
-!                              ZB    :    BED ELEVATION
-!                    ZS, ZSU, ZSV    :    FREE SURFACE ELEVATION
-!                       H, HU, HV    :    DEPTH
+!                           TBFUV    :    FRACTIONAL BED SHEAR STRESS
+!                            TBUV    :    TOTAL BED SHEAR STRESS
+!                             KIB    :    TURBULENCE KINETIC ENERGY AT BED
+!                             DIB    :    TURBULENCE DISSIPATION AT BED
+!                              KI    :    TURBULENCE KINETIC ENERGY
+!                              DI    :    TURBULENCE DISSIPATION
+!                             DIS    :    TURBULENCE DISSIPATION AT FREE SURFACE
+!                             CSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
+!               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
 !                               R    :    WATER-SEDIMENT MIXTURE DENSITY
 !                              RI    :    LOCAL DEPTH-AVERAGED WATER-SEDIMENT MIXTURE DENSITY
+!                              ZB    :    BED ELEVATION
+!                    ZS, ZSU, ZSV    :    FREE SURFACE ELEVATION
+!                       H, HU, HV    :    DEPTH FROM BED TO FREE SURFACE
 !                     UVA, UA, VA    :    DEPTH-AVERAGED VELOCITY
 !                        UV, U, V    :    HORIZONTAL VELOCITY VECTOR, MAY ALSO BE THE DEVIATION OF THE HORIZONTAL VELOCITY VECTOR
-!                          WW , W    :    VERTICAL VELOCITY SCALAR
-!                            TBUV    :    TOTAL BED SHEAR STRESS
-!                           TBFUV    :    FRACTIONAL BED SHEAR STRESS
-!               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
-!                             CSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
-!                              KI    :    TURBULENCE KINETIC ENERGY
-!                             KIB    :    TURBULENCE KINETIC ENERGY AT BED
-!                              DI    :    TURBULENCE DISSIPATION
-!                        DIB, DIS    :    TURBULENCE DISSIPATION AT BED AND FREE SURFACE RESPECTIVELY
+!                               W    :    VERTICAL VELOCITY SCALAR
 !               VXYUV, VXYU, VXYV    :    HORIZONTAL EDDY KINEMATIC VISCOSITY VECTOR
 !                       VZWW, VZW    :    VERTICAL EDDY KINEMATIC VISCOSITY SCALAR
 !               DXYUV, DXYU, DXYV    :    HORIZONTAL EDDY KINEMATIC DIFFUSIVITY VECTOR
-!                       DZWW , DZ    :    VERTICAL EDDY KINEMATIC DIFFUSIVITY SCALAR
+!                       DZWW, DZW    :    VERTICAL EDDY KINEMATIC DIFFUSIVITY SCALAR
 !
 ! RECORD OF REVISIONS:
 !
@@ -46,35 +47,33 @@
 
     IMPLICIT NONE
 
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBFUV
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBUV
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: KIB
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIB
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: CSS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: QSBUV
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: R
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: RI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZB
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZSU , ZSV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: H
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HU , HV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: R
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: RI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: UVA
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: UA , VA
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: UV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: U , V
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: WW
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: W
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBUV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBFUV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: QSBUV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: CSS
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: KIB
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIB , DIS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: VXYUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VXYU , VXYV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZWW
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZW
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: DXYUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DXYU , DXYV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DZWW
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DZW
 
   END MODULE MR_DEF_FIELD_VARS

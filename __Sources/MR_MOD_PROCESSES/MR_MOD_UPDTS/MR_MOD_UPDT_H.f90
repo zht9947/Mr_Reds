@@ -71,14 +71,16 @@
 
     INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( HSTOR(1:NI1(FDRD_KIND),1:NJ) ) ; HSTOR = 0.0
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          H( I , J ) = MR_FUNC_H( HSTOR( I , J ) , ZS( I , J ) , ZB( I , J ) )
+    ALLOCATE(  HSTOR(1:NI1(FDRD_KIND),1:NJ) ) ;  HSTOR = 0.0
+      !BLOCK
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+             H( I , J ) = MR_FUNC_H(  HSTOR( I , J ) ,  ZS( I , J ) ,  ZB( I , J ) )
+          END DO
         END DO
-      END DO
-    DEALLOCATE( HSTOR )
+      !END BLOCK
+    DEALLOCATE(  HSTOR )
 
     ALLOCATE( HSTORU(0:NI0(FDRD_KIND),1:NJ) ) ; HSTORU = 0.0
       ALLOCATE( ZBU(0:NI0(FDRD_KIND),1:NJ) )

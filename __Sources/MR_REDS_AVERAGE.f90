@@ -74,10 +74,7 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    CALL MR_ECHO_PRJ( FLAG_PRJ_SETS_CORRECT )
-    IF( .NOT. FLAG_PRJ_SETS_CORRECT ) THEN
-      STOP
-    END IF
+    CALL MR_ECHO_PRJ
 
    !BLOCK
   ! ALLOCATE MEMORIES FOR PROJECT
@@ -115,33 +112,34 @@
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Input... ", $ )')
-    CALL MR_GET_NTSS_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
+    WRITE(*,'("Get the maximum number of timesteps and corresponding time, ")')
+    WRITE(*,'("  And the data of the last time will be averaged... ", $ )')
+    CALL MR_GET_NTSS_N_T_NTSS_AVERAGE( FILE_XMDF , ITS , T , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      CALL MR_INPUT_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
+    END IF
+    WRITE(*,'("Done! ")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'("Input... ", $ )')
+    CALL MR_INPUT_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
     END IF
     WRITE(*,'("Done! ")')
 
     WRITE(*,'("Output... ", $ )')
-    CALL MR_GET_T_NTSS_AVERAGE( FILE_XMDF , T , ERROR , ERRMSG )
+    CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
     END IF
     WRITE(*,'("Done! ")')
+
+    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_AVERAGE)
 
 !***********************************************************************************************************************************
 

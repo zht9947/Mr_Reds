@@ -66,7 +66,7 @@
 !
 !                          D0, DS    :    GRAIN-SIZE; DIMENSIONLESS GRAIN-SIZE
 !                            TCRS    :    DIMENSIONLESS CRITICAL SHEAR STRESS
-!                              WS    :    DIMENSIONLESS FALL VELOCITY
+!                           WALLS    :    DIMENSIONLESS FALL VELOCITY
 !                             RBS    :    ROSSBY NUMBERS FOR FALL VELOCITY
 !
 !                                      \\ ABOVE ARE SEDIMENT GRIAN-SIZE CLASSIFIED PARAMETERS
@@ -128,7 +128,7 @@
 
     REAL   (PARD_KIND) :: D0 , DS
     REAL   (PARD_KIND) :: TCRS
-    REAL   (PARD_KIND) :: WS
+    REAL   (PARD_KIND) :: WALLS
     REAL   (PARD_KIND) :: RBS
 
     REAL   (PARD_KIND) , ALLOCATABLE , DIMENSION(:) :: SIGMA

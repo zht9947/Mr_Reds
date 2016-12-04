@@ -29,8 +29,10 @@
 
     PRIVATE
 
-    PUBLIC :: MR_GET_NTSS
-    PUBLIC :: MR_GET_T_ITS , MR_GET_T_NTSS
+    PUBLIC :: MR_GET_DSET_NTSS
+    PUBLIC :: MR_GET_DSET_T_ITS
+
+    PUBLIC :: MR_GET_DSET_NTSS_N_T_NTSS
 
 !***********************************************************************************************************************************
 
@@ -56,7 +58,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS , ERROR , ERRMSG )
+  SUBROUTINE MR_GET_DSET_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -66,8 +68,8 @@
 
     INTEGER                          :: DSET_ID
 
-    INTEGER(TSID_KIND) , INTENT(OUT) :: NTSS
     INTEGER                          :: NTIMES
+    INTEGER(TSID_KIND) , INTENT(OUT) :: NTSS
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -101,7 +103,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_NTSS
+  END SUBROUTINE MR_GET_DSET_NTSS
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -123,7 +125,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_T_ITS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS , T_ITS , ERROR , ERRMSG )
+  SUBROUTINE MR_GET_DSET_T_ITS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS , ITS , T_ITS , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -133,9 +135,8 @@
 
     INTEGER                          :: DSET_ID
 
+    INTEGER(TSID_KIND) , INTENT(IN ) :: NTSS
     INTEGER(TSID_KIND) , INTENT(IN ) :: ITS
-    INTEGER(TSID_KIND)               :: NTSS
-    INTEGER                          :: NTIMES
 
     REAL   (8)         , ALLOCATABLE , DIMENSION(:) :: T_ARRAY
 
@@ -152,32 +153,17 @@
       ERRMSG = "Error in openning dataset group"
     ELSE
 
-      CALL XF_GET_DATASET_NUM_TIMES( DSET_ID , NTIMES , ERROR )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in getting number of timesteps from dataset group"
-      ELSE
-
-        NTSS = NTIMES - 1
-        IF( ITS > NTSS ) THEN
-          ERROR = - 7701
-          ERRMSG = "Maximum timestep exceeded"
+      ALLOCATE( T_ARRAY(0:NTSS) )
+        CALL XF_GET_DATASET_TIMES( DSET_ID , SIZE(T_ARRAY) , T_ARRAY , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in getting time's array"
         ELSE
 
-          ALLOCATE( T_ARRAY(0:NTSS) )
-            CALL XF_GET_DATASET_TIMES( DSET_ID , SIZE(T_ARRAY) , T_ARRAY , ERROR )
-            IF( ERROR < 0 ) THEN
-              ERRMSG = "Error in getting time's array"
-            ELSE
-
-              T_ITS = T_ARRAY( ITS )
-
-            END IF
-
-          DEALLOCATE( T_ARRAY )
+          T_ITS = T_ARRAY( ITS )
 
         END IF
 
-      END IF
+      DEALLOCATE( T_ARRAY )
 
       CALL XF_CLOSE_GROUP( DSET_ID , ERROR_DUMMY )
       IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
@@ -191,7 +177,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_T_ITS
+  END SUBROUTINE MR_GET_DSET_T_ITS
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -213,7 +199,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_T_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T_NTSS , ERROR , ERRMSG )
+  SUBROUTINE MR_GET_DSET_NTSS_N_T_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS , T_NTSS , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -223,8 +209,8 @@
 
     INTEGER                          :: DSET_ID
 
-    INTEGER(TSID_KIND)               :: NTSS
     INTEGER                          :: NTIMES
+    INTEGER(TSID_KIND) , INTENT(OUT) :: NTSS
 
     REAL   (8)         , ALLOCATABLE , DIMENSION(:) :: T_ARRAY
 
@@ -274,6 +260,6 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_T_NTSS
+  END SUBROUTINE MR_GET_DSET_NTSS_N_T_NTSS
 
   END MODULE MR_MOD_GET_DSET_TIMES

@@ -22,12 +22,7 @@
 
     USE MR_KINDS
 
-    USE MR_DEF_PRJ_METADATA
-
-    USE MR_DEF_RANKS
-    USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_SLOPE
-    USE MR_DEF_TIMING
+    USE MR_NUM_START_MODE
 
     IMPLICIT NONE
 
@@ -59,28 +54,24 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_DETER_START_MODE( FLAG_COLD_START )
+  SUBROUTINE MR_DETER_START_MODE
 
     IMPLICIT NONE
 
-    LOGICAL            , INTENT(OUT)  :: FLAG_COLD_START
-
-    CHARACTER( LEN=1 ) :: COLD_START_Y_OR_N
+    INTEGER :: ERROR
 
     WRITE(*,'( )')
+    WRITE(*,'("Which start mode would be preferred? ")')
+    WRITE(*,'("    1. Cold mode; 2. Hot mode ")')
     DO
-      WRITE(*,'("Cold start? (Y/N): ", $ )')
-      READ(*,*) COLD_START_Y_OR_N
-      SELECT CASE( COLD_START_Y_OR_N )
-      CASE( "Y" , "y" )
-        FLAG_COLD_START = .TRUE.
-        RETURN
-      CASE( "N" , "n" )
-        FLAG_COLD_START = .FALSE.
-        RETURN
-      CASE DEFAULT
-        CYCLE
-      END SELECT
+      WRITE(*,'("  Select No. ", $ )')
+      READ(*,*,IOSTAT=ERROR) START_MODE
+      IF( ERROR == 0 ) THEN
+        SELECT CASE( START_MODE )
+        CASE( COLD_MODE , HOT_MODE )
+          RETURN
+        END SELECT
+      END IF
     END DO
 
   END SUBROUTINE MR_DETER_START_MODE
