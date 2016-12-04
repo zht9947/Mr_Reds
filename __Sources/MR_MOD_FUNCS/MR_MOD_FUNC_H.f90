@@ -67,7 +67,7 @@
     REAL(FDRD_KIND) :: H
 
     HBELOW = HSTOR * ( 1.0 - 2.0 * CFACTSTOR * CBASESTOR / (1.0-CBASESTOR) )
-    
+
     IF( ZS * ALPAR <= ZB - CFACTSTOR*HSTOR ) THEN
       H = EPSILON(H)
     ELSE IF( ZS * ALPAR <= ZB - HBELOW ) THEN

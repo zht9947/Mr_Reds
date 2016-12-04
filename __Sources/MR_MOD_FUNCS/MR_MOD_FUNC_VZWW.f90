@@ -1,4 +1,3 @@
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -19,19 +18,19 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_UPDT_DIS
+  MODULE MR_MOD_FUNC_VZWW
 
     USE MR_KINDS
 
-    USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_FIELD_VARS
+
+    USE MR_MCS_K_EPS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_UPDT_DIS
+    PUBLIC :: MR_FUNC_VZWW
 
 !***********************************************************************************************************************************
 
@@ -57,19 +56,17 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_DIS
-
+  FUNCTION MR_FUNC_VZWW( V0 , KI , DI ) RESULT( VZWW )
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM( V0 ) :: MR_FUNC_VZWW
     IMPLICIT NONE
 
-    INTEGER(IJID_KIND) :: I , J
+    REAL(PARD_KIND) , INTENT(IN ) :: V0
+    REAL(FDRD_KIND) , INTENT(IN ) :: KI , DI
 
-    DO J = 1 , NJ
-     !DIR$ VECTOR ALIGNED
-      DO I = 1 , NI
-        DIS( I , J ) = 2.33 / ( RBT**0.5 ) * ( KI( I , J ,NK )**1.5 ) / H( I , J )
-      END DO
-    END DO
+    REAL(FDRD_KIND) :: VZWW
 
-  END SUBROUTINE MR_UPDT_DIS
+    VZWW = V0 / VZR + CV0 / EKZ * KI * KI / MAX( DI , EPSILON(DI) )
 
-  END MODULE MR_MOD_UPDT_DIS
+  END FUNCTION MR_FUNC_VZWW
+
+  END MODULE MR_MOD_FUNC_VZWW

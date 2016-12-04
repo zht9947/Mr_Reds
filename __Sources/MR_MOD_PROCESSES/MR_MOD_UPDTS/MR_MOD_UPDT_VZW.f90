@@ -64,6 +64,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_UPDT_VZW
 
+    USE MR_MOD_FUNC_VZWW
+
     USE MR_MOD_INTERP_Z
 
     IMPLICIT NONE
@@ -76,7 +78,7 @@
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            VZWW( I , J , K ) = V0 / VZR + CV0 / EKZ * KI( I , J , K ) * KI( I , J , K ) / MAX( DI( I , J , K ) , EPSILON(DI) )
+            VZWW( I , J , K ) = MR_FUNC_VZWW( V0 , KI( I , J , K ) , DI( I , J , K ) )
           END DO
         END DO
       END DO
@@ -85,8 +87,8 @@
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            VZB( I , J ) = V0 / VZR + CV0 / EKZ * KIB( I , J ) * KIB( I , J ) / MAX( DIB( I , J ) , EPSILON(DIB) )
-            VZS( I , J ) = V0 / VZR + CV0 / EKZ * KI( I , J ,NK ) * KI( I , J ,NK ) / MAX( DIS( I , J ) , EPSILON(DIS) )
+            VZB( I , J ) = MR_FUNC_VZWW( V0 , KIB( I , J ) , DIB( I , J ) )
+            VZS( I , J ) = MR_FUNC_VZWW( V0 , KI( I , J ,NK ) , DIS( I , J ) )
           END DO
         END DO
 

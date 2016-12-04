@@ -21,14 +21,14 @@
 !                             DIS    :    TURBULENCE DISSIPATION AT FREE SURFACE
 !                             CSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
 !               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
-!                               R    :    WATER-SEDIMENT MIXTURE DENSITY
-!                              RI    :    LOCAL DEPTH-AVERAGED WATER-SEDIMENT MIXTURE DENSITY
 !                              ZB    :    BED ELEVATION
 !                    ZS, ZSU, ZSV    :    FREE SURFACE ELEVATION
 !                       H, HU, HV    :    DEPTH FROM BED TO FREE SURFACE
 !                     UVA, UA, VA    :    DEPTH-AVERAGED VELOCITY
 !                        UV, U, V    :    HORIZONTAL VELOCITY VECTOR, MAY ALSO BE THE DEVIATION OF THE HORIZONTAL VELOCITY VECTOR
 !                               W    :    VERTICAL VELOCITY SCALAR
+!                               R    :    WATER-SEDIMENT MIXTURE DENSITY
+!                              RI    :    LOCAL DEPTH-AVERAGED WATER-SEDIMENT MIXTURE DENSITY
 !               VXYUV, VXYU, VXYV    :    HORIZONTAL EDDY KINEMATIC VISCOSITY VECTOR
 !                       VZWW, VZW    :    VERTICAL EDDY KINEMATIC VISCOSITY SCALAR
 !               DXYUV, DXYU, DXYV    :    HORIZONTAL EDDY KINEMATIC DIFFUSIVITY VECTOR
@@ -57,8 +57,6 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: CSS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: QSBUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: R
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: RI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZB
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZSU , ZSV
@@ -69,6 +67,8 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: UV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: U , V
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: W
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: R
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: RI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:,:  ) :: VXYUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VXYU , VXYV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZW

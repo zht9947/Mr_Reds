@@ -126,8 +126,7 @@
 
     USE MR_MOD_READ_FIELD_VARS_N_ACTIVITY
 
-    USE MR_MOD_UPDT_KIB_N_DIB
-    USE MR_MOD_UPDT_DIS
+    USE MR_MOD_UPDT_KI_N_DI
     USE MR_MOD_UPDT_VZW
 
     USE MR_MOD_INTERP_Z
@@ -235,6 +234,9 @@
 
     END DO
 
+  ! UPDATE DIS
+    CALL MR_UPDT_DIS
+
   ! READ DI
     DO K = 1 , NK
 
@@ -256,36 +258,9 @@
 
     END DO
 
-  ! UPDATE DIS
-    CALL MR_UPDT_DIS
-
    !BLOCK
     CSS      =   0.000E+0
     QSBUV    =   0.000E+0   ; QSBU    =   0.000E+0   ; QSBV    =   0.000E+0
-   !END BLOCK
-
-  ! READ R
-    DO K = 1 , NK
-
-    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_R
-    DUMMY_BASE = R0 ; DUMMY_REF = RR
-    CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=R(:,:, K ) ,   &
-    & ERROR=ERROR , ERRMSG=ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when initializing R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    END DO
-
-   !BLOCK
-    RI       =   0.000E+0
    !END BLOCK
 
   ! READ ZB
@@ -369,37 +344,59 @@
 
     END DO
 
-
-    W = 0.0
    !BLOCK
-  !  ALLOCATE( WW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
-  !
-  !! READ WW
-  !  DO K = 1 , NK
-  !
-  !  WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-  !  PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_WW
-  !  DUMMY_BASE = 0.0 ; DUMMY_REF = WR
-  !  CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
-  !  & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-  !  & SS=WW(:,:, K ) ,   &
-  !  & ERROR=ERROR , ERRMSG=ERRMSG )
-  !  IF( ERROR < 0 ) THEN
-  !    ERRMSG = TRIM(ERRMSG)//" when initializing WW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-  !    //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-  !    CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-  !    CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-  !    RETURN
-  !  END IF
-  !
-  !  END DO
-  !
-  !! CONVERT WW TO W
-  !  ALLOCATE( WB(1:NI1(FDRD_KIND),1:NJ) , WS(1:NI1(FDRD_KIND),1:NJ) ) ; WB = 0.0 ; WS = 0.0
-  !    CALL MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W , WB , WS )
-  !  DEALLOCATE( WB , WS )
-  !
-  !  DEALLOCATE( WW )
+    ALLOCATE( WW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
+
+  ! READ WW
+    DO K = 1 , NK
+  
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_WW
+    DUMMY_BASE = 0.0 ; DUMMY_REF = WR
+    CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=WW(:,:, K ) ,   &
+    & ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when initializing WW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+  
+    END DO
+
+  ! CONVERT WW TO W
+    ALLOCATE( WB(1:NI1(FDRD_KIND),1:NJ) , WS(1:NI1(FDRD_KIND),1:NJ) ) ; WB = 0.0 ; WS = 0.0
+      CALL MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W , WB , WS )
+    DEALLOCATE( WB , WS )
+  
+    DEALLOCATE( WW )
+   !END BLOCK
+
+  ! READ R
+    DO K = 1 , NK
+
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_R
+    DUMMY_BASE = R0 ; DUMMY_REF = RR
+    CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=R(:,:, K ) ,   &
+    & ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when initializing R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+    END DO
+
+   !BLOCK
+    RI       =   0.000E+0
    !END BLOCK
 
    !BLOCK

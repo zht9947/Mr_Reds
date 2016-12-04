@@ -65,7 +65,8 @@
 		<Filter Name="MR_MOD_FUNC_PARS">
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_PARS\MR_MOD_FUNC_TCRS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_H.f90"/>
-		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_TBUV.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_TBUV.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_VZWW.f90"/></Filter>
 		<Filter Name="MR_MOD_OPERATIONS">
 		<Filter Name="MR_MOD_OPERATORS">
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_SS.f90"/>
@@ -114,11 +115,9 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_ADV_N_DIF_Z.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_BAR_XY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_CALC_HYD\MR_MOD_CALC_HYD_COR_XY.f90"/></Filter>
-		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_DIS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_H.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_HYD - To be revised.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_KI_N_DI.f90"/>
-		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_KIB_N_DIB.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_TBUV.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_VZW.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_DETER_START_MODE.f90"/>
