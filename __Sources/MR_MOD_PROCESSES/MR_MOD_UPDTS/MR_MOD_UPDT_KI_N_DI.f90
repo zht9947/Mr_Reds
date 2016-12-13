@@ -35,7 +35,8 @@
     PRIVATE
 
     PUBLIC :: MR_UPDT_KI_N_DI
-    PUBLIC :: MR_UPDT_KIB_N_DIB , MR_UPDT_DIS
+
+    PUBLIC :: MR_CALC_KIB_N_DIB , MR_CALC_DIS
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: EQKD_PRO , EQKD_GRO
 
@@ -135,34 +136,6 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_KIB_N_DIB
-
-    IMPLICIT NONE
-
-    CALL MR_CALC_KIB_N_DIB( NI , NJ , TBUV , KIB , DIB )
-
-  END SUBROUTINE MR_UPDT_KIB_N_DIB
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
   SUBROUTINE MR_CALC_KIB_N_DIB( NI , NJ , TBUV , KIB , DIB )
 
     USE MR_MOD_OPERATOR_UV
@@ -214,34 +187,6 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_DIS
-
-    IMPLICIT NONE
-
-    CALL MR_CALC_DIS( NI , NJ , KI(:,:,NK ) , DIS )
-
-  END SUBROUTINE MR_UPDT_DIS
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
   SUBROUTINE MR_CALC_DIS( NI , NJ , KIS , DIS )
 
     IMPLICIT NONE
@@ -256,7 +201,7 @@
     DO J = 1 , NJ
      !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        DIS( I , J ) = 2.33 / ( RBT**0.5 ) * ( KIS( I , J )**1.5 ) / H( I , J )
+        DIS( I , J ) = 2.33 / ( SQRT( RBT ) ) * ( KIS( I , J )**1.5 ) / H( I , J )
       END DO
     END DO
 

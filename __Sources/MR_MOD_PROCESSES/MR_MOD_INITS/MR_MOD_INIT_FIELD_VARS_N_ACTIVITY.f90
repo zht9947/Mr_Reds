@@ -210,8 +210,8 @@
       RETURN
     END IF
 
-  ! UPDATE KIB AND DIB
-    CALL MR_UPDT_KIB_N_DIB
+  ! CALCULATE KIB AND DIB
+    CALL MR_CALC_KIB_N_DIB( NI , NJ , TBUV , KIB , DIB )
 
   ! READ KI
     DO K = 1 , NK
@@ -234,8 +234,8 @@
 
     END DO
 
-  ! UPDATE DIS
-    CALL MR_UPDT_DIS
+  ! CALCULATE DIS
+    CALL MR_CALC_DIS( NI , NJ , KI(:,:,NK ) , DIS )
 
   ! READ DI
     DO K = 1 , NK
