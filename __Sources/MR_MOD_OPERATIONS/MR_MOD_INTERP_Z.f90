@@ -66,7 +66,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,1:NK) :: UV
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: UVW
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: UV0 , UVN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) , OPTIONAL :: UV0 , UVN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -137,9 +137,15 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      UVW( I , J ,DIM, K ) = UV0( I , J ,DIM)
+      IF( PRESENT(UV0) ) THEN
+        UVW( I , J ,DIM, K ) = UV0( I , J ,DIM)
+      ELSE
+        UVW( I , J ,DIM, K ) = UV( I , J ,DIM,K+1)
+      END IF
     ELSE
-      UVW( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        UVW( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_K0
@@ -169,9 +175,13 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      UVW( I , J ,DIM, K ) = 0.5 * ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) )
+      !BLOCK
+        UVW( I , J ,DIM, K ) = 0.5 * ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) )
+      !END BLOCK
     ELSE
-      UVW( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        UVW( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KK
@@ -201,9 +211,15 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      UVW( I , J ,DIM, K ) = UVN( I , J ,DIM)
+      IF( PRESENT(UVN) ) THEN
+        UVW( I , J ,DIM, K ) = UVN( I , J ,DIM)
+      ELSE
+        UVW( I , J ,DIM, K ) = UV( I , J ,DIM, K )
+      END IF
     ELSE
-      UVW( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        UVW( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_UV_W_II_JJ_KN
@@ -295,7 +311,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: SS
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: SW
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: SS0 , SSN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) , OPTIONAL :: SS0 , SSN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -359,9 +375,15 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      SW( I , J , K ) = SS0( I , J )
+      IF( PRESENT(SS0) ) THEN
+        SW( I , J , K ) = SS0( I , J )
+      ELSE
+        SW( I , J , K ) = SS( I , J ,K+1)
+      END IF
     ELSE
-      SW( I , J , K ) = 0.0
+      !BLOCK
+        SW( I , J , K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_K0
@@ -391,9 +413,13 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      SW( I , J , K ) = 0.5 * ( SS( I , J ,K+1) + SS( I , J , K ) )
+      !BLOCK
+        SW( I , J , K ) = 0.5 * ( SS( I , J ,K+1) + SS( I , J , K ) )
+      !END BLOCK
     ELSE
-      SW( I , J , K ) = 0.0
+      !BLOCK
+        SW( I , J , K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KK
@@ -423,9 +449,15 @@
     IMPLICIT NONE
 
     IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-      SW( I , J , K ) = SSN( I , J )
+      IF( PRESENT(SSN) ) THEN
+        SW( I , J , K ) = SSN( I , J )
+      ELSE
+        SW( I , J , K ) = SS( I , J , K )
+      END IF
     ELSE
-      SW( I , J , K ) = 0.0
+      !BLOCK
+        SW( I , J , K ) = 0.0
+      !END BLOCK
     END IF
 
   END SUBROUTINE MR_INTERP_Z_SS_W_II_JJ_KN

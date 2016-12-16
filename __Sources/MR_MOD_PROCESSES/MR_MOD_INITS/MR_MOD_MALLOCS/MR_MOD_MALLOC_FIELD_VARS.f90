@@ -63,13 +63,8 @@
     ALLOCATE( TBFUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
     ALLOCATE(  TBUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
 
-    ALLOCATE(   KIB(1:NI1(FDRD_KIND),1:NJ           ) )
-    ALLOCATE(   DIB(1:NI1(FDRD_KIND),1:NJ           ) )
-
     ALLOCATE(    KI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
     ALLOCATE(    DI(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
-
-    ALLOCATE(   DIS(1:NI1(FDRD_KIND),1:NJ           ) )
 
     ALLOCATE(   CSS(1:NI1(FDRD_KIND),1:NJ,    1:NK  ) )
 

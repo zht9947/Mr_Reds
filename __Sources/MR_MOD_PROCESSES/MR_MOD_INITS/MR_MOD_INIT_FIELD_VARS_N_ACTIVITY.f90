@@ -41,7 +41,7 @@
     PUBLIC :: MR_INIT_FIELD_VARS_N_ACTIVITY_HOT
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: WW
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: WB , WS
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: VZWW
 
 !***********************************************************************************************************************************
 
@@ -73,11 +73,8 @@
 
     TBFUV    =   0.000E+0
     TBUV     =   0.000E+0
-    KIB      =   0.000E+0
-    DIB      =   0.000E+0
     KI       =   0.000E+0
     DI       =   0.000E+0
-    DIS      =   0.000E+0
     CSS      =   0.000E+0
     QSBUV    =   0.000E+0   ; QSBU    =   0.000E+0   ; QSBV    =   0.000E+0
     R        =   0.000E+0
@@ -125,9 +122,6 @@
     USE MR_MOD_GET_DSET_TIMES
 
     USE MR_MOD_READ_FIELD_VARS_N_ACTIVITY
-
-    USE MR_MOD_UPDT_KI_N_DI
-    USE MR_MOD_UPDT_VZW
 
     USE MR_MOD_INTERP_Z
 
@@ -210,9 +204,6 @@
       RETURN
     END IF
 
-  ! CALCULATE KIB AND DIB
-    CALL MR_CALC_KIB_N_DIB( NI , NJ , TBUV , KIB , DIB )
-
   ! READ KI
     DO K = 1 , NK
 
@@ -233,9 +224,6 @@
     END IF
 
     END DO
-
-  ! CALCULATE DIS
-    CALL MR_CALC_DIS( NI , NJ , KI(:,:,NK ) , DIS )
 
   ! READ DI
     DO K = 1 , NK
@@ -368,10 +356,8 @@
     END DO
 
   ! CONVERT WW TO W
-    ALLOCATE( WB(1:NI1(FDRD_KIND),1:NJ) , WS(1:NI1(FDRD_KIND),1:NJ) ) ; WB = 0.0 ; WS = 0.0
-      CALL MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W , WB , WS )
-    DEALLOCATE( WB , WS )
-  
+    CALL MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W )
+
     DEALLOCATE( WW )
    !END BLOCK
 
@@ -403,15 +389,42 @@
     VXYUV    =   1.000E+0   ; VXYU    =   1.000E+0   ; VXYV    =   1.000E+0
    !END BLOCK
 
-  ! UPDATE VZW
-    CALL MR_UPDT_VZW
+   !BLOCK
+    ALLOCATE( VZWW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
+
+  ! READ VZWW
+    DO K = 1 , NK
+
+    WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"//DSET_NAME_VZWW
+    DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
+    CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
+    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & SS=VZWW(:,:, K ) ,   &
+    & ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when initializing VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
+      //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+      RETURN
+    END IF
+
+    END DO
+
+  ! INTERPOLATE VZWW TO VZW
+    CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW )
+
+    DEALLOCATE( VZWW )
+   !END BLOCK
 
    !BLOCK
     DXYUV    =   1.000E+0   ; DXYU    =   1.000E+0   ; DXYV    =   1.000E+0
    !END BLOCK
 
-  ! UPDATE DZW
+   !BLOCK
     DZW = VZW
+   !END BLOCK
 
     CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -448,11 +461,11 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W , W0 , WN )
+  SUBROUTINE MR_CONVERT_WW_TO_W( NI , NJ , NK , UA , VA , WW , W )
 
     USE MR_MOD_OPERATOR_SS
-    USE MR_MOD_CALC_GRAD_XY
 
+    USE MR_MOD_CALC_GRAD_XY
     USE MR_MOD_INTERP_Z
 
     IMPLICIT NONE
@@ -467,10 +480,9 @@
 
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: W0
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: WN
-
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: REDC_GRAD_UVA
+
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: WB , WS
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -490,7 +502,9 @@
 
     END DO
 
-    CALL MR_INTERP_Z_SS_W( NI , NJ , NK , WW , W , W0 , WN )
+    WB = 0.0 ; WS = 0.0
+
+    CALL MR_INTERP_Z_SS_W( NI , NJ , NK , WW , W , SS0=WB , SSN=WS )
 
   END SUBROUTINE MR_CONVERT_WW_TO_W
 

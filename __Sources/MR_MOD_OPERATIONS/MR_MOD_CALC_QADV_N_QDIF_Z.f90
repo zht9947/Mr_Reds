@@ -73,7 +73,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    0:NK) :: W , VZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: QADV_Z_UV_W , QDIF_Z_UV_W
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: TUV0 , TUVN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) , OPTIONAL :: TUV0 , TUVN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -168,13 +168,21 @@
     IMPLICIT NONE
 
     !BLOCK
-      QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     !END BLOCK
 
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-      QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     ELSE
-      QDIF_Z_UV_W( I , J ,DIM, K ) = DT * MW( I , J ) * TUV0( I , J ,DIM) / ( H( I , J ) * DSIGMA )
+      IF( PRESENT(TUV0) ) THEN
+        QDIF_Z_UV_W( I , J ,DIM, K ) = DT * MW( I , J ) * TUV0( I , J ,DIM) / ( H( I , J ) * DSIGMA )
+      ELSE
+        QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      END IF
     END IF
 
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_K0
@@ -218,16 +226,24 @@
 
     ! DDW
       !BLOCK
-        DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+        !BLOCK
+          DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
-        &   - TUV0( I , J ,DIM) / ( EKZ * VZW( I , J ,K-1) ) * ( H( I , J ) * DSIGMA )
+        IF( PRESENT(TUV0) ) THEN
+          D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
+          &   - TUV0( I , J ,DIM) / ( EKZ * VZW( I , J ,K-1) ) * ( H( I , J ) * DSIGMA )
+        ELSE
+          D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        END IF
       ELSE
-        D2W = ( UV( I , J ,DIM,K+2) - UV( I , J ,DIM,K+1) )   &
-        &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !BLOCK
+          D2W = ( UV( I , J ,DIM,K+2) - UV( I , J ,DIM,K+1) )   &
+          &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !END BLOCK
       END IF
 
     ! CALCULATE ADVECTION
@@ -284,16 +300,22 @@
 
     ! DDW
       !BLOCK
-        DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !BLOCK
+          DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
-        &   - ( UV( I , J ,DIM, K ) - UV( I , J ,DIM,K-1) )   !\\\
+        !BLOCK
+          D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
+          &   - ( UV( I , J ,DIM, K ) - UV( I , J ,DIM,K-1) )   !\\\
+        !END BLOCK
       ELSE
-        D2W = ( UV( I , J ,DIM,K+2) - UV( I , J ,DIM,K+1) )   &
-        &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !BLOCK
+          D2W = ( UV( I , J ,DIM,K+2) - UV( I , J ,DIM,K+1) )   &
+          &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        !END BLOCK
       END IF
 
     ! CALCULATE ADVECTION
@@ -350,16 +372,24 @@
 
     ! DDW
       !BLOCK
-        DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+        !BLOCK
+          DDW = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
-        &   - ( UV( I , J ,DIM, K ) - UV( I , J ,DIM,K-1) )   !\\\
+        !BLOCK
+          D2W = ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   &
+          &   - ( UV( I , J ,DIM, K ) - UV( I , J ,DIM,K-1) )   !\\\
+        !END BLOCK
       ELSE
-        D2W = TUVN( I , J ,DIM) / ( EKZ * VZW( I , J ,K+1) ) * ( H( I , J ) * DSIGMA )   &
-        &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        IF( PRESENT(TUVN) ) THEN
+          D2W = TUVN( I , J ,DIM) / ( EKZ * VZW( I , J ,K+1) ) * ( H( I , J ) * DSIGMA )   &
+          &   - ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        ELSE
+          D2W =-( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )   !\\\
+        END IF
       END IF
 
     ! CALCULATE ADVECTION
@@ -402,13 +432,21 @@
     IMPLICIT NONE
 
     !BLOCK
-      QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        QADV_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     !END BLOCK
 
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-      QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !BLOCK
+        QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
     ELSE
-      QDIF_Z_UV_W( I , J ,DIM, K ) = DT * MW( I , J ) * TUVN( I , J ,DIM) / ( H( I , J ) * DSIGMA )
+      IF( PRESENT(TUVN) ) THEN
+        QDIF_Z_UV_W( I , J ,DIM, K ) = DT * MW( I , J ) * TUVN( I , J ,DIM) / ( H( I , J ) * DSIGMA )
+      ELSE
+        QDIF_Z_UV_W( I , J ,DIM, K ) = 0.0
+      END IF
     END IF
 
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_UV_W_II_JJ_KN
@@ -448,7 +486,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,    0:NK) :: VZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: T_Z_UV_W
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: TUV0 , TUVN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) , OPTIONAL :: TUV0 , TUVN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
@@ -460,9 +498,15 @@
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !BLOCK
+                T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !END BLOCK
             ELSE
-              T_Z_UV_W( I , J ,DIM, K ) = TUV0( I , J ,DIM)
+              IF( PRESENT(TUV0) ) THEN
+                T_Z_UV_W( I , J ,DIM, K ) = TUV0( I , J ,DIM)
+              ELSE
+                T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              END IF
             END IF
           END DO
         END DO
@@ -475,10 +519,14 @@
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !BLOCK
+                T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !END BLOCK
             ELSE
-              T_Z_UV_W( I , J ,DIM, K ) = EKZ * VZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
-              & ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+              !BLOCK
+                T_Z_UV_W( I , J ,DIM, K ) = EKZ * VZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+                & ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+              !END BLOCK
             END IF
           END DO
         END DO
@@ -491,9 +539,15 @@
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !BLOCK
+                T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              !END BLOCK
             ELSE
-              T_Z_UV_W( I , J ,DIM, K ) = TUVN( I , J ,DIM)
+              IF( PRESENT(TUVN) ) THEN
+                T_Z_UV_W( I , J ,DIM, K ) = TUVN( I , J ,DIM)
+              ELSE
+                T_Z_UV_W( I , J ,DIM, K ) = 0.0
+              END IF
             END IF
           END DO
         END DO
@@ -535,7 +589,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W , DZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: QADV_Z_SS_W , QDIF_Z_SS_W
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: TSS0 , TSSN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) , OPTIONAL :: TSS0 , TSSN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -619,13 +673,21 @@
     IMPLICIT NONE
 
     !BLOCK
-      QADV_Z_SS_W( I , J , K ) = 0.0
+      !BLOCK
+        QADV_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
     !END BLOCK
 
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-      QDIF_Z_SS_W( I , J , K ) = 0.0
+      !BLOCK
+        QDIF_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
     ELSE
-      QDIF_Z_SS_W( I , J , K ) = DT * MW( I , J ) * TSS0( I , J ) / ( H( I , J ) * DSIGMA )
+      IF( PRESENT(TSS0) ) THEN
+        QDIF_Z_SS_W( I , J , K ) = DT * MW( I , J ) * TSS0( I , J ) / ( H( I , J ) * DSIGMA )
+      ELSE
+        QDIF_Z_SS_W( I , J , K ) = 0.0
+      END IF
     END IF
 
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_K0
@@ -669,16 +731,24 @@
 
     ! DDW
       !BLOCK
-        DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )
+        !BLOCK
+          DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
-        &   - TSS0( I , J ) / ( SCZ * DZW( I , J ,K-1) ) * ( H( I , J ) * DSIGMA )
+        IF( PRESENT(TSS0) ) THEN
+          D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
+          &   - TSS0( I , J ) / ( SCZ * DZW( I , J ,K-1) ) * ( H( I , J ) * DSIGMA )
+        ELSE
+          D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        END IF
       ELSE
-        D2W = ( SS( I , J ,K+2) - SS( I , J ,K+1) )   &
-        &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !BLOCK
+          D2W = ( SS( I , J ,K+2) - SS( I , J ,K+1) )   &
+          &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !END BLOCK
       END IF
 
     ! CALCULATE ADVECTION
@@ -735,16 +805,22 @@
 
     ! DDW
       !BLOCK
-        DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !BLOCK
+          DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
-        &   - ( SS( I , J , K ) - SS( I , J ,K-1) )   !\\\
+        !BLOCK
+          D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
+          &   - ( SS( I , J , K ) - SS( I , J ,K-1) )   !\\\
+        !END BLOCK
       ELSE
-        D2W = ( SS( I , J ,K+2) - SS( I , J ,K+1) )   &
-        &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !BLOCK
+          D2W = ( SS( I , J ,K+2) - SS( I , J ,K+1) )   &
+          &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        !END BLOCK
       END IF
 
     ! CALCULATE ADVECTION
@@ -801,16 +877,24 @@
 
     ! DDW
       !BLOCK
-        DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )
+        !BLOCK
+          DDW = ( SS( I , J ,K+1) - SS( I , J , K ) )
+        !END BLOCK
       !END BLOCK
 
     ! D2W
       IF( CRW >= 0.0 ) THEN
-        D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
-        &   - ( SS( I , J , K ) - SS( I , J ,K-1) )   !\\\
+        !BLOCK
+          D2W = ( SS( I , J ,K+1) - SS( I , J , K ) )   &
+          &   - ( SS( I , J , K ) - SS( I , J ,K-1) )   !\\\
+        !END BLOCK
       ELSE
-        D2W = TSSN( I , J ) / ( SCZ * DZW( I , J ,K+1) ) * ( H( I , J ) * DSIGMA )   &
-        &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        IF( PRESENT(TSSN) ) THEN
+          D2W = TSSN( I , J ) / ( SCZ * DZW( I , J ,K+1) ) * ( H( I , J ) * DSIGMA )   &
+          &   - ( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        ELSE
+          D2W =-( SS( I , J ,K+1) - SS( I , J , K ) )   !\\\
+        END IF
       END IF
 
     ! CALCULATE ADVECTION
@@ -853,13 +937,21 @@
     IMPLICIT NONE
 
     !BLOCK
-      QADV_Z_SS_W( I , J , K ) = 0.0
+      !BLOCK
+        QADV_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
     !END BLOCK
 
     IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-      QDIF_Z_SS_W( I , J , K ) = 0.0
+      !BLOCK
+        QDIF_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
     ELSE
-      QDIF_Z_SS_W( I , J , K ) = DT * MW( I , J ) * TSSN( I , J ) / ( H( I , J ) * DSIGMA )
+      IF( PRESENT(TSSN) ) THEN
+        QDIF_Z_SS_W( I , J , K ) = DT * MW( I , J ) * TSSN( I , J ) / ( H( I , J ) * DSIGMA )
+      ELSE
+        QDIF_Z_SS_W( I , J , K ) = 0.0
+      END IF
     END IF
 
   END SUBROUTINE MR_CALC_QADV_N_QDIF_Z_SS_W_II_JJ_KN
@@ -899,7 +991,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: DZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: T_Z_SS_W
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) :: TSS0 , TSSN
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ     ) , OPTIONAL :: TSS0 , TSSN
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -909,9 +1001,15 @@
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            T_Z_SS_W( I , J , K ) = 0.0
+            !BLOCK
+              T_Z_SS_W( I , J , K ) = 0.0
+            !END BLOCK
           ELSE
-            T_Z_SS_W( I , J , K ) = TSS0( I , J )
+            IF( PRESENT(TSS0) ) THEN
+              T_Z_SS_W( I , J , K ) = TSS0( I , J )
+            ELSE
+              T_Z_SS_W( I , J , K ) = 0.0
+            END IF
           END IF
         END DO
       END DO
@@ -922,10 +1020,14 @@
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            T_Z_SS_W( I , J , K ) = 0.0
+            !BLOCK
+              T_Z_SS_W( I , J , K ) = 0.0
+            !END BLOCK
           ELSE
-            T_Z_SS_W( I , J , K ) = SCZ * DZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
-            & ( SS( I , J ,K+1) - SS( I , J , K ) )
+            !BLOCK
+              T_Z_SS_W( I , J , K ) = SCZ * DZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+              & ( SS( I , J ,K+1) - SS( I , J , K ) )
+            !END BLOCK
           END IF
         END DO
       END DO
@@ -936,9 +1038,15 @@
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            T_Z_SS_W( I , J , K ) = 0.0
+            !BLOCK
+              T_Z_SS_W( I , J , K ) = 0.0
+            !END BLOCK
           ELSE
-            T_Z_SS_W( I , J , K ) = TSSN( I , J )
+            IF( PRESENT(TSSN) ) THEN
+              T_Z_SS_W( I , J , K ) = TSSN( I , J )
+            ELSE
+              T_Z_SS_W( I , J , K ) = 0.0
+            END IF
           END IF
         END DO
       END DO

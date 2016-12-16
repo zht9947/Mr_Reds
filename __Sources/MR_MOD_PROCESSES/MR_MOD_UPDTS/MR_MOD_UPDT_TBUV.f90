@@ -35,8 +35,7 @@
     PUBLIC :: MR_UPDT_TBUV
 
     REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:,  :  ) :: UV_MOD
-    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: TBUV_MOD
-    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: TBFUV_MOD
+    REAL(FDRD_KIND)    , ALLOCATABLE , DIMENSION(:,:      ) :: TBFUV_MOD , TBUV_MOD
 
 !***********************************************************************************************************************************
 
@@ -74,7 +73,7 @@
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
-    ALLOCATE( UV_MOD(1:NI1(FDRD_KIND),1:NJ,1:1) , TBUV_MOD(1:NI1(FDRD_KIND),1:NJ) , TBFUV_MOD(1:NI1(FDRD_KIND),1:NJ) )
+    ALLOCATE( UV_MOD(1:NI1(FDRD_KIND),1:NJ,1:1) , TBFUV_MOD(1:NI1(FDRD_KIND),1:NJ) , TBUV_MOD(1:NI1(FDRD_KIND),1:NJ) )
 
       UV_MOD(:,:, 1 ) = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UV(:,:,1:2, 1 ) ) )
 
@@ -101,7 +100,7 @@
         END DO
       END DO
 
-    DEALLOCATE( UV_MOD , TBUV_MOD , TBFUV_MOD )
+    DEALLOCATE( UV_MOD , TBFUV_MOD , TBUV_MOD )
 
   END SUBROUTINE MR_UPDT_TBUV
 

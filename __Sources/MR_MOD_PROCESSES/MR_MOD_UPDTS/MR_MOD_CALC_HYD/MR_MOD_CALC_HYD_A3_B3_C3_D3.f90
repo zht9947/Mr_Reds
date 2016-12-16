@@ -152,17 +152,10 @@
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2     ) :: HYD_ADV_XY , HYD_DIF_XY , HYD_BAR_XY , HYD_COR_XY
 
     INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
 
-    INTEGER :: DIM
-
-    CALL MR_CALC_HYD_ADV_N_DIF_Z( NI , NJ , NK , HYD_ADV_Z , HYD_DIF_Z )
-
     DO K = 1 , NK
-
-      CALL MR_CALC_HYD_ADV_N_DIF_XY( NI , NJ , K , HYD_ADV_XY , HYD_DIF_XY )
-      !CALL MR_CALC_HYD_BAR_XY( NI , NJ , K , HYD_BAR_XY )
-      !CALL MR_CALC_HYD_COR_XY( NI , NJ , K , HYD_COR_XY )
 
       DO DIM = 1 , 2
 
@@ -175,6 +168,21 @@
           END DO
         END DO
 
+      END DO
+
+    END DO
+
+  ! ASSIGN NONEQUILIBRIUM TERMS
+    CALL MR_CALC_HYD_ADV_N_DIF_Z( NI , NJ , NK , HYD_ADV_Z , HYD_DIF_Z )
+
+    DO K = 1 , NK
+
+      CALL MR_CALC_HYD_ADV_N_DIF_XY( NI , NJ , K , HYD_ADV_XY , HYD_DIF_XY )
+     !CALL MR_CALC_HYD_BAR_XY( NI , NJ , K , HYD_BAR_XY )
+     !CALL MR_CALC_HYD_COR_XY( NI , NJ , K , HYD_COR_XY )
+
+      DO DIM = 1 , 2
+
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
@@ -182,8 +190,8 @@
               HYD_D3( I , J ,DIM, K ) = HYD_D3( I , J ,DIM, K ) +  &
               & HYD_ADV_XY( I , J ,DIM) + HYD_ADV_Z( I , J ,DIM, K ) +   &
               & HYD_DIF_XY( I , J ,DIM) + HYD_DIF_Z( I , J ,DIM, K ) !+   &
-            ! & HYD_BAR_XY( I , J ,DIM) +   &
-            ! & HYD_COR_XY( I , J ,DIM)
+             !& HYD_BAR_XY( I , J ,DIM) +   &
+             !& HYD_COR_XY( I , J ,DIM)
             END IF
           END DO
         END DO

@@ -36,7 +36,6 @@
     PUBLIC :: MR_UPDT_VZW
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: VZWW
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: VZB , VZS
 
 !***********************************************************************************************************************************
 
@@ -83,18 +82,7 @@
         END DO
       END DO
 
-      ALLOCATE( VZB(1:NI1(FDRD_KIND),1:NJ) , VZS(1:NI1(FDRD_KIND),1:NJ) )
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            VZB( I , J ) = MR_FUNC_VZWW( V0 , KIB( I , J ) , DIB( I , J ) )
-            VZS( I , J ) = MR_FUNC_VZWW( V0 , KI( I , J ,NK ) , DIS( I , J ) )
-          END DO
-        END DO
-
-        CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW , VZB , VZS )
-
-      DEALLOCATE( VZB , VZS )
+      CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW )
 
     DEALLOCATE( VZWW )
 

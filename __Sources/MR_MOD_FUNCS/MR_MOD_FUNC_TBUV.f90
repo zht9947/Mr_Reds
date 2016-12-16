@@ -253,7 +253,7 @@
     REAL(FDRD_KIND) :: TMP1 , TMP2
 
     RESHEARS = MAX( RET * HDS * SQRT( TBFUV_MOD ) , 1.0 )
-    
+
     TMP1 = LOG( RESHEARS )
     TMP2 = TMP1**2.55
 

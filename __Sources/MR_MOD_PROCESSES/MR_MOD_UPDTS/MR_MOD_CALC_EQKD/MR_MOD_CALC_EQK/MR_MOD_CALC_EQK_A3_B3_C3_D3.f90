@@ -100,7 +100,17 @@
       END DO
     END DO
 
-    DO K = 1 , NK-1
+    K = 1
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          !BLOCK
+            EQK_C3( I , J , K ) = 0.0
+          !END BLOCK
+        END DO
+      END DO
+    !END K = 1
+    DO K = 2 , NK-1
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
@@ -157,12 +167,7 @@
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
 
-    CALL MR_CALC_EQK_ADV_N_DIF_Z( NI , NJ , NK , EQK_ADV_Z , EQK_DIF_Z )
-
     DO K = 1 , NK
-
-      CALL MR_CALC_EQK_ADV_N_DIF_XY( NI , NJ , K , EQK_ADV_XY , EQK_DIF_XY )
-      CALL MR_CALC_EQK_SRC_XY( NI , NJ , K , EQKD_PRO(:,:, K ) , EQKD_GRO(:,:, K ) , EQK_SRC_XY )
 
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
@@ -172,6 +177,16 @@
           !END BLOCK
         END DO
       END DO
+
+    END DO
+
+  ! ASSIGN NONEQUILIBRIUM TERMS
+    CALL MR_CALC_EQK_ADV_N_DIF_Z( NI , NJ , NK , EQK_ADV_Z , EQK_DIF_Z )
+
+    DO K = 2 , NK
+
+      CALL MR_CALC_EQK_ADV_N_DIF_XY( NI , NJ , K , EQK_ADV_XY , EQK_DIF_XY )
+      CALL MR_CALC_EQK_SRC_XY( NI , NJ , K , EQKD_PRO(:,:, K ) , EQKD_GRO(:,:, K ) , EQK_SRC_XY )
 
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED

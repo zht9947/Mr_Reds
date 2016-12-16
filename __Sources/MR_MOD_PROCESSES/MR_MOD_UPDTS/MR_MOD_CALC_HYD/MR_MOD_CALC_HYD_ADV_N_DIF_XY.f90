@@ -87,7 +87,8 @@
 
       ALLOCATE( VVT(1:NI1(FDRD_KIND),0:NJ,1:2) )
         CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,1) )
-        CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,2) )
+       !CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,2) )
+        VVT(:,:,2) = V(:,:, K )
 
         VVT = JVV .MRUVTFM. VVT
 
@@ -97,8 +98,9 @@
       DEALLOCATE( VVT )
 
       ALLOCATE( UUT(0:NI0(FDRD_KIND),1:NJ,1:2) )
-        CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,1) )
         CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,2) )
+       !CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,1) )
+        UUT(:,:,1) = U(:,:, K )
 
         UUT = JUU .MRUVTFM. UUT
 

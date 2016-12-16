@@ -35,8 +35,6 @@
 
     PUBLIC :: MR_CALC_HYD_ADV_N_DIF_Z
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TSUV
-
 !***********************************************************************************************************************************
 
   CONTAINS
@@ -75,9 +73,7 @@
 
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2,0:NK) :: HYD_QADV_Z_W , HYD_QDIF_Z_W
 
-    ALLOCATE( TSUV(1:NI1(FDRD_KIND),1:NJ,1:2) ) ; TSUV(1:NI,1:NJ,1:2) = 0.0
-      CALL MR_CALC_QADV_N_QDIF_Z_UV_W( NI , NJ , NK , UV , RB , W , HYD_QADV_Z_W , EKZ , VZW , HYD_QDIF_Z_W , TBUV , TSUV )
-    DEALLOCATE( TSUV )
+    CALL MR_CALC_QADV_N_QDIF_Z_UV_W( NI , NJ , NK , UV , RB , W , HYD_QADV_Z_W , EKZ , VZW , HYD_QDIF_Z_W , TUV0=TBUV )
 
   ! CALCULATE ADVECTION
     CALL MR_CALC_GRAD_Z_UV( NI , NJ , NK , HYD_QADV_Z_W , HYD_ADV_Z )

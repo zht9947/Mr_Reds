@@ -37,9 +37,6 @@
 
     PUBLIC :: MR_CALC_EQK_ADV_N_DIF_Z
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBKI
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TSKI
-
 !***********************************************************************************************************************************
 
   CONTAINS
@@ -80,18 +77,7 @@
 
     INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( TBKI(1:NI1(FDRD_KIND),1:NJ) , TSKI(1:NI1(FDRD_KIND),1:NJ) )
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          TBKI( I , J ) = 2.0 * EKZ/SIK * VZW( I , J , 0 ) / ( H( I , J ) * DSIGMA ) * ( KI( I , J , 1 ) - KIB( I , J ) )
-          TSKI( I , J ) = 0.0
-        END DO
-      END DO
-
-      CALL MR_CALC_QADV_N_QDIF_Z_SS_W( NI , NJ , NK , KI , RB , W , EQK_QADV_Z_W , EKZ/SIK , VZW , EQK_QDIF_Z_W , TBKI , TSKI )
-
-    DEALLOCATE( TBKI , TSKI )
+    CALL MR_CALC_QADV_N_QDIF_Z_SS_W( NI , NJ , NK , KI , RB , W , EQK_QADV_Z_W , EKZ/SIK , VZW , EQK_QDIF_Z_W )
 
   ! CALCULATE ADVECTION
     CALL MR_CALC_GRAD_Z_SS( NI , NJ , NK , EQK_QADV_Z_W , EQK_ADV_Z )

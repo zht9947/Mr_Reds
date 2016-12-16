@@ -14,11 +14,8 @@
 !
 !                           TBFUV    :    FRACTIONAL BED SHEAR STRESS
 !                            TBUV    :    TOTAL BED SHEAR STRESS
-!                             KIB    :    TURBULENCE KINETIC ENERGY AT BED
-!                             DIB    :    TURBULENCE DISSIPATION AT BED
 !                              KI    :    TURBULENCE KINETIC ENERGY
 !                              DI    :    TURBULENCE DISSIPATION
-!                             DIS    :    TURBULENCE DISSIPATION AT FREE SURFACE
 !                             CSS    :    SUSPENDED-LOAD SEDIMENT CONCENTRATION
 !               QSBUV, QSBU, QSBV    :    BED-LOAD SEDIMENT FLUX
 !                              ZB    :    BED ELEVATION
@@ -49,11 +46,8 @@
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBFUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: TBUV
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: KIB
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIB
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: KI
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: DI
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: DIS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: CSS
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:    ) :: QSBUV
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: QSBU , QSBV
