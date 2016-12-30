@@ -36,6 +36,7 @@
 
     USE MR_MOD_GET_TIMES_AVERAGE
     USE MR_MOD_INPUT_AVERAGE
+    USE MR_MOD_UPDT_FIELD_VARS_AVERAGE
     USE MR_MOD_OUTPUT_AVERAGE
 
     USE MR_MOD_ECHO_PRJ
@@ -113,7 +114,7 @@
     WRITE(*,'( )')
 
     WRITE(*,'("Get the maximum number of timesteps and corresponding time, ")')
-    WRITE(*,'("  And the data of the last time will be averaged... ", $ )')
+    WRITE(*,'("and the data of the last time will be averaged... ", $ )')
     CALL MR_GET_NTSS_N_T_NTSS_AVERAGE( FILE_XMDF , ITS , T , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -130,6 +131,8 @@
       STOP
     END IF
     WRITE(*,'("Done! ")')
+
+    CALL MR_UPDT_FIELD_VARS_AVERAGE
 
     WRITE(*,'("Output... ", $ )')
     CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )

@@ -14,7 +14,7 @@
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
 		<Configuration Name="Release|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" DeleteExtensionsOnClean="*.cod;*__genmod.*;*.obj;*.mod;*.pdb;*.asm;*.lst;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;*.lib;$(TargetPath);*.optrpt;*.diag" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
-				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeFull" HeapArrays="4" InterproceduralOptimizations="ipoMultiFile" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" RuntimeLibrary="rtMultiThreadedDLL"/>
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeFull" UseProcessorExtensions="codeExclusivelyHost" HeapArrays="4" InterproceduralOptimizations="ipoMultiFile" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" VectorizerDiagLevel="vectorizerDiagLevelNew5" EmitDiagnosticsToFile="true" ArrayAlignment="alignArray32Bytes" RuntimeLibrary="rtMultiThreadedDLL"/>
 				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)__Library\lib" IgnoreDefaultLibraryNames="libcmt" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.1.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
 				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
@@ -34,6 +34,7 @@
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS.f90"/>
+		<File RelativePath="..\__Sources\__POST_DEFS\MR_DEF_FIELD_VARS_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_DSET_NAMES.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_UNITS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_GRID_SYS.f90"/>
@@ -81,6 +82,8 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_INITS\MR_MOD_INIT_OUTPUT_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/></Filter>
+		<Filter Name="MR_MOD_UPDTS">
+		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_UPDTS\MR_MOD_UPDT_FIELD_VARS_AVERAGE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>
 		<File RelativePath="..\__Sources\__POST_PROCESSES\MR_MOD_GET_TIMES_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\__POST_PROCESSES\MR_MOD_INPUT_AVERAGE.f90"/>

@@ -19,7 +19,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_UPDT_TBUV
+  MODULE MR_MOD_UPDT_FIELD_VARS_AVERAGE
 
     USE MR_KINDS
 
@@ -27,15 +27,13 @@
     USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_CURVED_GEOS
     USE MR_DEF_FIELD_VARS
+    USE MR_DEF_FIELD_VARS_AVERAGE
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_UPDT_TBUV
-
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: UV_MOD
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBFUV_MOD , TBUV_MOD
+    PUBLIC :: MR_UPDT_FIELD_VARS_AVERAGE
 
 !***********************************************************************************************************************************
 
@@ -61,47 +59,39 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_TBUV
+  SUBROUTINE MR_UPDT_FIELD_VARS_AVERAGE
 
-    USE MR_MOD_FUNC_TBUV
-
-    USE MR_MOD_OPERATOR_SS
     USE MR_MOD_OPERATOR_UV
+    USE MR_MOD_OPERATOR_SS
+
+    USE MR_MOD_AVERAGE
 
     IMPLICIT NONE
 
-    INTEGER(IJID_KIND) :: I , J
-    INTEGER            :: DIM
+  ! UPDATE AVERAGE_H
+    CALL MR_AVERAGE_SS( NI , NJ , H , AVERAGE_H )
 
-    ALLOCATE( UV_MOD(1:NI1(FDRD_KIND),1:NJ,1:1) , TBFUV_MOD(1:NI1(FDRD_KIND),1:NJ) , TBUV_MOD(1:NI1(FDRD_KIND),1:NJ) )
+  ! UPDATE AVERAGE_UV
+    CALL MR_AVERAGE_UV( NI , NJ , ( UVA .MRUVMTP. H ) , AVERAGE_UV )
+    CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. ( UVA .MRUVMTP. H ) ) ) ) , AVERAGE_UV_MOD )
+    AVERAGE_UV = AVERAGE_UV / AVERAGE_H
+    AVERAGE_UV_MOD = AVERAGE_UV_MOD / AVERAGE_H
 
-      UV_MOD(:,:, 1 ) = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UV(:,:,1:2, 1 ) ) )
+  ! UPDATE AVERAGE_TBUV
+    CALL MR_AVERAGE_UV( NI , NJ , TBUV , AVERAGE_TBUV )
+    CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) ) ) , AVERAGE_TBUV_MOD )
 
-      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
-      DO DIM = 1 , 2
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            TBFUV( I , J ,DIM) = MR_FUNC_TBFUV_COMP( TBFUV_MOD( I , J ) , D0 , H( I , J ) ,   &
-            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
-          END DO
-        END DO
-      END DO
+  ! UPDATE AVERAGE_NUMFR
+    CALL MR_AVERAGE_UV( NI , NJ , NUMFR , AVERAGE_NUMFR )
+    CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. NUMFR ) ) ) , AVERAGE_NUMFR_MOD )
 
-      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
-      TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
-      DO DIM = 1 , 2
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( TBUV_MOD( I , J ) , TBFUV_MOD( I , J ) , D0 , TCRS , H( I , J ) ,   &
-            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
-          END DO
-        END DO
-      END DO
+  ! UPDATE AVERAGE_NUMFRS
+    CALL MR_AVERAGE_UV( NI , NJ , NUMFRS , AVERAGE_NUMFRS )
+    CALL MR_AVERAGE_SS( NI , NJ , ( .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. NUMFRS ) ) ) , AVERAGE_NUMFRS_MOD )
 
-    DEALLOCATE( UV_MOD , TBFUV_MOD , TBUV_MOD )
+  ! UPDATE AVERAGE_QUV
+    CALL MR_AVERAGE_QUV( NI , NJ , ( UVA .MRUVMTP. H ) , AVERAGE_QUV )
 
-  END SUBROUTINE MR_UPDT_TBUV
+  END SUBROUTINE MR_UPDT_FIELD_VARS_AVERAGE
 
-  END MODULE MR_MOD_UPDT_TBUV
+  END MODULE MR_MOD_UPDT_FIELD_VARS_AVERAGE

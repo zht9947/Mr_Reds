@@ -62,7 +62,7 @@
 
     REAL(PARD_KIND) :: TCRS
 
-    TCRS = RBT / FR2 * (SS-1.0) * (D0/ZR) *   &
+    TCRS = RBT / FR * (SS-1.0) * (D0/ZR) *   &
     ( 0.130 *           EXP( -0.015 * DS * DS ) / (DS**0.392)   &
     + 0.045 * ( 1.000 - EXP( -0.068 *   DS    )               )   &
     )

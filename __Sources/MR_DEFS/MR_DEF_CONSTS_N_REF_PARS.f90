@@ -51,14 +51,14 @@
 !
 !                              RB    :    ROSSBY NUMBER, RB = UVR / ( COR * XYR )
 !                             RBT    :    ROSSBY NUMBER FOR SHEAR STRESS, RBT = UVR / ( COR * ZR )
-!                       EKXY, EKZ    :    HORIZONTAL & VERTICAL EKMAN NUMBER, EKXY = VXYR / ( COR * XYR2 ), EKZ = VZR / ( COR * ZR2 )
-!                       SCXY, SCZ    :    HORIZONTAL & VERTICAL SCHMIDT NUMBER, SCXY = DXYR / ( COR * XYR2 ), SCZ = DZR / ( COR * ZR2 )
+!                       EKXY, EKZ    :    HORIZONTAL & VERTICAL EKMAN NUMBER, EKXY = VXYR / ( COR * XYR * XYR ), EKZ = VZR / ( COR * ZR * ZR )
+!                       SCXY, SCZ    :    HORIZONTAL & VERTICAL SCHMIDT NUMBER, SCXY = DXYR / ( COR * XYR * XYR ), SCZ = DZR / ( COR * ZR * ZR )
 !                              RE    :    REYNOLDS NUMBER, RE = UVR * ZR / V0
 !                             RET    :    REYNOLDS NUMBER FOR SHEAR STRESS, RET = RE / SQRT( RBT )
-!                             FR2    :    SQUARED FROUDE NUMBER, FR2 = UVR2 / ( GR * ZR )
-!                            FRD2    :    SQUARED DENSIMETRIC FROUDE NUMBER, FRD2 = FR2 * R0 / ( RR - R0 )
-!                           ALPAR    :    ALPHA PARAMETER, ALPAR = FR2 / RB
-!                            BPAR    :    BETA PARAMETER, BPAR = RB2 / FR2
+!                              FR    :    SQUARED FROUDE NUMBER, FR = UVR * UVR / ( GR * ZR )
+!                             FRD    :    SQUARED DENSIMETRIC FROUDE NUMBER, FRD = FR * R0 / ( RR - R0 )
+!                           ALPAR    :    ALPHA PARAMETER, ALPAR = FR / RB
+!                            BPAR    :    BETA PARAMETER, BPAR = RB * RB / FR
 !
 !                                      \\ ABOVE ARE DIMENSIONLESS COMBINATIONS
 !
@@ -121,8 +121,8 @@
     REAL   (PARD_KIND) :: SCXY , SCZ
     REAL   (PARD_KIND) :: RE
     REAL   (PARD_KIND) :: RET
-    REAL   (PARD_KIND) :: FR2
-    REAL   (PARD_KIND) :: FRD2
+    REAL   (PARD_KIND) :: FR
+    REAL   (PARD_KIND) :: FRD
     REAL   (PARD_KIND) :: ALPAR
     REAL   (PARD_KIND) :: BPAR
 

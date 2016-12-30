@@ -810,9 +810,9 @@
     SCZ = DZR / ( COR * ZR * ZR )
     RE = UVR * ZR / V0
     RET = RE / SQRT( RBT )
-    FR2 = UVR * UVR / ( GR * ZR )
-    FRD2 = FR2 * R0 / ( RR - R0 )
-    ALPAR = FR2 / RB
+    FR = UVR * UVR / ( GR * ZR )
+    FRD = FR * R0 / ( RR - R0 )
+    ALPAR = FR / RB
     BPAR = RB / ALPAR
 
    !BLOCK

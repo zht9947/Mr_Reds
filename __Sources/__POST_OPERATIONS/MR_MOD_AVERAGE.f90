@@ -33,9 +33,66 @@
     PUBLIC :: MR_AVERAGE_UV
     PUBLIC :: MR_AVERAGE_SS
 
+    PUBLIC :: MR_AVERAGE_QUV
+
 !***********************************************************************************************************************************
 
   CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_AVERAGE_QUV( NI , NJ , QUV , QUV_AVERAGE )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:2) :: QUV
+    REAL   (FDRD_KIND) , INTENT(OUT) :: QUV_AVERAGE(1:2)
+
+    REAL   (CARD_KIND) :: NUMER
+    REAL   (CARD_KIND) :: DENOR
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      NUMER = 0.0
+      DENOR = EPSILON(DENOR)
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+            NUMER = NUMER + SQRT( GUV( I , J ,1,1) ) * SQRT( GUV( I , J ,2,2) ) * QUV( I , J ,DIM)
+            DENOR = DENOR + SQRT( GUV( I , J ,MOD(DIM,2)+1,MOD(DIM,2)+1) )
+          END IF
+        END DO
+      END DO
+
+      QUV_AVERAGE(DIM) = NUMER / DENOR
+
+    END DO
+
+  END SUBROUTINE MR_AVERAGE_QUV
 
 !***********************************************************************************************************************************
 ! UNIT:
