@@ -3,7 +3,6 @@
 
 # User-specific files
 *.suo
-*.user
 *.sln.docstates
 
 # Build results
@@ -187,5 +186,11 @@ FakesAssemblies/
 GeneratedArtifacts/
 _Pvt_Extensions/
 ModelManifest.xml
+
+# Visual Studio Database files
+*.u2d
+*.db3
+
+# Intel Amplifier XE Results
 /Mr_Reds/My Amplifier XE Results - Mr_Reds
-/Mr_Reds_Average
+/Mr_Reds_Average/My Amplifier XE Results - Mr_Reds_Average
