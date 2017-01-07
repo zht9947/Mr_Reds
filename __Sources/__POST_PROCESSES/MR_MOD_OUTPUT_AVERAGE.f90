@@ -129,7 +129,7 @@
     UV_AVERAGE = UV_AVERAGE * ( DUMMY_REF - DUMMY_BASE ) + DUMMY_BASE
     DUMMY_CHAR_LEN = LEN_TRIM("Unit Discharge")
     WRITE( FILE_AVERAGE_ID , '(T53,TL<DUMMY_CHAR_LEN>,A," [",A,"] ",T70," : ",TR13  ,"   ","(",ES13.6,",",ES13.6,")" )' )   &
-    & "Unit Discharge" , "m^2/s" ,   &
+    & "Unit Discharge"     , "m^2/s"         ,   &
     & UV_AVERAGE
 
     WRITE( FILE_AVERAGE_ID , '( )' )
