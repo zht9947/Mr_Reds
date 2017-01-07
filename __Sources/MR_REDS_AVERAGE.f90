@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_PROGRAM_METADATA.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -56,6 +57,11 @@
 
     INTEGER            :: ERROR
     CHARACTER( 2**10 ) :: ERRMSG
+
+   !BLOCK
+  ! MANAGE THE VERSION
+    WRITE(*,'( A ," by ", A ," [ver.", A ,"]",/)') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
+   !END BLOCK
 
    !BLOCK
   ! GET PATH\NAMES OF INPUT FILES FROM COMMAND LINE

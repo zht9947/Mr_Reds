@@ -25,7 +25,8 @@
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
 	<Files>
 		<Filter Name="Header Files" Filter="fi;fd;h;inc">
-		<File RelativePath="..\__Library\include\MR_H_ALIGN_PADDING.h"/></Filter>
+		<File RelativePath="..\__Library\include\MR_H_ALIGN_PADDING.h"/>
+		<File RelativePath="..\__Library\include\MR_H_PROGRAM_METADATA.h"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
 		<Filter Name="MR_KINDS">
