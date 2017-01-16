@@ -65,6 +65,7 @@
     ALLOCATE(    UVA(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
 
     ALLOCATE(   TBUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
+    ALLOCATE(  TBFUV(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
 
     ALLOCATE(  NUMFR(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
     ALLOCATE( NUMFRS(1:NI1(FDRD_KIND),1:NJ,1:2       ) )
