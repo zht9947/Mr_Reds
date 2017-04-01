@@ -19,48 +19,48 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  PROGRAM MR_REDS_AVERAGE
+  PROGRAM MR_REDS
 
     USE MR_KINDS
 
+    USE MR_DEF_TIMING
+    USE MR_DEF_CONSTS_N_REF_PARS
+
     USE MR_MOD_INIT_PRJ
 
+    USE MR_MOD_ECHO_PRJ
+
     USE MR_MOD_MALLOC_GRID_SYS
-    USE MR_MOD_MALLOC_CURVED_GEOS_AVERAGE
-    USE MR_MOD_MALLOC_FIELD_VARS_AVERAGE
+    USE MR_MOD_MALLOC_CURVED_GEOS
+    USE MR_MOD_MALLOC_FIELD_VARS_RESAMPLE
     USE MR_MOD_MALLOC_ACTIVITY
 
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
 
-    USE MR_MOD_INIT_OUTPUT_AVERAGE
+    USE MR_MOD_INIT_OUTPUT
 
     USE MR_MOD_GENER_GET_TIMES
-    USE MR_MOD_INPUT_AVERAGE
-    USE MR_MOD_UPDT_FIELD_VARS_AVERAGE
-    USE MR_MOD_OUTPUT_AVERAGE
-
-    USE MR_MOD_ECHO_PRJ
+    USE MR_MOD_INPUT_RESAMPLE
+    USE MR_MOD_OUTPUT_RESAMPLE
 
     IMPLICIT NONE
 
     CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
-    CHARACTER( 2**08 ) :: FILE_AVERAGE
+    CHARACTER( 2**08 ) :: FILE_XMDF_RESAMPLE
 
     INTEGER(TSID_KIND) :: ITS
+    INTEGER(TSID_KIND) :: ITS_STRIDE , ITS_END
 
     REAL   (TMRD_KIND) :: T
-
-    LOGICAL            :: FLAG_PRJ_SETS_CORRECT
-    LOGICAL            :: FLAG_COLD_START
 
     INTEGER            :: ERROR
     CHARACTER( 2**10 ) :: ERRMSG
 
    !BLOCK
   ! MANAGE THE VERSION
-    WRITE(*,'( A ,"_Average by ", A ," [ver.", A ,"]",/)') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
+    WRITE(*,'( A ,"_Resample by ", A ," [ver.", A ,"]",/)') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
    !END BLOCK
 
    !BLOCK
@@ -86,8 +86,8 @@
    !BLOCK
   ! ALLOCATE MEMORIES FOR PROJECT
     CALL MR_MALLOC_GRID_SYS
-    CALL MR_MALLOC_CURVED_GEOS_AVERAGE
-    CALL MR_MALLOC_FIELD_VARS_AVERAGE
+    CALL MR_MALLOC_CURVED_GEOS
+    CALL MR_MALLOC_FIELD_VARS_RESAMPLE
     CALL MR_MALLOC_ACTIVITY
    !END BLOCK
 
@@ -110,7 +110,7 @@
     WRITE(*,'("Done! ")')
 
     WRITE(*,'("Initialize output... ", $ )')
-    CALL MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE , ERROR , ERRMSG )
+    CALL MR_INIT_OUTPUT( FILE_XMDF_RESAMPLE , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
@@ -119,36 +119,47 @@
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Get the maximum number of timesteps and corresponding time, ")')
-    WRITE(*,'("and the data of the last time will be averaged... ", $ )')
-    CALL MR_GENER_GET_NTSS_N_T_NTSS( FILE_XMDF , ITS , T , ERROR , ERRMSG )
+  ! GET NTSS
+    CALL MR_GENER_GET_NTSS( FILE_XMDF , NTSS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
-
-    WRITE(*,'( )')
-
-    WRITE(*,'("Input... ", $ )')
-    CALL MR_INPUT_AVERAGE( FILE_XMDF , ITS , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
+  ! REASSIGN ITS_END
+    IF( ITS_END > NTSS ) THEN
+      ITS_END = NTSS
     END IF
-    WRITE(*,'("Done! ")')
 
-    CALL MR_UPDT_FIELD_VARS_AVERAGE
+    WRITE(*,'(8X,"Resample...  0.00%", A , $ )') ACHAR(13)
 
-    WRITE(*,'("Output... ", $ )')
-    CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
+    DO ITS = 0 , ITS_END , ITS_STRIDE
 
-    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_AVERAGE)
+    ! GET T OF ITS
+      CALL MR_GENER_GET_T_ITS( FILE_XMDF , NTSS , ITS , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+
+      CALL MR_INPUT_RESAMPLE( FILE_XMDF , ITS , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+
+      CALL MR_OUTPUT_RESAMPLE( FILE_XMDF_RESAMPLE , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+
+      WRITE(*,'(8X,"Resample...",F6.2,"%", A , $ )') REAL(ITS)/REAL(ITS_END)*100.00 , ACHAR(13)
+
+    END DO
+
+    WRITE(*,'(8X,"Resample... Done! ")')
+
+    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF)
 
 !***********************************************************************************************************************************
 
@@ -178,12 +189,14 @@
 
     IMPLICIT NONE
 
+    CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() < 3 ) THEN
       ERROR = - 1
-      ERRMSG = "Not enough command arguments as input files"
+      ERRMSG = "Not enough command arguments as input & output files"
       RETURN
     END IF
 
@@ -209,9 +222,43 @@
       RETURN
     END IF
 
-  ! SET AVERAGE FILE'S PATH\NAME
-    FILE_AVERAGE = TRIM(FILE_XMDF)//".average.txt"
+  ! GET XMDF_RESAMPLE FILE'S PATH\NAME
+    CALL GET_COMMAND_ARGUMENT( 3 , FILE_XMDF_RESAMPLE , STATUS=ERROR )
+    IF( ERROR == - 1 ) THEN
+      ERRMSG = "XMDF_RESAMPLE File's path too long!"
+      RETURN
+    ELSE IF( ERROR /= 0 ) THEN
+      ERROR = - ABS(ERROR)
+      ERRMSG = "Error in getting command argument No.3 as XMDF_RESAMPLE File"
+      RETURN
+    END IF
+
+  ! DETERMINE DEFAULT ITS_STRIDE
+    ITS_STRIDE = 1
+  ! GET USER-SPECIFIED ITS_STRIDE
+    CALL GET_COMMAND_ARGUMENT( 4 , CHAR_ARGUMENT , STATUS=ERROR )
+    IF( ERROR == 0 ) THEN
+      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_STRIDE
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument No.4 as ITS_STRIDE"
+        RETURN
+      END IF
+    END IF
+
+  ! DETERMINE DEFAULT ITS_END
+    ITS_END = HUGE( ITS_END )
+  ! GET USER-SPECIFIED ITS_END
+    CALL GET_COMMAND_ARGUMENT( 5 , CHAR_ARGUMENT , STATUS=ERROR )
+    IF( ERROR == 0 ) THEN
+      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_END
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument No.5 as ITS_END"
+        RETURN
+      END IF
+    END IF
 
   END SUBROUTINE MR_INIT_FILES
 
-  END PROGRAM MR_REDS_AVERAGE
+  END PROGRAM MR_REDS

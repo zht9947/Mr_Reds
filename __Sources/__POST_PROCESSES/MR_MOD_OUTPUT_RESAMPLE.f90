@@ -19,7 +19,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_OUTPUT
+  MODULE MR_MOD_OUTPUT_RESAMPLE
 
     USE MR_KINDS
 
@@ -34,7 +34,7 @@
 
     PRIVATE
 
-    PUBLIC :: MR_OUTPUT
+    PUBLIC :: MR_OUTPUT_RESAMPLE
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: ZBU , ZBV , ZBOO
 
@@ -67,7 +67,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_OUTPUT( FILE_XMDF_NAME , T , ERROR , ERRMSG )
+  SUBROUTINE MR_OUTPUT_RESAMPLE( FILE_XMDF_NAME , T , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -314,11 +314,6 @@
 
     END DO
 
-   !BLOCK
-  ! CONVERT W TO WW
-    ALLOCATE( WW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
-      CALL MR_CONVERT_W_TO_WW( NI , NJ , NK , UA , VA , W , WW )
-
   ! WRITE WW
     DO K = 1 , NK
 
@@ -338,14 +333,6 @@
     END IF
 
     END DO
-
-    DEALLOCATE( WW )
-   !END BLOCK
-
-   !BLOCK
-  ! ANTI-INTERPOLATE VZW TO VZWW
-    ALLOCATE( VZWW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
-      CALL MR_ANTI_INTERP_Z_SS_W( NI , NJ , NK , VZW , VZWW )
 
   ! WRITE VZWW
     DO K = 1 , NK
@@ -367,9 +354,6 @@
 
     END DO
 
-    DEALLOCATE( VZWW )
-   !END BLOCK
-
     CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
@@ -383,7 +367,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_OUTPUT
+  END SUBROUTINE MR_OUTPUT_RESAMPLE
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -529,67 +513,4 @@
 
   END SUBROUTINE MR_CALC_HOO
 
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_CONVERT_W_TO_WW( NI , NJ , NK , UA , VA , W , WW )
-
-    USE MR_MOD_OPERATOR_SS
-    USE MR_MOD_CALC_GRAD_XY
-
-    USE MR_MOD_INTERP_Z
-
-    IMPLICIT NONE
-
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
-    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
-
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(FDRD_KIND),1:NJ     ) :: UA
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),0:NJ     ) :: VA
-
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,0:NK) :: W
-
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(FDRD_KIND),1:NJ,1:NK) :: WW
-
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(FDRD_KIND),1:NJ) :: REDC_GRAD_UVA
-
-    INTEGER(IJID_KIND) :: I , J
-    INTEGER(KKID_KIND) :: K
-
-    CALL MR_ANTI_INTERP_Z_SS_W( NI , NJ , NK , W , WW )
-
-    CALL MR_CALC_REDC_GRAD_XY_SS( NI , NJ ,   &
-    & ( MU .MRSSSCL. ( UA .MRSSMTP. HU ) ) , ( MV .MRSSSCL. ( VA .MRSSMTP. HV ) ) , REDC_GRAD_UVA )
-
-    DO K = 1 , NK
-
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          WW( I , J , K ) = WW( I , J , K ) * H( I , J ) -   &
-          & ( 1.0 + SIGMA( K ) ) * REDC_GRAD_UVA( I , J ) / MW( I , J )
-        END DO
-      END DO
-
-    END DO
-
-  END SUBROUTINE MR_CONVERT_W_TO_WW
-
-  END MODULE MR_MOD_OUTPUT
+  END MODULE MR_MOD_OUTPUT_RESAMPLE

@@ -18,7 +18,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_GET_TIMES_AVERAGE
+  MODULE MR_MOD_GENER_GET_TIMES
 
     USE MR_KINDS
 
@@ -28,10 +28,10 @@
 
     PRIVATE
 
-    PUBLIC :: MR_GET_NTSS_AVERAGE
-    PUBLIC :: MR_GET_T_ITS_AVERAGE
+    PUBLIC :: MR_GENER_GET_NTSS
+    PUBLIC :: MR_GENER_GET_T_ITS
 
-    PUBLIC :: MR_GET_NTSS_N_T_NTSS_AVERAGE
+    PUBLIC :: MR_GENER_GET_NTSS_N_T_NTSS
 
 !***********************************************************************************************************************************
 
@@ -57,7 +57,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_NTSS_AVERAGE( FILE_XMDF_NAME , NTSS , ERROR , ERRMSG )
+  SUBROUTINE MR_GENER_GET_NTSS( FILE_XMDF_NAME , NTSS , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -117,7 +117,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_NTSS_AVERAGE
+  END SUBROUTINE MR_GENER_GET_NTSS
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -139,7 +139,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_T_ITS_AVERAGE( FILE_XMDF_NAME , NTSS , ITS , T_ITS , ERROR , ERRMSG )
+  SUBROUTINE MR_GENER_GET_T_ITS( FILE_XMDF_NAME , NTSS , ITS , T_ITS , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -202,7 +202,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_T_ITS_AVERAGE
+  END SUBROUTINE MR_GENER_GET_T_ITS
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -224,7 +224,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GET_NTSS_N_T_NTSS_AVERAGE( FILE_XMDF_NAME , NTSS , T_NTSS , ERROR , ERRMSG )
+  SUBROUTINE MR_GENER_GET_NTSS_N_T_NTSS( FILE_XMDF_NAME , NTSS , T_NTSS , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -285,6 +285,6 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_GET_NTSS_N_T_NTSS_AVERAGE
+  END SUBROUTINE MR_GENER_GET_NTSS_N_T_NTSS
 
-  END MODULE MR_MOD_GET_TIMES_AVERAGE
+  END MODULE MR_MOD_GENER_GET_TIMES
