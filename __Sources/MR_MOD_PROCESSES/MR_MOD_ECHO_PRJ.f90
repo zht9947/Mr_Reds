@@ -104,10 +104,10 @@
     WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ", F16.6,"E+03")') RR/1.0E+03
 
     WRITE(*,'( )')
-    WRITE(*,'(4X,"----Flow Plane Slope----")')
-    WRITE(*,'(4X,"    Please confirm the flow plane slope")')
-    WRITE(*,'(4X,"    be coincidence with X axis!")')
-    WRITE(*,'(4X,"                                  Flow plane slope                  : ",ES20.6       )') SLOPE
+    WRITE(*,'(4X,"----Slope----")')
+    WRITE(*,'(4X,"    Please confirm that the slope")')
+    WRITE(*,'(4X,"    be along the centerline!")')
+    WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
 
     WRITE(*,'( )')
     DO

@@ -131,7 +131,7 @@
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           BETA( I , J ,1) = BETA( I , J ,1)   &
           + DT * MW( I , J ) * H( I , J ) *   &
-            ( XYR/ZR / ALPAR * IUV( I , J ,1,1) * SLOPE   &   ! ADDITIONAL SLOPE TERM
+            ( XYR/ZR / ALPAR * FUV( I , J ,1,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
             - (    (1.0-PHI) * FUV( I , J ,1,1) * GRAD_XY_ZS( I , J ,1)   &
               +                FUV( I , J ,1,2) * GRAD_XY_ZS( I , J ,2)   &
               )   &
@@ -154,7 +154,7 @@
         IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
           BETA( I , J ,2) = BETA( I , J ,2)   &
           + DT * MW( I , J ) * H( I , J ) *   &
-            ( XYR/ZR / ALPAR * IUV( I , J ,2,1) * SLOPE   &   ! ADDITIONAL SLOPE TERM
+            ( XYR/ZR / ALPAR * FUV( I , J ,2,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
             - (                FUV( I , J ,2,1) * GRAD_XY_ZS( I , J ,1)   &
               +    (1.0-PHI) * FUV( I , J ,2,2) * GRAD_XY_ZS( I , J ,2)   &
               )   &

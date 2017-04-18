@@ -314,7 +314,7 @@
 
               END DO
 
-            CASE( "Flow Plane Slope" )
+            CASE( "Slope" )
 
               DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -324,7 +324,7 @@
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
                   ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                  //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
+                  //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
                 ELSE
@@ -341,21 +341,21 @@
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
                       ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                      //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
+                      //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     ELSE
 
                       SELECT CASE( TRIM(ALIAS) )
-                      CASE( "Flow plane slope" )
+                      CASE( "Slope" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , SLOPE
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Flow plane slope"" "   &
+                          ERRMSG = "Error in reading ""Slope"" "   &
                           //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                          //"when initializing Flow Plane Slope from file "//TRIM(FILE_PRJ_NAME)
+                          //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         END IF
