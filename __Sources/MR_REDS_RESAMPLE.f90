@@ -240,39 +240,39 @@
   ! GET USER-SPECIFIED ITS_START:ITS_STRIDE:ITS_END
     CALL GET_COMMAND_ARGUMENT( 4 , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR == 0 ) THEN
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789:" ) == 0 ) THEN
-        IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
-        ! CASE ITS_STRIDE
-          READ( CHAR_ARGUMENT(1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_STRIDE
-          ERROR = 0
-        ELSE
+      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789:" ) /= 0 ) THEN
+        ERROR = - 1
+        ERRMSG = "Illegal character in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
+        RETURN
+      ELSE
+        IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) /= 0 ) THEN
           IDELI1 = SCAN( TRIM(CHAR_ARGUMENT) , ":" )
           CHAR_ARGUMENT(IDELI1:IDELI1) = " "
-          IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
-          ! CASE ITS_START:ITS_END
-            READ( CHAR_ARGUMENT(1:IDELI1-1) , * , IOSTAT=ERROR ) ITS_START
-            READ( CHAR_ARGUMENT(IDELI1+1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_END
-            ERROR = 0
-          ELSE
+          IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) /= 0 ) THEN
             IDELI2 = SCAN( TRIM(CHAR_ARGUMENT) , ":" )
             CHAR_ARGUMENT(IDELI2:IDELI2) = " "
-            IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
+            IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) /= 0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Too many colons in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
+              RETURN
+            ELSE
             ! CASE ITS_START:ITS_STRIDE:ITS_END
               READ( CHAR_ARGUMENT(1:IDELI1-1) , * , IOSTAT=ERROR ) ITS_START
               READ( CHAR_ARGUMENT(IDELI1+1:IDELI2-1) , * , IOSTAT=ERROR ) ITS_STRIDE
               READ( CHAR_ARGUMENT(IDELI2+1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_END
               ERROR = 0
-            ELSE
-              ERROR = - 1
-              ERRMSG = "Too many colons in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
-              RETURN
             END IF
+          ELSE
+          ! CASE ITS_START:ITS_END
+            READ( CHAR_ARGUMENT(1:IDELI1-1) , * , IOSTAT=ERROR ) ITS_START
+            READ( CHAR_ARGUMENT(IDELI1+1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_END
+            ERROR = 0
           END IF
+        ELSE
+        ! CASE ITS_STRIDE
+          READ( CHAR_ARGUMENT(1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_STRIDE
+          ERROR = 0
         END IF
-      ELSE
-        ERROR = - 1
-        ERRMSG = "Illegal character in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
-        RETURN
       END IF
     END IF
 
