@@ -51,7 +51,7 @@
     CHARACTER( 2**08 ) :: FILE_XMDF_RESAMPLE
 
     INTEGER(TSID_KIND) :: ITS
-    INTEGER(TSID_KIND) :: ITS_STRIDE , ITS_END
+    INTEGER(TSID_KIND) :: ITS_START , ITS_STRIDE , ITS_END
 
     REAL   (TMRD_KIND) :: T
 
@@ -132,7 +132,7 @@
 
     WRITE(*,'(8X,"Resample...  0.00%", A , $ )') ACHAR(13)
 
-    DO ITS = 0 , ITS_END , ITS_STRIDE
+    DO ITS = ITS_START , ITS_END , ITS_STRIDE
 
     ! GET T OF ITS
       CALL MR_GENER_GET_T_ITS( FILE_XMDF , NTSS , ITS , T , ERROR , ERRMSG )
@@ -191,6 +191,8 @@
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
 
+    INTEGER                          :: IDELI1 , IDELI2
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
@@ -233,28 +235,43 @@
       RETURN
     END IF
 
-  ! DETERMINE DEFAULT ITS_STRIDE
-    ITS_STRIDE = 1
-  ! GET USER-SPECIFIED ITS_STRIDE
+  ! DETERMINE DEFAULT ITS_START:ITS_STRIDE:ITS_END
+    ITS_START = 0 ; ITS_STRIDE = 1 ; ITS_END = HUGE( ITS_END )
+  ! GET USER-SPECIFIED ITS_START:ITS_STRIDE:ITS_END
     CALL GET_COMMAND_ARGUMENT( 4 , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR == 0 ) THEN
-      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_STRIDE
-      IF( ERROR /= 0 ) THEN
-        ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument No.4 as ITS_STRIDE"
-        RETURN
-      END IF
-    END IF
-
-  ! DETERMINE DEFAULT ITS_END
-    ITS_END = HUGE( ITS_END )
-  ! GET USER-SPECIFIED ITS_END
-    CALL GET_COMMAND_ARGUMENT( 5 , CHAR_ARGUMENT , STATUS=ERROR )
-    IF( ERROR == 0 ) THEN
-      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_END
-      IF( ERROR /= 0 ) THEN
-        ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument No.5 as ITS_END"
+      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789:" ) == 0 ) THEN
+        IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
+        ! CASE ITS_STRIDE
+          READ( CHAR_ARGUMENT(1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_STRIDE
+          ERROR = 0
+        ELSE
+          IDELI1 = SCAN( TRIM(CHAR_ARGUMENT) , ":" )
+          CHAR_ARGUMENT(IDELI1:IDELI1) = " "
+          IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
+          ! CASE ITS_START:ITS_END
+            READ( CHAR_ARGUMENT(1:IDELI1-1) , * , IOSTAT=ERROR ) ITS_START
+            READ( CHAR_ARGUMENT(IDELI1+1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_END
+            ERROR = 0
+          ELSE
+            IDELI2 = SCAN( TRIM(CHAR_ARGUMENT) , ":" )
+            CHAR_ARGUMENT(IDELI2:IDELI2) = " "
+            IF( SCAN( TRIM(CHAR_ARGUMENT) , ":" ) == 0 ) THEN
+            ! CASE ITS_START:ITS_STRIDE:ITS_END
+              READ( CHAR_ARGUMENT(1:IDELI1-1) , * , IOSTAT=ERROR ) ITS_START
+              READ( CHAR_ARGUMENT(IDELI1+1:IDELI2-1) , * , IOSTAT=ERROR ) ITS_STRIDE
+              READ( CHAR_ARGUMENT(IDELI2+1:LEN_TRIM(CHAR_ARGUMENT)) , * , IOSTAT=ERROR ) ITS_END
+              ERROR = 0
+            ELSE
+              ERROR = - 1
+              ERRMSG = "Too many colons in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
+              RETURN
+            END IF
+          END IF
+        END IF
+      ELSE
+        ERROR = - 1
+        ERRMSG = "Illegal character in command argument No.4 as ITS_START:ITS_STRIDE:ITS_END"
         RETURN
       END IF
     END IF
