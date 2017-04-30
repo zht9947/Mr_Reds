@@ -9,6 +9,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Average", "Mr_Reds_
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Resample", "Mr_Reds_Resample\Mr_Reds_Resample.vfproj", "{3DF0E435-81F0-4849-AF90-FE26D87C1E9D}"
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Extend", "Mr_Reds_Extend\Mr_Reds_Extend.vfproj", "{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -27,6 +29,10 @@ Global
 		{3DF0E435-81F0-4849-AF90-FE26D87C1E9D}.Debug|Win32.Build.0 = Debug|Win32
 		{3DF0E435-81F0-4849-AF90-FE26D87C1E9D}.Release|Win32.ActiveCfg = Release|Win32
 		{3DF0E435-81F0-4849-AF90-FE26D87C1E9D}.Release|Win32.Build.0 = Release|Win32
+		{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}.Debug|Win32.Build.0 = Debug|Win32
+		{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}.Release|Win32.ActiveCfg = Release|Win32
+		{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

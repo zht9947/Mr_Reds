@@ -28,8 +28,8 @@
 
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBFUV   = "Frictional Bed Shear Stress"   !// " (" // UNIT_TBFUV   // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_TBUV    = "Total Bed Shear Stress"        !// " (" // UNIT_TBUV    // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_CSS     = ""                              !// " (" // UNIT_CSS     // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_QSBUV   = ""                              !// " (" // UNIT_QSBUV   // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_CSS     = "NONE"                          !// " (" // UNIT_CSS     // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_QSBUV   = "NONE"                          !// " (" // UNIT_QSBUV   // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_KI      = "Turbulence Kinetic Energy"     !// " (" // UNIT_KI      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DI      = "Turbulence Dissipation"        !// " (" // UNIT_DI      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_ZB      = "Bed Elevation"                 !// " (" // UNIT_ZB      // ")"

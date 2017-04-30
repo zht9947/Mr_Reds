@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{8A387A7B-23FF-4EAD-9367-09EF43EAD0F3}">
+	<Platforms>
+		<Platform Name="Win32"/></Platforms>
+	<Configurations>
+		<Configuration Name="Debug|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeDisabled" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" WarnInterfaces="true" Traceback="true" BoundsCheck="true" StackFrameCheck="true" RuntimeLibrary="rtMultiThreadedDebugDLL"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)__Library\lib" IgnoreDefaultLibraryNames="libcmt" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.1.lib"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
+		<Configuration Name="Release|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" DeleteExtensionsOnClean="*.cod;*__genmod.*;*.obj;*.mod;*.pdb;*.asm;*.lst;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;*.lib;$(TargetPath);*.optrpt;*.diag" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
+				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeFull" UseProcessorExtensions="codeExclusivelyHost" HeapArrays="4" InterproceduralOptimizations="ipoMultiFile" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" VectorizerDiagLevel="vectorizerDiagLevelNew5" EmitDiagnosticsToFile="true" ArrayAlignment="alignArray32Bytes" RuntimeLibrary="rtMultiThreadedDLL"/>
+				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)__Library\lib" IgnoreDefaultLibraryNames="libcmt" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.1.lib"/>
+				<Tool Name="VFResourceCompilerTool"/>
+				<Tool Name="VFMidlTool" SuppressStartupBanner="true"/>
+				<Tool Name="VFCustomBuildTool"/>
+				<Tool Name="VFPreLinkEventTool"/>
+				<Tool Name="VFPreBuildEventTool"/>
+				<Tool Name="VFPostBuildEventTool"/>
+				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration></Configurations>
+	<Files>
+		<Filter Name="Header Files" Filter="fi;fd;h;inc">
+		<File RelativePath="..\__Library\include\MR_H_ALIGN_PADDING.h"/>
+		<File RelativePath="..\__Library\include\MR_H_PROGRAM_METADATA.h"/></Filter>
+		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
+		<Filter Name="MR_DEFS">
+		<Filter Name="MR_KINDS">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_DEFS\MR_DEF_GRID_SYS_EXTEND.f90"/>
+		<File RelativePath="..\__Sources\__POST_DEFS\MR_DEF_RANKS_EXTEND.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_DSET_NAMES.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_UNITS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_RANKS.f90"/></Filter>
+		<Filter Name="MR_MOD_FILE_MANIPULATIONS">
+		<Filter Name="MR_MOD_FILE_XMDF_MANIPULATIONS">
+		<Filter Name="XMDF">
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_CREATE_DSET.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_GET_DSET_TIMES.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_GET_RANKS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_GEN_READ_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_TO_RW_EXTEND_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_TO_GEN_WRITE_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_SEARCH_DSET_UNIT.f90"/></Filter></Filter>
+		<Filter Name="MR_MOD_OPERATIONS">
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_EXTEND.f90"/></Filter>
+		<Filter Name="MR_MOD_PROCESSES">
+		<Filter Name="MR_MOD_INITS">
+		<Filter Name="MR_MOD_MALLOCS">
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\__POST_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS_EXTEND.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\MR_MOD_INIT_GRID_SYS_EXTEND.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_NI_NJ.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_RW_EXTEND.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_REDS_EXTEND.f90"/></Filter></Files>
+	<Globals/></VisualStudioProject>

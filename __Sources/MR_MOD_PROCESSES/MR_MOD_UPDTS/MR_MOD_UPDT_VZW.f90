@@ -70,7 +70,7 @@
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
 
-    ALLOCATE( VZWW(1:NI1(FDRD_KIND),1:NJ,1:NK) )
+    ALLOCATE( VZWW(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) )
       DO K = 1 , NK
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED

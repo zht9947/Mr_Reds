@@ -62,14 +62,14 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CREATE_DSET_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , UV_UNITS , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_DSET_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , UNIT_UV , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
     INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID
 
     CHARACTER(   *   ) , INTENT(IN ) :: PATH_UV_IN_MULTI_DSETS
-    CHARACTER(   *   ) , INTENT(IN ) :: UV_UNITS
+    CHARACTER(   *   ) , INTENT(IN ) :: UNIT_UV
 
     INTEGER                          :: DSET_UV_ID
 
@@ -79,7 +79,7 @@
     INTEGER                          :: ERROR_DUMMY
 
     ERRMSG = ""
-    CALL XF_CREATE_VECTOR_DATASET( MULTI_DSETS_ID , TRIM(PATH_UV_IN_MULTI_DSETS) , TRIM(UV_UNITS) ,   &
+    CALL XF_CREATE_VECTOR_DATASET( MULTI_DSETS_ID , TRIM(PATH_UV_IN_MULTI_DSETS) , TRIM(UNIT_UV) ,   &
     & T_UNITS , COMPRESSION , DSET_UV_ID , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in creating vector dataset group"
@@ -119,14 +119,14 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CREATE_DSET_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , SS_UNITS , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_DSET_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , UNIT_SS , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
     INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID
 
     CHARACTER(   *   ) , INTENT(IN ) :: PATH_SS_IN_MULTI_DSETS
-    CHARACTER(   *   ) , INTENT(IN ) :: SS_UNITS
+    CHARACTER(   *   ) , INTENT(IN ) :: UNIT_SS
 
     INTEGER                          :: DSET_SS_ID
 
@@ -136,7 +136,7 @@
     INTEGER                          :: ERROR_DUMMY
 
     ERRMSG = ""
-    CALL XF_CREATE_SCALAR_DATASET( MULTI_DSETS_ID , TRIM(PATH_SS_IN_MULTI_DSETS) , TRIM(SS_UNITS) ,   &
+    CALL XF_CREATE_SCALAR_DATASET( MULTI_DSETS_ID , TRIM(PATH_SS_IN_MULTI_DSETS) , TRIM(UNIT_SS) ,   &
     & T_UNITS , COMPRESSION , DSET_SS_ID , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in creating scalar dataset group"

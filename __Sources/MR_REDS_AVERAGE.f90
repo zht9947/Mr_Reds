@@ -35,7 +35,7 @@
 
     USE MR_MOD_INIT_OUTPUT_AVERAGE
 
-    USE MR_MOD_GENER_GET_TIMES
+    USE MR_MOD_GET_TIMES
     USE MR_MOD_INPUT_AVERAGE
     USE MR_MOD_UPDT_FIELD_VARS_AVERAGE
     USE MR_MOD_OUTPUT_AVERAGE
@@ -121,7 +121,7 @@
 
     WRITE(*,'("Get the maximum number of timesteps and corresponding time, ")')
     WRITE(*,'("and the data of the last time will be averaged... ", $ )')
-    CALL MR_GENER_GET_NTSS_N_T_NTSS( FILE_XMDF , ITS , T , ERROR , ERRMSG )
+    CALL MR_GET_NTSS_N_T_NTSS( FILE_XMDF , ITS , T , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
@@ -180,6 +180,8 @@
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    ERRMSG = ""
 
     IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
       ERROR = - 1

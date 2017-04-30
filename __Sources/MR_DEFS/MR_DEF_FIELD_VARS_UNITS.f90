@@ -29,7 +29,7 @@
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_KI      = "m^2/s^2"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_DI      = "m^2/s^3"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_CSS     = "kg/m^3"
-    CHARACTER( 2**04 ) , PARAMETER :: UNIT_QSBUV   = ""
+    CHARACTER( 2**04 ) , PARAMETER :: UNIT_QSBUV   = "NONE"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_ZB      = "m"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_ZS      = "m"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_H       = "m"

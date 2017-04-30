@@ -19,18 +19,18 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CURVED_GEOS_AVERAGE
+  MODULE MR_MOD_MALLOC_GRID_SYS_EXTEND
 
     USE MR_KINDS
 
-    USE MR_DEF_RANKS
-    USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_RANKS , ONLY : NI , NJ
+    USE MR_DEF_GRID_SYS_EXTEND
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_CURVED_GEOS_AVERAGE
+    PUBLIC :: MR_MALLOC_GRID_SYS_EXTEND
 
 !***********************************************************************************************************************************
 
@@ -56,24 +56,18 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_CURVED_GEOS_AVERAGE
+  SUBROUTINE MR_MALLOC_GRID_SYS_EXTEND( NLOOPS )
 
     IMPLICIT NONE
 
-    ALLOCATE( JUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( JUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , JVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( JOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    INTEGER            , INTENT(IN ) :: NLOOPS
 
-    ALLOCATE( GUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
+    ALLOCATE( EXTEND_EMIDW(1:NI1(NI*NLOOPS,EMID_KIND),1:NJ) )
 
-    ALLOCATE( IUV(1:NI1(GJRD_KIND),1:NJ,1:2,1:2) )
-    ALLOCATE( IUU(0:NI0(GJRD_KIND),1:NJ,1:2,1:2) , IVV(1:NI1(GJRD_KIND),0:NJ,1:2,1:2) )
-    ALLOCATE( IOO(0:NI0(GJRD_KIND),0:NJ,1:2,1:2) )
+    ALLOCATE( EXTEND_NDIDW(1:NI1(NI*NLOOPS,NDID_KIND),1:NJ) )
+    ALLOCATE( EXTEND_NDIDU(0:NI0(NI*NLOOPS,NDID_KIND),1:NJ) , EXTEND_NDIDV(1:NI1(NI*NLOOPS,NDID_KIND),0:NJ) )
+    ALLOCATE( EXTEND_NDIDO(0:NI0(NI*NLOOPS,NDID_KIND),0:NJ) )
 
-    ALLOCATE(  MW(1:NI1(GJRD_KIND),1:NJ)         )
-    ALLOCATE(  MU(0:NI0(GJRD_KIND),1:NJ)         ,  MV(1:NI1(GJRD_KIND),0:NJ)         )
-    ALLOCATE(  MO(0:NI0(GJRD_KIND),0:NJ)         )
+  END SUBROUTINE MR_MALLOC_GRID_SYS_EXTEND
 
-  END SUBROUTINE MR_MALLOC_CURVED_GEOS_AVERAGE
-
-  END MODULE MR_MOD_MALLOC_CURVED_GEOS_AVERAGE
+  END MODULE MR_MOD_MALLOC_GRID_SYS_EXTEND

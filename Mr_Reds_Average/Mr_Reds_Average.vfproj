@@ -66,7 +66,7 @@
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_SS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_UV.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_XUV.f90"/></Filter>
-		<File RelativePath="..\__Sources\__POST_OPERATIONS\MR_MOD_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_XY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_Z.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/>
@@ -76,18 +76,18 @@
 		<Filter Name="MR_MOD_MALLOCS">
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_CONSTS_N_REF_PARS.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_INITS\__POST_MALLOCS\MR_MOD_MALLOC_CURVED_GEOS_AVERAGE.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_INITS\__POST_MALLOCS\MR_MOD_MALLOC_FIELD_VARS_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\__POST_MOD_MALLOCS\MR_MOD_MALLOC_CURVED_GEOS_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\__POST_MOD_MALLOCS\MR_MOD_MALLOC_FIELD_VARS_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_CURVED_GEOS - for Anti-Symmetry BC.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_INITS\MR_MOD_INIT_OUTPUT_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\MR_MOD_INIT_OUTPUT_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/></Filter>
 		<Filter Name="MR_MOD_UPDTS">
-		<File RelativePath="..\__Sources\__POST_PROCESSES\__POST_UPDTS\MR_MOD_UPDT_FIELD_VARS_AVERAGE.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_UPDTS\MR_MOD_UPDT_FIELD_VARS_AVERAGE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\MR_MOD_GENER_GET_TIMES.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\MR_MOD_INPUT_AVERAGE.f90"/>
-		<File RelativePath="..\__Sources\__POST_PROCESSES\MR_MOD_OUTPUT_AVERAGE.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_INPUT_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_OUTPUT_AVERAGE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_REDS_AVERAGE.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
