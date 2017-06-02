@@ -62,7 +62,7 @@
 
     USE MR_MOD_GEN_READ_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GEN_WRITE_FIELD_VARS_N_ACTIVITY
-    USE MR_MOD_SEARCH_DSET_UNIT
+    USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
     USE MR_MOD_EXTEND
@@ -142,7 +142,11 @@
 
           ! CREATE CATALOG IN THE TARGET
             IF( FIRST_CALL ) THEN
-              CALL MR_SEARCH_DSET_UNIT( PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV )
+              CALL MR_GET_DSET_UNIT( MULTI_DSETS_ID , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV , ERROR , ERRMSG )
+              IF( ERROR < 0 ) THEN
+                ERRMSG = TRIM(ERRMSG)//" in the source file between"
+                RETURN
+              END IF
               CALL MR_CREATE_DSET_UV( MULTI_DSETS_ID_EXTEND , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
                 ERRMSG = TRIM(ERRMSG)//" in the target file between"
@@ -196,7 +200,7 @@
 
     USE MR_MOD_GEN_READ_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GEN_WRITE_FIELD_VARS_N_ACTIVITY
-    USE MR_MOD_SEARCH_DSET_UNIT
+    USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
     USE MR_MOD_EXTEND
@@ -276,7 +280,11 @@
 
           ! CREATE CATALOG IN THE TARGET
             IF( FIRST_CALL ) THEN
-              CALL MR_SEARCH_DSET_UNIT( PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS )
+              CALL MR_GET_DSET_UNIT( MULTI_DSETS_ID , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS , ERROR , ERRMSG )
+              IF( ERROR < 0 ) THEN
+                ERRMSG = TRIM(ERRMSG)//" in the source file between"
+                RETURN
+              END IF
               CALL MR_CREATE_DSET_SS( MULTI_DSETS_ID_EXTEND , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
                 ERRMSG = TRIM(ERRMSG)//" in the target file between"

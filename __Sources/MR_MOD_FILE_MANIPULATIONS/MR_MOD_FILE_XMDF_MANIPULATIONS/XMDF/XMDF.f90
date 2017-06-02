@@ -5341,9 +5341,9 @@ END SUBROUTINE
 
 SUBROUTINE XF_GET_DATASET_UNITS (a_Id, a_Units, error)
 INTEGER,          INTENT(IN)   :: a_Id
-CHARACTER(LEN=*), INTENT(OUT) :: a_Units
+CHARACTER(LEN=*), INTENT(OUT)  :: a_Units
 INTEGER,          INTENT(OUT)  :: error
-INTEGER                          unitslen
+INTEGER                        :: unitslen
 
 
 !            INTEGER, EXTERNAL :: _xfGetDatasetUnits_f
