@@ -158,7 +158,7 @@
 
    !BLOCK
   ! DETERMINE WHICH TIMESTEP TO BE READ AND SET THE STARTING TIME
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//DSET_NAME_ZB
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
     CALL MR_GET_DSET_NTSS_N_T_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE , T_START , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activities with hot mode "   &
@@ -170,7 +170,7 @@
    !END BLOCK
 
   ! READ TBFUV
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBFUV
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBFUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -185,7 +185,7 @@
     END IF
 
   ! READ TBUV
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_TBUV
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -204,7 +204,7 @@
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
-    //"K-Epsilon Model/"//DSET_NAME_KI
+    //"K-Epsilon Model/"//TRIM(DSET_NAME_KI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -225,7 +225,7 @@
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
-    //"K-Epsilon Model/"//DSET_NAME_DI
+    //"K-Epsilon Model/"//TRIM(DSET_NAME_DI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = DIR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -247,7 +247,7 @@
    !END BLOCK
 
   ! READ ZB
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//DSET_NAME_ZB
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,    &
@@ -263,7 +263,7 @@
     END IF
 
   ! READ ZS
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_ZS
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_ZS)
     DUMMY_BASE = 0.0 ; DUMMY_REF = SR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,    &
@@ -278,7 +278,7 @@
     END IF
 
   ! READ H
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_H
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_H)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -293,7 +293,7 @@
     END IF
 
   ! READ UVA
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//DSET_NAME_UVA
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_UVA)
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -311,7 +311,8 @@
     DO K = 1 , NK
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_UV
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
+    //TRIM(DSET_NAME_UV)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -334,7 +335,8 @@
     DO K = 1 , NK
   
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_WW
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
+    //TRIM(DSET_NAME_WW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = WR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -360,7 +362,8 @@
     DO K = 1 , NK
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"//DSET_NAME_R
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
+    //TRIM(DSET_NAME_R)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = R0 ; DUMMY_REF = RR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
@@ -391,7 +394,8 @@
     DO K = 1 , NK
 
     WRITE( K_CHAR , '(I<LEN(K_CHAR)>)' ) K
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"//DSET_NAME_VZWW
+    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
+    //TRIM(DSET_NAME_VZWW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
