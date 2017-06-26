@@ -24,8 +24,6 @@
 
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_FIELD_VARS_DSET_NAMES
-    USE MR_DEF_FIELD_VARS_UNITS
 
     IMPLICIT NONE
 
@@ -78,10 +76,8 @@
       RETURN
     END IF
 
-    WRITE( FILE_AVERAGE_ID , '("Statistics of Flow Status:")' )
-    WRITE( FILE_AVERAGE_ID , '( )' )
-    WRITE( FILE_AVERAGE_ID , '(4X,"                                   Water density [kg/m^3]         : ", ES13.6 )' ) R0
-    WRITE( FILE_AVERAGE_ID , '(4X,"                      Gravitational acceleration [m/s^2]          : ", ES13.6 )' ) GR
+    WRITE( FILE_AVERAGE_ID , '("Rho (kg/m^3)",/,ES13.6)' ) R0
+    WRITE( FILE_AVERAGE_ID , '("g (m/s^2)",/,ES13.6)' ) GR
 
     CALL MR_CLOSE_FILE_DEFAULT( FILE_AVERAGE_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
