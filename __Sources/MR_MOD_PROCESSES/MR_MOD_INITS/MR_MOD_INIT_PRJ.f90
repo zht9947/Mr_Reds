@@ -713,27 +713,13 @@
                                     RETURN
                                   END IF
 
-                                CASE( "Reference horizontal eddy kinematic viscosity" )
-                                  BACKSPACE( FILE_PRJ_ID )
-
-                                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , VXYR
-                                  IF( ERROR > 0 ) THEN
-                                    ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference horizontal eddy kinematic viscosity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                                    //"when initializing Constants and Reference Parameters\"   &
-                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
-                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                                    RETURN
-                                  END IF
-
-                                CASE( "Reference vertical eddy kinematic viscosity" )
+                                CASE( "Reference eddy kinematic viscosity" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , VZR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference vertical eddy kinematic viscosity"" "   &
+                                    ERRMSG = "Error in reading ""Reference eddy kinematic viscosity"" "   &
                                     //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
@@ -795,18 +781,17 @@
     WR = UVR / XYR * ZR
     SR = COR * UVR * XYR / GR
     TUVR = R0 * COR * UVR * ZR
-    QUVR = COR * XYR * ZR
+    QSUVR = R0 * COR * XYR * ZR
     KIR = COR * UVR * ZR
     DIR = COR * UVR * UVR
-    DXYR = VXYR
     DZR = VZR
 
   ! CALCULATE DIMENSIONLESS COMBINATIONS
     RB = UVR / ( COR * XYR )
     RBT = UVR / ( COR * ZR )
-    EKXY = VXYR / ( COR * XYR * XYR )
+    EKXY = VZR / ( COR * XYR * XYR )
     EKZ = VZR / ( COR * ZR * ZR )
-    SCXY = DXYR / ( COR * XYR * XYR )
+    SCXY = DZR / ( COR * XYR * XYR )
     SCZ = DZR / ( COR * ZR * ZR )
     RE = UVR * ZR / V0
     RET = RE / SQRT( RBT )

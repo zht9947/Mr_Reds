@@ -37,9 +37,7 @@
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_UV      = "m/s"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_WW      = "m/s"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_R       = "kg/m^3"
-    CHARACTER( 2**04 ) , PARAMETER :: UNIT_VXYUV   = "m^2/s"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_VZWW    = "m^2/s"
-    CHARACTER( 2**04 ) , PARAMETER :: UNIT_DXYUV   = "m^2/s"
     CHARACTER( 2**04 ) , PARAMETER :: UNIT_DZWW    = "m^2/s"
 
   END MODULE MR_DEF_FIELD_VARS_UNITS

@@ -91,11 +91,13 @@
 
       ALLOCATE( ALFA(1:NI1(NI,CARD_KIND),1:NJ,1:2) , BETA(1:NI1(NI,CARD_KIND),1:NJ,1:2) )
 
-        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS CALLING
+        CALL MR_CALC_ALFA_N_BETA( NI , NJ , NK , HYD_D3 , ALFA , BETA )   ! HYD_D3 WILL BE REVISED IN THIS CALL
 
         ALLOCATE( D1(1:NI1(NI,CARD_KIND),1:NJ) )
           CALL MR_CALC_D1( NI , NJ , ZS , ALFA , BETA , D1 )
-          ALLOCATE( A1(2:NI2(NI,CARD_KIND),1:NJ) , B1(1:NI1(NI,CARD_KIND),1:NJ) , C1(1:NI2(NI,CARD_KIND)-1,1:NJ) )
+          ALLOCATE( A1(2:NI2(NI,CARD_KIND),1:NJ) ,   &
+          & B1(1:NI1(NI,CARD_KIND),1:NJ  ) ,   &
+          & C1(1:NI2(NI,CARD_KIND)-1,1:NJ) )
             CALL MR_CALC_A1_B1_C1( NI , NJ , ALFA , A1 , B1 , C1 )
             !BLOCK
               ZS = MR_TDMA1( NI , NJ , A1 , B1 , C1 , D1 )
@@ -105,7 +107,9 @@
 
         ALLOCATE( D2(1:NI1(NI,CARD_KIND),1:NJ) )
           CALL MR_CALC_D2( NI , NJ , ZS , BETA , D2 )
-          ALLOCATE( A2(1:NI1(NI,CARD_KIND),2:NJ) , B2(1:NI1(NI,CARD_KIND),1:NJ) , C2(1:NI1(NI,CARD_KIND),1:NJ-1) )
+          ALLOCATE( A2(1:NI1(NI,CARD_KIND),2:NJ) ,   &
+          & B2(1:NI1(NI,CARD_KIND),1:NJ  ) ,   &
+          & C2(1:NI1(NI,CARD_KIND),1:NJ-1) )
             CALL MR_CALC_A2_B2_C2( NI , NJ , ALFA , A2 , B2 , C2 )
             !BLOCK
               ZS = MR_TDMA2( NI , NJ , A2 , B2 , C2 , D2 )
@@ -123,7 +127,9 @@
 
       DEALLOCATE( ALFA , BETA )
 
-      ALLOCATE( HYD_A3(1:NI1(NI,CARD_KIND),1:NJ,2:NK) , HYD_B3(1:NI1(NI,CARD_KIND),1:NJ,1:NK) , HYD_C3(1:NI1(NI,CARD_KIND),1:NJ,1:NK-1) )
+      ALLOCATE( HYD_A3(1:NI1(NI,CARD_KIND),1:NJ,2:NK) ,   &
+      & HYD_B3(1:NI1(NI,CARD_KIND),1:NJ,1:NK  ) ,   &
+      & HYD_C3(1:NI1(NI,CARD_KIND),1:NJ,1:NK-1) )
         CALL MR_CALC_HYD_A3_B3_C3( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 )
         !BLOCK
           UV = MR_TDMA3_UV( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 , HYD_D3 )

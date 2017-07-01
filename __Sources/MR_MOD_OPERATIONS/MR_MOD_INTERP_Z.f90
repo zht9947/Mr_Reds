@@ -29,8 +29,11 @@
 
     PRIVATE
 
-    PUBLIC :: MR_INTERP_Z_UV_W , MR_ANTI_INTERP_Z_UV_W
-    PUBLIC :: MR_INTERP_Z_SS_W , MR_ANTI_INTERP_Z_SS_W
+    PUBLIC :: MR_INTERP_Z_UV_W
+    PUBLIC :: MR_INV_INTERP_Z_UV_FROM_UVW
+
+    PUBLIC :: MR_INTERP_Z_SS_W
+    PUBLIC :: MR_INV_INTERP_Z_SS_FROM_SW
 
 !***********************************************************************************************************************************
 
@@ -246,7 +249,7 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_ANTI_INTERP_Z_UV_W( NI , NJ , NK , UVW , UV )
+  SUBROUTINE MR_INV_INTERP_Z_UV_FROM_UVW( NI , NJ , NK , UVW , UV )
 
     IMPLICIT NONE
 
@@ -279,7 +282,7 @@
 
     END DO
 
-  END SUBROUTINE MR_ANTI_INTERP_Z_UV_W
+  END SUBROUTINE MR_INV_INTERP_Z_UV_FROM_UVW
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -484,7 +487,7 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_ANTI_INTERP_Z_SS_W( NI , NJ , NK , SW , SS )
+  SUBROUTINE MR_INV_INTERP_Z_SS_FROM_SW( NI , NJ , NK , SW , SS )
 
     IMPLICIT NONE
 
@@ -512,6 +515,6 @@
 
     END DO
 
-  END SUBROUTINE MR_ANTI_INTERP_Z_SS_W
+  END SUBROUTINE MR_INV_INTERP_Z_SS_FROM_SW
 
   END MODULE MR_MOD_INTERP_Z

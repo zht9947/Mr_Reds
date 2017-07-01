@@ -29,6 +29,8 @@
     USE MR_DEF_ACTIVITY
     USE MR_DEF_TIMING
 
+    USE MR_MCS_K_EPS
+
     IMPLICIT NONE
 
     PRIVATE
@@ -84,13 +86,13 @@
     ALLOCATE( DIV(1:NI1(NI,FDRD_KIND),0:NJ) )
       CALL MR_INTERP_XY_SS_V( NI , NJ , DI(:,:, K ) , DIV )
       CALL MR_CALC_QADV_N_QDIF_XY_SS_U( NI , NJ ,   &
-      & DI(:,:, K ) , DIV , RB , U(:,:, K ) , EQD_QADV_XY_U , EKXY , VXYU(:,:, K ) , EQD_QDIF_XY_U )
+      & DI(:,:, K ) , DIV , RB , U(:,:, K ) , EQD_QADV_XY_U , EKXY/SID , VXYU(:,:, K ) , EQD_QDIF_XY_U )
     DEALLOCATE( DIV )
 
     ALLOCATE( DIU(0:NI0(NI,FDRD_KIND),1:NJ) )
       CALL MR_INTERP_XY_SS_U( NI , NJ , DI(:,:, K ) , DIU )
       CALL MR_CALC_QADV_N_QDIF_XY_SS_V( NI , NJ ,   &
-      & DI(:,:, K ) , DIU , RB , V(:,:, K ) , EQD_QADV_XY_V , EKXY , VXYV(:,:, K ) , EQD_QDIF_XY_V )
+      & DI(:,:, K ) , DIU , RB , V(:,:, K ) , EQD_QADV_XY_V , EKXY/SID , VXYV(:,:, K ) , EQD_QDIF_XY_V )
     DEALLOCATE( DIU )
 
   ! CALCULATE ADVECTION

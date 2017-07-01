@@ -63,7 +63,7 @@
 
     REAL(FDRD_KIND) :: HDS
 
-    HDS = 3.0 * (D0/ZR)
+    HDS = 2.0 * (D0/ZR)
 
   END FUNCTION MR_FUNC_HDS
 

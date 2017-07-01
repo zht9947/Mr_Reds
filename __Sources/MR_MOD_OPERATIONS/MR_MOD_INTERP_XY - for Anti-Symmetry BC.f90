@@ -37,6 +37,8 @@
     PUBLIC :: MR_INTERP_XY_UV_O_U
     PUBLIC :: MR_INTERP_XY_SS_O_U
     PUBLIC :: MR_INTERP_XY_ZS_O_U
+    PUBLIC :: MR_INV_INTERP_XY_UV_FROM_UU
+    PUBLIC :: MR_INV_INTERP_XY_SS_FROM_SU
 
     PUBLIC :: MR_INTERP_XY_UV_V_BY_RCPRAC
     PUBLIC :: MR_INTERP_XY_UV_V_BY_LINEAR
@@ -46,6 +48,8 @@
     PUBLIC :: MR_INTERP_XY_UV_O_V
     PUBLIC :: MR_INTERP_XY_SS_O_V
     PUBLIC :: MR_INTERP_XY_ZS_O_V
+    PUBLIC :: MR_INV_INTERP_XY_UV_FROM_VV
+    PUBLIC :: MR_INV_INTERP_XY_SS_FROM_SV
 
 !***********************************************************************************************************************************
 
@@ -413,7 +417,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2) :: UV
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(NI,FDRD_KIND),1:NJ    ) :: V_AT_U
 
-    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(                      1:2) :: FACTOR = (/+1.0,-1.0/)
+    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(                         1:2) :: FACTOR = (/+1.0,-1.0/)
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -2168,6 +2172,99 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
+  SUBROUTINE MR_INV_INTERP_XY_UV_FROM_UU( NI , NJ , UU , UV )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(NI,FDRD_KIND),1:NJ,1:2) :: UU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2) :: UV
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+            UV( I , J ,DIM) = 0.5 * ( UU( I , J ,DIM) + UU(I-1, J ,DIM) )
+          ELSE
+            UV( I , J ,DIM) = 0.0
+          END IF
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_INV_INTERP_XY_UV_FROM_UU
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_INV_INTERP_XY_SS_FROM_SU( NI , NJ , SU , SS )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(NI,FDRD_KIND),1:NJ) :: SU
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: SS
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+          SS( I , J ) = 0.5 * ( SU( I , J ) + SU(I-1, J ) )
+        ELSE
+          SS( I , J ) = 0.0
+        END IF
+      END DO
+    END DO
+
+  END SUBROUTINE MR_INV_INTERP_XY_SS_FROM_SU
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
   SUBROUTINE MR_INTERP_XY_UV_V_BY_RCPRAC( NI , NJ , ZS , ALFA , BETA , V )
 
     USE MR_DEF_CURVED_GEOS , ONLY : MV
@@ -2970,7 +3067,7 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),0:NJ    ) :: V
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(NI,FDRD_KIND),0:NJ    ) :: VO
 
-    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(                      1:2) :: FACTOR = (/+1.0,-1.0/)
+    REAL   (FDRD_KIND) , PARAMETER   , DIMENSION(                         1:2) :: FACTOR = (/+1.0,-1.0/)
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -4066,5 +4163,98 @@
   END SUBROUTINE MR_INTERP_XY_ZS_O_V_IN_JN
 
   END SUBROUTINE MR_INTERP_XY_ZS_O_V
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_INV_INTERP_XY_UV_FROM_VV( NI , NJ , VV , UV )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),0:NJ,1:2) :: VV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2) :: UV
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+            UV( I , J ,DIM) = 0.5 * ( VV( I , J ,DIM) + VV( I ,J-1,DIM) )
+          ELSE 
+            UV( I , J ,DIM) = 0.0
+          END IF
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_INV_INTERP_XY_UV_FROM_VV
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_INV_INTERP_XY_SS_FROM_SV( NI , NJ , SV , SS )
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),0:NJ) :: SV
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: SS
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+          SS( I , J ) = 0.5 * ( SV( I , J ) + SV( I ,J-1) )
+        ELSE
+          SS( I , J ) = 0.0
+        END IF
+      END DO
+    END DO
+
+  END SUBROUTINE MR_INV_INTERP_XY_SS_FROM_SV
 
   END MODULE MR_MOD_INTERP_XY

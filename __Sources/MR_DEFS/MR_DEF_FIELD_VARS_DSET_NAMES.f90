@@ -39,9 +39,7 @@
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_UV      = "Horizontal Velocity"           !// " (" // UNIT_UV      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_WW      = "Vertical Velocity"             !// " (" // UNIT_WW      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_R       = "Density"                       !// " (" // UNIT_R       // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_VXYUV   = "Horizontal Eddy Viscosity"     !// " (" // UNIT_VXYUV   // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_VZWW    = "Vertical Eddy Viscosity"       !// " (" // UNIT_VZWW    // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DXYUV   = "Horizontal Eddy Diffusivity"   !// " (" // UNIT_DXYUV   // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DZWW    = "Vertical Eddy Diffusivity"     !// " (" // UNIT_DZWW    // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_VZWW    = "Eddy Viscosity"                !// " (" // UNIT_VZWW    // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DZWW    = "Eddy Diffusivity"              !// " (" // UNIT_DZWW    // ")"
 
   END MODULE MR_DEF_FIELD_VARS_DSET_NAMES

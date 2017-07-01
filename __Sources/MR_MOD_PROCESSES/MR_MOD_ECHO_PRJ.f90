@@ -99,8 +99,7 @@
     WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ", F16.6       )') XYR
     WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ", F16.6       )') ZR
     WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ", F16.6       )') UVR
-    WRITE(*,'(4X,"     Reference horizontal eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VXYR
-    WRITE(*,'(4X,"       Reference vertical eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VZR
+    WRITE(*,'(4X,"                Reference eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VZR
     WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ", F16.6,"E+03")') RR/1.0E+03
 
     WRITE(*,'( )')

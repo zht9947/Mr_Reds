@@ -146,23 +146,24 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_EQK_D3( NI , NJ , NK , EQKD_PRO , EQKD_GRO , EQK_D3 )
+  SUBROUTINE MR_CALC_EQK_D3( NI , NJ , NK , EQKD_PRO_XY , EQKD_PRO_Z , EQKD_BRO_Z , EQK_D3 )
 
     USE MR_MOD_CALC_EQK_ADV_N_DIF_Z
     USE MR_MOD_CALC_EQK_ADV_N_DIF_XY
-    USE MR_MOD_CALC_EQK_SRC_XY
+    USE MR_MOD_CALC_EQK_SRC_XYZ
 
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK  ) :: EQKD_PRO , EQKD_GRO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK  ) :: EQKD_PRO_XY , EQKD_PRO_Z , EQKD_BRO_Z
 
     REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,CARD_KIND),1:NJ,1:NK  ) :: EQK_D3
 
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) :: EQK_ADV_Z  , EQK_DIF_Z
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQK_ADV_XY , EQK_DIF_XY , EQK_SRC_XY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQK_ADV_XY , EQK_DIF_XY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQK_SRC_XYZ
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -186,7 +187,7 @@
     DO K = 2 , NK
 
       CALL MR_CALC_EQK_ADV_N_DIF_XY( NI , NJ , K , EQK_ADV_XY , EQK_DIF_XY )
-      CALL MR_CALC_EQK_SRC_XY( NI , NJ , K , EQKD_PRO(:,:, K ) , EQKD_GRO(:,:, K ) , EQK_SRC_XY )
+      CALL MR_CALC_EQK_SRC_XYZ( NI , NJ , K , EQKD_PRO_XY(:,:, K ) , EQKD_PRO_Z(:,:, K ) , EQKD_BRO_Z(:,:, K ) , EQK_SRC_XYZ )
 
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
@@ -195,7 +196,7 @@
             EQK_D3( I , J , K ) = EQK_D3( I , J , K ) +  &
             & EQK_ADV_XY( I , J ) + EQK_ADV_Z( I , J , K ) +   &
             & EQK_DIF_XY( I , J ) + EQK_DIF_Z( I , J , K ) +   &
-            & EQK_SRC_XY( I , J )
+            & EQK_SRC_XYZ( I , J )
           END IF
         END DO
       END DO

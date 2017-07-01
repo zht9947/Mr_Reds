@@ -80,9 +80,9 @@
     UVA      =   0.000E+0   ;   UA    =   0.000E+0   ;   VA    =   0.000E+0
     UV       =   0.000E+0   ;    U    =   0.000E+0   ;    V    =   0.000E+0
     W        =   0.000E+0
-    VXYUV    =   1.000E+0   ; VXYU    =   1.000E+0   ; VXYV    =   1.000E+0
+    VZWW     =   V0 / VZR   ; VXYU    =   V0 / VZR   ; VXYV    =   V0 / VZR
     VZW      =   V0 / VZR
-    DXYUV    =   1.000E+0   ; DXYU    =   1.000E+0   ; DXYV    =   1.000E+0
+    DZWW     =   V0 / VZR   ; DXYU    =   V0 / VZR   ; DXYV    =   V0 / VZR
     DZW      =   V0 / VZR
 
     ACTIVITY =   BEACTIVE
@@ -118,6 +118,7 @@
 
     USE MR_MOD_READ_FIELD_VARS_N_ACTIVITY
 
+    USE MR_MOD_INTERP_XY
     USE MR_MOD_INTERP_Z
 
     IMPLICIT NONE
@@ -384,12 +385,6 @@
    !END BLOCK
 
    !BLOCK
-    VXYUV    =   1.000E+0   ; VXYU    =   1.000E+0   ; VXYV    =   1.000E+0
-   !END BLOCK
-
-   !BLOCK
-    ALLOCATE( VZWW(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) )
-
   ! READ VZWW
     DO K = 1 , NK
 
@@ -409,20 +404,19 @@
       RETURN
     END IF
 
+  ! INTERPOLATE VZWW TO VXYU & VXYV
+    CALL MR_INTERP_XY_SS_U( NI , NJ , VZWW(:,:, K ) , VXYU(:,:, K ) )
+    CALL MR_INTERP_XY_SS_V( NI , NJ , VZWW(:,:, K ) , VXYV(:,:, K ) )
+
     END DO
 
   ! INTERPOLATE VZWW TO VZW
     CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW )
-
-    DEALLOCATE( VZWW )
    !END BLOCK
 
    !BLOCK
-    DXYUV    =   1.000E+0   ; DXYU    =   1.000E+0   ; DXYV    =   1.000E+0
-   !END BLOCK
-
-   !BLOCK
-    DZW = VZW
+    DZWW     =   VZWW       ; DXYU    =   VXYU       ; DXYV    =   VXYV
+    DZW      =   VZW
    !END BLOCK
 
     CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )

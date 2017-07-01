@@ -39,11 +39,11 @@
 !                              WR    :    REFERENCE VERTICAL VELOCITY, WR = UVR / XYR * ZR
 !                              SR    :    REFERENCE FREE SURFACE ELEVATION, SR = COR * UVR * XYR / GR
 !                            TUVR    :    REFERENCE SHEAR STRESS, TUVR = R0 * COR * UVR * ZR
-!                            QUVR    :    REFERENCE TRANSPORT FLUX, QUVR = COR * XYR * ZR
+!                           QSUVR    :    REFERENCE TRANSPORT FLUX, QSUVR = R0 * COR * XYR * ZR
 !                             KIR    :    REFERENCE TURBULENCE KINETIC ENERGY, KIR = COR * UVR * ZR
-!                             DIR    :    REFERENCE TURBULENCE DISSIPATION RATE, DIR = COR * UVR2
-!                       VXYR, VZR    :    REFERENCE HORIZONTAL & VERTICAL EDDY KINEMATIC VISCOSITY
-!                       DXYR, DZR    :    REFERENCE HORIZONTAL & VERTICAL EDDY KINEMATIC DIFFUSIVITY
+!                             DIR    :    REFERENCE TURBULENCE DISSIPATION RATE, DIR = COR * UVR * UVR
+!                             VZR    :    REFERENCE EDDY KINEMATIC VISCOSITY
+!                             DZR    :    REFERENCE EDDY KINEMATIC DIFFUSIVITY
 !                              RR    :    REFERENCE WATER-SEDIMENT MIXTURE DENSITY,
 !                                         GENERALLY AS MAXIMUM WATER-SEDIMENT MIXTURE DENSITY EXPECTED
 !
@@ -51,8 +51,8 @@
 !
 !                              RB    :    ROSSBY NUMBER, RB = UVR / ( COR * XYR )
 !                             RBT    :    ROSSBY NUMBER FOR SHEAR STRESS, RBT = UVR / ( COR * ZR )
-!                       EKXY, EKZ    :    HORIZONTAL & VERTICAL EKMAN NUMBER, EKXY = VXYR / ( COR * XYR * XYR ), EKZ = VZR / ( COR * ZR * ZR )
-!                       SCXY, SCZ    :    HORIZONTAL & VERTICAL SCHMIDT NUMBER, SCXY = DXYR / ( COR * XYR * XYR ), SCZ = DZR / ( COR * ZR * ZR )
+!                       EKXY, EKZ    :    HORIZONTAL & VERTICAL EKMAN NUMBER, EKXY = VZR / ( COR * XYR * XYR ), EKZ = VZR / ( COR * ZR * ZR )
+!                       SCXY, SCZ    :    HORIZONTAL & VERTICAL SCHMIDT NUMBER, SCXY = DZR / ( COR * XYR * XYR ), SCZ = DZR / ( COR * ZR * ZR )
 !                              RE    :    REYNOLDS NUMBER, RE = UVR * ZR / V0
 !                             RET    :    REYNOLDS NUMBER FOR SHEAR STRESS, RET = RE / SQRT( RBT )
 !                              FR    :    SQUARED FROUDE NUMBER, FR = UVR * UVR / ( GR * ZR )
@@ -108,11 +108,11 @@
     REAL   (PARD_KIND) :: WR
     REAL   (PARD_KIND) :: SR
     REAL   (PARD_KIND) :: TUVR
-    REAL   (PARD_KIND) :: QUVR
+    REAL   (PARD_KIND) :: QSUVR
     REAL   (PARD_KIND) :: KIR
     REAL   (PARD_KIND) :: DIR
-    REAL   (PARD_KIND) :: VXYR , VZR
-    REAL   (PARD_KIND) :: DXYR , DZR
+    REAL   (PARD_KIND) :: VZR
+    REAL   (PARD_KIND) :: DZR
     REAL   (PARD_KIND) :: RR
 
     REAL   (PARD_KIND) :: RB

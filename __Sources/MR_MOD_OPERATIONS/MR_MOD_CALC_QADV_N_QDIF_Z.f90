@@ -248,9 +248,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_UV_W( I , J ,DIM, K ) = - CRW * MW( I , J ) *   &
-      ( (     ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
-        -         CRW         * DDW                         / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                         / 6.0   &
+      ( (       ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
+        -         CRW         * DDW                           / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                           / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -320,9 +320,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_UV_W( I , J ,DIM, K ) = - CRW * MW( I , J ) *   &
-      ( (     ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
-        -         CRW         * DDW                         / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                         / 6.0   &
+      ( (       ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
+        -         CRW         * DDW                           / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                           / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -394,9 +394,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_UV_W( I , J ,DIM, K ) = - CRW * MW( I , J ) *   &
-      ( (     ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
-        -         CRW         * DDW                         / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                         / 6.0   &
+      ( (       ( UV( I , J ,DIM,K+1) + UV( I , J ,DIM, K ) ) / 2.0   &
+        -         CRW         * DDW                           / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                           / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -473,7 +473,7 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_T_Z_UV_W( NI , NJ , NK , UV , EKZ , VZW , T_Z_UV_W , TUV0 , TUVN )
+  SUBROUTINE MR_CALC_T_Z_UV_W( NI , NJ , NK , UV , RB , W , EKZ , VZW , T_Z_UV_W , TUV0 , TUVN )
 
     IMPLICIT NONE
 
@@ -482,8 +482,8 @@
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2,1:NK) :: UV
 
-    REAL   (PARD_KIND) , INTENT(IN ) :: EKZ
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,    0:NK) :: VZW
+    REAL   (PARD_KIND) , INTENT(IN ) :: RB , EKZ
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,    0:NK) :: W , VZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2,0:NK) :: T_Z_UV_W
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2     ) , OPTIONAL :: TUV0 , TUVN
@@ -497,17 +497,8 @@
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              !BLOCK
-                T_Z_UV_W( I , J ,DIM, K ) = 0.0
-              !END BLOCK
-            ELSE
-              IF( PRESENT(TUV0) ) THEN
-                T_Z_UV_W( I , J ,DIM, K ) = TUV0( I , J ,DIM)
-              ELSE
-                T_Z_UV_W( I , J ,DIM, K ) = 0.0
-              END IF
-            END IF
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_T_Z_UV_W_II_JJ_K0
           END DO
         END DO
       END DO
@@ -518,16 +509,8 @@
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              !BLOCK
-                T_Z_UV_W( I , J ,DIM, K ) = 0.0
-              !END BLOCK
-            ELSE
-              !BLOCK
-                T_Z_UV_W( I , J ,DIM, K ) = EKZ * VZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
-                & ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
-              !END BLOCK
-            END IF
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_T_Z_UV_W_II_JJ_KK
           END DO
         END DO
       END DO
@@ -538,21 +521,129 @@
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
-            IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-              !BLOCK
-                T_Z_UV_W( I , J ,DIM, K ) = 0.0
-              !END BLOCK
-            ELSE
-              IF( PRESENT(TUVN) ) THEN
-                T_Z_UV_W( I , J ,DIM, K ) = TUVN( I , J ,DIM)
-              ELSE
-                T_Z_UV_W( I , J ,DIM, K ) = 0.0
-              END IF
-            END IF
+           !DIR$ FORCEINLINE
+            CALL MR_CALC_T_Z_UV_W_II_JJ_KN
           END DO
         END DO
       END DO
     !END K = NK
+
+!***********************************************************************************************************************************
+
+  CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_K0
+
+    IMPLICIT NONE
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+      !BLOCK
+        T_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
+    ELSE
+      IF( PRESENT(TUV0) ) THEN
+        T_Z_UV_W( I , J ,DIM, K ) = TUV0( I , J ,DIM)
+      ELSE
+        T_Z_UV_W( I , J ,DIM, K ) = 0.0
+      END IF
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_K0
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_KK
+
+    IMPLICIT NONE
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+
+      T_Z_UV_W( I , J ,DIM, K ) = 0.0
+
+    ELSE
+
+      T_Z_UV_W( I , J ,DIM, K ) = EKZ * VZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+      ( UV( I , J ,DIM,K+1) - UV( I , J ,DIM, K ) )
+
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_KK
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_KN
+
+    IMPLICIT NONE
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+      !BLOCK
+        T_Z_UV_W( I , J ,DIM, K ) = 0.0
+      !END BLOCK
+    ELSE
+      IF( PRESENT(TUVN) ) THEN
+        T_Z_UV_W( I , J ,DIM, K ) = TUVN( I , J ,DIM)
+      ELSE
+        T_Z_UV_W( I , J ,DIM, K ) = 0.0
+      END IF
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_UV_W_II_JJ_KN
 
   END SUBROUTINE MR_CALC_T_Z_UV_W
 
@@ -753,9 +844,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_SS_W( I , J , K ) = - CRW * MW( I , J ) *   &
-      ( (     ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
-        -         CRW         * DDW                 / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                 / 6.0   &
+      ( (       ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
+        -         CRW         * DDW                   / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                   / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -825,9 +916,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_SS_W( I , J , K ) = - CRW * MW( I , J ) *   &
-      ( (     ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
-        -         CRW         * DDW                 / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                 / 6.0   &
+      ( (       ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
+        -         CRW         * DDW                   / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                   / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -899,9 +990,9 @@
 
     ! CALCULATE ADVECTION
       QADV_Z_SS_W( I , J , K ) = - CRW * MW( I , J ) *   &
-      ( (     ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
-        -         CRW         * DDW                 / 2.0   &
-        - ( 1.0 - CRW * CRW ) * D2W                 / 6.0   &
+      ( (       ( SS( I , J ,K+1) + SS( I , J , K ) ) / 2.0   &
+        -         CRW         * DDW                   / 2.0   &
+        - ( 1.0 - CRW * CRW ) * D2W                   / 6.0   &
         )   &
       )
     ! CALCULATE DIFFUSION
@@ -978,7 +1069,7 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_T_Z_SS_W( NI , NJ , NK , SS , SCZ , DZW , T_Z_SS_W , TSS0 , TSSN )
+  SUBROUTINE MR_CALC_T_Z_SS_W( NI , NJ , NK , SS , RB , W , SCZ , DZW , T_Z_SS_W , TSS0 , TSSN )
 
     IMPLICIT NONE
 
@@ -987,8 +1078,8 @@
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) :: SS
 
-    REAL   (PARD_KIND) , INTENT(IN ) :: SCZ
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,0:NK) :: DZW
+    REAL   (PARD_KIND) , INTENT(IN ) :: RB , SCZ
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,0:NK) :: W , DZW
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,0:NK) :: T_Z_SS_W
 
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) , OPTIONAL :: TSS0 , TSSN
@@ -1000,17 +1091,8 @@
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            !BLOCK
-              T_Z_SS_W( I , J , K ) = 0.0
-            !END BLOCK
-          ELSE
-            IF( PRESENT(TSS0) ) THEN
-              T_Z_SS_W( I , J , K ) = TSS0( I , J )
-            ELSE
-              T_Z_SS_W( I , J , K ) = 0.0
-            END IF
-          END IF
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_T_Z_SS_W_II_JJ_K0
         END DO
       END DO
     !END K = 0
@@ -1019,16 +1101,8 @@
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            !BLOCK
-              T_Z_SS_W( I , J , K ) = 0.0
-            !END BLOCK
-          ELSE
-            !BLOCK
-              T_Z_SS_W( I , J , K ) = SCZ * DZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
-              & ( SS( I , J ,K+1) - SS( I , J , K ) )
-            !END BLOCK
-          END IF
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_T_Z_SS_W_II_JJ_KK
         END DO
       END DO
     END DO
@@ -1037,20 +1111,131 @@
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
-          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            !BLOCK
-              T_Z_SS_W( I , J , K ) = 0.0
-            !END BLOCK
-          ELSE
-            IF( PRESENT(TSSN) ) THEN
-              T_Z_SS_W( I , J , K ) = TSSN( I , J )
-            ELSE
-              T_Z_SS_W( I , J , K ) = 0.0
-            END IF
-          END IF
+         !DIR$ FORCEINLINE
+          CALL MR_CALC_T_Z_SS_W_II_JJ_KN
         END DO
       END DO
     !END K = NK
+
+!***********************************************************************************************************************************
+
+  CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_K0
+
+    IMPLICIT NONE
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+      !BLOCK
+        T_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
+    ELSE
+      IF( PRESENT(TSS0) ) THEN
+        T_Z_SS_W( I , J , K ) = TSS0( I , J )
+      ELSE
+        T_Z_SS_W( I , J , K ) = 0.0
+      END IF
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_K0
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_KK
+
+    IMPLICIT NONE
+
+    REAL   (CARD_KIND)               :: CRW , DRW
+    REAL   (CARD_KIND)               :: DDW , D2W
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+
+      T_Z_SS_W( I , J , K ) = 0.0
+
+    ELSE
+
+      T_Z_SS_W( I , J , K ) = SCZ * DZW( I , J , K ) / ( H( I , J ) * DSIGMA ) *   &
+      ( SS( I , J ,K+1) - SS( I , J , K ) )
+
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_KK
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_KN
+
+    IMPLICIT NONE
+
+    IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+      !BLOCK
+        T_Z_SS_W( I , J , K ) = 0.0
+      !END BLOCK
+    ELSE
+      IF( PRESENT(TSSN) ) THEN
+        T_Z_SS_W( I , J , K ) = TSSN( I , J )
+      ELSE
+        T_Z_SS_W( I , J , K ) = 0.0
+      END IF
+    END IF
+
+  END SUBROUTINE MR_CALC_T_Z_SS_W_II_JJ_KN
 
   END SUBROUTINE MR_CALC_T_Z_SS_W
 

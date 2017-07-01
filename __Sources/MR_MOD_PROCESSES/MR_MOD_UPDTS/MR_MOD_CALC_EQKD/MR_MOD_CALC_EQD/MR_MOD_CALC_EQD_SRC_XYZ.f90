@@ -19,13 +19,15 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_UPDT_VZW
+  MODULE MR_MOD_CALC_EQD_SRC_XYZ
 
     USE MR_KINDS
 
-    USE MR_DEF_RANKS
+    USE MR_DEF_CURVED_GEOS
     USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_FIELD_VARS
+    USE MR_DEF_ACTIVITY
+    USE MR_DEF_TIMING
 
     USE MR_MCS_K_EPS
 
@@ -33,7 +35,7 @@
 
     PRIVATE
 
-    PUBLIC :: MR_UPDT_VZW
+    PUBLIC :: MR_CALC_EQD_SRC_XYZ
 
 !***********************************************************************************************************************************
 
@@ -56,34 +58,31 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_UPDT_VZW
+  SUBROUTINE MR_CALC_EQD_SRC_XYZ( NI , NJ , K , EQKD_PRO_XY_K , EQKD_PRO_Z_K , EQD_SRC_XYZ )
 
-    USE MR_MOD_FUNC_VZWW
-
-    USE MR_MOD_INTERP_Z
+    USE MR_MOD_OPERATOR_SS
 
     IMPLICIT NONE
 
-    INTEGER(IJID_KIND) :: I , J
-    INTEGER(KKID_KIND) :: K
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    ALLOCATE( VZWW(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) )
-      DO K = 1 , NK
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            VZWW( I , J , K ) = MR_FUNC_VZWW( V0 , KI( I , J , K ) , DI( I , J , K ) )
-          END DO
-        END DO
-      END DO
+    INTEGER(KKID_KIND) , INTENT(IN ) :: K
 
-      CALL MR_INTERP_Z_SS_W( NI , NJ , NK , VZWW , VZW )
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQKD_PRO_XY_K , EQKD_PRO_Z_K
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQD_SRC_XYZ
 
-    DEALLOCATE( VZWW )
+    EQD_SRC_XYZ = + DT * RBT *   &
+    ( MW .MRSSSCL.   &
+      ( ( ( ( REAL( ( CD1 * ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - CD2 * DI(:,:, K ) ) , FDRD_KIND ) )   &
+              .MRSSMTP. DI(:,:, K )   &
+          ) .MRSSDIV. KI(:,:, K )   &
+        )   &
+      )   &
+    )
 
-  END SUBROUTINE MR_UPDT_VZW
+  END SUBROUTINE MR_CALC_EQD_SRC_XYZ
 
-  END MODULE MR_MOD_UPDT_VZW
+  END MODULE MR_MOD_CALC_EQD_SRC_XYZ

@@ -156,23 +156,24 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_EQD_D3( NI , NJ , NK , EQKD_PRO , EQD_D3 )
+  SUBROUTINE MR_CALC_EQD_D3( NI , NJ , NK , EQKD_PRO_XY , EQKD_PRO_Z , EQD_D3 )
 
     USE MR_MOD_CALC_EQD_ADV_N_DIF_Z
     USE MR_MOD_CALC_EQD_ADV_N_DIF_XY
-    USE MR_MOD_CALC_EQD_SRC_XY
+    USE MR_MOD_CALC_EQD_SRC_XYZ
 
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK  ) :: EQKD_PRO
+    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK  ) :: EQKD_PRO_XY , EQKD_PRO_Z
     
     REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,CARD_KIND),1:NJ,1:NK  ) :: EQD_D3
 
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) :: EQD_ADV_Z  , EQD_DIF_Z
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQD_ADV_XY , EQD_DIF_XY , EQD_SRC_XY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQD_ADV_XY , EQD_DIF_XY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ     ) :: EQD_SRC_XYZ
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER(KKID_KIND) :: K
@@ -196,7 +197,7 @@
     DO K = 2 , NK-1
 
       CALL MR_CALC_EQD_ADV_N_DIF_XY( NI , NJ , K , EQD_ADV_XY , EQD_DIF_XY )
-      CALL MR_CALC_EQD_SRC_XY( NI , NJ , K , EQKD_PRO(:,:, K ) , EQD_SRC_XY )
+      CALL MR_CALC_EQD_SRC_XYZ( NI , NJ , K , EQKD_PRO_XY(:,:, K ) , EQKD_PRO_Z(:,:, K ) , EQD_SRC_XYZ )
 
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
@@ -205,7 +206,7 @@
             EQD_D3( I , J , K ) = EQD_D3( I , J , K ) +  &
             & EQD_ADV_XY( I , J ) + EQD_ADV_Z( I , J , K ) +   &
             & EQD_DIF_XY( I , J ) + EQD_DIF_Z( I , J , K ) +   &
-            & EQD_SRC_XY( I , J )
+            & EQD_SRC_XYZ( I , J )
           END IF
         END DO
       END DO
