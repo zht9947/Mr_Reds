@@ -355,7 +355,7 @@
     DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
     CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=VZWW(:,:, K ) ,   &
+    & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when outputting VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &

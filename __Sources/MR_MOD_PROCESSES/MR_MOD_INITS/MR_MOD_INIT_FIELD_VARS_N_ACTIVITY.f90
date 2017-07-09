@@ -394,7 +394,7 @@
     DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_BEFORE ,   &
     & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
-    & SS=VZWW(:,:, K ) ,   &
+    & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
@@ -403,10 +403,6 @@
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
     END IF
-
-  ! INTERPOLATE VZWW TO VXYU & VXYV
-    CALL MR_INTERP_XY_SS_U( NI , NJ , VZWW(:,:, K ) , VXYU(:,:, K ) )
-    CALL MR_INTERP_XY_SS_V( NI , NJ , VZWW(:,:, K ) , VXYV(:,:, K ) )
 
     END DO
 
