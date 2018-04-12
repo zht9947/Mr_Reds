@@ -69,6 +69,9 @@
 		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_XY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_Z.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_QADV_N_QDIF_XY - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_CALC_UNIT_ENERGY.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_CALC_UNIT_FORCES_N_MOTION.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_Z.f90"/></Filter>
 		<Filter Name="MR_MOD_PROCESSES">

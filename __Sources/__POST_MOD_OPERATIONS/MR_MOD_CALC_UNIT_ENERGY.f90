@@ -19,18 +19,19 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_FIELD_VARS_AVERAGE
+  MODULE MR_MOD_CALC_UNIT_ENERGY
 
     USE MR_KINDS
 
-    USE MR_DEF_RANKS
-    USE MR_DEF_FIELD_VARS_AVERAGE
+    USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_FIELD_VARS
+    USE MR_DEF_ACTIVITY
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_FIELD_VARS_AVERAGE
+    PUBLIC :: MR_CALC_UNIT_ENERGY
 
 !***********************************************************************************************************************************
 
@@ -53,21 +54,36 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_FIELD_VARS_AVERAGE
+  SUBROUTINE MR_CALC_UNIT_ENERGY( NI , NJ , NK , UNIT_ENERGY )
 
     IMPLICIT NONE
 
-    ALLOCATE(           AVERAGE_XSEC_H(1:NI1(NI,FDRD_KIND)    ) )
-    ALLOCATE( AVERAGE_XSEC_UNIT_FORCES(1:NI1(NI,FDRD_KIND),1:2) )
-    ALLOCATE( AVERAGE_XSEC_UNIT_MOTION(1:NI1(NI,FDRD_KIND),1:2) )
-    ALLOCATE( AVERAGE_XSEC_UNIT_ENERGY(1:NI1(NI,FDRD_KIND)    ) )
-    ALLOCATE(       AVERAGE_XSEC_TBFUV(1:NI1(NI,FDRD_KIND),1:2) )
-    ALLOCATE(        AVERAGE_XSEC_TBUV(1:NI1(NI,FDRD_KIND),1:2) )
-    ALLOCATE(         AVERAGE_XSEC_QUV(1:NI1(NI,FDRD_KIND),1:2) )
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-  END SUBROUTINE MR_MALLOC_FIELD_VARS_AVERAGE
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) :: UNIT_ENERGY
 
-  END MODULE MR_MOD_MALLOC_FIELD_VARS_AVERAGE
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER(KKID_KIND) :: K
+
+    DO K = 1 , NK
+
+      DO J = 1 , NJ
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , NI
+          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
+            UNIT_ENERGY( I , J , K ) = 0.0
+          ELSE
+            UNIT_ENERGY( I , J , K ) = 0.5 * GUV( I , J ,1,1) * UV( I , J ,1, K ) * UV( I , J ,1, K )
+          END IF
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_CALC_UNIT_ENERGY
+
+  END MODULE MR_MOD_CALC_UNIT_ENERGY
