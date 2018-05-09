@@ -2,4 +2,4 @@
 <VisualStudioUserFile ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{EF0FF827-D9B6-4C0B-981D-1F37075790B0}">
 	<Configurations>
 		<Configuration Name="Debug|Win32" CommandArguments="R:\Case.txt R:\Case.h5"/>
-		<Configuration Name="Release|Win32" CommandArguments="C:\Users\ZHT9947\Desktop\Case.txt R:\Case.h5"/></Configurations></VisualStudioUserFile>
+		<Configuration Name="Release|Win32" CommandArguments="R:\Case.txt R:\Case.h5"/></Configurations></VisualStudioUserFile>
