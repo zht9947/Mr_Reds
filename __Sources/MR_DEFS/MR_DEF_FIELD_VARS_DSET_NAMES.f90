@@ -32,7 +32,7 @@
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_QSBUV   = "NONE"                          !// " (" // UNIT_QSBUV   // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_KI      = "Turbulence Kinetic Energy"     !// " (" // UNIT_KI      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_DI      = "Turbulence Dissipation"        !// " (" // UNIT_DI      // ")"
-    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_ZB      = "Bed Elevation"                 !// " (" // UNIT_ZB      // ")"
+    CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_ZB      = "Bathymetry"                    !// " (" // UNIT_ZB      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_ZS      = "Free Surface Elevation"        !// " (" // UNIT_ZS      // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_H       = "Depth"                         !// " (" // UNIT_H       // ")"
     CHARACTER( 2**06 ) , PARAMETER :: DSET_NAME_UVA     = "Depth-Averaged Velocity"       !// " (" // UNIT_UVA     // ")"
