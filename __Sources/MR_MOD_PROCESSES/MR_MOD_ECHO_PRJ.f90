@@ -73,7 +73,7 @@
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"     GRID ",I5," x ",I5," x ",I5)') NI , NJ , NK
-    WRITE(*,'(4X,"       GRAIN SIZE ",F7.3," mm")') D0*1000.0
+    WRITE(*,'(4X,"       GRAIN SIZE ",F13.5," mm")') D0*1000.0
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
