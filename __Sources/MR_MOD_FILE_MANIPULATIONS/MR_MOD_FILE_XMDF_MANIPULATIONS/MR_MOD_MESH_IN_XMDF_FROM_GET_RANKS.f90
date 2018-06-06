@@ -70,13 +70,13 @@
 
     CALL XF_GET_NUMBER_OF_NODES( MESH_IN_XMDF_ID , NND , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in getting then number of nodes from mesh"
+      ERRMSG = "Error in getting the number of nodes from mesh"
       RETURN
     END IF
 
     CALL XF_GET_NUMBER_OF_ELEMENTS( MESH_IN_XMDF_ID , NEM , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in getting then number of elements from mesh"
+      ERRMSG = "Error in getting the number of elements from mesh"
       RETURN
     END IF
 

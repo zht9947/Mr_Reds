@@ -19,7 +19,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_INPUT_AVERAGE
+  MODULE MR_MOD_INPUT
 
     USE MR_KINDS
 
@@ -34,7 +34,7 @@
 
     PRIVATE
 
-    PUBLIC :: MR_INPUT_AVERAGE
+    PUBLIC :: MR_INPUT
 
 !***********************************************************************************************************************************
 
@@ -60,7 +60,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INPUT_AVERAGE( FILE_XMDF_NAME , ITS , ERROR , ERRMSG )
+  SUBROUTINE MR_INPUT( FILE_XMDF_NAME , ITS , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -367,7 +367,7 @@
       RETURN
     END IF
 
-  END SUBROUTINE MR_INPUT_AVERAGE
+  END SUBROUTINE MR_INPUT
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -436,4 +436,4 @@
 
   END SUBROUTINE MR_CONVERT_WW_TO_W
 
-  END MODULE MR_MOD_INPUT_AVERAGE
+  END MODULE MR_MOD_INPUT

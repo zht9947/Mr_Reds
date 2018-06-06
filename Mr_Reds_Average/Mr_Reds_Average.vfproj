@@ -91,7 +91,7 @@
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_UPDTS\MR_MOD_UPDT_FIELD_VARS_AVERAGE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_INPUT_AVERAGE.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INPUT.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_OUTPUT_AVERAGE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_REDS_AVERAGE.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
