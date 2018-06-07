@@ -98,8 +98,6 @@
     CHARACTER( 2**03 )               :: K_CHAR
     INTEGER(KKID_KIND)               :: K
 
-    ERRMSG = ""
-
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "WRITE" , FILE_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)
@@ -121,8 +119,8 @@
     & UV=TBFUV ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting TBFUV(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting TBFUV(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -136,8 +134,8 @@
     & UV=TBUV ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting TBUV(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting TBUV(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -155,8 +153,8 @@
     & SS=KI(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting KI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting KI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -176,8 +174,8 @@
     & SS=DI(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting DI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting DI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -197,8 +195,8 @@
     & SS=R(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -223,8 +221,8 @@
     & SS=ZB , SU=ZBU , SV=ZBV , SO=ZBOO ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting ZB(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting ZB(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       DEALLOCATE( ZBU , ZBV )
@@ -245,8 +243,8 @@
     & SS=ZS , SU=ZSU , SV=ZSV , SO=ZSOO ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting ZS(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting ZS(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       DEALLOCATE( ZSOO )
@@ -269,8 +267,8 @@
     & SS=H , SU=HU , SV=HV , SO=HOO ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting H(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting H(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       DEALLOCATE( HOO )
@@ -288,8 +286,8 @@
     & UV=UVA , U=UA , V=VA ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting UVA(:,:) "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting UVA(:,:) to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -307,8 +305,8 @@
     & UV=UV(:,:,1:2, K ) , U=U(:,:, K ) , V=V(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting UV(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting UV(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -334,8 +332,8 @@
     & SS=WW(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting WW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting WW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN
@@ -358,8 +356,8 @@
     & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
     & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") "   &
-      //"to multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
+      //" when outputting VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN

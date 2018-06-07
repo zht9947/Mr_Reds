@@ -84,7 +84,6 @@
     ALLOCATE( XYUU(0:NI0(NI,XYRD_KIND),1:NJ,1:2) , XYVV(1:NI1(NI,XYRD_KIND),0:NJ,1:2) )
     ALLOCATE( XYOO(0:NI0(NI,XYRD_KIND),0:NJ,1:2) )
 
-    ERRMSG = ""
     CALL MR_INIT_COORS( TRIM(FILE_XMDF_NAME) , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing curved geometries"
@@ -342,8 +341,6 @@
 
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
-
-    ERRMSG = ""
 
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "READ" , FILE_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN

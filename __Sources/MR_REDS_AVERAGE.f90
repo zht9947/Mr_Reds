@@ -103,7 +103,7 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize curved geometries... ", $ )')
+    WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)

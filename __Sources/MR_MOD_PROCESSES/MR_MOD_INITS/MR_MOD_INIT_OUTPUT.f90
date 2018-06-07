@@ -81,8 +81,6 @@
     CHARACTER( 2**03 )               :: K_CHAR
     INTEGER(KKID_KIND)               :: K
 
-    ERRMSG = ""
-
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "WRITE" , FILE_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)

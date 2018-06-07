@@ -81,8 +81,6 @@
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
 
-    ERRMSG = ""
-
    !BLOCK
   ! OPEN SOURCE
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "READ" , FILE_XMDF_ID , ERROR , ERRMSG )

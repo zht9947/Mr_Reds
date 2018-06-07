@@ -129,13 +129,17 @@
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    ERRMSG = ""
     CALL MR_GET_FILE_NTSS_PREV_N_T_END_PREV( FILE_XMDF_NAME , NTSS_PREV , T_START , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
       RETURN
     END IF
 
     CALL MR_INPUT( FILE_XMDF_NAME , NTSS_PREV , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
+      RETURN
+    END IF
 
 !***********************************************************************************************************************************
 
@@ -180,8 +184,6 @@
 
     CHARACTER( 2**08 )               :: PATH_DSET_IN_MULTI_DSETS
 
-    ERRMSG = ""
-
     CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "READ" , FILE_XMDF_ID , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)
@@ -198,8 +200,7 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
     CALL MR_GET_DSET_NTSS_N_T_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_PREV , T_END_PREV , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activities with hot mode "   &
-      //"from multiple datasets /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
+      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
       CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
       RETURN

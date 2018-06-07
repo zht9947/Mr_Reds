@@ -86,8 +86,6 @@
 
     INTEGER(KKID_KIND)               :: K
 
-    ERRMSG = ""
-
     REC_ID = 0
 
     CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ_NAME , "READ" , FILE_PRJ_ID , ERROR , ERRMSG )

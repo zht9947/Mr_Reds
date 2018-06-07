@@ -84,7 +84,7 @@
 
       CALL XF_GET_DATASET_NUM_TIMES( DSET_ID , NTIMES , ERROR )
       IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in getting number of timesteps from dataset group"
+        ERRMSG = "Error in getting the number of timesteps from dataset group"
       ELSE
 
         NTSS = NTIMES - 1
@@ -156,7 +156,7 @@
       ALLOCATE( T_ARRAY(0:NTSS) )
         CALL XF_GET_DATASET_TIMES( DSET_ID , SIZE(T_ARRAY) , T_ARRAY , ERROR )
         IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting time's array"
+          ERRMSG = "Error in getting time's array from dataset group"
         ELSE
 
           T_ITS = T_ARRAY( ITS )
@@ -229,7 +229,7 @@
 
       CALL XF_GET_DATASET_NUM_TIMES( DSET_ID , NTIMES , ERROR )
       IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in getting number of timesteps from dataset group"
+        ERRMSG = "Error in getting the number of timesteps from dataset group"
       ELSE
 
         NTSS = NTIMES - 1
@@ -237,7 +237,7 @@
         ALLOCATE( T_ARRAY(0:NTSS) )
           CALL XF_GET_DATASET_TIMES( DSET_ID , SIZE(T_ARRAY) , T_ARRAY , ERROR )
           IF( ERROR < 0 ) THEN
-            ERRMSG = "Error in getting time's array"
+            ERRMSG = "Error in getting time's array from dataset group"
           ELSE
 
             T_NTSS = T_ARRAY( NTSS )

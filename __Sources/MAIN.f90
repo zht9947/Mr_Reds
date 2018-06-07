@@ -192,7 +192,7 @@
 !    WRITE(*,'("Done! ")')
 !  END IF
 !
-!  WRITE(*,'("Initialize curved geometries... ", $ )')
+!  WRITE(*,'("Initialize curved geometry... ", $ )')
 !  CALL MR_INIT_CURVED_GEOS( TRIM(FILE_XMDF) , ERROR , ERRMSG )
 !  IF( ERROR < 0 ) THEN
 !    WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -326,7 +326,7 @@
 !
 !  !pause
 !
-!  WRITE(*,'("Initialize field variables and activities... ", $ )')
+!  WRITE(*,'("Initialize field variables and activity... ", $ )')
 !  CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD_MODE
 !  WRITE(*,'("Done! ")')
 !
