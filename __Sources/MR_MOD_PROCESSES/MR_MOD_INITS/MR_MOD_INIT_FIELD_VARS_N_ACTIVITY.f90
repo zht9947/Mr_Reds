@@ -114,7 +114,7 @@
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
 
-    USE MR_MOD_GET_DSET_TIMES
+    USE MR_MOD_GET_TIMES
 
     USE MR_MOD_INPUT
 
@@ -129,7 +129,7 @@
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    CALL MR_GET_FILE_NTSS_PREV_N_T_END_PREV( FILE_XMDF_NAME , NTSS_PREV , T_START , ERROR , ERRMSG )
+    CALL MR_GET_NTSS_N_T_NTSS( FILE_XMDF_NAME , NTSS_PREV , T_START , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
       RETURN
@@ -140,86 +140,6 @@
       ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
       RETURN
     END IF
-
-!***********************************************************************************************************************************
-
-  CONTAINS
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_GET_FILE_NTSS_PREV_N_T_END_PREV( FILE_XMDF_NAME , NTSS_PREV , T_END_PREV , ERROR , ERRMSG )
-
-    IMPLICIT NONE
-
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
-
-    INTEGER                          :: FILE_XMDF_ID , MULTI_DSETS_ID
-
-    INTEGER(TSID_KIND) , INTENT(OUT) :: NTSS_PREV
-    REAL   (TMRD_KIND) , INTENT(OUT) :: T_END_PREV
-
-    INTEGER            , INTENT(OUT) :: ERROR
-    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
-
-    INTEGER                          :: ERROR_DUMMY
-    CHARACTER( 2**10 )               :: ERRMSG_DUMMY
-
-    CHARACTER( 2**08 )               :: PATH_DSET_IN_MULTI_DSETS
-
-    CALL MR_OPEN_FILE_XMDF( FILE_XMDF_NAME , "READ" , FILE_XMDF_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)
-      RETURN
-    END IF
-
-    CALL MR_OPEN_MULTI_DSETS( FILE_XMDF_ID , MULTI_DSETS_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
-    CALL MR_GET_DSET_NTSS_N_T_NTSS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , NTSS_PREV , T_END_PREV , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    CALL MR_CLOSE_MULTI_DSETS( MULTI_DSETS_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)
-      CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-      RETURN
-    END IF
-
-    CALL MR_CLOSE_FILE_XMDF( FILE_XMDF_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_NAME)
-      RETURN
-    END IF
-
-  END SUBROUTINE MR_GET_FILE_NTSS_PREV_N_T_END_PREV
 
   END SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_HOT
 

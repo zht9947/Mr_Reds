@@ -59,7 +59,7 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_OUTPUT_AVERAGE( FILE_AVERAGE_NAME , T , ERROR , ERRMSG )
 
-    USE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
+    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
     IMPLICIT NONE
 

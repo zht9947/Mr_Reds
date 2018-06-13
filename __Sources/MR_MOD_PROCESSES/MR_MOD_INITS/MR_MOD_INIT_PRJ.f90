@@ -60,10 +60,11 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_PRJ( FILE_PRJ_NAME , ERROR , ERRMSG )
 
-    USE MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT
+    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
     USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
 
+    USE MR_MOD_FUNC_DS
     USE MR_MOD_FUNC_TCRS
 
     IMPLICIT NONE
@@ -124,7 +125,7 @@
             ELSE
 
               SELECT CASE( TRIM(LABEL) )
-              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
+              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
                 BACKSPACE( FILE_PRJ_ID )
                 REC_ID = REC_ID - 1
                 EXIT
@@ -158,15 +159,14 @@
 
           END DO
 
-        CASE( "IJK" )
+        CASE( "NKK" )
           BACKSPACE( FILE_PRJ_ID )
 
-          READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NI , NJ , NK
+          READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NK
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading numbers of columns (NI), "   &
-            //"rows (NJ) and layers (NK) from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-            //"when initializing Grid Ranks from file "//TRIM(FILE_PRJ_NAME)
+            ERRMSG = "Error in reading number of layers from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
           END IF
@@ -181,15 +181,13 @@
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
             ERRMSG = "Error in reading grain size from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-            //"when initializing Grain Size from file "//TRIM(FILE_PRJ_NAME)
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
           END IF
 
-         !BLOCK
         ! CONVERT UNIT FROM MILLIMETERS TO METERS
           D0 = D0 / 1000.0
-         !END BLOCK
 
         CASE( "TAB" )
           BACKSPACE( FILE_PRJ_ID )
@@ -220,7 +218,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -328,7 +326,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -384,7 +382,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -418,7 +416,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -491,7 +489,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -564,7 +562,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -651,7 +649,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "IJK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -799,20 +797,25 @@
     BPAR = RB / ALPAR
 
    !BLOCK
-  ! CALCULATE DSIGMA
-    DSIGMA = 1.0 / NK
-  ! CALCULATE SIGMA COORDINATES
-    SIGMA(NK) = - 0.5 * DSIGMA
-    DO K = NK-1 , 1 , -1
-      SIGMA( K ) = SIGMA(K+1) - DSIGMA
-    END DO
+    IF( .NOT. ( NK > 0 ) ) THEN
+      ERROR = - 9999
+      ERRMSG = "Number of layers is identified with zero, "   &
+      //"please check the file "//TRIM(FILE_PRJ_NAME)
+      RETURN
+    ELSE
+    ! CALCULATE DSIGMA
+      DSIGMA = REAL(1.0,PARD_KIND) / NK
+    ! CALCULATE SIGMA COORDINATES
+      SIGMA(NK) = - REAL(0.5,PARD_KIND) * DSIGMA
+      DO K = NK-1 , 1 , -1
+        SIGMA( K ) = SIGMA(K+1) - DSIGMA
+      END DO
+    END IF
    !END BLOCK
 
-   !BLOCK
   ! CALCULATE DS, TCRS, WS & RBS
-    DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0/3.0)
+    DS = MR_FUNC_DS( D0 )
     TCRS = MR_FUNC_TCRS( D0 , DS )
-   !END BLOCK
 
   ! NONDIMENSIONALIZE DT
     DT = DT * COR

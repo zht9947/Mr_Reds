@@ -18,7 +18,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_FUNC_TCRS
+  MODULE MR_MOD_FUNC_DS
 
     USE MR_KINDS
 
@@ -28,11 +28,11 @@
 
     PRIVATE
 
-    PUBLIC :: MR_FUNC_TCRS
+    PUBLIC :: MR_FUNC_DS
 
-    INTERFACE MR_FUNC_TCRS
-      MODULE PROCEDURE MR_FUNC_TCRS_PARD_KIND
-      MODULE PROCEDURE MR_FUNC_TCRS_FDRD_KIND
+    INTERFACE MR_FUNC_DS
+      MODULE PROCEDURE MR_FUNC_DS_PARD_KIND
+      MODULE PROCEDURE MR_FUNC_DS_FDRD_KIND
     END INTERFACE
 
 !***********************************************************************************************************************************
@@ -59,20 +59,17 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_TCRS_PARD_KIND( D0 , DS ) RESULT( TCRS )
+  FUNCTION MR_FUNC_DS_PARD_KIND( D0 ) RESULT( DS )
 
     IMPLICIT NONE
 
-    REAL(PARD_KIND) , INTENT(IN ) :: D0 , DS
+    REAL(PARD_KIND) , INTENT(IN ) :: D0
 
-    REAL(PARD_KIND) :: TCRS
+    REAL(PARD_KIND) :: DS
 
-    TCRS = RBT / FR * (SS-1.0) * (D0/ZR) *   &
-    ( 0.130 *           EXP( -0.015 * DS * DS ) / (DS**0.392)   &
-    + 0.045 * ( 1.000 - EXP( -0.068 *   DS    )               )   &
-    )
+    DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0_PARD_KIND/3.0_PARD_KIND)
 
-  END FUNCTION MR_FUNC_TCRS_PARD_KIND
+  END FUNCTION MR_FUNC_DS_PARD_KIND
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -94,19 +91,16 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_TCRS_FDRD_KIND( D0 , DS ) RESULT( TCRS )
+  FUNCTION MR_FUNC_DS_FDRD_KIND( D0 ) RESULT( DS )
 
     IMPLICIT NONE
 
-    REAL(FDRD_KIND) , INTENT(IN ) :: D0 , DS
+    REAL(FDRD_KIND) , INTENT(IN ) :: D0
 
-    REAL(FDRD_KIND) :: TCRS
+    REAL(FDRD_KIND) :: DS
 
-    TCRS = RBT / FR * (SS-1.0) * (D0/ZR) *   &
-    ( 0.130 *           EXP( -0.015 * DS * DS ) / (DS**0.392)   &
-    + 0.045 * ( 1.000 - EXP( -0.068 *   DS    )               )   &
-    )
+    DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0_PARD_KIND/3.0_PARD_KIND)
 
-  END FUNCTION MR_FUNC_TCRS_FDRD_KIND
+  END FUNCTION MR_FUNC_DS_FDRD_KIND
 
-  END MODULE MR_MOD_FUNC_TCRS
+  END MODULE MR_MOD_FUNC_DS

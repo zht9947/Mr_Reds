@@ -250,15 +250,15 @@
     REAL(FDRD_KIND) :: BS
 
     REAL(FDRD_KIND) :: RESHEARS
-    REAL(FDRD_KIND) :: TMP1 , TMP2
+    REAL(FDRD_KIND) :: CTMP1 , CTMP2
 
     RESHEARS = MAX( RET * HDS * SQRT( TBFUV_MOD ) , 1.0 )
 
-    TMP1 = LOG( RESHEARS )
-    TMP2 = TMP1**2.55
+    CTMP1 = LOG( RESHEARS )
+    CTMP2 = CTMP1**2.55
 
-    BS =          8.5         * ( 1.0 - EXP( -0.0594 * TMP2 ) )   &
-    &  + ( TMP1 / KAR + 5.5 ) *         EXP( -0.0705 * TMP2 )
+    BS =           8.5         * ( 1.0 - EXP( -0.0594 * CTMP2 ) )   &
+    &  + ( CTMP1 / KAR + 5.5 ) *         EXP( -0.0705 * CTMP2 )
 
   END FUNCTION MR_FUNC_BS
 

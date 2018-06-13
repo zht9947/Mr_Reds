@@ -61,8 +61,7 @@
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\__POST_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS_EXTEND.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\MR_MOD_INIT_GRID_SYS_EXTEND.f90"/></Filter>
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_NI_NJ.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_RW_EXTEND.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_EXTEND.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_REDS_EXTEND.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

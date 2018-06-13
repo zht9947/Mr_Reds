@@ -72,8 +72,8 @@
     WRITE(*,'(4X,"<ABSTRACT> ", A )') TRIM(PRJ_ABSTRACT)
 
     WRITE(*,'( )')
-    WRITE(*,'(4X,"     GRID ",I5," x ",I5," x ",I5)') NI , NJ , NK
-    WRITE(*,'(4X,"       GRAIN SIZE ",F13.5," mm")') D0*1000.0
+    WRITE(*,'(4X,"    NUMBER OF LAYERS ",I09)') NK
+    WRITE(*,'(4X,"       GRAIN SIZE ",F12.5," mm")') D0*1000.0
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
@@ -93,13 +93,13 @@
     WRITE(*,'(4X,"                                 Sediment porosity                  : ", F16.6       )') PS
     WRITE(*,'(4X,"  ----Physical Constants----")')
     WRITE(*,'(4X,"                               Von Karman constant                  : ", F16.6       )') KAR
-    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",EN20.6       )') COR
+    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",ES20.6       )') COR
     WRITE(*,'(4X,"                        Gravitational acceleration [m/s^2]          : ", F16.6       )') GR
     WRITE(*,'(4X,"  ----Reference Parameters----")')
     WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ", F16.6       )') XYR
     WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ", F16.6       )') ZR
     WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ", F16.6       )') UVR
-    WRITE(*,'(4X,"                Reference eddy kinematic viscosity [m^2/s]          : ",EN20.6       )') VZR
+    WRITE(*,'(4X,"                Reference eddy kinematic viscosity [m^2/s]          : ",ES20.6       )') VZR
     WRITE(*,'(4X,"          Reference water-sediment mixture density [kg/m^3]         : ", F16.6,"E+03")') RR/1.0E+03
 
     WRITE(*,'( )')

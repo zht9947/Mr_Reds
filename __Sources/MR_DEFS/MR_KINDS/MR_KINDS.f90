@@ -29,7 +29,7 @@
 !                       TMRD_KIND    :    KIND OF TIME
 !                       PARD_KIND    :    KIND OF CONSTANTS AND REFERENCE PARAMETERS
 !                       XYRD_KIND    :    KIND OF COORDINATES
-!                       GJRD_KIND    :    KIND OF CURVED GEOMETRIES
+!                       GJRD_KIND    :    KIND OF CURVED GEOMETRY
 !                       FDRD_KIND    :    KIND OF FIELD VARIABLES
 !
 !                                      \\ ABOVE ARE FOR REAL DATA

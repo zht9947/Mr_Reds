@@ -86,7 +86,7 @@
 
     CALL MR_INIT_COORS( TRIM(FILE_XMDF_NAME) , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when initializing curved geometries"
+      ERRMSG = TRIM(ERRMSG)//" when initializing curved geometry"
     ELSE
 
       DO DIM = 1 , 2

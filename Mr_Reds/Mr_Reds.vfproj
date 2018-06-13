@@ -61,9 +61,10 @@
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/></Filter>
-		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_CREATE_OPEN_N_CLOSE_FILE_DEFAULT.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT.f90"/></Filter>
 		<Filter Name="MR_MOD_FUNCS">
 		<Filter Name="MR_MOD_FUNC_PARS">
+		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_PARS\MR_MOD_FUNC_DS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_PARS\MR_MOD_FUNC_TCRS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_H.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_TBUV.f90"/>
@@ -93,7 +94,8 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_FIELD_VARS_N_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_OUTPUT.f90"/>
-		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_PRJ.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_RANKS.f90"/></Filter>
 		<Filter Name="MR_MOD_UPDTS">
 		<Filter Name="MR_MOD_CALC_EQKD">
 		<Filter Name="MR_MOD_CALC_EQD">
@@ -124,6 +126,7 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_VZWW.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_DETER_START_MODE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_ECHO_PRJ.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INPUT.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_OUTPUT.f90"/></Filter>
 		<File RelativePath="..\__Sources\MAIN.f90"/>

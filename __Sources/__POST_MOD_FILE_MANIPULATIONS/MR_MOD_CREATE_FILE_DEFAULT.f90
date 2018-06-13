@@ -5,7 +5,7 @@
 !
 ! PURPOSE:
 !
-!   TO
+!
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -15,20 +15,18 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_INIT_OUTPUT_AVERAGE
+  MODULE MR_MOD_CREATE_FILE_DEFAULT
 
     USE MR_KINDS
-
-    USE MR_DEF_CONSTS_N_REF_PARS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_INIT_OUTPUT_AVERAGE
+    PUBLIC :: MR_CREATE_FILE_DEFAULT
 
 !***********************************************************************************************************************************
 
@@ -41,7 +39,7 @@
 !
 ! PURPOSE:
 !
-!   TO
+!
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -51,38 +49,46 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE_NAME , ERROR , ERRMSG )
-
-    USE MR_MOD_CREATE_FILE_DEFAULT
-    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
+  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , FILE_ID , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_AVERAGE_NAME
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
 
-    INTEGER                          :: FILE_AVERAGE_ID , MULTI_DSETS_ID
+    INTEGER            , INTENT(OUT) :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    CALL MR_CREATE_FILE_DEFAULT( FILE_AVERAGE_NAME , FILE_AVERAGE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
+    LOGICAL                          :: BE_OPENED
 
-    WRITE( FILE_AVERAGE_ID , '("Rho (kg/m^3)",/,ES13.6)' ) R0
-    WRITE( FILE_AVERAGE_ID , '("g (m/s^2)",/,ES13.6)' ) GR
+    INTEGER                          :: IQID
 
-    CALL MR_CLOSE_FILE_DEFAULT( FILE_AVERAGE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
+    ERRMSG = ""
+    CALL SYSTEM_CLOCK( FILE_ID )
+    DO IQID = 1 , HUGE(FILE_ID)
+      INQUIRE( FILE_ID , OPENED=BE_OPENED )
+      IF( BE_OPENED ) THEN
+        FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
+      ELSE
+        OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='WRITE' , IOSTAT=ERROR )
+        IF( ERROR > 0 ) THEN
+          ERROR = - ERROR
+          ERRMSG = "Error in creating file"
+          RETURN
+        END IF
 
-  END SUBROUTINE MR_INIT_OUTPUT_AVERAGE
+        RETURN
 
-  END MODULE MR_MOD_INIT_OUTPUT_AVERAGE
+      END IF
+
+    END DO
+
+    ERROR = -1 ; ERRMSG = "No available unit assigned for file"
+
+  END SUBROUTINE MR_CREATE_FILE_DEFAULT
+
+  END MODULE MR_MOD_CREATE_FILE_DEFAULT
