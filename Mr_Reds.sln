@@ -13,6 +13,8 @@ Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Extend", "Mr_Reds_E
 EndProject
 Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Mr_Reds_Scale", "Mr_Reds_Scale\Mr_Reds_Scale.vfproj", "{E0A9AAD2-8D68-4734-8329-A2EF74D9F476}"
 EndProject
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "SGMeshGen", "SGMeshGen\SGMeshGen.vfproj", "{6BDBDB23-DE13-4A98-8D56-725EBB36F4F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Win32 = Debug|Win32
@@ -39,6 +41,10 @@ Global
 		{E0A9AAD2-8D68-4734-8329-A2EF74D9F476}.Debug|Win32.Build.0 = Debug|Win32
 		{E0A9AAD2-8D68-4734-8329-A2EF74D9F476}.Release|Win32.ActiveCfg = Release|Win32
 		{E0A9AAD2-8D68-4734-8329-A2EF74D9F476}.Release|Win32.Build.0 = Release|Win32
+		{6BDBDB23-DE13-4A98-8D56-725EBB36F4F5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{6BDBDB23-DE13-4A98-8D56-725EBB36F4F5}.Debug|Win32.Build.0 = Debug|Win32
+		{6BDBDB23-DE13-4A98-8D56-725EBB36F4F5}.Release|Win32.ActiveCfg = Release|Win32
+		{6BDBDB23-DE13-4A98-8D56-725EBB36F4F5}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

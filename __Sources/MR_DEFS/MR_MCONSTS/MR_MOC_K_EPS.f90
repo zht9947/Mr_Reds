@@ -18,7 +18,7 @@
 !   2015-03-24    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MCS_K_EPS
+  MODULE MR_MOC_K_EPS
 
     USE MR_KINDS
 
@@ -32,4 +32,4 @@
     REAL   (PARD_KIND) , PARAMETER :: SIK = 1.00
     REAL   (PARD_KIND) , PARAMETER :: SID = 1.30
 
-  END MODULE MR_MCS_K_EPS
+  END MODULE MR_MOC_K_EPS

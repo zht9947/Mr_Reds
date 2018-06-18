@@ -56,7 +56,7 @@
    !BLOCK
   ! GET THE SOURCE AND TARGET FILES' PATH\NAMES
   ! AS WELL AS RUNNING ARGUMENTS FROM COMMAND LINE
-    CALL MR_INIT_FILES( ERROR , ERRMSG )
+    CALL MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
@@ -148,7 +148,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FILES( ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -163,7 +163,7 @@
 
     IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
       ERROR = - 1
-      ERRMSG = "Not enough command arguments as input & output files"
+      ERRMSG = "Not enough command arguments"
       RETURN
     END IF
 
@@ -241,6 +241,6 @@
       END IF
     END IF
 
-  END SUBROUTINE MR_INIT_FILES
+  END SUBROUTINE MR_INIT_COMMAND_LINE
 
   END PROGRAM MR_REDS_RESAMPLE

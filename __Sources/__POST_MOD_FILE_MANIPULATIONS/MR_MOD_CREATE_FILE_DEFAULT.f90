@@ -20,7 +20,7 @@
 !***********************************************************************************************************************************
   MODULE MR_MOD_CREATE_FILE_DEFAULT
 
-    USE MR_KINDS
+    USE MR_ERRORS
 
     IMPLICIT NONE
 
@@ -52,13 +52,16 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , FILE_ID , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , FILE_STATUS , ERROR , ERRMSG )
+
+    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_STATUS
 
-    INTEGER            , INTENT(OUT) :: FILE_ID
+    INTEGER                          :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -74,10 +77,25 @@
       IF( BE_OPENED ) THEN
         FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
       ELSE
-        OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='WRITE' , IOSTAT=ERROR )
-        IF( ERROR > 0 ) THEN
-          ERROR = - ERROR
-          ERRMSG = "Error in creating file"
+        SELECT CASE( TRIM(FILE_STATUS) )
+        CASE( "OVERWRITE" , "OverWrite" , "Overwrite" , "OVER" , "Over" , "O" , "overwrite", "o" )
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='WRITE' , IOSTAT=ERROR )
+          IF( ERROR > 0 ) THEN
+            ERROR = - ERROR
+            ERRMSG = "Error in creating file"
+            RETURN
+          END IF
+        CASE DEFAULT
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='NEW' , ACTION='WRITE' , IOSTAT=ERROR )
+          IF( ERROR > 0 ) THEN
+            ERROR = ERROR_CREATING_NEW_FILE
+            ERRMSG = "Error in creating file"
+            RETURN
+          END IF
+        END SELECT
+
+        CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
           RETURN
         END IF
 
@@ -87,7 +105,8 @@
 
     END DO
 
-    ERROR = -1 ; ERRMSG = "No available unit assigned for file"
+    ERROR = - 1
+    ERRMSG = "No available unit assigned for file"
 
   END SUBROUTINE MR_CREATE_FILE_DEFAULT
 

@@ -154,7 +154,7 @@ MODULE XMDFERRORDEFINITIONS
 
   INTEGER,PARAMETER :: ERROR_OTHER                       =-9901
 
-    ! Guid names and lengths
+  ! Guid names and lengths
   CHARACTER(2**05),PARAMETER :: XF_GUID                  ='Guid'
   INTEGER,PARAMETER :: XF_GUID_STRINGLENGTH              = 37
 
@@ -176,7 +176,7 @@ MODULE XMDFDEFS
 
   !/ XMDF version number
   !/ Single precision float
-  REAL*4, PARAMETER :: XMDF_VERSION = 1.20
+  REAL*4, PARAMETER :: XMDF_VERSION = 2.20
   CHARACTER(2**05),PARAMETER :: FILE_VERSION='File Version'
 
   INTEGER, PARAMETER :: NULL =  0

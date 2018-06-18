@@ -118,7 +118,7 @@
 ! !BLOCK
 !! GET PATH\NAMES OF INPUT FILES FROM COMMAND LINE
 !! AND MEANWHILE SET PATH\NAMES OF OUTPUT FILES
-!  CALL MR_INIT_FILES( ERROR , ERRMSG )
+!  CALL MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 !  IF( ERROR < 0 ) THEN
 !    WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
 !    STOP
@@ -647,7 +647,7 @@
 !
 !contains
 !
-!  subroutine mr_init_files( error , errmsg )
+!  subroutine MR_INIT_COMMAND_LINE( error , errmsg )
 !
 !    implicit none
 !
@@ -682,6 +682,6 @@
 !      return
 !    end if
 !
-!  end subroutine mr_init_files
+!  end subroutine MR_INIT_COMMAND_LINE
 !
 !end program main

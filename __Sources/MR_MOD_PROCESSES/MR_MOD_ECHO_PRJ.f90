@@ -62,7 +62,7 @@
 
     IMPLICIT NONE
 
-    CHARACTER( LEN=1 ) :: PRJ_SETS_CORRECT_Y_OR_N
+    CHARACTER( 1 ) :: PRJ_SETS_CORRECT_Y_OR_N
 
     WRITE(*,'( )')
     WRITE(*,'(2X,"Please check the project settings below:")')
@@ -107,18 +107,6 @@
     WRITE(*,'(4X,"    Please confirm that the slope")')
     WRITE(*,'(4X,"    be along the centerline!")')
     WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
-
-    WRITE(*,'( )')
-    DO
-      WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
-      READ(*,*) PRJ_SETS_CORRECT_Y_OR_N
-      SELECT CASE( PRJ_SETS_CORRECT_Y_OR_N )
-      CASE( "Y" , "y" )
-        RETURN
-      CASE( "N" , "n" )
-        STOP
-      END SELECT
-    END DO
 
   END SUBROUTINE MR_ECHO_PRJ
 

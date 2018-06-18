@@ -18,17 +18,13 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_DETER_START_MODE
-
-    USE MR_KINDS
-
-    USE MR_NUM_START_MODE
+  MODULE MR_MOD_CTRL_RETRY_CREATING_FILES
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_DETER_START_MODE
+    PUBLIC :: MR_CTRL_RETRY_CREATING_FILES
 
 !***********************************************************************************************************************************
 
@@ -54,26 +50,23 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_DETER_START_MODE
+  SUBROUTINE MR_CTRL_RETRY_CREATING_FILES
 
     IMPLICIT NONE
 
-    INTEGER :: ERROR
+    CHARACTER( 1 ) :: Y_OR_N
 
-    WRITE(*,'( )')
-    WRITE(*,'("Which start mode would be preferred? ")')
-    WRITE(*,'("    1. Cold mode; 2. Hot mode ")')
     DO
-      WRITE(*,'("  Select No. ", $ )')
-      READ(*,*,IOSTAT=ERROR) START_MODE
-      IF( ERROR == 0 ) THEN
-        SELECT CASE( START_MODE )
-        CASE( COLD_MODE , HOT_MODE )
-          RETURN
-        END SELECT
-      END IF
+      WRITE(*,'("Retry creating files by deleting the old ones? (Y/N): ", $ )')
+      READ(*,*) Y_OR_N
+      SELECT CASE( Y_OR_N )
+      CASE( "Y" , "y" )
+        RETURN
+      CASE( "N" , "n" )
+        STOP
+      END SELECT
     END DO
 
-  END SUBROUTINE MR_DETER_START_MODE
+  END SUBROUTINE MR_CTRL_RETRY_CREATING_FILES
 
-  END MODULE MR_MOD_DETER_START_MODE
+  END MODULE MR_MOD_CTRL_RETRY_CREATING_FILES

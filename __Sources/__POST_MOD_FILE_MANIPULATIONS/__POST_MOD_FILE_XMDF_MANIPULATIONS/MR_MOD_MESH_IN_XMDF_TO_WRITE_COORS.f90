@@ -19,7 +19,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_READ_COORS
+  MODULE MR_MOD_WRITE_COORS
 
     USE XMDF
 
@@ -31,7 +31,7 @@
 
     PRIVATE
 
-    PUBLIC :: MR_READ_XY
+    PUBLIC :: MR_WRITE_XY
 
 !***********************************************************************************************************************************
 
@@ -57,7 +57,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_XY( MESH_IN_XMDF_ID , NND , NI , NJ , XYUV , XYUU , XYVV , XYOO , ERROR , ERRMSG )
+  SUBROUTINE MR_WRITE_XY( MESH_IN_XMDF_ID , NND , NI , NJ , XYUV , XYUU , XYVV , XYOO , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -66,37 +66,51 @@
     INTEGER(NDID_KIND) , INTENT(IN ) :: NND
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    REAL   (XYRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,XYRD_KIND),1:NJ,1:2) :: XYUV
-    REAL   (XYRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(NI,XYRD_KIND),1:NJ,1:2) :: XYUU
-    REAL   (XYRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,XYRD_KIND),0:NJ,1:2) :: XYVV
-    REAL   (XYRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(NI,XYRD_KIND),0:NJ,1:2) :: XYOO
+    REAL   (XYRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,XYRD_KIND),1:NJ,1:2) :: XYUV
+    REAL   (XYRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(NI,XYRD_KIND),1:NJ,1:2) :: XYUU
+    REAL   (XYRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,XYRD_KIND),0:NJ,1:2) :: XYVV
+    REAL   (XYRD_KIND) , INTENT(IN ) , DIMENSION(0:NI0(NI,XYRD_KIND),0:NJ,1:2) :: XYOO
 
-    REAL   (8)         , DIMENSION(1:2,1:NND) :: XY_ARRAY
+    REAL   (8)         , DIMENSION(1:3,1:NND) :: XY_ARRAY
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
+   !DIR$ FORCEINLINE
+    CALL MR_WRITE_XY_PACK_FOR_W_NODES
+   !DIR$ FORCEINLINE
+    CALL MR_WRITE_XY_PACK_FOR_U_NODES
+   !DIR$ FORCEINLINE
+    CALL MR_WRITE_XY_PACK_FOR_V_NODES
+   !DIR$ FORCEINLINE
+    CALL MR_WRITE_XY_PACK_FOR_O_NODES
+   !END$ FORCEINLINE
+
     ERRMSG = ""
-    CALL XF_READ_X_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 1 ,1:NND) , ERROR )
+
+    CALL XF_SET_NUMBER_OF_NODES( MESH_IN_XMDF_ID , NND , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in reading X coordinates of all node from mesh"
-      RETURN
-    END IF
-    CALL XF_READ_Y_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 2 ,1:NND) , ERROR )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in reading Y coordinates of all node from mesh"
+      ERRMSG = "Error in setting number of nodes in mesh"
       RETURN
     END IF
 
-   !DIR$ FORCEINLINE
-    CALL MR_READ_XY_UNPACK_FOR_W_NODES
-   !DIR$ FORCEINLINE
-    CALL MR_READ_XY_UNPACK_FOR_U_NODES
-   !DIR$ FORCEINLINE
-    CALL MR_READ_XY_UNPACK_FOR_V_NODES
-   !DIR$ FORCEINLINE
-    CALL MR_READ_XY_UNPACK_FOR_O_NODES
-   !END$ FORCEINLINE
+    CALL XF_WRITE_X_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 1 ,1:NND) , NONE , ERROR )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = "Error in writing X coordinates of all nodes to mesh"
+      RETURN
+    END IF
+    CALL XF_WRITE_Y_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 2 ,1:NND) , ERROR )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = "Error in writing Y coordinates of all nodes to mesh"
+      RETURN
+    END IF
+
+    XY_ARRAY( 3 ,1:NND) = 0.0
+    CALL XF_WRITE_Z_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 3 ,1:NND) , ERROR )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = "Error in writing Z coordinates of all nodes to mesh"
+      RETURN
+    END IF
 
 !***********************************************************************************************************************************
 
@@ -122,25 +136,25 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_XY_UNPACK_FOR_W_NODES
+  SUBROUTINE MR_WRITE_XY_PACK_FOR_W_NODES
 
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
-
+ 
     DO DIM = 1 , 2
 
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
-          XYUV( I , J ,DIM) = XY_ARRAY(DIM, NDIDW( I , J ) )
+          XY_ARRAY(DIM, NDIDW( I , J ) ) = XYUV( I , J ,DIM)
         END DO
       END DO
 
     END DO
 
-  END SUBROUTINE MR_READ_XY_UNPACK_FOR_W_NODES
+  END SUBROUTINE MR_WRITE_XY_PACK_FOR_W_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -162,7 +176,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_XY_UNPACK_FOR_U_NODES
+  SUBROUTINE MR_WRITE_XY_PACK_FOR_U_NODES
 
     IMPLICIT NONE
 
@@ -174,13 +188,13 @@
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
-          XYUU( I , J ,DIM) = XY_ARRAY(DIM, NDIDU( I , J ) )
+          XY_ARRAY(DIM, NDIDU( I , J ) ) = XYUU( I , J ,DIM)
         END DO
       END DO
 
     END DO
 
-  END SUBROUTINE MR_READ_XY_UNPACK_FOR_U_NODES
+  END SUBROUTINE MR_WRITE_XY_PACK_FOR_U_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -202,7 +216,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_XY_UNPACK_FOR_V_NODES
+  SUBROUTINE MR_WRITE_XY_PACK_FOR_V_NODES
 
     IMPLICIT NONE
 
@@ -214,13 +228,13 @@
       DO J = 0 , NJ
        !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 1 , NI
-          XYVV( I , J ,DIM) = XY_ARRAY(DIM, NDIDV( I , J ) )
+          XY_ARRAY(DIM, NDIDV( I , J ) ) = XYVV( I , J ,DIM)
         END DO
       END DO
 
     END DO
 
-  END SUBROUTINE MR_READ_XY_UNPACK_FOR_V_NODES
+  END SUBROUTINE MR_WRITE_XY_PACK_FOR_V_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -242,7 +256,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_XY_UNPACK_FOR_O_NODES
+  SUBROUTINE MR_WRITE_XY_PACK_FOR_O_NODES
 
     IMPLICIT NONE
 
@@ -254,14 +268,14 @@
       DO J = 0 , NJ
        !DIR$ VECTOR ALIGNED, ALWAYS
         DO I = 0 , NI
-          XYOO( I , J ,DIM) = XY_ARRAY(DIM, NDIDO( I , J ) )
+          XY_ARRAY(DIM, NDIDO( I , J ) ) = XYOO( I , J ,DIM)
         END DO
       END DO
 
     END DO
 
-  END SUBROUTINE MR_READ_XY_UNPACK_FOR_O_NODES
+  END SUBROUTINE MR_WRITE_XY_PACK_FOR_O_NODES
 
-  END SUBROUTINE MR_READ_XY
+  END SUBROUTINE MR_WRITE_XY
 
-  END MODULE MR_MOD_READ_COORS
+  END MODULE MR_MOD_WRITE_COORS

@@ -1,29 +1,30 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_DEF_SLOPE
+!  (MODULE) MR_DEF_RANKS_EXTEND
 !
 ! PURPOSE:
 !
-!   TO DEFINE THE SLOPE PARAMETER MEASURED ALONG THE CHANNEL CENTERLINE.
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
-!                           SLOPE    :    SLOPE ALONG THE CHANNEL CENTERLINE
+!
 !
 ! RECORD OF REVISIONS:
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-24    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-03-21    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_DEF_SLOPE
+  MODULE MR_DEF_RANKS_EXTEND
 
     USE MR_KINDS
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) :: SLOPE
+    INTEGER(NDID_KIND) :: NND2
+    INTEGER(EMID_KIND) :: NEM2
 
-  END MODULE MR_DEF_SLOPE
+  END MODULE MR_DEF_RANKS_EXTEND

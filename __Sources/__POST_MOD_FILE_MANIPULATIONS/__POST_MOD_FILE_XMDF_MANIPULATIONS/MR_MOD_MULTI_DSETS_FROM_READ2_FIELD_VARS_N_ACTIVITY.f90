@@ -19,7 +19,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_GEN_READ_FIELD_VARS_N_ACTIVITY
+  MODULE MR_MOD_READ2_FIELD_VARS_N_ACTIVITY
 
     USE XMDF
 
@@ -29,8 +29,8 @@
 
     PRIVATE
 
-    PUBLIC :: MR_GEN_READ_UV
-    PUBLIC :: MR_GEN_READ_SS
+    PUBLIC :: MR_READ2_UV
+    PUBLIC :: MR_READ2_SS
 
 !***********************************************************************************************************************************
 
@@ -56,7 +56,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GEN_READ_ACTIVITY( DSET_ACTIVITY_ID , ITS , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+  SUBROUTINE MR_READ2_ACTIVITY( DSET_ACTIVITY_ID , ITS , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -83,7 +83,7 @@
     END IF
 
    !DIR$ FORCEINLINE
-    CALL MR_READ_ACTIVITY_UNPACK_FOR_ELEMS
+    CALL MR_READ2_ACTIVITY_UNPACK_FOR_ELEMS
    !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
@@ -110,7 +110,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_ACTIVITY_UNPACK_FOR_ELEMS
+  SUBROUTINE MR_READ2_ACTIVITY_UNPACK_FOR_ELEMS
 
     IMPLICIT NONE
 
@@ -123,9 +123,9 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_READ_ACTIVITY_UNPACK_FOR_ELEMS
+  END SUBROUTINE MR_READ2_ACTIVITY_UNPACK_FOR_ELEMS
 
-  END SUBROUTINE MR_GEN_READ_ACTIVITY
+  END SUBROUTINE MR_READ2_ACTIVITY
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -147,7 +147,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GEN_READ_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , ITS ,   &
+  SUBROUTINE MR_READ2_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , ITS ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , UV , UU , VV , UVO ,   &
   & ACTIVITY , ERROR , ERRMSG )
 
@@ -197,7 +197,7 @@
       ELSE
 
         IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_GEN_READ_ACTIVITY( DSET_UV_ID , ITS , NEM , NI , NJ , EMIDW ,  ACTIVITY , ERROR , ERRMSG )
+          CALL MR_READ2_ACTIVITY( DSET_UV_ID , ITS , NEM , NI , NJ , EMIDW ,  ACTIVITY , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
             ERRMSG = TRIM(ERRMSG)//" from vector dataset group"
           END IF
@@ -218,13 +218,13 @@
     END IF
 
    !DIR$ FORCEINLINE
-    CALL MR_READ_UV_UNPACK_FOR_W_NODES
+    CALL MR_READ2_UV_UNPACK_FOR_W_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_UV_UNPACK_FOR_U_NODES
+    CALL MR_READ2_UV_UNPACK_FOR_U_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_UV_UNPACK_FOR_V_NODES
+    CALL MR_READ2_UV_UNPACK_FOR_V_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_UV_UNPACK_FOR_O_NODES
+    CALL MR_READ2_UV_UNPACK_FOR_O_NODES
    !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
@@ -251,7 +251,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_UV_UNPACK_FOR_W_NODES
+  SUBROUTINE MR_READ2_UV_UNPACK_FOR_W_NODES
 
     IMPLICIT NONE
 
@@ -269,7 +269,7 @@
 
     END DO
 
-  END SUBROUTINE MR_READ_UV_UNPACK_FOR_W_NODES
+  END SUBROUTINE MR_READ2_UV_UNPACK_FOR_W_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -291,7 +291,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_UV_UNPACK_FOR_U_NODES
+  SUBROUTINE MR_READ2_UV_UNPACK_FOR_U_NODES
 
     IMPLICIT NONE
 
@@ -309,7 +309,7 @@
 
     END DO
 
-  END SUBROUTINE MR_READ_UV_UNPACK_FOR_U_NODES
+  END SUBROUTINE MR_READ2_UV_UNPACK_FOR_U_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -331,7 +331,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_UV_UNPACK_FOR_V_NODES
+  SUBROUTINE MR_READ2_UV_UNPACK_FOR_V_NODES
 
     IMPLICIT NONE
 
@@ -349,7 +349,7 @@
 
     END DO
 
-  END SUBROUTINE MR_READ_UV_UNPACK_FOR_V_NODES
+  END SUBROUTINE MR_READ2_UV_UNPACK_FOR_V_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -371,7 +371,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_UV_UNPACK_FOR_O_NODES
+  SUBROUTINE MR_READ2_UV_UNPACK_FOR_O_NODES
 
     IMPLICIT NONE
 
@@ -389,9 +389,9 @@
 
     END DO
 
-  END SUBROUTINE MR_READ_UV_UNPACK_FOR_O_NODES
+  END SUBROUTINE MR_READ2_UV_UNPACK_FOR_O_NODES
 
-  END SUBROUTINE MR_GEN_READ_UV
+  END SUBROUTINE MR_READ2_UV
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -413,7 +413,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GEN_READ_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , ITS ,   &
+  SUBROUTINE MR_READ2_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , ITS ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , SS , SU , SV , SO ,   &
   & ACTIVITY , ERROR , ERRMSG )
 
@@ -463,7 +463,7 @@
       ELSE
 
         IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_GEN_READ_ACTIVITY( DSET_SS_ID , ITS , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+          CALL MR_READ2_ACTIVITY( DSET_SS_ID , ITS , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
             ERRMSG = TRIM(ERRMSG)//" from scalar dataset group"
           END IF
@@ -484,13 +484,13 @@
     END IF
 
    !DIR$ FORCEINLINE
-    CALL MR_READ_SS_UNPACK_FOR_W_NODES
+    CALL MR_READ2_SS_UNPACK_FOR_W_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_SS_UNPACK_FOR_U_NODES
+    CALL MR_READ2_SS_UNPACK_FOR_U_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_SS_UNPACK_FOR_V_NODES
+    CALL MR_READ2_SS_UNPACK_FOR_V_NODES
    !DIR$ FORCEINLINE
-    CALL MR_READ_SS_UNPACK_FOR_O_NODES
+    CALL MR_READ2_SS_UNPACK_FOR_O_NODES
    !END$ FORCEINLINE
 
 !***********************************************************************************************************************************
@@ -517,7 +517,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_SS_UNPACK_FOR_W_NODES
+  SUBROUTINE MR_READ2_SS_UNPACK_FOR_W_NODES
 
     IMPLICIT NONE
 
@@ -530,7 +530,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_READ_SS_UNPACK_FOR_W_NODES
+  END SUBROUTINE MR_READ2_SS_UNPACK_FOR_W_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -552,7 +552,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_SS_UNPACK_FOR_U_NODES
+  SUBROUTINE MR_READ2_SS_UNPACK_FOR_U_NODES
 
     IMPLICIT NONE
 
@@ -565,7 +565,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_READ_SS_UNPACK_FOR_U_NODES
+  END SUBROUTINE MR_READ2_SS_UNPACK_FOR_U_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -587,7 +587,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_SS_UNPACK_FOR_V_NODES
+  SUBROUTINE MR_READ2_SS_UNPACK_FOR_V_NODES
 
     IMPLICIT NONE
 
@@ -600,7 +600,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_READ_SS_UNPACK_FOR_V_NODES
+  END SUBROUTINE MR_READ2_SS_UNPACK_FOR_V_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -622,7 +622,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_READ_SS_UNPACK_FOR_O_NODES
+  SUBROUTINE MR_READ2_SS_UNPACK_FOR_O_NODES
 
     IMPLICIT NONE
 
@@ -635,8 +635,8 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_READ_SS_UNPACK_FOR_O_NODES
+  END SUBROUTINE MR_READ2_SS_UNPACK_FOR_O_NODES
 
-  END SUBROUTINE MR_GEN_READ_SS
+  END SUBROUTINE MR_READ2_SS
 
-  END MODULE MR_MOD_GEN_READ_FIELD_VARS_N_ACTIVITY
+  END MODULE MR_MOD_READ2_FIELD_VARS_N_ACTIVITY

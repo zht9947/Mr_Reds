@@ -27,8 +27,8 @@
     USE MR_DEF_CONSTS_N_REF_PARS
 
     USE MR_MOD_INIT_PRJ
-
     USE MR_MOD_ECHO_PRJ
+    USE MR_MOD_CTRL_PRJ_SETS_CORRECT
 
     USE MR_NUM_START_MODE
     USE MR_MOD_DETER_START_MODE
@@ -69,18 +69,23 @@
 
    !BLOCK
   ! MANAGE THE VERSION
-    WRITE(*,'( A ," by ", A ," [ver.", A ,"]",/)') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
+    WRITE(*,'( A ," by ", A ," [ver.", A ,"]")') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
    !END BLOCK
 
-   !BLOCK
-  ! GET PROJECT FILE'S AND MESH XMDF FILE'S 
-  ! PATH\NAMES FROM COMMAND LINE
-    CALL MR_INIT_FILES( ERROR , ERRMSG )
+  ! GET COMMAND ARGUMENTS FROM COMMAND LINE
+    CALL MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(/,"PLEASE RUN ", A ," with the following command arguments:")') TRIM(INNERNAME)
+      WRITE(*,'(  "  1- (non-optional)")')
+      WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
+      WRITE(*,'(  "  2- (non-optional)")')
+      WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
+      WRITE(*,'(  "  ALL the arguments must be given in sequence.")')
       STOP
     END IF
-   !END BLOCK
+
+    WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
     CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
@@ -91,6 +96,12 @@
     WRITE(*,'("Done! ")')
 
     CALL MR_ECHO_PRJ
+
+    WRITE(*,'( )')
+
+    CALL MR_CTRL_PRJ_SETS_CORRECT
+
+    WRITE(*,'( )')
 
     CALL MR_DETER_START_MODE
 
@@ -214,43 +225,69 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FILES( ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
     IMPLICIT NONE
+
+    CHARACTER( 2**08 )               :: CHAR_ARGUMENT
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
 
+  ! HELP DETECT
+    IF( COMMAND_ARGUMENT_COUNT() == 1 ) THEN
+      CALL GET_COMMAND_ARGUMENT( 1 , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command arguments"
+        RETURN
+      ELSE
+        SELECT CASE( TRIM(CHAR_ARGUMENT) )
+        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        )
+          ERROR = - 999999
+          ERRMSG = "Help information is displayed as below"
+          RETURN
+        END SELECT
+      END IF
+    END IF
+
+  ! NUMBER OF COMMAND ARGUMENTS DETECT
     IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
-      ERROR = - 1
-      ERRMSG = "Not enough command arguments as input files"
+      ERROR = - 11
+      ERRMSG = "Not enough command arguments"
+      RETURN
+    ELSE IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
+      ERROR = - 12
+      ERRMSG = "Too many command arguments"
       RETURN
     END IF
 
   ! GET PROJECT FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( 1 , FILE_PRJ , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
-      ERRMSG = "PROJECT File's path too long"
+      ERRMSG = "Project file's path\name too long"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.1 as PROJECT File"
+      ERRMSG = "Error in getting command argument no.1 as project file"
       RETURN
     END IF
 
   ! GET XMDF FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( 2 , FILE_XMDF , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
-      ERRMSG = "XMDF File's path too long!"
+      ERRMSG = "Mesh file's path\name too long!"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.2 as XMDF File"
+      ERRMSG = "Error in getting command argument no.2 as mesh file"
       RETURN
     END IF
 
-  END SUBROUTINE MR_INIT_FILES
+  END SUBROUTINE MR_INIT_COMMAND_LINE
 
   END PROGRAM MR_REDS

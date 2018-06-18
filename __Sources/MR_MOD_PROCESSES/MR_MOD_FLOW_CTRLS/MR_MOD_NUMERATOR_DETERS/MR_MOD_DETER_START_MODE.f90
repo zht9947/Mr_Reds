@@ -1,4 +1,3 @@
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -19,23 +18,15 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_CALC_EQD_SRC_XYZ
+  MODULE MR_MOD_DETER_START_MODE
 
-    USE MR_KINDS
-
-    USE MR_DEF_CURVED_GEOS
-    USE MR_DEF_CONSTS_N_REF_PARS
-    USE MR_DEF_FIELD_VARS
-    USE MR_DEF_ACTIVITY
-    USE MR_DEF_TIMING
-
-    USE MR_MOC_K_EPS
+    USE MR_NUM_START_MODE
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_CALC_EQD_SRC_XYZ
+    PUBLIC :: MR_DETER_START_MODE
 
 !***********************************************************************************************************************************
 
@@ -58,31 +49,28 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_EQD_SRC_XYZ( NI , NJ , K , EQKD_PRO_XY_K , EQKD_PRO_Z_K , EQD_SRC_XYZ )
-
-    USE MR_MOD_OPERATOR_SS
+  SUBROUTINE MR_DETER_START_MODE
 
     IMPLICIT NONE
 
-    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
+    INTEGER :: ERROR
 
-    INTEGER(KKID_KIND) , INTENT(IN ) :: K
+    WRITE(*,'("Which start mode would be preferred? ")')
+    WRITE(*,'("    1. Cold mode; 2. Hot mode ")')
+    DO
+      WRITE(*,'("  Select No. ", $ )')
+      READ(*,*,IOSTAT=ERROR) START_MODE
+      IF( ERROR == 0 ) THEN
+        SELECT CASE( START_MODE )
+        CASE( COLD_MODE , HOT_MODE )
+          RETURN
+        END SELECT
+      END IF
+    END DO
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQKD_PRO_XY_K , EQKD_PRO_Z_K
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQD_SRC_XYZ
+  END SUBROUTINE MR_DETER_START_MODE
 
-    EQD_SRC_XYZ = + DT * RBT *   &
-    ( MW .MRSSSCL.   &
-      ( ( ( ( REAL( ( CD1 * ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - CD2 * DI(:,:, K ) ) , FDRD_KIND ) )   &
-              .MRSSMTP. DI(:,:, K )   &
-          ) .MRSSDIV. KI(:,:, K )   &
-        )   &
-      )   &
-    )
-
-  END SUBROUTINE MR_CALC_EQD_SRC_XYZ
-
-  END MODULE MR_MOD_CALC_EQD_SRC_XYZ
+  END MODULE MR_MOD_DETER_START_MODE

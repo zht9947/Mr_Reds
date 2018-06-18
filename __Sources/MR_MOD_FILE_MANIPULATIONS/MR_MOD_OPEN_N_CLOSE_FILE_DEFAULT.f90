@@ -76,7 +76,7 @@
       IF( BE_OPENED ) THEN
         FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
       ELSE
-        SELECT CASE( FILE_ACTION )
+        SELECT CASE( TRIM(FILE_ACTION) )
         CASE( "READ" , "R" , "Read" , "read", "r" )
           OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ'  , POSITION='REWIND' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
@@ -106,7 +106,8 @@
 
     END DO
 
-    ERROR = -1 ; ERRMSG = "No available unit assigned for file"
+    ERROR = - 1
+    ERRMSG = "No available unit assigned for file"
 
   END SUBROUTINE MR_OPEN_FILE_DEFAULT
 

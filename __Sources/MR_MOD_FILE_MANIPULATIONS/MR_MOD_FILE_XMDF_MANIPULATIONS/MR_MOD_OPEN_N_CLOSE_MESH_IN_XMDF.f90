@@ -31,7 +31,8 @@
     
     PUBLIC :: XF_PATH_MESH_IN_XMDF
 
-    CHARACTER( 2**06 ) , PARAMETER :: XF_PATH_MESH_IN_XMDF = "2DMeshModule/mesh"
+    CHARACTER( 2**06 ) , PARAMETER :: XF_PATH_MESH_IN_XMDF =   &
+    & "2DMeshModule/mesh"
 
 !***********************************************************************************************************************************
 

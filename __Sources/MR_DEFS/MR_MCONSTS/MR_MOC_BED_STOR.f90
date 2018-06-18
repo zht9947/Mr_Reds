@@ -1,15 +1,15 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_DEF_SLOPE
+!  (MODULE)
 !
 ! PURPOSE:
 !
-!   TO DEFINE THE SLOPE PARAMETER MEASURED ALONG THE CHANNEL CENTERLINE.
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
-!                           SLOPE    :    SLOPE ALONG THE CHANNEL CENTERLINE
+!
 !
 ! RECORD OF REVISIONS:
 !
@@ -18,12 +18,13 @@
 !   2015-03-24    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_DEF_SLOPE
+  MODULE MR_MOC_BED_STOR
 
     USE MR_KINDS
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) :: SLOPE
+    REAL   (PARD_KIND) , PARAMETER :: CBASESTOR = 0.01
+    REAL   (PARD_KIND) , PARAMETER :: CFACTSTOR = 3.00
 
-  END MODULE MR_DEF_SLOPE
+  END MODULE MR_MOC_BED_STOR

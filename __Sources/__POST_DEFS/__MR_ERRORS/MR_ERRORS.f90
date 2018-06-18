@@ -1,33 +1,27 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_DEF_GRID_SYS_EXTEND
+!  (MODULE) MR_ERRORS
 !
 ! PURPOSE:
 !
-!   TO 
+!   TO DEFINE THE ERROR PARAMETERS.
 !
 ! DEFINITION OF VARIABLES:
 !
-!
+!             ERROR_CREATING_FILE    :    ERROR IN CREATING A NEW FILE
 !
 ! RECORD OF REVISIONS:
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-27    |     DR. HYDE     |    ORIGINAL CODE.
+!   2015-03-20    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_DEF_GRID_SYS_EXTEND
-
-    USE MR_KINDS
+  MODULE MR_ERRORS
 
     IMPLICIT NONE
 
-    INTEGER(EMID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: EXTEND_EMIDW
+    INTEGER , PARAMETER :: ERROR_CREATING_NEW_FILE = -100001
 
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: EXTEND_NDIDW
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: EXTEND_NDIDU , EXTEND_NDIDV
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: EXTEND_NDIDO
-
-  END MODULE MR_DEF_GRID_SYS_EXTEND
+  END MODULE MR_ERRORS

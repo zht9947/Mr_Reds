@@ -11,7 +11,7 @@
 !
 !                             NND    :    NUMBER OF NODES
 !                             NEM    :    NUMBER OF ELEMENTS
-!                          NI, NJ    :    NUMBER OF COLUMNS & NUMBER OF ROWS
+!                          NI, NJ    :    NUMBER OF COLUMNS AND ROWS, RESPECTIVELY
 !                              NK    :    NUMBER OF LAYERS
 !                             NKS    :    NUMBER OF GRAIN SIZES
 !

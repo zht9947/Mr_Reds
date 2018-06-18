@@ -11,7 +11,7 @@
 !
 !                         T_UNITS    :    TIME UNITS
 !                     COMPRESSION    :    COMPRESSION OPTION FOR A DATASET REPRESENTED BY AN INTEGER
-!                                      \\ A VALUE OF -1 FOR THE COMPRESSION OPTION IS NO COMPRESSION.
+!                                      \\ A VALUE OF "NONE(-1)" FOR THE COMPRESSION OPTION IS NO COMPRESSION.
 !                                         A COMPRESSION OPTION BETWEEN 0 AND 9 INDICATES THE COMPRESSION LEVEL
 !                                           WHERE 0 IS THE MINIMUM COMPRESSION;
 !                                             AND 9 IS THE MAXIMUM COMPRESSION.
@@ -36,7 +36,7 @@
     PUBLIC :: MR_CREATE_DSET_SS
 
     CHARACTER( 2**05 ) , PARAMETER :: T_UNITS = TS_SECONDS
-    INTEGER            , PARAMETER :: COMPRESSION = -1   ! NO COMPRESSION
+    INTEGER            , PARAMETER :: COMPRESSION = NONE   ! NO COMPRESSION
 
 !***********************************************************************************************************************************
 

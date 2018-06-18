@@ -15,7 +15,7 @@
 !                           EMIDW    :    ELEMENT ID ARRAY
 !
 !                           NDIDW    :    CENTROID ID ARRAY
-!                    NDIDU, NDIDV    :    U- & V-FACIAL NODE ID ARRAYS
+!                    NDIDU, NDIDV    :    U- AND V-, RESPECTIVELY, FACIAL NODE ID ARRAYS
 !                           NDIDO    :    CORNER NODE ID ARRAY
 !
 ! RECORD OF REVISIONS:

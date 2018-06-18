@@ -22,7 +22,8 @@
 
     USE XMDF
 
-    USE MR_KINDS
+    USE MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF ,   &
+    ONLY : XF_PATH_MESH_IN_XMDF
 
     IMPLICIT NONE
 
@@ -33,7 +34,8 @@
 
     PUBLIC :: XF_PATH_MULTI_DSETS
 
-    CHARACTER( 2**06 ) , PARAMETER :: XF_PATH_MULTI_DSETS = "2DMeshModule/mesh/Datasets"
+    CHARACTER( 2**06 ) , PARAMETER :: XF_PATH_MULTI_DSETS =   &
+    & TRIM(XF_PATH_MESH_IN_XMDF)//"/"//TRIM(MULTI_DATASET_LOCATION)
 
 !***********************************************************************************************************************************
 

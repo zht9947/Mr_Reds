@@ -29,10 +29,13 @@
 		<File RelativePath="..\__Library\include\MR_H_PROGRAM_METADATA.h"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
+		<Filter Name="MR_ERRORS">
+		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS.f90"/>
 		<File RelativePath="..\__Sources\__POST_DEFS\MR_DEF_FIELD_VARS_AVERAGE.f90"/>
@@ -77,6 +80,9 @@
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_Z.f90"/></Filter>
 		<Filter Name="MR_MOD_PROCESSES">
+		<Filter Name="MR_MOD_FLOW_CTRLS">
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_CTRL_PRJ_SETS_CORRECT.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_FLOW_CTRLS\MR_MOD_CTRL_RETRY_CREATING_FILES.f90"/></Filter>
 		<Filter Name="MR_MOD_INITS">
 		<Filter Name="MR_MOD_MALLOCS">
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_ACTIVITY.f90"/>

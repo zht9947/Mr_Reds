@@ -22,8 +22,6 @@
 
     USE XMDF
 
-    USE MR_KINDS
-
     IMPLICIT NONE
 
     PRIVATE
@@ -68,8 +66,8 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    SELECT CASE( FILE_XMDF_ACTION )
-    CASE( "READ" , "R" , "Read" , "read", "r" )
+    SELECT CASE( TRIM(FILE_XMDF_ACTION) )
+    CASE( "READ" , "Read" , "R" , "read", "r" )
       CALL XF_OPEN_FILE( TRIM(FILE_XMDF_NAME) , .TRUE. , FILE_XMDF_ID , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in opening file"

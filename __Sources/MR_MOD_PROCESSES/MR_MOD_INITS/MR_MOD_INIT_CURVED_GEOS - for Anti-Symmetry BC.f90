@@ -25,6 +25,7 @@
 
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_COORS
     USE MR_DEF_CURVED_GEOS
 
     IMPLICIT NONE
@@ -32,11 +33,6 @@
     PRIVATE
 
     PUBLIC :: MR_INIT_CURVED_GEOS
-
-    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUV
-    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUU
-    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYVV
-    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYOO
 
 !***********************************************************************************************************************************
 
@@ -84,13 +80,14 @@
     ALLOCATE( XYUU(0:NI0(NI,XYRD_KIND),1:NJ,1:2) , XYVV(1:NI1(NI,XYRD_KIND),0:NJ,1:2) )
     ALLOCATE( XYOO(0:NI0(NI,XYRD_KIND),0:NJ,1:2) )
 
-    CALL MR_INIT_COORS( TRIM(FILE_XMDF_NAME) , ERROR , ERRMSG )
+    CALL MR_INIT_COORS( FILE_XMDF_NAME , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing curved geometry"
     ELSE
 
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JUV( I , J ,DIM,1) = XYUU( I , J ,DIM) - XYUU(I-1, J ,DIM)
           END DO
@@ -98,6 +95,7 @@
       END DO
       DO DIM = 1 , 2
         DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JUV( I , J ,DIM,2) = XYVV( I , J ,DIM) - XYVV( I ,J-1,DIM)
           END DO
@@ -124,6 +122,7 @@
             + ( XYUU( P , Q ,DIM) - XYUV( P , Q ,DIM) ) * FACTOR(DIM)   &
             )
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JUU( I , J ,DIM,1) = XYUV(I+1, J ,DIM) - XYUV( I , J ,DIM)
           END DO
@@ -145,6 +144,7 @@
             + ( XYOO( P ,Q-1,DIM) - XYOO( P , Q ,DIM) ) * FACTOR(DIM)   &
             ) / 2.0
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JUU( I , J ,DIM,2) = XYOO( I , J ,DIM) - XYOO( I ,J-1,DIM)
           END DO
@@ -171,6 +171,7 @@
 
       DO DIM = 1 , 2
         DO J = 0 , NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JVV( I , J ,DIM,1) = XYOO( I , J ,DIM) - XYOO(I-1, J ,DIM)
           END DO
@@ -178,16 +179,19 @@
       END DO
       DO DIM = 1 , 2
         J = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JVV( I , J ,DIM,2) = 2.0 * ( XYUV( I ,J+1,DIM) - XYVV( I , J ,DIM) )
           END DO
         !END J = 0
         DO J = 1 , NJ-1
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JVV( I , J ,DIM,2) = XYUV( I ,J+1,DIM) - XYUV( I , J ,DIM)
           END DO
         END DO
         J = NJ
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI
             JVV( I , J ,DIM,2) = 2.0 * ( XYVV( I , J ,DIM) - XYUV( I , J ,DIM) )
           END DO
@@ -214,6 +218,7 @@
             + ( XYOO( P ,Q-1,DIM) - XYVV( P ,Q-1,DIM) ) * FACTOR(DIM)   &
             )
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JOO( I , J ,DIM,1) = XYVV(I+1, J ,DIM) - XYVV( I , J ,DIM)
           END DO
@@ -235,6 +240,7 @@
             + ( XYUU( P ,Q-1,DIM) - XYOO( P ,Q-1,DIM) ) * FACTOR(DIM)   &
             )
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JOO( I , J ,DIM,2) = 2.0 * ( XYUU( I ,J+1,DIM) - XYOO( I , J ,DIM) )
           END DO
@@ -254,6 +260,7 @@
             + ( XYUU( P ,Q-1,DIM) - XYUU( P , Q ,DIM) ) * FACTOR(DIM)   &
             ) / 2.0
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JOO( I , J ,DIM,2) = XYUU( I ,J+1,DIM) - XYUU( I , J ,DIM)
           END DO
@@ -273,6 +280,7 @@
             + ( XYOO( I , J ,DIM) - XYUU( I , J ,DIM) )   &
             )
           !END I = 0
+         !DIR$ VECTOR ALIGNED
           DO I = 1 , NI-1
             JOO( I , J ,DIM,2) = 2.0 * ( XYOO( I , J ,DIM) - XYUU( I , J ,DIM) )
           END DO

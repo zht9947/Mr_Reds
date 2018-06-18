@@ -18,13 +18,12 @@
 !   2015-03-24    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MCS_BED_STOR
+  MODULE MR_MAC_PI
 
     USE MR_KINDS
 
     IMPLICIT NONE
 
-    REAL   (PARD_KIND) , PARAMETER :: CBASESTOR = 0.01
-    REAL   (PARD_KIND) , PARAMETER :: CFACTSTOR = 3.00
+    REAL   (PARD_KIND) , PARAMETER :: PI = 3.141592653589793
 
-  END MODULE MR_MCS_BED_STOR
+  END MODULE MR_MAC_PI
