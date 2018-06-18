@@ -85,8 +85,8 @@
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
           IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
-            NUMER_XSEC( I ) = NUMER_XSEC( I ) + SQRT( GUV( I , J ,2,MOD(DIM,2)+1) ) * QUV( I , J ,DIM) * SQRT( GUV( I , J ,DIM,DIM) )
-            DENOR_XSEC( I ) = DENOR_XSEC( I ) + SQRT( GUV( I , J ,2,MOD(DIM,2)+1) )
+            NUMER_XSEC( I ) = NUMER_XSEC( I ) + SQRT( GUV( I , J ,MOD(DIM,2)+1,MOD(DIM,2)+1) ) * QUV( I , J ,DIM) * SQRT( GUV( I , J ,DIM,DIM) )
+            DENOR_XSEC( I ) = DENOR_XSEC( I ) + SQRT( GUV( I , J ,MOD(DIM,2)+1,MOD(DIM,2)+1) )
           END IF
         END DO
       END DO
