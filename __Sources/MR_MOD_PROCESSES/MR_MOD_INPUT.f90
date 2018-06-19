@@ -26,6 +26,7 @@
     USE MR_DEF_RANKS
     USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_CURVED_GEOS
+    USE MR_DEF_GRID_SYS
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_FIELD_VARS_DSET_NAMES
     USE MR_DEF_ACTIVITY
@@ -108,7 +109,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBFUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , IUV , IUU , IVV , IOO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & UV=TBFUV ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -123,7 +125,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , IUV , IUU , IVV , IOO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & UV=TBUV ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -142,7 +145,8 @@
     //"K-Epsilon Model/"//TRIM(DSET_NAME_KI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=KI(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -163,7 +167,8 @@
     //"K-Epsilon Model/"//TRIM(DSET_NAME_DI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = DIR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=DI(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -184,7 +189,8 @@
     //TRIM(DSET_NAME_R)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = R0 ; DUMMY_REF = RR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=R(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -210,7 +216,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,    &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=ZB ,   &
     & ACTIVITY=ACTIVITY ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
@@ -226,7 +233,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_ZS)
     DUMMY_BASE = 0.0 ; DUMMY_REF = SR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,    &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=ZS , SU=ZSU , SV=ZSV ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -241,7 +249,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_H)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=H , SU=HU , SV=HV ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -256,7 +265,8 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_UVA)
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , IUV , IUU , IVV , IOO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & UV=UVA , U=UA , V=VA ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -275,7 +285,8 @@
     //TRIM(DSET_NAME_UV)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
     CALL MR_READ_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , IUV , IUU , IVV , IOO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & UV=UV(:,:,1:2, K ) , U=U(:,:, K ) , V=V(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -299,7 +310,8 @@
     //TRIM(DSET_NAME_WW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = WR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=WW(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -327,7 +339,8 @@
     //TRIM(DSET_NAME_VZWW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
     CALL MR_READ_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , ITS ,   &
-    & NND , NEM , NI , NJ , DUMMY_BASE , DUMMY_REF ,   &
+    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+    & DUMMY_BASE , DUMMY_REF ,   &
     & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
     & ERROR=ERROR , ERRMSG=ERRMSG )
     IF( ERROR < 0 ) THEN
