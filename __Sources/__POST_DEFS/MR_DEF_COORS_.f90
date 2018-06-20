@@ -1,11 +1,11 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_DEF_GRID_SYS_EXTEND
+!  (MODULE) MR_DEF_COORS_
 !
 ! PURPOSE:
 !
-!   TO 
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -18,16 +18,15 @@
 !   2015-03-27    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_DEF_GRID_SYS_EXTEND
+  MODULE MR_DEF_COORS_
 
     USE MR_KINDS
 
     IMPLICIT NONE
 
-    INTEGER(EMID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: EMIDW2
+    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUV_
+    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYUU_
+    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYVV_
+    REAL   (XYRD_KIND) , ALLOCATABLE , DIMENSION(:,:,:  ) :: XYOO_
 
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: NDIDW2
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: NDIDU2 , NDIDV2
-    INTEGER(NDID_KIND) , ALLOCATABLE , DIMENSION(:,:) :: NDIDO2
-
-  END MODULE MR_DEF_GRID_SYS_EXTEND
+  END MODULE MR_DEF_COORS_

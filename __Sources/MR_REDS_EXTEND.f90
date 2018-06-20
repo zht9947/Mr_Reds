@@ -21,25 +21,29 @@
 !***********************************************************************************************************************************
   PROGRAM MR_REDS_EXTEND
 
+    USE MR_ERRORS
+
     USE MR_KINDS
 
-    USE MR_DEF_RANKS
+    USE MR_MOD_CTRL_RETRY_CREATING_FILES
+
+    USE MR_MOD_INIT_RANKS
+    USE MR_MOD_INIT_RANKS_EXTEND
 
     USE MR_MOD_MALLOC_GRID_SYS
-    USE MR_MOD_MALLOC_GRID_SYS_EXTEND
+    USE MR_MOD_MALLOC_GRID_SYS_
 
     USE MR_MOD_INIT_GRID_SYS
-    USE MR_MOD_INIT_GRID_SYS_EXTEND
 
-    USE MR_MOD_GET_NI_NJ
+    USE MR_MOD_DO_EXTEND_OUTPUT_MESH_DATA
+
     USE MR_MOD_GET_TIMES
-
     USE MR_MOD_IO_EXTEND
 
     IMPLICIT NONE
 
     CHARACTER( 2**08 ) :: FILE_XMDF
-    CHARACTER( 2**08 ) :: FILE_XMDF_EXTEND
+    CHARACTER( 2**08 ) :: FILE_XMDF_
 
     INTEGER            :: NLOOPS
 
@@ -54,47 +58,82 @@
 
    !BLOCK
   ! MANAGE THE VERSION
-    WRITE(*,'( A ,"_Extend by ", A ," [ver.", A ,"]",/)') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
+    WRITE(*,'( A ,"_Extend by ", A ," [ver.", A ,"]")') TRIM(INNERNAME) , TRIM(CONTRIBUTOR) , TRIM(SEMVER)
    !END BLOCK
 
-   !BLOCK
-  ! GET THE SOURCE AND TARGET FILES' PATH\NAMES
-  ! AS WELL AS RUNNING ARGUMENTS FROM COMMAND LINE
+  ! GET COMMAND ARGUMENTS FROM COMMAND LINE
+  ! AND SET OUTPUT FILES' PATH\NAMES
     CALL MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(/,"PLEASE RUN ", A ,"_Extend with the following command arguments:")') TRIM(INNERNAME)
+      WRITE(*,'(  "  1- (non-optional)")')
+      WRITE(*,'(  "      Source file''s path\name containing the mesh and the data to be extened, in XMDF format;")')
+      WRITE(*,'(  "  2- (optional)")')
+      WRITE(*,'(  "      Number of loops that the source are expected to be extended;")')
+      WRITE(*,'(  "        If omitted, the source will be just duplicated;")')
+      WRITE(*,'(  "  ALL the arguments must be given in sequence.")')
       STOP
     END IF
-   !END BLOCK
 
-   !BLOCK
-  ! GET NI AND NJ FROM THE SOURCE
-    CALL MR_GET_NI_NJ( FILE_XMDF , NI , NJ , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-   !END BLOCK
+    WRITE(*,'( )')
 
-   !BLOCK
-  ! ALLOCATE MEMORIES
-    CALL MR_MALLOC_GRID_SYS
-    CALL MR_MALLOC_GRID_SYS_EXTEND( NLOOPS )
-   !END BLOCK
-
-    WRITE(*,'("Initialize grid system of the source... ", $ )')
-    CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
+    WRITE(*,'("Verify input files... ", $ )')
+    CALL MR_INIT_INPUT_FILES( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize grid system of the target... ", $ )')
-    CALL MR_INIT_GRID_SYS_EXTEND( FILE_XMDF_EXTEND , NLOOPS , ERROR , ERRMSG )
+    WRITE(*,'("Create output files... ", $ )')
+    CALL MR_INIT_OUTPUT_FILES( "NEWCREATE" , ERROR , ERRMSG )
+    IF( ERROR == ERROR_CREATING_NEW_FILE ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(/,"Files with the same names may already exist.")')
+      CALL MR_CTRL_RETRY_CREATING_FILES
+      WRITE(*,'( )')
+      WRITE(*,'("Create output files... ", $ )')
+      CALL MR_INIT_OUTPUT_FILES( "OVERWRITE" , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    ELSE IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    WRITE(*,'("Done! ")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'("Initialize ranks... ", $ )')
+    CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
+    ELSE
+      CALL MR_INIT_RANKS_EXTEND( NLOOPS )
+      WRITE(*,'("Done! ")')
+      WRITE(*,'(2X,"Allocate memories... ", $ )')
+      CALL MR_MALLOC_GRID_SYS
+      CALL MR_MALLOC_GRID_SYS_
+    END IF
+    WRITE(*,'("Done! ")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'(4X,"Extend mesh... ", $ )')
+    CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    ELSE
+      CALL MR_DO_EXTEND_OUTPUT_MESH_DATA( FILE_XMDF , FILE_XMDF_ , NLOOPS , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
     END IF
     WRITE(*,'("Done! ")')
 
@@ -107,7 +146,7 @@
       STOP
     END IF
 
-    WRITE(*,'(8X,"Extend...  0.00%", A , $ )') ACHAR(13)
+    WRITE(*,'(8X,"Extend data...  0.00%", A , $ )') ACHAR(13)
 
     DO ITS = 0 , NTSS
 
@@ -118,20 +157,21 @@
         STOP
       END IF
 
-      CALL MR_IO_EXTEND( FILE_XMDF , FILE_XMDF_EXTEND , ITS , T , NLOOPS , ERROR , ERRMSG )
+      CALL MR_IO_EXTEND( FILE_XMDF , FILE_XMDF_ , ITS , T , NLOOPS , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
 
-      WRITE(*,'(8X,"Extend...",F6.2,"%", A , $ )')   &
+      WRITE(*,'(8X,"Extend data...",F6.2,"%", A , $ )')   &
       & REAL(ITS+1)/REAL(NTSS+1)*100.00 , ACHAR(13)
 
     END DO
 
-    WRITE(*,'(8X,"Extend... Done! ")')
+    WRITE(*,'(8X,"Extend data... Done! ")')
 
-    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF_EXTEND)
+    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF_)
+
 
 !***********************************************************************************************************************************
 
@@ -163,16 +203,37 @@
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
 
-    INTEGER                          :: IDELI1 , IDELI2
-
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
 
-    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
-      ERROR = - 1
+  ! HELP DETECT
+    IF( COMMAND_ARGUMENT_COUNT() == 1 ) THEN
+      CALL GET_COMMAND_ARGUMENT( 1 , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command arguments"
+        RETURN
+      ELSE
+        SELECT CASE( TRIM(CHAR_ARGUMENT) )
+        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        )
+          ERROR = - 999999
+          ERRMSG = "Help information is displayed as below"
+          RETURN
+        END SELECT
+      END IF
+    END IF
+
+    IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
+      ERROR = - 11
       ERRMSG = "Not enough command arguments"
+      RETURN
+    ELSE IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
+      ERROR = - 12
+      ERRMSG = "Too many command arguments"
       RETURN
     END IF
 
@@ -183,42 +244,130 @@
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.1 as XMDF File"
+      ERRMSG = "Error in getting command argument No.1 as source file"
       RETURN
     END IF
 
-  ! GET XMDF_EXTEND FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 2 , FILE_XMDF_EXTEND , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "XMDF_EXTEND File's path too long!"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.2 as XMDF_EXTEND File"
-      RETURN
-    END IF
+    FILE_XMDF_ = TRIM(FILE_XMDF)//". extend"
 
-   !BLOCK
-  ! DETERMINE DEFAULT RUNNING ARGUMENTS
-  ! DETERMINE DEFAULT NLOOPS
-    NLOOPS = 1
-   !END BLOCK
+    IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
 
-  ! GET USER-SPECIFIED NLOOPS
-    CALL GET_COMMAND_ARGUMENT( 3 , CHAR_ARGUMENT , STATUS=ERROR )
-    IF( ERROR /= 0 ) THEN
-      ERROR = + ABS(ERROR)
-    ELSE
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-        ERROR = - 1
-        ERRMSG = "Illegal character in command argument No.3 as NLOOPS"
+    ! GET NUMBER OF LOOPS THAT THE SOURCE ARE EXPECTED TO BE EXTENDED TO
+      CALL GET_COMMAND_ARGUMENT( 2 , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no.2"
         RETURN
       ELSE
-        READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NLOOPS
-        ERROR = 0
+        IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+          ERROR = - 1
+          ERRMSG = "Illegal character in command argument no.2"
+          RETURN
+        ELSE
+          READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NLOOPS
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in reading a value from command argument no.2"
+            RETURN
+          END IF
+          FILE_XMDF_ = TRIM(FILE_XMDF_)//" ("//TRIM(CHAR_ARGUMENT)//")"
+        END IF
+      END IF
+
+    ELSE
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      NLOOPS = 1
+     !END BLOCK
+      FILE_XMDF_ = TRIM(FILE_XMDF_)//" (1)"
+    END IF
+
+    FILE_XMDF_ = TRIM(FILE_XMDF_)//".h5"
+
+  END SUBROUTINE MR_INIT_COMMAND_LINE
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_INIT_INPUT_FILES( ERROR , ERRMSG )
+
+    USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
+
+    IMPLICIT NONE
+
+    INTEGER            , INTENT(OUT) :: ERROR
+    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    INTEGER            :: FILE_ID
+
+    CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as source file"
+      RETURN
+    ELSE
+      CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+        RETURN
       END IF
     END IF
 
-  END SUBROUTINE MR_INIT_COMMAND_LINE
+  END SUBROUTINE MR_INIT_INPUT_FILES
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_INIT_OUTPUT_FILES( FILE_STATUS , ERROR , ERRMSG )
+
+    USE MR_MOD_CREATE_FILE_XMDF
+
+    IMPLICIT NONE
+
+    CHARACTER(   *   ) , INTENT(IN ) :: FILE_STATUS
+
+    INTEGER            , INTENT(OUT) :: ERROR
+    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    CALL MR_CREATE_FILE_XMDF( FILE_XMDF_ , FILE_STATUS , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_)
+      RETURN
+    END IF
+
+  END SUBROUTINE MR_INIT_OUTPUT_FILES
 
   END PROGRAM MR_REDS_EXTEND

@@ -23,8 +23,11 @@
 
     USE XMDF
 
+    USE MR_DEF_RANKS
+    USE MR_DEF_RANKS_
+
     USE MR_DEF_GRID_SYS
-    USE MR_DEF_GRID_SYS_EXTEND
+    USE MR_DEF_GRID_SYS_
 
     IMPLICIT NONE
 
@@ -57,11 +60,10 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_RW_EXTEND_UV( MULTI_DSETS_ID , MULTI_DSETS_ID_EXTEND , ITS , T ,   &
-  & NND , NND2 , NEM , NEM2 , NLOOPS , NI , NJ , ERROR , ERRMSG )
+  SUBROUTINE MR_RW_EXTEND_UV( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , NLOOPS , NI , NJ , ERROR , ERRMSG )
 
-    USE MR_MOD_READ2_FIELD_VARS_N_ACTIVITY
-    USE MR_MOD_WRITE2_FIELD_VARS_N_ACTIVITY
+    USE MR_MOD_READ_RAW_FIELD_VARS_N_ACTIVITY
+    USE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
@@ -70,14 +72,12 @@
     IMPLICIT NONE
 
     INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID
-    INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID_EXTEND
+    INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID_
 
     INTEGER(TSID_KIND) , INTENT(IN ) :: ITS
 
     REAL   (TMRD_KIND) , INTENT(IN ) :: T
 
-    INTEGER(NDID_KIND) , INTENT(IN ) :: NND , NND2
-    INTEGER(EMID_KIND) , INTENT(IN ) :: NEM , NEM2
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER            , INTENT(IN ) :: NLOOPS
 
@@ -87,11 +87,11 @@
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI,FDRD_KIND),0:NJ,1:2) :: UVO
     INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI,ACID_KIND),1:NJ    ) :: ACTIVITY
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: EXTEND_UV
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: EXTEND_UU
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: EXTEND_VV
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: EXTEND_UVO
-    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ    ) :: EXTEND_ACTIVITY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: UV_
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: UU_
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: VV_
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: UVO_
+    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ    ) :: ACTIVITY_
 
     CHARACTER          , DIMENSION(:) , ALLOCATABLE :: PATH_UV_CHAR_ARRAY
     CHARACTER( 2**08 )               :: PATH_UV
@@ -106,66 +106,65 @@
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    INTEGER                          :: ERROR_DUMMY
-
-    LOGICAL            , SAVE        :: FIRST_CALL = .TRUE.
+    LOGICAL            , SAVE        :: BE_FIRST_CALL = .TRUE.
 
     ERRMSG = ""
     CALL XF_GET_VECTOR_DATASETS_INFO( MULTI_DSETS_ID , N_UV_DSETS , N_MAX_PATH_UV_LENGTH , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in getting vector datasets information from the source file between"
+      ERRMSG = "Error in getting vector datasets information in multiple datasets from the source file out of the files"
     ELSE
       ALLOCATE( PATH_UV_CHAR_ARRAY( N_UV_DSETS * N_MAX_PATH_UV_LENGTH ) )
         CALL XF_GET_VECTOR_DATASET_PATHS( MULTI_DSETS_ID , N_UV_DSETS , N_MAX_PATH_UV_LENGTH , PATH_UV_CHAR_ARRAY , ERROR )
         IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting each vector dataset's path in multiple datasets from the source file between"
+          ERRMSG = "Error in getting each vector dataset's path in multiple datasets from the source file out of the files"
         ELSE
           DO IUV_DSET = 1 , N_UV_DSETS
+            PATH_UV = ""
             DO ICR = 1 , N_MAX_PATH_UV_LENGTH-1
               PATH_UV(ICR:ICR) = PATH_UV_CHAR_ARRAY( (IUV_DSET-1)*N_MAX_PATH_UV_LENGTH + ICR )
             END DO
 
           ! READ FROM SOURCE
-            CALL MR_READ2_UV( MULTI_DSETS_ID , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , ITS ,   &
+            CALL MR_READ_RAW_UV( MULTI_DSETS_ID , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , ITS ,   &
             & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-            & UV , UU , VV , UVO ,   &
-            & ACTIVITY , ERROR , ERRMSG )
+            & UV , UU , VV , UVO , ACTIVITY ,   &
+            & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" in the source file between"
+              ERRMSG = TRIM(ERRMSG)//" in the source file out of the files"
               RETURN
             END IF
 
           ! EXTEND
             CALL MR_EXTEND_UV( NLOOPS , NI , NJ ,   &
             & UV , UU , VV , UVO , ACTIVITY ,   &
-            & EXTEND_UV , EXTEND_UU , EXTEND_VV , EXTEND_UVO , EXTEND_ACTIVITY )
+            & UV_ , UU_ , VV_ , UVO_ , ACTIVITY_ )
 
-          ! CREATE CATALOG IN THE TARGET
-            IF( FIRST_CALL ) THEN
+            IF( BE_FIRST_CALL ) THEN
+            ! CREATE CATALOG IN THE TARGET
               CALL MR_GET_DSET_UNIT( MULTI_DSETS_ID , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" in the source file between"
+                ERRMSG = TRIM(ERRMSG)//" in the source file out of the files"
                 RETURN
               END IF
-              CALL MR_CREATE_DSET_UV( MULTI_DSETS_ID_EXTEND , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV , ERROR , ERRMSG )
+              CALL MR_CREATE_DSET_UV( MULTI_DSETS_ID_ , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , UNIT_UV , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" in the target file between"
+                ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
                 RETURN
               END IF
             END IF
 
           ! WRITE TO THE TARGET
-            CALL MR_WRITE2_UV( MULTI_DSETS_ID_EXTEND , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , T ,   &
-            & NND2 , NEM2 , NI*NLOOPS , NJ , EMIDW2 , NDIDW2 , NDIDU2 , NDIDV2 , NDIDO2 ,   &
-            & EXTEND_UV , EXTEND_UU , EXTEND_VV , EXTEND_UVO ,   &
-            & EXTEND_ACTIVITY , ERROR , ERRMSG )
+            CALL MR_WRITE_RAW_UV( MULTI_DSETS_ID_ , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , T ,   &
+            & NND_ , NEM_ , NI_ , NJ_ , EMIDW_ , NDIDW_ , NDIDU_ , NDIDV_ , NDIDO_ ,   &
+            & UV_ , UU_ , VV_ , UVO_ , ACTIVITY_ ,   &
+            & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" in the target file between"
+              ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
             END IF
 
           END DO
 
-          FIRST_CALL = .FALSE.
+          BE_FIRST_CALL = .FALSE.
 
         END IF
 
@@ -195,11 +194,10 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_RW_EXTEND_SS( MULTI_DSETS_ID , MULTI_DSETS_ID_EXTEND , ITS , T ,   &
-  & NND , NND2 , NEM , NEM2 , NLOOPS , NI , NJ , ERROR , ERRMSG )
+  SUBROUTINE MR_RW_EXTEND_SS( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , NLOOPS , NI , NJ , ERROR , ERRMSG )
 
-    USE MR_MOD_READ2_FIELD_VARS_N_ACTIVITY
-    USE MR_MOD_WRITE2_FIELD_VARS_N_ACTIVITY
+    USE MR_MOD_READ_RAW_FIELD_VARS_N_ACTIVITY
+    USE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
@@ -208,14 +206,12 @@
     IMPLICIT NONE
 
     INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID
-    INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID_EXTEND
+    INTEGER            , INTENT(IN ) :: MULTI_DSETS_ID_
 
     INTEGER(TSID_KIND) , INTENT(IN ) :: ITS
 
     REAL   (TMRD_KIND) , INTENT(IN ) :: T
 
-    INTEGER(NDID_KIND) , INTENT(IN ) :: NND , NND2
-    INTEGER(EMID_KIND) , INTENT(IN ) :: NEM , NEM2
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER            , INTENT(IN ) :: NLOOPS
 
@@ -225,11 +221,11 @@
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI,FDRD_KIND),0:NJ) :: SO
     INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI,ACID_KIND),1:NJ) :: ACTIVITY
 
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ) :: EXTEND_SS
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ) :: EXTEND_SU
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ) :: EXTEND_SV
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ) :: EXTEND_SO
-    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ) :: EXTEND_ACTIVITY
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ) :: SS_
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ) :: SU_
+    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ) :: SV_
+    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ) :: SO_
+    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ) :: ACTIVITY_
 
     CHARACTER          , DIMENSION(:) , ALLOCATABLE :: PATH_SS_CHAR_ARRAY
     CHARACTER( 2**08 )               :: PATH_SS
@@ -244,66 +240,65 @@
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    INTEGER                          :: ERROR_DUMMY
-
-    LOGICAL            , SAVE        :: FIRST_CALL = .TRUE.
+    LOGICAL            , SAVE        :: BE_FIRST_CALL = .TRUE.
 
     ERRMSG = ""
     CALL XF_GET_SCALAR_DATASETS_INFO( MULTI_DSETS_ID , N_SS_DSETS , N_MAX_PATH_SS_LENGTH , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in getting vector datasets information from the source file between"
+      ERRMSG = "Error in getting vector datasets information in multiple datasets from the source file out of the files"
     ELSE
       ALLOCATE( PATH_SS_CHAR_ARRAY( N_SS_DSETS * N_MAX_PATH_SS_LENGTH ) )
         CALL XF_GET_SCALAR_DATASET_PATHS( MULTI_DSETS_ID , N_SS_DSETS , N_MAX_PATH_SS_LENGTH , PATH_SS_CHAR_ARRAY , ERROR )
         IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting each scalar dataset's path in multiple datasets from the source file between"
+          ERRMSG = "Error in getting each scalar dataset's path in multiple datasets from the source file out of the files"
         ELSE
           DO ISS_DSET = 1 , N_SS_DSETS
+            PATH_SS = ""
             DO ICR = 1 , N_MAX_PATH_SS_LENGTH-1
               PATH_SS(ICR:ICR) = PATH_SS_CHAR_ARRAY( (ISS_DSET-1)*N_MAX_PATH_SS_LENGTH + ICR )
             END DO
 
           ! READ FROM SOURCE
-            CALL MR_READ2_SS( MULTI_DSETS_ID , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , ITS ,   &
+            CALL MR_READ_RAW_SS( MULTI_DSETS_ID , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , ITS ,   &
             & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-            & SS , SU, SV , SO ,   &
-            & ACTIVITY , ERROR , ERRMSG )
+            & SS , SU , SV , SO , ACTIVITY ,   &
+            & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" in the source file between"
+              ERRMSG = TRIM(ERRMSG)//" in the source file out of the files"
               RETURN
             END IF
 
           ! EXTEND
             CALL MR_EXTEND_SS( NLOOPS , NI , NJ ,   &
             & SS , SU , SV , SO , ACTIVITY ,   &
-            & EXTEND_SS , EXTEND_SU , EXTEND_SV , EXTEND_SO , EXTEND_ACTIVITY )
+            & SS_ , SU_ , SV_ , SO_ , ACTIVITY_ )
 
-          ! CREATE CATALOG IN THE TARGET
-            IF( FIRST_CALL ) THEN
+            IF( BE_FIRST_CALL ) THEN
+            ! CREATE CATALOG IN THE TARGET
               CALL MR_GET_DSET_UNIT( MULTI_DSETS_ID , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" in the source file between"
+                ERRMSG = TRIM(ERRMSG)//" in the source file out of the files"
                 RETURN
               END IF
-              CALL MR_CREATE_DSET_SS( MULTI_DSETS_ID_EXTEND , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS , ERROR , ERRMSG )
+              CALL MR_CREATE_DSET_SS( MULTI_DSETS_ID_ , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , UNIT_SS , ERROR , ERRMSG )
               IF( ERROR < 0 ) THEN
-                ERRMSG = TRIM(ERRMSG)//" in the target file between"
+                ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
                 RETURN
               END IF
             END IF
 
           ! WRITE TO THE TARGET
-            CALL MR_WRITE2_SS( MULTI_DSETS_ID_EXTEND , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , T ,   &
-            & NND2 , NEM2 , NI*NLOOPS , NJ , EMIDW2 , NDIDW2 , NDIDU2 , NDIDV2 , NDIDO2 ,   &
-            & EXTEND_SS , EXTEND_SU , EXTEND_SV , EXTEND_SO ,   &
-            & EXTEND_ACTIVITY , ERROR , ERRMSG )
+            CALL MR_WRITE_RAW_SS( MULTI_DSETS_ID_ , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , T ,   &
+            & NND_ , NEM_ , NI_ , NJ_ , EMIDW_ , NDIDW_ , NDIDU_ , NDIDV_ , NDIDO_ ,   &
+            & SS_ , SU_ , SV_ , SO_ , ACTIVITY_ ,   &
+            & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" in the target file between"
+              ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
             END IF
 
           END DO
 
-          FIRST_CALL = .FALSE.
+          BE_FIRST_CALL = .FALSE.
 
         END IF
 

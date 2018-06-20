@@ -23,8 +23,6 @@
 
     USE MR_KINDS
 
-    USE MR_MAC_PI
-
     IMPLICIT NONE
 
     PRIVATE

@@ -19,7 +19,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_WRITE2_FIELD_VARS_N_ACTIVITY
+  MODULE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
 
     USE XMDF
 
@@ -29,8 +29,8 @@
 
     PRIVATE
 
-    PUBLIC :: MR_WRITE2_UV
-    PUBLIC :: MR_WRITE2_SS
+    PUBLIC :: MR_WRITE_RAW_UV
+    PUBLIC :: MR_WRITE_RAW_SS
 
 !***********************************************************************************************************************************
 
@@ -56,7 +56,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_ACTIVITY( DSET_ACTIVITY_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+  SUBROUTINE MR_WRITE_RAW_ACTIVITY( DSET_ACTIVITY_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
 
     IMPLICIT NONE
 
@@ -74,7 +74,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_ACTIVITY_PACK_FOR_ELEMS
+    CALL MR_WRITE_RAW_ACTIVITY_PACK_FOR_ELEMS
    !END$ FORCEINLINE
 
     ERRMSG = ""
@@ -108,7 +108,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_ACTIVITY_PACK_FOR_ELEMS
+  SUBROUTINE MR_WRITE_RAW_ACTIVITY_PACK_FOR_ELEMS
 
     IMPLICIT NONE
 
@@ -121,9 +121,9 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_WRITE2_ACTIVITY_PACK_FOR_ELEMS
+  END SUBROUTINE MR_WRITE_RAW_ACTIVITY_PACK_FOR_ELEMS
 
-  END SUBROUTINE MR_WRITE2_ACTIVITY
+  END SUBROUTINE MR_WRITE_RAW_ACTIVITY
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -145,7 +145,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , T ,   &
+  SUBROUTINE MR_WRITE_RAW_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , T ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , UV , UU , VV , UVO ,   &
   & ACTIVITY , ERROR , ERRMSG )
 
@@ -184,13 +184,13 @@
     INTEGER                          :: ERROR_DUMMY
 
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_UV_PACK_FOR_W_NODES
+    CALL MR_WRITE_RAW_UV_PACK_FOR_W_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_UV_PACK_FOR_U_NODES
+    CALL MR_WRITE_RAW_UV_PACK_FOR_U_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_UV_PACK_FOR_V_NODES
+    CALL MR_WRITE_RAW_UV_PACK_FOR_V_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_UV_PACK_FOR_O_NODES
+    CALL MR_WRITE_RAW_UV_PACK_FOR_O_NODES
    !END$ FORCEINLINE
 
     ERRMSG = ""
@@ -205,7 +205,7 @@
       ELSE
 
         IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_WRITE2_ACTIVITY( DSET_UV_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+          CALL MR_WRITE_RAW_ACTIVITY( DSET_UV_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
             ERRMSG = TRIM(ERRMSG)//" into vector dataset group"
           END IF
@@ -249,7 +249,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_UV_PACK_FOR_W_NODES
+  SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_W_NODES
 
     IMPLICIT NONE
 
@@ -267,7 +267,7 @@
 
     END DO
 
-  END SUBROUTINE MR_WRITE2_UV_PACK_FOR_W_NODES
+  END SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_W_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -289,7 +289,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_UV_PACK_FOR_U_NODES
+  SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_U_NODES
 
     IMPLICIT NONE
 
@@ -307,7 +307,7 @@
 
     END DO
 
-  END SUBROUTINE MR_WRITE2_UV_PACK_FOR_U_NODES
+  END SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_U_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -329,7 +329,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_UV_PACK_FOR_V_NODES
+  SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_V_NODES
 
     IMPLICIT NONE
 
@@ -347,7 +347,7 @@
 
     END DO
 
-  END SUBROUTINE MR_WRITE2_UV_PACK_FOR_V_NODES
+  END SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_V_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -369,7 +369,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_UV_PACK_FOR_O_NODES
+  SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_O_NODES
 
     IMPLICIT NONE
 
@@ -387,9 +387,9 @@
 
     END DO
 
-  END SUBROUTINE MR_WRITE2_UV_PACK_FOR_O_NODES
+  END SUBROUTINE MR_WRITE_RAW_UV_PACK_FOR_O_NODES
 
-  END SUBROUTINE MR_WRITE2_UV
+  END SUBROUTINE MR_WRITE_RAW_UV
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -411,7 +411,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , T ,   &
+  SUBROUTINE MR_WRITE_RAW_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , T ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , SS , SU , SV , SO ,   &
   & ACTIVITY , ERROR , ERRMSG )
 
@@ -450,13 +450,13 @@
     INTEGER                          :: ERROR_DUMMY
 
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_SS_PACK_FOR_W_NODES
+    CALL MR_WRITE_RAW_SS_PACK_FOR_W_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_SS_PACK_FOR_U_NODES
+    CALL MR_WRITE_RAW_SS_PACK_FOR_U_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_SS_PACK_FOR_V_NODES
+    CALL MR_WRITE_RAW_SS_PACK_FOR_V_NODES
    !DIR$ FORCEINLINE
-    CALL MR_WRITE2_SS_PACK_FOR_O_NODES
+    CALL MR_WRITE_RAW_SS_PACK_FOR_O_NODES
    !END$ FORCEINLINE
 
     ERRMSG = ""
@@ -471,7 +471,7 @@
       ELSE
 
         IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_WRITE2_ACTIVITY( DSET_SS_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+          CALL MR_WRITE_RAW_ACTIVITY( DSET_SS_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
             ERRMSG = TRIM(ERRMSG)//" into scalar dataset group"
           END IF
@@ -515,7 +515,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_SS_PACK_FOR_W_NODES
+  SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_W_NODES
 
     IMPLICIT NONE
 
@@ -528,7 +528,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_WRITE2_SS_PACK_FOR_W_NODES
+  END SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_W_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -550,7 +550,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_SS_PACK_FOR_U_NODES
+  SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_U_NODES
 
     IMPLICIT NONE
 
@@ -563,7 +563,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_WRITE2_SS_PACK_FOR_U_NODES
+  END SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_U_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -585,7 +585,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_SS_PACK_FOR_V_NODES
+  SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_V_NODES
 
     IMPLICIT NONE
 
@@ -598,7 +598,7 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_WRITE2_SS_PACK_FOR_V_NODES
+  END SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_V_NODES
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -620,7 +620,7 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_WRITE2_SS_PACK_FOR_O_NODES
+  SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_O_NODES
 
     IMPLICIT NONE
 
@@ -633,8 +633,8 @@
       END DO
     END DO
 
-  END SUBROUTINE MR_WRITE2_SS_PACK_FOR_O_NODES
+  END SUBROUTINE MR_WRITE_RAW_SS_PACK_FOR_O_NODES
 
-  END SUBROUTINE MR_WRITE2_SS
+  END SUBROUTINE MR_WRITE_RAW_SS
 
-  END MODULE MR_MOD_WRITE2_FIELD_VARS_N_ACTIVITY
+  END MODULE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
