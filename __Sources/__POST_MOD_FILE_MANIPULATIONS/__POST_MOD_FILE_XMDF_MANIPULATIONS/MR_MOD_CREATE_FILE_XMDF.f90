@@ -200,26 +200,26 @@
     REAL                           :: R_RANDOM
     INTEGER                        :: IDX
 
-    INTEGER                        :: ICHAR
+    INTEGER                        :: ICR
 
     CALL RANDOM_SEED()
 
     CALL RANDOM_NUMBER( R_RANDOM )
     LUID = MOD( INT( R_RANDOM * 99999 ) , 99999 ) + 1
 
-    DO ICHAR = 1 , 32
+    DO ICR = 1 , 32
 
       CALL RANDOM_NUMBER( R_RANDOM )
       IDX = MOD( INT( R_RANDOM * 15 ) , 15 ) + 1
 
-      SELECT CASE( SZTMP(ICHAR:ICHAR) )
+      SELECT CASE( SZTMP(ICR:ICR) )
       CASE( "X" )
-        GUID(ICHAR:ICHAR) = SZHEX(IDX:IDX)
+        GUID(ICR:ICR) = SZHEX(IDX:IDX)
       CASE( "Y" )
         IDX = IOR( IAND( (IDX-1) , 3 ) , 8 ) + 1
-        GUID(ICHAR:ICHAR) = SZHEX(IDX:IDX)
+        GUID(ICR:ICR) = SZHEX(IDX:IDX)
       CASE( "4" )
-        GUID(ICHAR:ICHAR) = "4"
+        GUID(ICR:ICR) = "4"
       END SELECT
 
     END DO

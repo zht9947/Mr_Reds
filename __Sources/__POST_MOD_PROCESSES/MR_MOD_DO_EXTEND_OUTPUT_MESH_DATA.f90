@@ -86,7 +86,7 @@
 
     CALL MR_OUTPUT_GRID_SYS_( FILE_XMDF_NAME_ , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting extended grid system to it"
+      ERRMSG = TRIM(ERRMSG)//" when outputting extended grid system"
     ELSE
 
       ALLOCATE( XYUV(1:NI1(NI,XYRD_KIND),1:NJ,1:2) )
@@ -95,6 +95,7 @@
 
       CALL MR_INIT_COORS( FILE_XMDF_NAME , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
+        ERRMSG = TRIM(ERRMSG)//" when initializing coordinates"
         DEALLOCATE( XYUV , XYUU , XYVV , XYOO )
       ELSE
 
@@ -110,7 +111,7 @@
 
         CALL MR_OUTPUT_COORS_( FILE_XMDF_NAME_ , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" when outputting extended coordinates to it"
+          ERRMSG = TRIM(ERRMSG)//" when outputting extended coordinates"
         END IF
 
         DEALLOCATE( XYUV_ , XYUU_ , XYVV_ , XYOO_ )

@@ -48,7 +48,6 @@
     INTEGER            :: NLOOPS
 
     INTEGER(TSID_KIND) :: NTSS
-    INTEGER(TSID_KIND) :: ITS_START , ITS_STRIDE , ITS_END
     INTEGER(TSID_KIND) :: ITS
 
     REAL   (TMRD_KIND) :: T
@@ -68,7 +67,8 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"PLEASE RUN ", A ,"_Extend with the following command arguments:")') TRIM(INNERNAME)
       WRITE(*,'(  "  1- (non-optional)")')
-      WRITE(*,'(  "      Source file''s path\name containing the mesh and the data to be extened, in XMDF format;")')
+      WRITE(*,'(  "      Source file''s path\name containing the mesh and the data to be extened,")')
+      WRITE(*,'(  "    in XMDF format;")')
       WRITE(*,'(  "  2- (optional)")')
       WRITE(*,'(  "      Number of loops that the source are expected to be extended;")')
       WRITE(*,'(  "        If omitted, the source will be just duplicated;")')
@@ -248,6 +248,7 @@
       RETURN
     END IF
 
+  ! SET EXTENDED XMDF FILE'S PATH\NAME
     FILE_XMDF_ = TRIM(FILE_XMDF)//". extend"
 
     IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
@@ -273,7 +274,6 @@
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" ("//TRIM(CHAR_ARGUMENT)//")"
         END IF
       END IF
-
     ELSE
      !BLOCK
     ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS

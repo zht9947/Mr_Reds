@@ -170,6 +170,7 @@
       RETURN
     END IF
 
+  ! SET XMDF FILE'S PATH\NAME
     FILE_XMDF = "Channel"
 
   ! GET DEFLECTION ANGLE AT A CROSSOVER SECTION, IN DEGREES
@@ -227,23 +228,23 @@
         ERROR = - 1
         ERRMSG = "Illegal character in command argument no.3"
         RETURN
-      END IF
-  
-      IDX = MAX( INDEX(CHAR_ARGUMENT,"PI") , INDEX(CHAR_ARGUMENT,"Pi") , INDEX(CHAR_ARGUMENT,"pi") )
-      IF( IDX /= 0 ) THEN
-        CHAR_ARGUMENT(IDX:IDX+1) = ""
-      END IF
-
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789Ee." ) /= 0 ) THEN
-        ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.3"
-        RETURN
       ELSE
-        READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) LAMBTH2BTH
-        IF( ERROR /= 0 ) THEN
-          ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no.3"
+        IDX = MAX( INDEX(CHAR_ARGUMENT,"PI") , INDEX(CHAR_ARGUMENT,"Pi") , INDEX(CHAR_ARGUMENT,"pi") )
+        IF( IDX /= 0 ) THEN
+          CHAR_ARGUMENT(IDX:IDX+1) = ""
+        END IF
+
+        IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789Ee." ) /= 0 ) THEN
+          ERROR = - 1
+          ERRMSG = "Illegal character in command argument no.3"
           RETURN
+        ELSE
+          READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) LAMBTH2BTH
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in reading a value from command argument no.3"
+            RETURN
+          END IF
         END IF
 
         IF( IDX /= 0 ) THEN
@@ -254,6 +255,7 @@
         END IF
 
       END IF
+
     END IF
 
   ! GET NUMBER OF COLUMNS IN ONE MEANDER BEND
