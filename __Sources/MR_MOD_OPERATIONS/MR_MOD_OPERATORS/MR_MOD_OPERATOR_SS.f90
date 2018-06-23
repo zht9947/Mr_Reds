@@ -33,25 +33,34 @@
     PUBLIC :: OPERATOR( .MRSSSQR. ) , OPERATOR( .MRSSQRT. )
 
     INTERFACE OPERATOR( .MRSSMTP. )
-      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_FDRD_KIND_X_FDRD_KIND
-      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_CARD_KIND_X_FDRD_KIND
+      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND8
+      MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND8
     END INTERFACE
 
     INTERFACE OPERATOR( .MRSSDIV. )
-      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_FDRD_KIND_X_FDRD_KIND
-      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_CARD_KIND_X_FDRD_KIND
+      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND8
+      MODULE PROCEDURE MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND8
     END INTERFACE
 
     INTERFACE OPERATOR( .MRSSSCL. )
-      MODULE PROCEDURE MR_SCALAR_SCALE_BY_MW_GJRD_KIND_X_FDRD_KIND
+      MODULE PROCEDURE MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND4
+      MODULE PROCEDURE MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND8
+      MODULE PROCEDURE MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND8
     END INTERFACE
 
     INTERFACE OPERATOR( .MRSSSQR. )
-      MODULE PROCEDURE MR_SCALAR_SQUARE_FDRD_KIND
+      MODULE PROCEDURE MR_SCALAR_SQUARE_KIND4
+      MODULE PROCEDURE MR_SCALAR_SQUARE_KIND8
     END INTERFACE
 
     INTERFACE OPERATOR( .MRSSQRT. )
-      MODULE PROCEDURE MR_SCALAR_SQUARE_ROOT_FDRD_KIND
+      MODULE PROCEDURE MR_SCALAR_SQUARE_ROOT_KIND4
+      MODULE PROCEDURE MR_SCALAR_SQUARE_ROOT_KIND8
     END INTERFACE
 
 !***********************************************************************************************************************************
@@ -78,56 +87,14 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_FDRD_KIND_X_FDRD_KIND( SS0 , SS ) RESULT( SSMTP )
+  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND4( SS0 , SS ) RESULT( SSMTP )
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
-
-    INTEGER(IJID_KIND) :: I , J
-
-    ALLOCATE( SSMTP(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
-
-    DO J = 1 , SIZE(SS0,DIM=2)
-     !DIR$ VECTOR ALIGNED
-      DO I = 1 , SIZE(SS0,DIM=1)
-        SSMTP( I , J ) = SS0( I , J ) * SS( I , J )
-      END DO
-    END DO
-
-  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_FDRD_KIND_X_FDRD_KIND
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (FUNCTION)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_CARD_KIND_X_FDRD_KIND( SS0 , SS ) RESULT( SSMTP )
-
-    IMPLICIT NONE
-
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
-
-    REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -140,7 +107,7 @@
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_CARD_KIND_X_FDRD_KIND
+  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND4
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -162,27 +129,27 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_DIVIDE_BY_SS_FDRD_KIND_X_FDRD_KIND( SS0 , SS ) RESULT( SSDIV )
+  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND4( SS0 , SS ) RESULT( SSMTP )
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
 
     INTEGER(IJID_KIND) :: I , J
 
-    ALLOCATE( SSDIV(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+    ALLOCATE( SSMTP(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
 
     DO J = 1 , SIZE(SS0,DIM=2)
      !DIR$ VECTOR ALIGNED
-      DO I = 1 , SIZE(SS0,DIM=1)
-        SSDIV( I , J ) = SS0( I , J ) / SS( I , J )
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSMTP( I , J ) = SS0( I , J ) * SS( I , J )
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_FDRD_KIND_X_FDRD_KIND
+  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND4
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -204,14 +171,98 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_DIVIDE_BY_SS_CARD_KIND_X_FDRD_KIND( SS0 , SS ) RESULT( SSDIV )
+  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND8( SS0 , SS ) RESULT( SSMTP )
 
     IMPLICIT NONE
 
-    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS
 
-    REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSMTP(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSMTP( I , J ) = SS0( I , J ) * SS( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND8( SS0 , SS ) RESULT( SSMTP )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS
+
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSMTP
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSMTP(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSMTP( I , J ) = SS0( I , J ) * SS( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_MULTIPLY_BY_SS_KIND8_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND4( SS0 , SS ) RESULT( SSDIV )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS
+
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -224,7 +275,7 @@
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_CARD_KIND_X_FDRD_KIND
+  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND4
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -246,14 +297,140 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_SCALE_BY_MW_GJRD_KIND_X_FDRD_KIND( MW , SS0 ) RESULT( SSSCL )
+  FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND4( SS0 , SS ) RESULT( SSDIV )
 
     IMPLICIT NONE
 
-    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: MW
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSSCL
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSDIV(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSDIV( I , J ) = SS0( I , J ) / SS( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND8( SS0 , SS ) RESULT( SSDIV )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS
+
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSDIV(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSDIV( I , J ) = SS0( I , J ) / SS( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND8( SS0 , SS ) RESULT( SSDIV )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS
+
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSDIV
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSDIV(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SSDIV( I , J ) = SS0( I , J ) / SS( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_DIVIDE_BY_SS_KIND8_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND4( MW , SS0 ) RESULT( SSSCL )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSSCL
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -266,7 +443,133 @@
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_SCALE_BY_MW_GJRD_KIND_X_FDRD_KIND
+  END FUNCTION MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND4( MW , SS0 ) RESULT( SSSCL )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSSCL
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSSCL(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(SS0,DIM=1) )
+        SSSCL( I , J ) = MW( I , J ) * SS0( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND8( MW , SS0 ) RESULT( SSSCL )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSSCL
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSSCL(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(SS0,DIM=1) )
+        SSSCL( I , J ) = MW( I , J ) * SS0( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_SCALE_BY_MW_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND8( MW , SS0 ) RESULT( SSSCL )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: MW
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSSCL
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSSCL(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(MW,DIM=1) , SIZE(SS0,DIM=1) )
+        SSSCL( I , J ) = MW( I , J ) * SS0( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_SCALE_BY_MW_KIND8_X_KIND8
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -288,13 +591,13 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_SQUARE_FDRD_KIND( SS0 ) RESULT( SSSQR )
+  FUNCTION MR_SCALAR_SQUARE_KIND4( SS0 ) RESULT( SSSQR )
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSSQR
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSSQR
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -307,7 +610,7 @@
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_SQUARE_FDRD_KIND
+  END FUNCTION MR_SCALAR_SQUARE_KIND4
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -329,13 +632,54 @@
 !   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_SCALAR_SQUARE_ROOT_FDRD_KIND( SS0 ) RESULT( SSQRT )
+  FUNCTION MR_SCALAR_SQUARE_KIND8( SS0 ) RESULT( SSSQR )
 
     IMPLICIT NONE
 
-    REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(:,:) :: SS0
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
 
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:) :: SSQRT
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSSQR
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSSQR(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , SIZE(SS0,DIM=1)
+        SSSQR( I , J ) = SS0( I , J ) * SS0( I , J )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_SQUARE_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SQUARE_ROOT_KIND4( SS0 ) RESULT( SSQRT )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (4)         , ALLOCATABLE , DIMENSION(:,:) :: SSQRT
 
     INTEGER(IJID_KIND) :: I , J
 
@@ -348,6 +692,47 @@
       END DO
     END DO
 
-  END FUNCTION MR_SCALAR_SQUARE_ROOT_FDRD_KIND
+  END FUNCTION MR_SCALAR_SQUARE_ROOT_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  FUNCTION MR_SCALAR_SQUARE_ROOT_KIND8( SS0 ) RESULT( SSQRT )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:,:) :: SSQRT
+
+    INTEGER(IJID_KIND) :: I , J
+
+    ALLOCATE( SSQRT(1:SIZE(SS0,DIM=1),1:SIZE(SS0,DIM=2)) )
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , SIZE(SS0,DIM=1)
+        SSQRT( I , J ) = SQRT( SS0( I , J ) )
+      END DO
+    END DO
+
+  END FUNCTION MR_SCALAR_SQUARE_ROOT_KIND8
 
   END MODULE MR_MOD_OPERATOR_SS
