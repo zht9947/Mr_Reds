@@ -800,7 +800,7 @@
     IF( .NOT. ( NK > 0 ) ) THEN
       ERROR = - 9999
       ERRMSG = "Number of layers is identified with zero, "   &
-      //"please check the file "//TRIM(FILE_PRJ_NAME)
+      //"please check the project file "//TRIM(FILE_PRJ_NAME)
       RETURN
     ELSE
     ! CALCULATE DSIGMA

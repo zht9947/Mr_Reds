@@ -73,11 +73,12 @@
       WRITE(*,'(  "      Number of rows into which the whole width of the channel will be divided;")')
       WRITE(*,'(  "  6- (optional)")')
       WRITE(*,'(  "      Number of meander bends that are supposed to be illustrated;")')
-      WRITE(*,'(  "        If omitted, only ONE meander bend will be illustrated;")')
-      WRITE(*,'(  "  ALL the arguments must be given in sequence.")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, only ONE meander bend will be illustrated;")')
+      WRITE(*,'(  "Note,")')
+      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
       STOP
     END IF
-
   ! CREATE OUTPUT FILES
     CALL MR_INIT_OUTPUT_FILES( "NEWCREATE" , ERROR , ERRMSG )
     IF( ERROR == ERROR_CREATING_NEW_FILE ) THEN

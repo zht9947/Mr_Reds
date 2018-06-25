@@ -81,19 +81,9 @@
       WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
       WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
-      WRITE(*,'(  "  ALL the arguments must be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
       STOP
     END IF
-
-    WRITE(*,'( )')
-
-    WRITE(*,'("Verify input files... ", $ )')
-    CALL MR_INIT_INPUT_FILES( ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
 
     WRITE(*,'( )')
 
@@ -209,7 +199,7 @@
 
     WRITE(*,'(8X,"Compute... Done! ")')
 
-    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF)
+    WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF)
 
 !***********************************************************************************************************************************
 
@@ -237,9 +227,14 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
+    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
+    USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+
+    INTEGER                          :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -285,6 +280,19 @@
       ERROR = - ABS(ERROR)
       ERRMSG = "Error in getting command argument no.1 as project file"
       RETURN
+    ELSE
+    ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+      CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+        RETURN
+      ELSE
+        CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+          RETURN
+        END IF
+      END IF
     END IF
 
   ! GET XMDF FILE'S PATH\NAME
@@ -296,66 +304,21 @@
       ERROR = - ABS(ERROR)
       ERRMSG = "Error in getting command argument no.2 as mesh file"
       RETURN
+    ELSE
+    ! VERIFY XMDF FILE'S OPENING AND CLOSING
+      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
+        RETURN
+      ELSE
+        CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+          RETURN
+        END IF
+      END IF
     END IF
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_INPUT_FILES( ERROR , ERRMSG )
-
-    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
-    USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
-
-    IMPLICIT NONE
-
-    INTEGER            , INTENT(OUT) :: ERROR
-    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
-
-    INTEGER            :: FILE_ID
-
-    CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-      RETURN
-    ELSE
-      CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
-        RETURN
-      END IF
-    END IF
-
-    CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
-      RETURN
-    ELSE
-      CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
-        RETURN
-      END IF
-    END IF
-
-  END SUBROUTINE MR_INIT_INPUT_FILES
 
   END PROGRAM MR_REDS

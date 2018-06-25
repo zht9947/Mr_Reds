@@ -19,22 +19,20 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_RW_EXTEND_FIELD_VARS_N_ACTIVITY
+  MODULE MR_MOD_RW_SCALE_FIELD_VARS_N_ACTIVITY
 
     USE XMDF
 
     USE MR_DEF_RANKS
-    USE MR_DEF_RANKS_
 
     USE MR_DEF_GRID_SYS
-    USE MR_DEF_GRID_SYS_
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_RW_EXTEND_UV
-    PUBLIC :: MR_RW_EXTEND_SS
+    PUBLIC :: MR_RW_SCALE_UV
+    PUBLIC :: MR_RW_SCALE_SS
 
 !***********************************************************************************************************************************
 
@@ -60,14 +58,14 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_RW_EXTEND_UV( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , NLOOPS , NI , NJ , ERROR , ERRMSG )
+  SUBROUTINE MR_RW_SCALE_UV( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , SCALE , NI , NJ , ERROR , ERRMSG )
 
     USE MR_MOD_READ_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
-    USE MR_MOD_EXTEND
+    USE MR_MOD_SCALE
 
     IMPLICIT NONE
 
@@ -78,7 +76,7 @@
 
     REAL   (TMRD_KIND) , INTENT(IN ) :: T
 
-    INTEGER            , INTENT(IN ) :: NLOOPS
+    REAL   (PARD_KIND) , INTENT(IN ) :: SCALE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
@@ -87,12 +85,6 @@
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),0:NJ,1:2) :: VV
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI,FDRD_KIND),0:NJ,1:2) :: UVO
     INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI,ACID_KIND),1:NJ    ) :: ACTIVITY
-
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: UV_
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ,1:2) :: UU_
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: VV_
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ,1:2) :: UVO_
-    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ    ) :: ACTIVITY_
 
     CHARACTER          , DIMENSION(:) , ALLOCATABLE :: PATH_UV_CHAR_ARRAY
     CHARACTER( 2**08 )               :: PATH_UV
@@ -106,6 +98,8 @@
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    INTEGER                          :: ERROR_DUMMY
 
     LOGICAL            , SAVE        :: BE_FIRST_CALL = .TRUE.
 
@@ -135,10 +129,8 @@
               RETURN
             END IF
 
-          ! EXTEND
-            CALL MR_EXTEND_UV( NLOOPS , NI , NJ ,   &
-            & UV , UU , VV , UVO , ACTIVITY ,   &
-            & UV_ , UU_ , VV_ , UVO_ , ACTIVITY_ )
+          ! SCALE
+            CALL MR_SCALE_UV( PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , SCALE , NI , NJ , UV , UU , VV , UVO )
 
             IF( BE_FIRST_CALL ) THEN
             ! CREATE CATALOG IN THE TARGET
@@ -156,8 +148,8 @@
 
           ! WRITE TO THE TARGET
             CALL MR_WRITE_RAW_UV( MULTI_DSETS_ID_ , PATH_UV(1:N_MAX_PATH_UV_LENGTH-1) , T ,   &
-            & NND_ , NEM_ , NI_ , NJ_ , EMIDW_ , NDIDW_ , NDIDU_ , NDIDV_ , NDIDO_ ,   &
-            & UV_ , UU_ , VV_ , UVO_ , ACTIVITY_ ,   &
+            & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+            & UV , UU , VV , UVO , ACTIVITY ,   &
             & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
               ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
@@ -173,7 +165,7 @@
 
     END IF
 
-  END SUBROUTINE MR_RW_EXTEND_UV
+  END SUBROUTINE MR_RW_SCALE_UV
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -195,14 +187,14 @@
 !   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_RW_EXTEND_SS( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , NLOOPS , NI , NJ , ERROR , ERRMSG )
+  SUBROUTINE MR_RW_SCALE_SS( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , SCALE , NI , NJ , ERROR , ERRMSG )
 
     USE MR_MOD_READ_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_WRITE_RAW_FIELD_VARS_N_ACTIVITY
     USE MR_MOD_GET_DSET_UNIT
     USE MR_MOD_CREATE_DSET
 
-    USE MR_MOD_EXTEND
+    USE MR_MOD_SCALE
 
     IMPLICIT NONE
 
@@ -213,7 +205,7 @@
 
     REAL   (TMRD_KIND) , INTENT(IN ) :: T
 
-    INTEGER            , INTENT(IN ) :: NLOOPS
+    REAL   (PARD_KIND) , INTENT(IN ) :: SCALE
 
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
@@ -222,12 +214,6 @@
     REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI,FDRD_KIND),0:NJ) :: SV
     REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI,FDRD_KIND),0:NJ) :: SO
     INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI,ACID_KIND),1:NJ) :: ACTIVITY
-
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),1:NJ) :: SS_
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),1:NJ) :: SU_
-    REAL   (FDRD_KIND) , DIMENSION(1:NI1(NI*NLOOPS,FDRD_KIND),0:NJ) :: SV_
-    REAL   (FDRD_KIND) , DIMENSION(0:NI0(NI*NLOOPS,FDRD_KIND),0:NJ) :: SO_
-    INTEGER(ACID_KIND) , DIMENSION(1:NI1(NI*NLOOPS,ACID_KIND),1:NJ) :: ACTIVITY_
 
     CHARACTER          , DIMENSION(:) , ALLOCATABLE :: PATH_SS_CHAR_ARRAY
     CHARACTER( 2**08 )               :: PATH_SS
@@ -241,6 +227,8 @@
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    INTEGER                          :: ERROR_DUMMY
 
     LOGICAL            , SAVE        :: BE_FIRST_CALL = .TRUE.
 
@@ -263,17 +251,15 @@
           ! READ FROM SOURCE
             CALL MR_READ_RAW_SS( MULTI_DSETS_ID , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , ITS ,   &
             & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-            & SS , SU , SV , SO , ACTIVITY ,   &
+            & SS , SU, SV , SO , ACTIVITY ,   &
             & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
               ERRMSG = TRIM(ERRMSG)//" in the source file out of the files"
               RETURN
             END IF
 
-          ! EXTEND
-            CALL MR_EXTEND_SS( NLOOPS , NI , NJ ,   &
-            & SS , SU , SV , SO , ACTIVITY ,   &
-            & SS_ , SU_ , SV_ , SO_ , ACTIVITY_ )
+          ! SCALE
+            CALL MR_SCALE_SS( PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , SCALE , NI , NJ , SS , SU , SV , SO )
 
             IF( BE_FIRST_CALL ) THEN
             ! CREATE CATALOG IN THE TARGET
@@ -291,8 +277,8 @@
 
           ! WRITE TO THE TARGET
             CALL MR_WRITE_RAW_SS( MULTI_DSETS_ID_ , PATH_SS(1:N_MAX_PATH_SS_LENGTH-1) , T ,   &
-            & NND_ , NEM_ , NI_ , NJ_ , EMIDW_ , NDIDW_ , NDIDU_ , NDIDV_ , NDIDO_ ,   &
-            & SS_ , SU_ , SV_ , SO_ , ACTIVITY_ ,   &
+            & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+            & SS , SU , SV , SO , ACTIVITY ,   &
             & ERROR , ERRMSG )
             IF( ERROR < 0 ) THEN
               ERRMSG = TRIM(ERRMSG)//" in the target file out of the files"
@@ -308,6 +294,6 @@
 
     END IF
 
-  END SUBROUTINE MR_RW_EXTEND_SS
+  END SUBROUTINE MR_RW_SCALE_SS
 
-  END MODULE MR_MOD_RW_EXTEND_FIELD_VARS_N_ACTIVITY
+  END MODULE MR_MOD_RW_SCALE_FIELD_VARS_N_ACTIVITY

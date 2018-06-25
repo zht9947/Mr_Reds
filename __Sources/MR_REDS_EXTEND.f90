@@ -70,30 +70,19 @@
       WRITE(*,'(  "      Source file''s path\name containing the mesh and the data to be extened,")')
       WRITE(*,'(  "    in XMDF format;")')
       WRITE(*,'(  "  2- (optional)")')
-      WRITE(*,'(  "      Number of loops that the source are expected to be extended;")')
-      WRITE(*,'(  "        If omitted, the source will be just duplicated;")')
-      WRITE(*,'(  "  ALL the arguments must be given in sequence.")')
+      WRITE(*,'(  "      Number of loops to which the source is expected to be extended;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, the source will be just duplicated;")')
+      WRITE(*,'(  "Note,")')
+      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
       STOP
     END IF
-
-    WRITE(*,'( )')
-
-    WRITE(*,'("Verify input files... ", $ )')
-    CALL MR_INIT_INPUT_FILES( ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
-
-    WRITE(*,'("Create output files... ", $ )')
+  ! CREATE OUTPUT FILES
     CALL MR_INIT_OUTPUT_FILES( "NEWCREATE" , ERROR , ERRMSG )
     IF( ERROR == ERROR_CREATING_NEW_FILE ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"Files with the same names may already exist.")')
       CALL MR_CTRL_RETRY_CREATING_FILES
-      WRITE(*,'( )')
-      WRITE(*,'("Create output files... ", $ )')
       CALL MR_INIT_OUTPUT_FILES( "OVERWRITE" , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -103,7 +92,6 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
 
     WRITE(*,'( )')
 
@@ -170,7 +158,7 @@
 
     WRITE(*,'(8X,"Extend data... Done! ")')
 
-    WRITE(*,'(/,"The result has been written into the file: ",/,4X, A )') TRIM(FILE_XMDF_)
+    WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF_)
 
 
 !***********************************************************************************************************************************
@@ -199,9 +187,13 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
+    USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+
+    INTEGER                          :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -227,6 +219,7 @@
       END IF
     END IF
 
+  ! NUMBER OF COMMAND ARGUMENTS DETECT
     IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
       ERROR = - 11
       ERRMSG = "Not enough command arguments"
@@ -246,6 +239,18 @@
       ERROR = - ABS(ERROR)
       ERRMSG = "Error in getting command argument No.1 as source file"
       RETURN
+    ELSE
+      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as source file"
+        RETURN
+      ELSE
+        CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+          RETURN
+        END IF
+      END IF
     END IF
 
   ! SET EXTENDED XMDF FILE'S PATH\NAME
@@ -306,51 +311,6 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_INPUT_FILES( ERROR , ERRMSG )
-
-    USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
-
-    IMPLICIT NONE
-
-    INTEGER            , INTENT(OUT) :: ERROR
-    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
-
-    INTEGER            :: FILE_ID
-
-    CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as source file"
-      RETURN
-    ELSE
-      CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
-        RETURN
-      END IF
-    END IF
-
-  END SUBROUTINE MR_INIT_INPUT_FILES
-
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
   SUBROUTINE MR_INIT_OUTPUT_FILES( FILE_STATUS , ERROR , ERRMSG )
 
     USE MR_MOD_CREATE_FILE_XMDF
@@ -364,7 +324,7 @@
 
     CALL MR_CREATE_FILE_XMDF( FILE_XMDF_ , FILE_STATUS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_)
+      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_)//" as target file"
       RETURN
     END IF
 

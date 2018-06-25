@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{3DF0E435-81F0-4849-AF90-FE26D87C1E9D}">
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{E0A9AAD2-8D68-4734-8329-A2EF74D9F476}">
 	<Platforms>
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
@@ -38,7 +38,7 @@
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_UNITS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_RANKS.f90"/></Filter>
-		<Filter Name="MR_MOD_FILE_MANIPULATIONS">
+		<Filter Name="MR_MOD_FLIE_MANIPULATIONS">
 		<Filter Name="MR_MOD_FILE_XMDF_MANIPULATIONS">
 		<Filter Name="XMDF">
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter>
@@ -52,11 +52,13 @@
 		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_TO_WRITE_COORS.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_TO_WRITE_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_READ_RAW_FIELD_VARS_N_ACTIVITY.f90"/>
-		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_TO_RW_RESAMPLE_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_TO_RW_SCALE_FIELD_VARS_N_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_FILE_MANIPULATIONS\__POST_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_TO_WRITE_RAW_FIELD_VARS_N_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/></Filter></Filter>
+		<Filter Name="MR_MOD_OPERATIONS">
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_SCALE.f90"/></Filter>
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_FLOW_CTRLS\MR_MOD_CTRL_RETRY_CREATING_FILES.f90"/></Filter>
@@ -65,8 +67,8 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_RANKS.f90"/></Filter>
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_DO_DUPLICATE_OUTPUT_MESH_DATA.f90"/>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_DO_SCALE_OUTPUT_MESH_DATA.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_RESAMPLE.f90"/></Filter>
-		<File RelativePath="..\__Sources\MR_REDS_RESAMPLE.f90"/></Filter></Files>
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_SCALE.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_REDS_SCALE.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

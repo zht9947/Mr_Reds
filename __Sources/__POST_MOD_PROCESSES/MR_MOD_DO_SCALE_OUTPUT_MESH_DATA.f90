@@ -19,7 +19,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_DO_DUPLICATE_OUTPUT_MESH_DATA
+  MODULE MR_MOD_DO_SCALE_OUTPUT_MESH_DATA
 
     USE MR_KINDS
 
@@ -31,7 +31,7 @@
 
     PRIVATE
 
-    PUBLIC :: MR_DO_DUPLICATE_OUTPUT_MESH_DATA
+    PUBLIC :: MR_DO_SCALE_OUTPUT_MESH_DATA
 
 !***********************************************************************************************************************************
 
@@ -57,7 +57,7 @@
 !   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_DO_DUPLICATE_OUTPUT_MESH_DATA( FILE_XMDF_NAME , FILE_XMDF_NAME_ , ERROR , ERRMSG )
+  SUBROUTINE MR_DO_SCALE_OUTPUT_MESH_DATA( FILE_XMDF_NAME , FILE_XMDF_NAME_ , SCALE , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF
@@ -65,16 +65,23 @@
     USE MR_MOD_WRITE_GRID_SYS
     USE MR_MOD_WRITE_COORS
 
+    USE MR_MOD_SCALE
+
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME , FILE_XMDF_NAME_
 
+    REAL   (PARD_KIND) , INTENT(IN ) :: SCALE
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
     CALL MR_OUTPUT_GRID_SYS( FILE_XMDF_NAME_ , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" when outputting duplicated grid system"
+      ERRMSG = TRIM(ERRMSG)//" when outputting scaled grid system"
     ELSE
 
       ALLOCATE( XYUV(1:NI1(NI,XYRD_KIND),1:NJ,1:2) )
@@ -86,9 +93,11 @@
         ERRMSG = TRIM(ERRMSG)//" when initializing coordinates"
       ELSE
 
+        CALL MR_SCALE_XY( SCALE , NI , NJ , XYUV , XYUU , XYVV , XYOO )
+
         CALL MR_OUTPUT_COORS( FILE_XMDF_NAME_ , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" when outputting duplicated coordinates"
+          ERRMSG = TRIM(ERRMSG)//" when outputting scaled coordinates"
         END IF
 
       END IF
@@ -97,7 +106,7 @@
 
     END IF
 
-  END SUBROUTINE MR_DO_DUPLICATE_OUTPUT_MESH_DATA
+  END SUBROUTINE MR_DO_SCALE_OUTPUT_MESH_DATA
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -326,4 +335,4 @@
 
   END SUBROUTINE MR_OUTPUT_COORS
 
-  END MODULE MR_MOD_DO_DUPLICATE_OUTPUT_MESH_DATA
+  END MODULE MR_MOD_DO_SCALE_OUTPUT_MESH_DATA
