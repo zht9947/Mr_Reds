@@ -64,9 +64,9 @@
       WRITE(*,'(  "      Channel width, in meters;")')
       WRITE(*,'(  "  3- (non-optional)")')
       WRITE(*,'(  "      Channel wavelength-to-width ratio;")')
-      WRITE(*,'(  "        Besides a real number, this argument can also be input as ""[proportion-to-pi]pi"",")')
-      WRITE(*,'(  "      e.g. ""2pi""; then the channel wavelength-to-width ratio will be calculated as a")')
-      WRITE(*,'(  "      corresponding proportion multiplied by pi¡Ö3.141592653589793...;")')
+      WRITE(*,'(  "        Besides a real number, this argument can also be input as [<proportion-to-pi>]pi,")')
+      WRITE(*,'(  "      e.g. pi, 2pi, etc.; then the channel wavelength-to-width ratio will be calculated")')
+      WRITE(*,'(  "      as a corresponding proportion multiplied by pi¡Ö3.141592653589793...;")')
       WRITE(*,'(  "  4- (non-optional)")')
       WRITE(*,'(  "      Number of columns into which the whole length of ONE meander bend will be divided;")')
       WRITE(*,'(  "  5- (non-optional)")')
@@ -241,7 +241,9 @@
           RETURN
         ELSE
           READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) LAMBTH2BTH
-          IF( ERROR /= 0 ) THEN
+          IF( ERROR == -1 ) THEN
+            LAMBTH2BTH = 1.0
+          ELSE IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in reading a value from command argument no.3"
             RETURN

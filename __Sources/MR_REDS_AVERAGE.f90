@@ -77,6 +77,7 @@
       WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
       WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
+      WRITE(*,'(  "Note,")')
       WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
       STOP
     END IF
