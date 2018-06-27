@@ -13,7 +13,7 @@
 				<Tool Name="VFPreBuildEventTool"/>
 				<Tool Name="VFPostBuildEventTool"/>
 				<Tool Name="VFManifestTool" SuppressStartupBanner="true"/></Configuration>
-		<Configuration Name="Release|Win32" OutputDirectory="$(ConfigurationName)\output" IntermediateDirectory="$(ConfigurationName)\intermediate" DeleteExtensionsOnClean="*.cod;*__genmod.*;*.obj;*.mod;*.pdb;*.asm;*.lst;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;*.lib;$(TargetPath);*.optrpt;*.diag" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
+		<Configuration Name="Release|Win32" OutputDirectory="$(SolutionDir)__0_release" IntermediateDirectory="$(ConfigurationName)\intermediate" DeleteExtensionsOnClean="*.cod;*__genmod.*;*.obj;*.mod;*.pdb;*.asm;*.lst;*.map;*.dyn;*.dpi;*.tmp;*.log;*.ilk;*.exe;*.lib;$(TargetPath);*.optrpt;*.diag" BuildLogFile="$(ConfigurationName)\BuildLog.htm">
 				<Tool Name="VFFortranCompilerTool" SuppressStartupBanner="true" DebugInformationFormat="debugEnabled" Optimization="optimizeFull" GenAlternateCodePaths="codeForAVX2" UseProcessorExtensions="codeExclusivelyHost" HeapArrays="4" InterproceduralOptimizations="ipoMultiFile" Preprocess="preprocessYes" AdditionalIncludeDirectories="$(SolutionDir)__Library\include" EnableEnhancedInstructionSet="codeArchAVX" VectorizerDiagLevel="vectorizerDiagLevelNew5" EmitDiagnosticsToFile="true" ArrayAlignment="alignArray32Bytes" RuntimeLibrary="rtMultiThreadedDLL"/>
 				<Tool Name="VFLinkerTool" LinkIncremental="linkIncrementalNo" SuppressStartupBanner="true" AdditionalLibraryDirectories="$(SolutionDir)__Library\lib" GenerateDebugInformation="true" SubSystem="subSystemConsole" AdditionalDependencies="xmdf2.2.lib"/>
 				<Tool Name="VFResourceCompilerTool"/>
