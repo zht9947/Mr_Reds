@@ -16,7 +16,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   MODULE MR_MOD_CALC_EQD_ADV_N_DIF_Z
@@ -58,7 +58,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_EQD_ADV_N_DIF_Z( NI , NJ , NK , EQD_ADV_Z , EQD_DIF_Z )

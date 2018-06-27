@@ -15,7 +15,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   MODULE MR_MOD_FUNC_TBUV
@@ -52,7 +52,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_HDS( D0 ) RESULT( HDS )
@@ -84,7 +84,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_TBFUV_COMP( TBFUV_MOD , D0 , H , SIGMA , UV_MOD , UV_COMP ) RESULT( TBFUV_COMP )
@@ -121,7 +121,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_HKS( TBFUV_MOD , D0 , TCRS , H ) RESULT( HKS )
@@ -163,7 +163,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_TBUV_COMP( TBUV_MOD , TBFUV_MOD , D0 , TCRS , H , SIGMA , UV_MOD , UV_COMP ) RESULT( TBUV_COMP )
@@ -200,7 +200,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_CHEZY( TBFUV_MOD , HDS , H , SIGMA ) RESULT( CHEZY )
@@ -238,7 +238,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_BS( TBFUV_MOD , HDS ) RESULT( BS )

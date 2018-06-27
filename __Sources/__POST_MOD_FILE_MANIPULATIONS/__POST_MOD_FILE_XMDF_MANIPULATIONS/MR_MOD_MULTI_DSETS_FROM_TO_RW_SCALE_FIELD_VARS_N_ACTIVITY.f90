@@ -16,7 +16,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   MODULE MR_MOD_RW_SCALE_FIELD_VARS_N_ACTIVITY
@@ -55,7 +55,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_RW_SCALE_UV( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , SCALE , NI , NJ , ERROR , ERRMSG )
@@ -184,7 +184,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-04-14    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   SUBROUTINE MR_RW_SCALE_SS( MULTI_DSETS_ID , MULTI_DSETS_ID_ , ITS , T , SCALE , NI , NJ , ERROR , ERRMSG )

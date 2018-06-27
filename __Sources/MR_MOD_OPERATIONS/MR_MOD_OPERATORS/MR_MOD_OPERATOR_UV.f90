@@ -16,7 +16,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   MODULE MR_MOD_OPERATOR_UV
@@ -98,7 +98,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_MULTIPLY_BY_SS_KIND4_X_KIND4( UV0 , SS ) RESULT( UVMTP )
@@ -145,7 +145,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_MULTIPLY_BY_SS_KIND8_X_KIND4( UV0 , SS ) RESULT( UVMTP )
@@ -192,7 +192,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_MULTIPLY_BY_SS_KIND4_X_KIND8( UV0 , SS ) RESULT( UVMTP )
@@ -239,7 +239,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_MULTIPLY_BY_SS_KIND8_X_KIND8( UV0 , SS ) RESULT( UVMTP )
@@ -286,7 +286,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DIVIDE_BY_SS_KIND4_X_KIND4( UV0 , SS ) RESULT( UVDIV )
@@ -333,7 +333,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DIVIDE_BY_SS_KIND8_X_KIND4( UV0 , SS ) RESULT( UVDIV )
@@ -380,7 +380,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DIVIDE_BY_SS_KIND4_X_KIND8( UV0 , SS ) RESULT( UVDIV )
@@ -427,7 +427,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DIVIDE_BY_SS_KIND8_X_KIND8( UV0 , SS ) RESULT( UVDIV )
@@ -474,7 +474,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SCALE_BY_MW_KIND4_X_KIND4( MW , UV0 ) RESULT( UVSCL )
@@ -521,7 +521,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SCALE_BY_MW_KIND8_X_KIND4( MW , UV0 ) RESULT( UVSCL )
@@ -568,7 +568,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SCALE_BY_MW_KIND4_X_KIND8( MW , UV0 ) RESULT( UVSCL )
@@ -615,7 +615,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SCALE_BY_MW_KIND8_X_KIND8( MW , UV0 ) RESULT( UVSCL )
@@ -662,7 +662,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_TRANSFORM_BY_XUV_KIND4_X_KIND4( XUV , UV0 ) RESULT( UVTFM )
@@ -709,7 +709,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_TRANSFORM_BY_XUV_KIND8_X_KIND4( XUV , UV0 ) RESULT( UVTFM )
@@ -756,7 +756,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_TRANSFORM_BY_XUV_KIND4_X_KIND8( XUV , UV0 ) RESULT( UVTFM )
@@ -803,7 +803,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-03-26    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_TRANSFORM_BY_XUV_KIND8_X_KIND8( XUV , UV0 ) RESULT( UVTFM )
@@ -850,7 +850,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_ROTATE_90CW_KIND4( UV0 ) RESULT( UVROT )
@@ -892,7 +892,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_ROTATE_90CW_KIND8( UV0 ) RESULT( UVROT )
@@ -934,7 +934,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SQUARE_KIND4( UV0 ) RESULT( UVSQR )
@@ -975,7 +975,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_SQUARE_KIND8( UV0 ) RESULT( UVSQR )
@@ -1016,7 +1016,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DOT_PRODUCT_KIND4_X_KIND4( UV0 , UV ) RESULT( UVDOT )
@@ -1058,7 +1058,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DOT_PRODUCT_KIND8_X_KIND4( UV0 , UV ) RESULT( UVDOT )
@@ -1100,7 +1100,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DOT_PRODUCT_KIND4_X_KIND8( UV0 , UV ) RESULT( UVDOT )
@@ -1142,7 +1142,7 @@
 !
 !      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
 !      ====       |    ==========    |    =====================
-!   2015-06-10    |     DR. HYDE     |    ORIGINAL CODE.
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
   FUNCTION MR_VECTOR_DOT_PRODUCT_KIND8_X_KIND8( UV0 , UV ) RESULT( UVDOT )

@@ -1,3 +1,6 @@
+!
+!       Original code by Dr. Hyde at 20XX-XX-XX.
+!
 !#include 'MR_H_ALIGN_PADDING.h'
 !program main
 !
