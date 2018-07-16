@@ -22,7 +22,7 @@
 ! from this software without specific prior written permission from the
 ! University or the Contributors, as appropriate for the name(s) to be
 ! used.  6.  THIS SOFTWARE IS PROVIDED BY THE UNIVERSITY AND THE
-! CONTRIBUTORS "AS IS"WITH NO WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+! CONTRIBUTORS "AS IS" WITH NO WARRANTY OF ANY KIND, EITHER EXPRESSED OR
 ! IMPLIED.  In no event shall the University or the Contributors be
 ! liable for any damages suffered by the users arising out of the use of
 ! this software, even if advised of the possibility of such damage.
@@ -91,7 +91,7 @@
 ! Lawrence Livermore National Laboratory (UC LLNL) under contract
 ! no.W-7405-ENG-48 (Contract 48) between the U.S. Department of Energy
 ! (DOE) and The Regents of the University of California (University) for
-! the operation of UC LLNL.  DISCLAIMER:This work was prepared as an
+! the operation of UC LLNL.  DISCLAIMER: This work was prepared as an
 ! account of work sponsored by an agency of the United States
 ! Government.  Neither the United States Government nor the University
 ! of California nor any of their employees, makes any warranty, express
