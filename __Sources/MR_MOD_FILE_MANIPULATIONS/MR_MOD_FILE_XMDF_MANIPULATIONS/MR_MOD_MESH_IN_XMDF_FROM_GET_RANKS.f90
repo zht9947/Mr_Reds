@@ -92,15 +92,15 @@
 
   ! CHECK CONSISTENCY
     IF( NND /= ((2*NI+1)*(2*NJ+1)) .AND. NEM /= (NI*NJ) ) THEN
-      ERROR = - 5500
+      ERROR = - 1
       ERRMSG = "Inconsistent both number of nodes (NND) and number of elements (NEM) gotten from mesh"
       RETURN
     ELSE IF( NND /= ((2*NI+1)*(2*NJ+1)) ) THEN
-      ERROR = - 5501
+      ERROR = - 1
       ERRMSG = "Inconsistent number of nodes (NND) gotten from mesh"
       RETURN
     ELSE IF( NEM /= (NI*NJ) ) THEN
-      ERROR = - 5502
+      ERROR = - 1
       ERRMSG = "Inconsistent number of elements (NEM) gotten from mesh"
       RETURN
     END IF

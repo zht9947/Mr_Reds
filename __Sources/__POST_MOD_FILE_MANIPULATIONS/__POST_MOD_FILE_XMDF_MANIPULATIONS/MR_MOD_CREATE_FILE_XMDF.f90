@@ -87,7 +87,7 @@
     CASE DEFAULT
       CALL XF_CREATE_FILE( TRIM(FILE_XMDF_NAME) , .FALSE. , FILE_XMDF_ID , ERROR )
       IF( ERROR < 0 ) THEN
-        ERROR = ERROR_CREATING_NEW_FILE
+        ERROR = ERROR_CANNOT_CREATE_NEW_FILE
         ERRMSG = "Error in creating file"
         RETURN
       END IF

@@ -88,7 +88,7 @@
         CASE DEFAULT
           OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='NEW' , ACTION='WRITE' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
-            ERROR = ERROR_CREATING_NEW_FILE
+            ERROR = ERROR_CANNOT_CREATE_NEW_FILE
             ERRMSG = "Error in creating file"
             RETURN
           END IF

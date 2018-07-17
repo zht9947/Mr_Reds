@@ -254,7 +254,7 @@
         CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
         &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
         )
-          ERROR = - 999999
+          ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
         END SELECT
@@ -263,11 +263,11 @@
 
   ! NUMBER OF COMMAND ARGUMENTS DETECT
     IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
-      ERROR = - 11
+      ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
     ELSE IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
-      ERROR = - 12
+      ERROR = - 1
       ERRMSG = "Too many command arguments"
       RETURN
     END IF
