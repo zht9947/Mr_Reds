@@ -42,6 +42,8 @@
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
 		<Filter Name="MR_MOD_NUMERATOR_DETER"/></Filter>
+		<Filter Name="MR_MOD_GEN_INIS">
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_GEN_INIS\MR_MOD_GEN_INI_ZB.f90"/></Filter>
 		<Filter Name="MR_MOD_INITS">
 		<Filter Name="MR_MOD_MALLOCS"/></Filter>
 		<Filter Name="MR_MOD_UPDTS"/></Filter></Filter></Files>
