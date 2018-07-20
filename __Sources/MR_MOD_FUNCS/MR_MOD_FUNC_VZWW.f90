@@ -57,7 +57,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_VZWW( V0 , KI , DI ) RESULT( VZWW )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( V0 ) :: MR_FUNC_VZWW
+
     IMPLICIT NONE
 
     REAL(PARD_KIND) , INTENT(IN ) :: V0

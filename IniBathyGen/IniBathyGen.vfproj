@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{F16170EF-F95A-47D6-9743-CD7CBAB3472B}">
+<VisualStudioProject ProjectCreator="Intel Fortran" Keyword="Console Application" Version="11.0" ProjectIdGuid="{03C83C73-7263-4345-BB34-DB787B5D02AD}">
 	<Platforms>
 		<Platform Name="Win32"/></Platforms>
 	<Configurations>
@@ -29,22 +29,56 @@
 		<File RelativePath="..\__Library\include\MR_H_PROGRAM_METADATA.h"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
+		<Filter Name="MR_ERRORS">
+		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS_INIBATHYGEN.f90"/></Filter>
 		<Filter Name="MR_KINDS">
-		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter></Filter>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<Filter Name="MR_MATH_CONSTS">
+		<File RelativePath="..\__Sources\__POST_DEFS\__MR_MATH_CONSTS\MR_MAC_PI.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CURVED_GEOS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_DSET_NAMES.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_UNITS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_RANKS.f90"/>
+		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_SLOPE.f90"/></Filter>
 		<Filter Name="MR_MOD_FILE_MANIPULATIONS">
 		<Filter Name="MR_MOD_FILE_XMDF_MANIPULATIONS">
 		<Filter Name="XMDF">
-		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter></Filter></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\XMDF\XMDF.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_CREATE_DSET.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_GET_DSET_TIMES.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_GET_RANKS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_COORS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MESH_IN_XMDF_FROM_READ_GRID_SYS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_FROM_READ_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_MULTI_DSETS_TO_WRITE_FIELD_VARS_N_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/></Filter></Filter>
 		<Filter Name="MR_MOD_FUNCS">
 		<Filter Name="MR_MOD_FUNC_PARS"/></Filter>
 		<Filter Name="MR_MOD_OPERATIONS">
-		<Filter Name="MR_MOD_OPERATORS"/></Filter>
+		<Filter Name="MR_MOD_OPERATORS">
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_SS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_UV.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_XUV.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/></Filter>
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
 		<Filter Name="MR_MOD_NUMERATOR_DETER"/></Filter>
 		<Filter Name="MR_MOD_GEN_INIS">
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_GEN_INIS\MR_MOD_GEN_INI_ZB.f90"/></Filter>
 		<Filter Name="MR_MOD_INITS">
-		<Filter Name="MR_MOD_MALLOCS"/></Filter>
-		<Filter Name="MR_MOD_UPDTS"/></Filter></Filter></Files>
+		<Filter Name="MR_MOD_MALLOCS">
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_ACTIVITY.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_CURVED_GEOS.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_CURVED_GEOS - for Anti-Symmetry BC.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/></Filter>
+		<Filter Name="MR_MOD_UPDTS"/></Filter>
+		<File RelativePath="..\__Sources\IniBathyGen.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

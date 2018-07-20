@@ -152,20 +152,20 @@
 
     REAL   (XYRD_KIND) , INTENT(OUT) , DIMENSION(0:NI0(2*NI,XYRD_KIND),0:2*NJ,1:2) :: XY_ALL
 
-    REAL   (PARD_KIND) :: DXI , DYI
+    REAL   (PARD_KIND) :: DXI , DYJ
 
     REAL   (PARD_KIND) :: THETA
 
     INTEGER(IJID_KIND) :: I , J
 
-    DXI = REAL(0.5,XYRD_KIND) * NBENDS / NI
-    DYI = REAL(1.0,XYRD_KIND) / NJ
+    DXI = 0.5_PARD_KIND * NBENDS / NI
+    DYJ = 1.0_PARD_KIND / NJ
 
     XY_ALL( 0 ,NJ,1) = 0.0
     XY_ALL( 0 ,NJ,2) = 0.0
    !DIR$ VECTOR ALIGNED
     DO I = 1 , NI
-      THETA = THETA0 * COS( 2.0 * PI * ( ( I - 0.5 ) * DXI ) )
+      THETA = THETA0 * COS(  2.0 * PI * ( ( I-0.5 ) * DXI )  )
 
       XY_ALL(2*I-1,NJ,1) = XY_ALL(2*I-2,NJ,1) + 0.5 * DXI * LTH * COS(THETA)
       XY_ALL(2*I-1,NJ,2) = XY_ALL(2*I-2,NJ,2) + 0.5 * DXI * LTH * SIN(THETA)
@@ -178,10 +178,10 @@
     DO J = NJ+1 , 2*NJ , +1
      !DIR$ VECTOR ALIGNED
       DO I = 0 , 2*NI
-        THETA = THETA0 * COS( 2.0 * PI * ( 0.5 * I * DXI ) )
+        THETA = THETA0 * COS(  2.0 * PI * ( 0.5 * I * DXI )  )
 
-        XY_ALL( I , J ,1) = XY_ALL( I ,J-1,1) - 0.5 * DYI * BTH * SIN(THETA)
-        XY_ALL( I , J ,2) = XY_ALL( I ,J-1,2) + 0.5 * DYI * BTH * COS(THETA)
+        XY_ALL( I , J ,1) = XY_ALL( I ,J-1,1) - 0.5 * DYJ * BTH * SIN(THETA)
+        XY_ALL( I , J ,2) = XY_ALL( I ,J-1,2) + 0.5 * DYJ * BTH * COS(THETA)
 
       END DO
     END DO
@@ -189,10 +189,10 @@
     DO J = NJ-1 , 0 , -1
      !DIR$ VECTOR ALIGNED
       DO I = 0 , 2*NI
-        THETA = THETA0 * COS( 2.0 * PI * ( 0.5 * I * DXI ) )
+        THETA = THETA0 * COS(  2.0 * PI * ( 0.5 * I * DXI )  )
 
-        XY_ALL( I , J ,1) = XY_ALL( I ,J+1,1) + 0.5 * DYI * BTH * SIN(THETA)
-        XY_ALL( I , J ,2) = XY_ALL( I ,J+1,2) - 0.5 * DYI * BTH * COS(THETA)
+        XY_ALL( I , J ,1) = XY_ALL( I ,J+1,1) + 0.5 * DYJ * BTH * SIN(THETA)
+        XY_ALL( I , J ,2) = XY_ALL( I ,J+1,2) - 0.5 * DYJ * BTH * COS(THETA)
 
       END DO
     END DO
