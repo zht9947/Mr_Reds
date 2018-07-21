@@ -55,7 +55,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GEN_XY( THETA0 , BTH , LTH , NBENDS , NI , NJ  , XYUV , XYUU , XYVV , XYOO )
+  SUBROUTINE MR_GEN_XY( THETA0 , BTH , LTH , NBENDS , NI , NJ , XYUV , XYUU , XYVV , XYOO )
 
     IMPLICIT NONE
 

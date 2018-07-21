@@ -27,13 +27,21 @@
 
     USE MR_MAC_PI
 
+    USE MR_DEF_RANKS
+    USE MR_DEF_CURVED_GEOS
+
     IMPLICIT NONE
 
     PRIVATE
 
     PUBLIC :: MR_GEN_INI_ZB
 
-    REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:) :: ALPHA_LBOUND , ALPHA_RBOUND
+    REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:) :: ALFA_LBOUND , ALFA_RBOUND
+
+    REAL   (CARD_KIND) , ALLOCATABLE , DIMENSION(:) :: ALFA , BETA , GAMA
+
+    REAL   (PARD_KIND) , ALLOCATABLE , DIMENSION(:) :: DZB_BK_L , DZB_BK_R
+    REAL   (GJRD_KIND) , ALLOCATABLE , DIMENSION(:) :: RTH_BK_L , RTH_BK_R
 
 !***********************************************************************************************************************************
 
@@ -59,13 +67,58 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_GEN_INI_ZB( THETA0 , BTH , LTH , HTH , DZB_BK_MIN , DZB_BK_MAX , XI0 , XXIM , NBENDS , NI , NJ , ZB , ERROR )
+  SUBROUTINE MR_INIT_RTH_BK
+
+    IMPLICIT NONE
+
+    INTEGER(IJID_KIND) :: I , J
+
+    J = 0
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        RTH_BK_R( I ) = ( ATAN( JOO(I-1, J ,2,1) / JOO(I-1, J ,1,1) ) - ATAN( JOO( I , J ,2,1) / JOO( I , J ,1,1) ) )   &
+        & / SQRT( GVV( I , J ,1,1) )
+        RTH_BK_R( I ) = 1.0 / SIGN( MAX( ABS(RTH_BK_R( I )) , 10.0*EPSILON(RTH_BK_R( I )) ) , RTH_BK_R( I ) )
+      END DO
+    !END J = 0
+      
+    J = NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        RTH_BK_L( I ) = ( ATAN( JOO(I-1, J ,2,1) / JOO(I-1, J ,1,1) ) - ATAN( JOO( I , J ,2,1) / JOO( I , J ,1,1) ) )   &
+        & / SQRT( GVV( I , J ,1,1) )
+        RTH_BK_L( I ) = 1.0 / SIGN( MAX( ABS(RTH_BK_L( I )) , 10.0*EPSILON(RTH_BK_L( I )) ) , RTH_BK_L( I ) )
+      END DO
+    !END J = NJ
+
+  END SUBROUTINE MR_INIT_RTH_BK
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_GEN_INI_ZB( THETA0 , HTH , DZB_BK_MIN , DZB_BK_MAX , XI0 , XXIM , NBENDS , NI , NJ , ZB , ERROR_1D_ARRAY )
 
     IMPLICIT NONE
 
     REAL   (PARD_KIND) , INTENT(IN ) :: THETA0
-    REAL   (PARD_KIND) , INTENT(IN ) :: BTH
-    REAL   (PARD_KIND) , INTENT(IN ) :: LTH , HTH
+    REAL   (PARD_KIND) , INTENT(IN ) :: HTH
     REAL   (PARD_KIND) , INTENT(IN ) :: DZB_BK_MIN , DZB_BK_MAX
     REAL   (PARD_KIND) , INTENT(IN ) :: XI0 , XXIM
 
@@ -75,71 +128,60 @@
 
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: ZB
 
-    INTEGER            , INTENT(OUT) , DIMENSION(1:NI1(NI,KIND(ERROR))) :: ERROR
+    INTEGER            , INTENT(OUT) , DIMENSION(1:NI1(NI,KIND(ERROR_1D_ARRAY))) :: ERROR_1D_ARRAY
 
     REAL   (PARD_KIND) :: COEFFI_XXIM
     REAL   (PARD_KIND) :: COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2
 
-    REAL   (PARD_KIND) :: CURVTH_MAX
-
-    REAL   (PARD_KIND) :: DXI , DYJ
-
-    REAL   (PARD_KIND) :: XI , YJ
-    REAL   (PARD_KIND) :: CURVTH , RADITH
-    REAL   (PARD_KIND) :: DZB_BK_L , DZB_BK_R
-
-    REAL   (CARD_KIND) , DIMENSION(1:NI1(NI,CARD_KIND)) :: ALPHA , BETA , GAMA
+    REAL   (PARD_KIND) :: DYJ
 
     INTEGER(IJID_KIND) :: I , J
 
     COEFFI_XXIM = ( 0.25 - XXIM ) / ( 1.0 + SIN( 2.0 * PI * XXIM ) )
 
-    COEFFI_DZB_BK_MIN_N_MAX_1 = 0.25 * ( DZB_BK_MAX + DZB_BK_MIN ) / BTH
-    COEFFI_DZB_BK_MIN_N_MAX_2 = 0.50 * ( DZB_BK_MAX - DZB_BK_MIN ) / BTH
+    COEFFI_DZB_BK_MIN_N_MAX_1 = 0.25 * ( DZB_BK_MAX + DZB_BK_MIN )
+    COEFFI_DZB_BK_MIN_N_MAX_2 = 0.50 * ( DZB_BK_MAX - DZB_BK_MIN )
 
-    CURVTH_MAX = 2.0 * PI * THETA0 * BTH / LTH
+    ALLOCATE( DZB_BK_L(1:NI1(NI,PARD_KIND)) , DZB_BK_R(1:NI1(NI,PARD_KIND)) )
 
-    DXI = 0.5_PARD_KIND * NBENDS / NI
-    DYJ = 1.0_PARD_KIND / NJ
-
-    IF( (.NOT. ALLOCATED(ALPHA_LBOUND) ) .AND. (.NOT. ALLOCATED(ALPHA_RBOUND) ) ) THEN
-      ALLOCATE( ALPHA_LBOUND(1:NI1(NI,CARD_KIND)) , ALPHA_RBOUND(1:NI1(NI,CARD_KIND)) )
-      ALPHA_LBOUND = -8.001 ; ALPHA_RBOUND = +10.001
-    END IF
-
-   !DIR$ NOVECTOR
-    DO I = 1 , NI
-
-      XI = (I-0.5) * DXI
-
-      CURVTH = CURVTH_MAX * SIN( 2.0 * PI * XI )
-      RADITH = 1.0 / SIGN( MAX( ABS(CURVTH) , 10.0*EPSILON(RADITH) ) , CURVTH )
-
-      CALL MR_CALC_DZB_BK( XI0 , COEFFI_XXIM ,   &
-      & COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2 , XI , DZB_BK_L , DZB_BK_R , ERROR( I ) )
-      IF( .NOT. ERROR( I ) < 0 ) THEN
-
-        CALL MR_CALC_DZB_PROFILE_COEFFIS( RADITH , DZB_BK_L , DZB_BK_R ,   &
-        & ALPHA_LBOUND( I ) , ALPHA_RBOUND( I ) , ALPHA( I ) , BETA( I ) , GAMA( I ) , ERROR( I ) )
-
-      END IF
-
-    END DO
-
-    IF( ANY( ERROR < 0 ) ) THEN
+    CALL MR_GEN_INI_DZB_BK( XI0 , COEFFI_XXIM , COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2 ,   &
+    & NBENDS , NI , DZB_BK_L , DZB_BK_R , ERROR_1D_ARRAY )
+    IF( ANY( ERROR_1D_ARRAY < 0 ) ) THEN
+      DEALLOCATE( DZB_BK_L , DZB_BK_R )
       RETURN
     END IF
 
+    ALLOCATE( RTH_BK_L(1:NI1(NI,GJRD_KIND)) , RTH_BK_R(1:NI1(NI,GJRD_KIND)) )
+
+    CALL MR_INIT_RTH_BK
+
+    ALLOCATE( ALFA(1:NI1(NI,CARD_KIND)) , BETA(1:NI1(NI,CARD_KIND)) , GAMA(1:NI1(NI,CARD_KIND)) )
+
+    IF( (.NOT. ALLOCATED(ALFA_LBOUND) ) .AND. (.NOT. ALLOCATED(ALFA_RBOUND) ) ) THEN
+      ALLOCATE( ALFA_LBOUND(1:NI1(NI,CARD_KIND)) , ALFA_RBOUND(1:NI1(NI,CARD_KIND)) )
+      ALFA_LBOUND = -8.001 ; ALFA_RBOUND = +10.001
+    END IF
+
+    CALL MR_GEN_INI_DZB_PROFILE_COEFFIS( NI , DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R ,   &
+    & ALFA_LBOUND , ALFA_RBOUND , ALFA , BETA , GAMA , ERROR_1D_ARRAY )
+    DEALLOCATE( DZB_BK_L , DZB_BK_R )
+    DEALLOCATE( RTH_BK_L , RTH_BK_R )
+    IF( ANY( ERROR_1D_ARRAY < 0 ) ) THEN
+      DEALLOCATE( ALFA , BETA , GAMA )
+      RETURN
+    END IF
+
+    DYJ = 1.0_PARD_KIND / NJ
+
     DO J = 1 , NJ
-
-      YJ = (J-0.5) * DYJ
-
      !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
-        ZB( I , J ) = ( GAMA( I ) - BETA( I ) * EXP( -ALPHA( I ) * ( 1.0 - YJ ) ) ) * BTH - HTH
+        ZB( I , J ) = ( GAMA( I ) - BETA( I ) * EXP( -ALFA( I ) * ( 1.0 - (J-0.5)*DYJ ) ) ) - HTH
       END DO
-
     END DO
+
+    DEALLOCATE( ALFA_LBOUND , ALFA_RBOUND )
+    DEALLOCATE( ALFA , BETA , GAMA )
 
   END SUBROUTINE MR_GEN_INI_ZB
 
@@ -163,8 +205,8 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_DZB_BK( XI0 , COEFFI_XXIM ,   &
-  & COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2 , XI , DZB_BK_L , DZB_BK_R , ERROR )
+  SUBROUTINE MR_GEN_INI_DZB_BK( XI0 , COEFFI_XXIM , COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2 ,   &
+  & NBENDS , NI , DZB_BK_L , DZB_BK_R , ERROR_1D_ARRAY )
 
     IMPLICIT NONE
 
@@ -172,27 +214,49 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: COEFFI_XXIM
     REAL   (PARD_KIND) , INTENT(IN ) :: COEFFI_DZB_BK_MIN_N_MAX_1 , COEFFI_DZB_BK_MIN_N_MAX_2
 
-    REAL   (PARD_KIND) , INTENT(IN ) :: XI
+    INTEGER            , INTENT(IN ) :: NBENDS
 
-    REAL   (PARD_KIND) , INTENT(OUT) :: DZB_BK_L , DZB_BK_R
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI
 
-    INTEGER            , INTENT(OUT) :: ERROR
+    REAL   (PARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,PARD_KIND)) :: DZB_BK_L , DZB_BK_R
+
+    INTEGER            , INTENT(OUT) , DIMENSION(1:NI1(NI,KIND(ERROR_1D_ARRAY))) :: ERROR_1D_ARRAY
+
+    REAL   (PARD_KIND) , DIMENSION(1:NI1(NI,PARD_KIND)) :: XXI , XXXI
 
     REAL   (PARD_KIND) :: DUMMY_DZB_BK_1 , DUMMY_DZB_BK_2
 
-    REAL   (PARD_KIND) :: XXI , XXXI
+    REAL   (PARD_KIND) :: DXI
 
-    XXI = XI - XI0
+    INTEGER(IJID_KIND) :: I
 
-    CALL MR_NEWTON_SOLVE_FUNC_XXXI( COEFFI_XXIM , XXI , XXXI , XXI , ERROR )
+    DXI = 0.5_PARD_KIND * NBENDS / NI
 
-    DUMMY_DZB_BK_1 = COEFFI_DZB_BK_MIN_N_MAX_1 - COEFFI_DZB_BK_MIN_N_MAX_1 * COS( 4.0 * PI * XXXI )
-    DUMMY_DZB_BK_2 = COEFFI_DZB_BK_MIN_N_MAX_2 * SIN( 2.0 * PI * XXXI )
+   !DIR$ VECTOR ALIGNED
+    DO I = 1 , NI
+      XXI( I ) = (I-0.5)*DXI - XI0
+    END DO
 
-    DZB_BK_L = DUMMY_DZB_BK_1 - DUMMY_DZB_BK_2
-    DZB_BK_R = DUMMY_DZB_BK_1 + DUMMY_DZB_BK_2
+   !DIR$ NOVECTOR
+    DO I = 1 , NI
+      CALL MR_NEWTON_SOLVE_FEQ_XXXI( COEFFI_XXIM , XXI( I ) , XXXI( I ) , XXI( I ) , ERROR_1D_ARRAY( I ) )
+    END DO
+    IF( ANY( ERROR_1D_ARRAY < 0 ) ) THEN
+      RETURN
+    END IF
 
-  END SUBROUTINE MR_CALC_DZB_BK
+   !DIR$ VECTOR ALIGNED
+    DO I = 1 , NI
+
+      DUMMY_DZB_BK_1 = COEFFI_DZB_BK_MIN_N_MAX_1 - COEFFI_DZB_BK_MIN_N_MAX_1 * COS( 4.0 * PI * XXXI( I ) )
+      DUMMY_DZB_BK_2 = COEFFI_DZB_BK_MIN_N_MAX_2 * SIN( 2.0 * PI * XXXI( I ) )
+
+      DZB_BK_L( I ) = DUMMY_DZB_BK_1 - DUMMY_DZB_BK_2
+      DZB_BK_R( I ) = DUMMY_DZB_BK_1 + DUMMY_DZB_BK_2
+
+    END DO
+
+  END SUBROUTINE MR_GEN_INI_DZB_BK
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -214,7 +278,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_NEWTON_SOLVE_FUNC_XXXI( COEFFI_XXIM , XXI , XXXI , XXXI_NEAR , ERROR )
+  SUBROUTINE MR_NEWTON_SOLVE_FEQ_XXXI( COEFFI_XXIM , XXI , XXXI , XXXI_NEAR , ERROR )
 
     IMPLICIT NONE
 
@@ -227,40 +291,41 @@
     REAL   (PARD_KIND) , INTENT(IN ) :: XXXI_NEAR
 
     REAL   (PARD_KIND) , PARAMETER   :: EPS_XXXI = 10.0*EPSILON(EPS_XXXI)
-    REAL   (CARD_KIND) , PARAMETER   :: EPS_FUNC_XXXI = 10.0*EPSILON(EPS_FUNC_XXXI)
+    REAL   (CARD_KIND) , PARAMETER   :: EPS_FEQ_XXXI = 10.0*EPSILON(EPS_FEQ_XXXI)
+    REAL   (CARD_KIND) , PARAMETER   :: EPS_FFEQ_XXXI = 10.0*EPSILON(EPS_FFEQ_XXXI)
 
     INTEGER            , PARAMETER   :: N_ITERS = 10000
 
     INTEGER            , INTENT(OUT) :: ERROR
 
     REAL   (PARD_KIND) :: XXXI0 , XXXI1
-    REAL   (CARD_KIND) :: FUNC_XXXI0 , FUNC_XXXI1
-    REAL   (CARD_KIND) :: FFUNC_XXXI0
+    REAL   (CARD_KIND) :: FEQ_XXXI0 , FEQ_XXXI1
+    REAL   (CARD_KIND) :: FFEQ_XXXI0
 
     INTEGER            :: I_ITER
 
     XXXI0 = XXXI_NEAR
-    FUNC_XXXI0 = MR_FUNC_XXXI( COEFFI_XXIM , XXI , XXXI0 )
+    FEQ_XXXI0 = MR_FUNC_FEQ_XXXI( COEFFI_XXIM , XXI , XXXI0 )
 
     DO I_ITER = 1 , N_ITERS
 
-      FFUNC_XXXI0 = MR_FFUNC_XXXI( COEFFI_XXIM , XXI , XXXI0 )
-      IF( FFUNC_XXXI0 <= EPS_FUNC_XXXI ) THEN
+      FFEQ_XXXI0 = MR_FUNC_FFEQ_XXXI( COEFFI_XXIM , XXI , XXXI0 )
+      IF( FFEQ_XXXI0 <= EPS_FFEQ_XXXI ) THEN
         XXXI = HUGE(XXXI)
         ERROR = ERROR_NEWTON_SOLVE_ZERO_DERIVATIVE
         RETURN
       END IF
 
-      XXXI1 = XXXI0 - FUNC_XXXI0 / FFUNC_XXXI0
+      XXXI1 = XXXI0 - FEQ_XXXI0 / FFEQ_XXXI0
 
-      FUNC_XXXI1 = MR_FUNC_XXXI( COEFFI_XXIM , XXI , XXXI1 )
-      IF( ABS( XXXI1 - XXXI0 ) <= EPS_XXXI .OR. ABS( FUNC_XXXI1 ) <= EPS_FUNC_XXXI ) THEN
+      FEQ_XXXI1 = MR_FUNC_FEQ_XXXI( COEFFI_XXIM , XXI , XXXI1 )
+      IF( ABS( XXXI1 - XXXI0 ) <= EPS_XXXI .OR. ABS( FEQ_XXXI1 ) <= EPS_FEQ_XXXI ) THEN
         XXXI = XXXI1
         ERROR = 0
         RETURN
       ELSE
         XXXI0 = XXXI1
-        FUNC_XXXI0 = FUNC_XXXI1
+        FEQ_XXXI0 = FEQ_XXXI1
       END IF
 
     END DO
@@ -268,7 +333,7 @@
     XXXI = HUGE(XXXI)
     ERROR = ERROR_NEWTON_SOLVE_MAX_NUMBER_OF_ITERATION
 
-  END SUBROUTINE MR_NEWTON_SOLVE_FUNC_XXXI
+  END SUBROUTINE MR_NEWTON_SOLVE_FEQ_XXXI
   
 !***********************************************************************************************************************************
 ! UNIT:
@@ -290,23 +355,22 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_XXXI( COEFFI_XXIM , XXI , XXXI ) RESULT( FUNC_XXXI )
+  FUNCTION MR_FUNC_FEQ_XXXI( COEFFI_XXIM , XXI , XXXI ) RESULT( FEQ_XXXI )
 
-   !DIR$ ATTRIBUTES VECTOR : UNIFORM( COEFFI_XXIM ) :: MR_FUNC_XXXI
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM( COEFFI_XXIM ) :: MR_FUNC_FEQ_XXXI
 
     IMPLICIT NONE
-
-    REAL   (CARD_KIND)               :: FUNC_XXXI
 
     REAL   (PARD_KIND) , INTENT(IN ) :: COEFFI_XXIM
 
     REAL   (PARD_KIND) , INTENT(IN ) :: XXI
-
     REAL   (PARD_KIND) , INTENT(IN ) :: XXXI
 
-    FUNC_XXXI = (XXXI-XXI) - COEFFI_XXIM * ( 1.0 - COS( 2.0 * PI * (XXXI+XXI) ) )
+    REAL   (CARD_KIND) :: FEQ_XXXI
 
-  END FUNCTION MR_FUNC_XXXI
+    FEQ_XXXI = (XXXI-XXI) - COEFFI_XXIM * ( 1.0 - COS( 2.0 * PI * (XXXI+XXI) ) )
+
+  END FUNCTION MR_FUNC_FEQ_XXXI
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -328,63 +392,22 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FFUNC_XXXI( COEFFI_XXIM , XXI , XXXI ) RESULT( FFUNC_XXXI )
+  FUNCTION MR_FUNC_FFEQ_XXXI( COEFFI_XXIM , XXI , XXXI ) RESULT( FFEQ_XXXI )
 
-   !DIR$ ATTRIBUTES VECTOR : UNIFORM( COEFFI_XXIM ) :: MR_FFUNC_XXXI
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM( COEFFI_XXIM ) :: MR_FUNC_FFEQ_XXXI
 
     IMPLICIT NONE
-
-    REAL   (CARD_KIND)               :: FFUNC_XXXI
 
     REAL   (PARD_KIND) , INTENT(IN ) :: COEFFI_XXIM
 
     REAL   (PARD_KIND) , INTENT(IN ) :: XXI
-
     REAL   (PARD_KIND) , INTENT(IN ) :: XXXI
 
-    FFUNC_XXXI = 1.0 - 2.0 * PI * COEFFI_XXIM * SIN( 2.0 * PI * (XXXI+XXI) )
+    REAL   (CARD_KIND) :: FFEQ_XXXI
 
-  END FUNCTION MR_FFUNC_XXXI
+    FFEQ_XXXI = 1.0 - 2.0 * PI * COEFFI_XXIM * SIN( 2.0 * PI * (XXXI+XXI) )
 
-!***********************************************************************************************************************************
-! UNIT:
-!
-!  (SUBROUTINE)
-!
-! PURPOSE:
-!
-!   TO
-!
-! DEFINITION OF VARIABLES:
-!
-!
-!
-! RECORD OF REVISIONS:
-!
-!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
-!      ====       |    ==========    |    =====================
-!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
-!
-!***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_DZB_PROFILE_COEFFIS( RADITH , DZB_BK_L , DZB_BK_R ,   &
-  & ALPHA_LBOUND , ALPHA_RBOUND , ALPHA , BETA , GAMA , ERROR )
-
-    IMPLICIT NONE
-
-    REAL   (PARD_KIND) , INTENT(IN ) :: RADITH
-    REAL   (PARD_KIND) , INTENT(IN ) :: DZB_BK_L , DZB_BK_R
-
-    REAL   (CARD_KIND) , INTENT(IN ) :: ALPHA_LBOUND , ALPHA_RBOUND
-
-    REAL   (CARD_KIND) , INTENT(OUT) :: ALPHA , BETA , GAMA
-
-    INTEGER            , INTENT(OUT) :: ERROR
-
-    CALL MR_BISECT_SOLVE_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA , ALPHA_LBOUND , ALPHA_RBOUND , ERROR )
-
-    CALL MR_CALC_BETA_N_GAMA( DZB_BK_L , DZB_BK_R , ALPHA , BETA , GAMA )
-
-  END SUBROUTINE MR_CALC_DZB_PROFILE_COEFFIS
+  END FUNCTION MR_FUNC_FFEQ_XXXI
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -406,57 +429,111 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_BISECT_SOLVE_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA , ALPHA_LBOUND , ALPHA_RBOUND , ERROR )
+  SUBROUTINE MR_GEN_INI_DZB_PROFILE_COEFFIS( NI , DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R ,   &
+  & ALFA_LBOUND , ALFA_RBOUND , ALFA , BETA , GAMA , ERROR_1D_ARRAY )
 
     IMPLICIT NONE
 
-    REAL   (PARD_KIND) , INTENT(IN ) :: RADITH
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI
+
+    REAL   (PARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,PARD_KIND)) :: DZB_BK_L , DZB_BK_R
+    REAL   (GJRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,GJRD_KIND)) :: RTH_BK_L , RTH_BK_R
+
+    REAL   (CARD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,CARD_KIND)) :: ALFA_LBOUND , ALFA_RBOUND
+
+    REAL   (CARD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,CARD_KIND)) :: ALFA , BETA , GAMA
+
+    INTEGER            , INTENT(OUT) , DIMENSION(1:NI1(NI,KIND(ERROR_1D_ARRAY))) :: ERROR_1D_ARRAY
+
+    INTEGER(IJID_KIND) :: I
+
+   !DIR$ NOVECTOR
+    DO I = 1 , NI
+      CALL MR_BISECT_SOLVE_FEQ_ALFA( DZB_BK_L( I ) , DZB_BK_R( I ) , RTH_BK_L( I ) , RTH_BK_R( I ) ,   &
+      & ALFA( I ) , ALFA_LBOUND( I ) , ALFA_RBOUND( I ) , ERROR_1D_ARRAY( I ) )
+    END DO
+    IF( ANY( ERROR_1D_ARRAY < 0 ) ) THEN
+      RETURN
+    END IF
+
+   !DIR$ VECTOR ALIGNED
+    DO I = 1 , NI
+      CALL MR_CALC_BETA_N_GAMA( DZB_BK_L( I ) , DZB_BK_R( I ) , ALFA( I ) , BETA( I ) , GAMA( I ) )
+    END DO
+
+  END SUBROUTINE MR_GEN_INI_DZB_PROFILE_COEFFIS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (SUBROUTINE)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_BISECT_SOLVE_FEQ_ALFA( DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R , ALFA , ALFA_LBOUND , ALFA_RBOUND , ERROR )
+
+    IMPLICIT NONE
+
     REAL   (PARD_KIND) , INTENT(IN ) :: DZB_BK_L , DZB_BK_R
+    REAL   (GJRD_KIND) , INTENT(IN ) :: RTH_BK_L , RTH_BK_R
 
-    REAL   (CARD_KIND) , INTENT(OUT) :: ALPHA
+    REAL   (CARD_KIND) , INTENT(OUT) :: ALFA
 
-    REAL   (CARD_KIND) , INTENT(IN ) :: ALPHA_LBOUND , ALPHA_RBOUND
+    REAL   (CARD_KIND) , INTENT(IN ) :: ALFA_LBOUND , ALFA_RBOUND
 
-    REAL   (CARD_KIND) , PARAMETER   :: EPS_ALPHA = 10.0*EPSILON(EPS_ALPHA)
-    REAL   (CARD_KIND) , PARAMETER   :: EPS_FUNC_ALPHA = 10.0*EPSILON(EPS_FUNC_ALPHA)
+    REAL   (CARD_KIND) , PARAMETER   :: EPS_ALFA = 10.0*EPSILON(EPS_ALFA)
+    REAL   (CARD_KIND) , PARAMETER   :: EPS_FEQ_ALFA = 10.0*EPSILON(EPS_FEQ_ALFA)
 
     INTEGER            , INTENT(OUT) :: ERROR
 
-    REAL   (CARD_KIND) :: ALPHA_LAPPRX , ALPHA_RAPPRX , ALPHA_MIDDLE
-    REAL   (CARD_KIND) :: FUNC_ALPHA_LAPPRX , FUNC_ALPHA_RAPPRX , FUNC_ALPHA_MIDDLE
+    REAL   (CARD_KIND) :: ALFA_LAPPRX , ALFA_RAPPRX , ALFA_MIDDLE
+    REAL   (CARD_KIND) :: FEQ_ALFA_LAPPRX , FEQ_ALFA_RAPPRX , FEQ_ALFA_MIDDLE
 
-    ALPHA_LAPPRX = ALPHA_LBOUND
-    FUNC_ALPHA_LAPPRX = MR_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA_LAPPRX )
-    ALPHA_RAPPRX = ALPHA_RBOUND
-    FUNC_ALPHA_RAPPRX = MR_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA_RAPPRX )
+    ALFA_LAPPRX = ALFA_LBOUND
+    FEQ_ALFA_LAPPRX = MR_FUNC_FEQ_ALFA( DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R , ALFA_LAPPRX )
+    ALFA_RAPPRX = ALFA_RBOUND
+    FEQ_ALFA_RAPPRX = MR_FUNC_FEQ_ALFA( DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R , ALFA_RAPPRX )
 
-    IF( FUNC_ALPHA_LAPPRX * FUNC_ALPHA_RAPPRX > 0 ) THEN
-      ALPHA = HUGE(ALPHA)
+    IF( FEQ_ALFA_LAPPRX * FEQ_ALFA_RAPPRX > 0 ) THEN
+      ALFA = HUGE(ALFA)
       ERROR = ERROR_BISECT_SOLVE_NO_UNIQUE_ROOT_IN_REGION
       RETURN
     END IF
 
-    DO WHILE( 0.5 * ABS( ALPHA_RAPPRX - ALPHA_LAPPRX ) > EPS_ALPHA )
+    DO WHILE( 0.5 * ABS( ALFA_RAPPRX - ALFA_LAPPRX ) > EPS_ALFA )
 
-      ALPHA_MIDDLE = 0.5 * ( ALPHA_LAPPRX + ALPHA_RAPPRX )
-      FUNC_ALPHA_MIDDLE = MR_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA_MIDDLE )
+      ALFA_MIDDLE = 0.5 * ( ALFA_LAPPRX + ALFA_RAPPRX )
+      FEQ_ALFA_MIDDLE = MR_FUNC_FEQ_ALFA( DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R , ALFA_MIDDLE )
 
-      IF( ABS( FUNC_ALPHA_MIDDLE ) <= EPS_FUNC_ALPHA ) THEN
+      IF( ABS( FEQ_ALFA_MIDDLE ) <= EPS_FEQ_ALFA ) THEN
         EXIT
-      ELSE IF( FUNC_ALPHA_LAPPRX * FUNC_ALPHA_MIDDLE < 0 ) THEN
-        ALPHA_RAPPRX = ALPHA_MIDDLE
-        FUNC_ALPHA_RAPPRX = FUNC_ALPHA_MIDDLE
+      ELSE IF( FEQ_ALFA_LAPPRX * FEQ_ALFA_MIDDLE < 0 ) THEN
+        ALFA_RAPPRX = ALFA_MIDDLE
+        FEQ_ALFA_RAPPRX = FEQ_ALFA_MIDDLE
       ELSE
-        ALPHA_LAPPRX = ALPHA_MIDDLE
-        FUNC_ALPHA_LAPPRX = FUNC_ALPHA_MIDDLE
+        ALFA_LAPPRX = ALFA_MIDDLE
+        FEQ_ALFA_LAPPRX = FEQ_ALFA_MIDDLE
       END IF
 
     END DO
 
-    ALPHA = 0.5 * ( ALPHA_LAPPRX + ALPHA_RAPPRX )
+    ALFA = 0.5 * ( ALFA_LAPPRX + ALFA_RAPPRX )
     ERROR = 0
 
-  END SUBROUTINE MR_BISECT_SOLVE_FUNC_ALPHA
+  END SUBROUTINE MR_BISECT_SOLVE_FEQ_ALFA
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -478,28 +555,33 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_ALPHA( RADITH , DZB_BK_L , DZB_BK_R , ALPHA ) RESULT( FUNC_ALPHA )
+  FUNCTION MR_FUNC_FEQ_ALFA( DZB_BK_L , DZB_BK_R , RTH_BK_L , RTH_BK_R , ALFA ) RESULT( FEQ_ALFA )
 
-   !DIR$ ATTRIBUTES VECTOR :: MR_FUNC_ALPHA
+   !DIR$ ATTRIBUTES VECTOR :: MR_FUNC_FEQ_ALFA
 
     IMPLICIT NONE
 
-    REAL   (CARD_KIND)               :: FUNC_ALPHA
-
-    REAL   (PARD_KIND) , INTENT(IN ) :: RADITH
     REAL   (PARD_KIND) , INTENT(IN ) :: DZB_BK_L , DZB_BK_R
+    REAL   (GJRD_KIND) , INTENT(IN ) :: RTH_BK_L , RTH_BK_R
 
-    REAL   (CARD_KIND) , INTENT(IN ) :: ALPHA
+    REAL   (CARD_KIND) , INTENT(IN ) :: ALFA
 
     REAL   (CARD_KIND) :: BETA , GAMA
 
-    CALL MR_CALC_BETA_N_GAMA( DZB_BK_L , DZB_BK_R , ALPHA , BETA , GAMA )
+    REAL   (GJRD_KIND) :: BTH
 
-    FUNC_ALPHA =    &
-    & BETA * ( EXP(-ALPHA) * ( ALPHA*(RADITH-0.5) - 1.0 ) - ALPHA*(RADITH+0.5) + 1.0 ) +   &
-    & GAMA * ALPHA * ALPHA * RADITH
+    REAL   (CARD_KIND) :: FEQ_ALFA
 
-  END FUNCTION MR_FUNC_ALPHA
+
+    CALL MR_CALC_BETA_N_GAMA( DZB_BK_L , DZB_BK_R , ALFA , BETA , GAMA )
+
+    BTH = ABS( RTH_BK_L - RTH_BK_R )
+
+    FEQ_ALFA =   &
+    & BETA * ( EXP(-ALFA) * ( ALFA * ( RTH_BK_R / BTH ) - 1.0 ) - ALFA * ( RTH_BK_L / BTH ) + 1.0 ) +   &
+    & GAMA * ALFA * ALFA * ( 0.5 * ( RTH_BK_L + RTH_BK_R ) / BTH )
+
+  END FUNCTION MR_FUNC_FEQ_ALFA
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -521,7 +603,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CALC_BETA_N_GAMA( DZB_BK_L , DZB_BK_R , ALPHA , BETA , GAMA )
+  SUBROUTINE MR_CALC_BETA_N_GAMA( DZB_BK_L , DZB_BK_R , ALFA , BETA , GAMA )
 
    !DIR$ ATTRIBUTES VECTOR :: MR_CALC_BETA_N_GAMA
 
@@ -529,11 +611,11 @@
 
     REAL   (PARD_KIND) , INTENT(IN ) :: DZB_BK_L , DZB_BK_R
 
-    REAL   (CARD_KIND) , INTENT(IN ) :: ALPHA
+    REAL   (CARD_KIND) , INTENT(IN ) :: ALFA
 
     REAL   (CARD_KIND) , INTENT(OUT) :: BETA , GAMA
 
-    BETA = ( DZB_BK_L - DZB_BK_R ) / ( EXP(-ALPHA) - 1.0 )
+    BETA = ( DZB_BK_L - DZB_BK_R ) / ( EXP(-ALFA) - 1.0 )
     GAMA =   DZB_BK_L + BETA
 
   END SUBROUTINE MR_CALC_BETA_N_GAMA
