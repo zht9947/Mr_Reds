@@ -1,11 +1,11 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_ERRORS_INIBATHYGEN
+!  (MODULE) MR_DEF_MEANDER_PARS
 !
 ! PURPOSE:
 !
-!   TO DEFINE THE UNIQUE ERROR PARAMETERS IN THE PROJECT INIBATHYGEN.
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -18,13 +18,17 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_ERRORS_INIBATHYGEN
+  MODULE MR_DEF_MEANDER_PARS
+
+    USE MR_KINDS
 
     IMPLICIT NONE
 
-    INTEGER , PARAMETER :: ERROR_BISECT_SOLVE_NO_UNIQUE_ROOT_IN_REGION = -2001
+    REAL   (GJRD_KIND) :: THETA0
 
-    INTEGER , PARAMETER :: ERROR_NEWTON_SOLVE_ZERO_DERIVATIVE          = -2011
-    INTEGER , PARAMETER :: ERROR_NEWTON_SOLVE_MAX_NUMBER_OF_ITERATION  = -2012
+    REAL   (GJRD_KIND) :: BTH , LTH , LAMBTH
+    REAL   (GJRD_KIND) :: LAMBTH2BTH , SINUOSITY
 
-  END MODULE MR_ERRORS_INIBATHYGEN
+    INTEGER            :: NBENDS
+
+  END MODULE MR_DEF_MEANDER_PARS
