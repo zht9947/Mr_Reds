@@ -89,7 +89,7 @@
       !DIR$ VECTOR ALIGNED
       DO I = 1 , NI
         WTH( I ) = 2.0 * DAREA( I )   &
-        & / ( SQRT( GVV( I , 0 ,1,1) ) + SQRT( GVV( I ,NJ ,1,1) ) )
+        / ( SQRT( GVV( I , 0 ,1,1) ) + SQRT( GVV( I ,NJ ,1,1) ) )
       END DO
 
     DEALLOCATE( DAREA )
@@ -98,8 +98,12 @@
     DO I = 1 , NI
 
       RTH( I ) =   &
-      ( ( ATAN( JOO(I-1, 0 ,2,1) / JOO(I-1, 0 ,1,1) ) + ATAN( JOO(I-1,NJ ,2,1) / JOO(I-1,NJ ,1,1) ) )   &
-      - ( ATAN( JOO( I , 0 ,2,1) / JOO( I , 0 ,1,1) ) + ATAN( JOO( I ,NJ ,2,1) / JOO( I ,NJ ,1,1) ) )   &
+      ( ( SIGN( ACOS( JOO(I-1, 0 ,1,1) / SQRT(GOO(I-1, 0 ,1,1)) ) , JOO(I-1, 0 ,2,1) )   &
+        + SIGN( ACOS( JOO(I-1,NJ ,1,1) / SQRT(GOO(I-1,NJ ,1,1)) ) , JOO(I-1,NJ ,2,1) )   &
+        )   &
+      - ( SIGN( ACOS( JOO( I , 0 ,1,1) / SQRT(GOO( I , 0 ,1,1)) ) , JOO( I , 0 ,2,1) )   &
+        + SIGN( ACOS( JOO( I ,NJ ,1,1) / SQRT(GOO( I ,NJ ,1,1)) ) , JOO( I ,NJ ,2,1) )   &
+        )   &
       ) / ( SQRT( GVV( I , 0 ,1,1) ) + SQRT( GVV( I ,NJ ,1,1) ) )
 
       RTH( I ) = 1.0 / SIGN( MAX( ABS(RTH( I )) , 10.0*EPSILON(RTH( I )) ) , RTH( I ) )
