@@ -1,7 +1,7 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_ERRORS
+!  (MODULE) MR_ERRORS_FILE_MANIPULATE
 !
 ! PURPOSE:
 !
@@ -18,10 +18,10 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_ERRORS
+  MODULE MR_ERRORS_FILE_MANIPULATE
 
     IMPLICIT NONE
 
     INTEGER , PARAMETER :: ERROR_CANNOT_CREATE_NEW_FILE = -1001
 
-  END MODULE MR_ERRORS
+  END MODULE MR_ERRORS_FILE_MANIPULATE

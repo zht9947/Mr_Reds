@@ -798,15 +798,15 @@
 
    !BLOCK
     IF( .NOT. ( NK > 0 ) ) THEN
-      ERROR = - 9999
+      ERROR = - 1
       ERRMSG = "Number of layers is identified with zero, "   &
       //"please check the project file "//TRIM(FILE_PRJ_NAME)
       RETURN
     ELSE
     ! CALCULATE DSIGMA
-      DSIGMA = REAL(1.0,PARD_KIND) / NK
+      DSIGMA = 1.0_PARD_KIND / NK
     ! CALCULATE SIGMA COORDINATES
-      SIGMA(NK) = - REAL(0.5,PARD_KIND) * DSIGMA
+      SIGMA(NK) = - 0.5_PARD_KIND * DSIGMA
       DO K = NK-1 , 1 , -1
         SIGMA( K ) = SIGMA(K+1) - DSIGMA
       END DO

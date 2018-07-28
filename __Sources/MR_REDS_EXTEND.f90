@@ -21,7 +21,7 @@
 !***********************************************************************************************************************************
   PROGRAM MR_REDS_EXTEND
 
-    USE MR_ERRORS
+    USE MR_ERRORS_FILE_MANIPULATE
 
     USE MR_KINDS
 
@@ -192,6 +192,8 @@
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+    CHARACTER( 2**03 )               :: I_ARG_CHAR
+    INTEGER                          :: I_ARG
 
     INTEGER                          :: FILE_ID
 
@@ -209,8 +211,8 @@
         RETURN
       ELSE
         SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
         )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
@@ -230,16 +232,19 @@
       RETURN
     END IF
 
+    I_ARG = 1
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET XMDF FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 1 , FILE_XMDF , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
       ERRMSG = "XMDF File's path too long!"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.1 as source file"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as source file"
       RETURN
     ELSE
+    ! VERIFY XMDF FILE'S OPENING AND CLOSING
       CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as source file"
@@ -258,22 +263,24 @@
 
     IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
 
+      I_ARG = 2
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET NUMBER OF LOOPS THAT THE SOURCE ARE EXPECTED TO BE EXTENDED TO
-      CALL GET_COMMAND_ARGUMENT( 2 , CHAR_ARGUMENT , STATUS=ERROR )
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
       IF( ERROR /= 0 ) THEN
         ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no.2"
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
           ERROR = - 1
-          ERRMSG = "Illegal character in command argument no.2"
+          ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         ELSE
           READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NLOOPS
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
-            ERRMSG = "Error in reading a value from command argument no.2"
+            ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
           END IF
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" ("//TRIM(CHAR_ARGUMENT)//")"

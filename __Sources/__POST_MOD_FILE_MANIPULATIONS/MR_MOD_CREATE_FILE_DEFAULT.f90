@@ -20,7 +20,7 @@
 !***********************************************************************************************************************************
   MODULE MR_MOD_CREATE_FILE_DEFAULT
 
-    USE MR_ERRORS
+    USE MR_ERRORS_FILE_MANIPULATE
 
     IMPLICIT NONE
 

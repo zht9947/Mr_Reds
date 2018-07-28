@@ -30,7 +30,7 @@
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
 		<Filter Name="MR_ERRORS">
-		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS_FILE_MANIPULATE.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>

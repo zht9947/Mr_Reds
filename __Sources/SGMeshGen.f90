@@ -21,7 +21,7 @@
 !***********************************************************************************************************************************
   PROGRAM SGMESHGEN
 
-    USE MR_ERRORS
+    USE MR_ERRORS_FILE_MANIPULATE
 
     USE MR_KINDS
 
@@ -59,7 +59,9 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"PLEASE RUN the mesh generator with the following command arguments:")')
       WRITE(*,'(  "  1- (non-optional)")')
-      WRITE(*,'(  "      Deflection angle of channel ceterline at a crossover section, in degrees;")')
+      WRITE(*,'(  "      Deflection angle of channel ceterline at reference crossover section, in degrees;")')
+      WRITE(*,'(  "        Absolute value of the deflection angle must be smaller than 138 degree; moreover,")')
+      WRITE(*,'(  "      negative value is permitted;")')
       WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Channel width, in meters;")')
       WRITE(*,'(  "  3- (non-optional)")')
@@ -133,6 +135,8 @@
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+    CHARACTER( 2**03 )               :: I_ARG_CHAR
+    INTEGER                          :: I_ARG
 
     INTEGER                          :: IDX
 
@@ -150,8 +154,8 @@
         RETURN
       ELSE
         SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
         )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
@@ -174,60 +178,74 @@
   ! SET XMDF FILE'S PATH\NAME
     FILE_XMDF = "Channel"
 
-  ! GET DEFLECTION ANGLE AT A CROSSOVER SECTION, IN DEGREES
-    CALL GET_COMMAND_ARGUMENT( 1 , CHAR_ARGUMENT , STATUS=ERROR )
+    I_ARG = 1
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+  ! GET DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.1"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
     ELSE
       IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
         ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.1"
+        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) THETA0
         IF( ERROR /= 0 ) THEN
           ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading value from command argument no.1"
+          ERRMSG = "Error in reading value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        ELSE IF( THETA0 <= -138.0 .OR. THETA0 >= +138.0 ) THEN
+          ERROR = - 1
+          ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         END IF
         FILE_XMDF = TRIM(FILE_XMDF)//" "//TRIM(CHAR_ARGUMENT)//"deg,"
       END IF
     END IF
 
+    I_ARG = 2
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET CHANNEL WIDTH, IN METERS
-    CALL GET_COMMAND_ARGUMENT( 2 , CHAR_ARGUMENT , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.2"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
     ELSE
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789Ee." ) /= 0 ) THEN
+      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
         ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.2"
+        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) BTH
         IF( ERROR /= 0 ) THEN
           ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no.2"
+          ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        ELSE IF( BTH <= 0.0 ) THEN
+          ERROR = - 1
+          ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         END IF
         FILE_XMDF = TRIM(FILE_XMDF)//" "//TRIM(CHAR_ARGUMENT)//"m"
       END IF
     END IF
 
+    I_ARG = 3
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET CHANNEL WAVELENGTH-TO-WIDTH RATIO
-    CALL GET_COMMAND_ARGUMENT( 3 , CHAR_ARGUMENT , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.3"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
     ELSE
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789Ee.PpIi" ) /= 0 ) THEN
+      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee.PpIi" ) /= 0 ) THEN
         ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.3"
+        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         IDX = MAX( INDEX(CHAR_ARGUMENT,"PI") , INDEX(CHAR_ARGUMENT,"Pi") , INDEX(CHAR_ARGUMENT,"pi") )
@@ -235,9 +253,9 @@
           CHAR_ARGUMENT(IDX:IDX+1) = ""
         END IF
 
-        IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789Ee." ) /= 0 ) THEN
+        IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
           ERROR = - 1
-          ERRMSG = "Illegal character in command argument no.3"
+          ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         ELSE
           READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) LAMBTH2BTH
@@ -245,7 +263,11 @@
             LAMBTH2BTH = 1.0
           ELSE IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
-            ERRMSG = "Error in reading a value from command argument no.3"
+            ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( LAMBTH2BTH <= 0.0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
           END IF
         END IF
@@ -261,44 +283,48 @@
 
     END IF
 
+    I_ARG = 4
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET NUMBER OF COLUMNS IN ONE MEANDER BEND
-    CALL GET_COMMAND_ARGUMENT( 4 , CHAR_ARGUMENT , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.4"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
     ELSE
       IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
         ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.4"
+        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NI
         IF( ERROR /= 0 ) THEN
           ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no.4"
+          ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         END IF
         FILE_XMDF = TRIM(FILE_XMDF)//" "//TRIM(CHAR_ARGUMENT)//"x"
       END IF
     END IF
 
+    I_ARG = 5
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET NUMBER OF ROWS
-    CALL GET_COMMAND_ARGUMENT( 5 , CHAR_ARGUMENT , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.5"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
     ELSE
       IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
         ERROR = - 1
-        ERRMSG = "Illegal character in command argument no.5"
+        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NJ
         IF( ERROR /= 0 ) THEN
           ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no.5"
+          ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         END IF
         FILE_XMDF = TRIM(FILE_XMDF)//TRIM(CHAR_ARGUMENT)
@@ -307,22 +333,24 @@
 
     IF( COMMAND_ARGUMENT_COUNT() > 5 ) THEN
 
+      I_ARG = 6
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET NUMBER OF MEANDER BENDS
-      CALL GET_COMMAND_ARGUMENT( 6 , CHAR_ARGUMENT , STATUS=ERROR )
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
       IF( ERROR /= 0 ) THEN
         ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no.6"
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
         IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
           ERROR = - 1
-          ERRMSG = "Illegal character in command argument no.6"
+          ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         ELSE
           READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
-            ERRMSG = "Error in reading a value from command argument no.6"
+            ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
           END IF
           FILE_XMDF = TRIM(FILE_XMDF)//" ("//TRIM(CHAR_ARGUMENT)//")"
