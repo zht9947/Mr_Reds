@@ -1,5 +1,4 @@
 #INCLUDE 'MR_H_PROGRAM_METADATA.H'
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -224,7 +223,7 @@
     WRITE(*,'("Done! ")')
 
     WRITE(*,'("Initialize field variables and activity... ", $ )')
-    IF( .TRUE. ) THEN
+    IF( .FALSE. ) THEN
       CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
       IF( ALLOCATED( T_START_ALTER ) )  THEN
         T_START = T_START_ALTER
@@ -273,10 +272,18 @@
 
     CALL MR_UPDT_H
 
-    CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
+    IF( .FALSE. ) THEN
+      CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    ELSE
+      CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.TRUE. )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
     END IF
 
     WRITE(*,'(8X,"Generate bathymetry and update depth... Done! ")')
