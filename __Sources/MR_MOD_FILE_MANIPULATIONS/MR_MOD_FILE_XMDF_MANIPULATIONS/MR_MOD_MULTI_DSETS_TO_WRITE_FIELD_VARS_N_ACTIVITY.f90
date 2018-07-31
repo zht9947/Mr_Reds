@@ -148,7 +148,7 @@
   SUBROUTINE MR_WRITE_UV( MULTI_DSETS_ID , PATH_UV_IN_MULTI_DSETS , T ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
   & UV_BASE , UV_REF , UV , U , UU , V , VV ,   &
-  & ACTIVITY , ERROR , ERRMSG )
+  & ACTIVITY , ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_OPERATOR_UV
     USE MR_MOD_INTERP_XY
@@ -192,13 +192,18 @@
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION( : , : ) :: V_AT_V
 
     REAL   (4)         , DIMENSION(1:2,1:NND) :: UV_ARRAY
+    REAL   (4)         , DIMENSION(    1:NND) :: UV_MOD_ARRAY
 
     INTEGER                          :: DSET_UV_ID
+
+    INTEGER                          :: NTIMES
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     INTEGER                          :: ERROR_DUMMY
+
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
 
    !DIR$ FORCEINLINE
     CALL MR_WRITE_UV_PACK_FOR_W_NODES
@@ -218,16 +223,51 @@
       ERRMSG = "Error in openning vector dataset group"
     ELSE
 
-      CALL XF_WRITE_VECTOR_TIMESTEP( DSET_UV_ID , REAL(T,8) , NND , 2 , UV_ARRAY , ERROR )
+      IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+        CALL XF_GET_DATASET_NUM_TIMES( DSET_UV_ID , NTIMES , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in getting the total number of timesteps from vector dataset group"
+        ELSE
+          NTIMES = NTIMES - 1
+          CALL XF_SET_DATASET_NUM_TIMES( DSET_UV_ID , NTIMES , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in droping the last timestep out of vector dataset group"
+          END IF
+        END IF
+      END IF
+
       IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in writing vector values into dataset group"
+        CONTINUE
       ELSE
 
-        IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_WRITE_ACTIVITY( DSET_UV_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+        CALL XF_WRITE_VECTOR_TIMESTEP( DSET_UV_ID , REAL(T,8) , NND , 2 , UV_ARRAY , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in writing vector values into dataset group"
+        ELSE
+
+          CALL XF_GET_DATASET_NUM_TIMES( DSET_UV_ID , NTIMES , ERROR )
           IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" into vector dataset group"
+            ERRMSG = "Error in getting the current number of timesteps from vector dataset group"
+          ELSE
+  
+            UV_MOD_ARRAY(:) = SQRT( UV_ARRAY(1,:) * UV_ARRAY(1,:) + UV_ARRAY(2,:) * UV_ARRAY(2,:) )
+
+            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_UV_ID , NTIMES , MINVAL(UV_MOD_ARRAY) , MAXVAL(UV_MOD_ARRAY) , ERROR )
+            IF( ERROR < 0 ) THEN
+              ERRMSG = "Error in setting minimum and maximum vector values into dataset group"
+            ELSE
+
+              IF( PRESENT( ACTIVITY ) ) THEN
+                CALL MR_WRITE_ACTIVITY( DSET_UV_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+                IF( ERROR < 0 ) THEN
+                  ERRMSG = TRIM(ERRMSG)//" into vector dataset group"
+                END IF
+              END IF
+
+            END IF
+
           END IF
+
         END IF
 
       END IF
@@ -609,7 +649,7 @@
   SUBROUTINE MR_WRITE_SS( MULTI_DSETS_ID , PATH_SS_IN_MULTI_DSETS , T ,   &
   & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
   & SS_BASE , SS_REF , SS , SU , SV , SO ,   &
-  & ACTIVITY , ERROR , ERRMSG )
+  & ACTIVITY , ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_INTERP_XY
 
@@ -649,10 +689,14 @@
 
     INTEGER                          :: DSET_SS_ID
 
+    INTEGER                          :: NTIMES
+
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     INTEGER                          :: ERROR_DUMMY
+
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
 
    !DIR$ FORCEINLINE
     CALL MR_WRITE_SS_PACK_FOR_W_NODES
@@ -672,16 +716,49 @@
       ERRMSG = "Error in openning scalar dataset group"
     ELSE
 
-      CALL XF_WRITE_SCALAR_TIMESTEP( DSET_SS_ID , REAL(T,8) , NND , SS_ARRAY , ERROR )
+      IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+        CALL XF_GET_DATASET_NUM_TIMES( DSET_SS_ID , NTIMES , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in getting the total number of timesteps from scalar dataset group"
+        ELSE
+          NTIMES = NTIMES - 1
+          CALL XF_SET_DATASET_NUM_TIMES( DSET_SS_ID , NTIMES , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in droping the last timestep out of scalar dataset group"
+          END IF
+        END IF
+      END IF
+
       IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in writing scalar values into dataset group"
+        CONTINUE
       ELSE
 
-        IF( PRESENT( ACTIVITY ) ) THEN
-          CALL MR_WRITE_ACTIVITY( DSET_SS_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+        CALL XF_WRITE_SCALAR_TIMESTEP( DSET_SS_ID , REAL(T,8) , NND , SS_ARRAY , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in writing scalar values into dataset group"
+        ELSE
+
+          CALL XF_GET_DATASET_NUM_TIMES( DSET_SS_ID , NTIMES , ERROR )
           IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" into scalar dataset group"
+            ERRMSG = "Error in getting the current number of timesteps from scalar dataset group"
+          ELSE
+
+            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_SS_ID , NTIMES , MINVAL(SS_ARRAY) , MAXVAL(SS_ARRAY) , ERROR )
+            IF( ERROR < 0 ) THEN
+              ERRMSG = "Error in setting minimum and maximum scalar values into dataset group"
+            ELSE
+
+              IF( PRESENT( ACTIVITY ) ) THEN
+                CALL MR_WRITE_ACTIVITY( DSET_SS_ID , NEM , NI , NJ , EMIDW , ACTIVITY , ERROR , ERRMSG )
+                IF( ERROR < 0 ) THEN
+                  ERRMSG = TRIM(ERRMSG)//" into scalar dataset group"
+                END IF
+              END IF
+
+            END IF
+
           END IF
+
         END IF
 
       END IF
