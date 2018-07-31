@@ -31,7 +31,7 @@
     USE MR_MOD_CTRL_PRJ_SETS_CORRECT
 
     USE MR_NUM_START_MODE
-    USE MR_MOD_DETER_START_MODE
+    !USE MR_MOD_DETER_START_MODE
 
     USE MR_MOD_INIT_RANKS
 
@@ -43,6 +43,9 @@
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
+
+    USE MR_MOD_CTRL_CONTINUE
+    USE MR_MOD_CTRL_COLD_MODE_STARTED
 
     USE MR_MOD_INIT_OUTPUT
 
@@ -58,6 +61,8 @@
 
     CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
+
+    REAL   (PARD_KIND) :: HTH
 
     INTEGER(TSID_KIND) :: ITS
 
@@ -103,10 +108,6 @@
 
     WRITE(*,'( )')
 
-    CALL MR_DETER_START_MODE
-
-    WRITE(*,'( )')
-
     WRITE(*,'("Initialize ranks... ", $ )')
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
@@ -140,10 +141,15 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize field variables and activity... ", $ )')
-    SELECT CASE( START_MODE )
-    CASE( COLD_MODE )
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
+    WRITE(*,'("Initialize field variables and activity on hot mode... ", $ )')
+    CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'( )')
+      CALL MR_CTRL_COLD_MODE_STARTED( HTH )
+      WRITE(*,'( )')
+      WRITE(*,'("Initialize field variables and activity on cold mode... ", $ )')
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
       WRITE(*,'("Done! ")')
       WRITE(*,'("Initialize output... ", $ )')
       CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
@@ -157,14 +163,17 @@
           STOP
         END IF
       END IF
-    CASE( HOT_MODE )
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-    END SELECT
+      START_MODE = COLD_MODE
+    ELSE
+      START_MODE = HOT_MODE
+    END IF
     WRITE(*,'("Done! ")')
+
+    SELECT CASE( START_MODE )
+    CASE( HOT_MODE )
+      WRITE(*,'( )')
+      CALL MR_CTRL_CONTINUE
+    END SELECT
 
     WRITE(*,'( )')
 

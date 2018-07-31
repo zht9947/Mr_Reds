@@ -18,15 +18,13 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_DETER_START_MODE
-
-    USE MR_NUM_START_MODE
+  MODULE MR_MOD_CTRL_CONTINUE
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_DETER_START_MODE
+    PUBLIC :: MR_CTRL_CONTINUE
 
 !***********************************************************************************************************************************
 
@@ -52,25 +50,23 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_DETER_START_MODE
+  SUBROUTINE MR_CTRL_CONTINUE
 
     IMPLICIT NONE
 
-    INTEGER :: ERROR
+    CHARACTER(   1   ) :: Y_OR_N
 
-    WRITE(*,'("Which start mode would be preferred? ")')
-    WRITE(*,'("    1. Cold mode; 2. Hot mode ")')
     DO
-      WRITE(*,'("  Select No. ", $ )')
-      READ(*,*,IOSTAT=ERROR) START_MODE
-      IF( ERROR == 0 ) THEN
-        SELECT CASE( START_MODE )
-        CASE( COLD_MODE , HOT_MODE )
-          RETURN
-        END SELECT
-      END IF
+      WRITE(*,'(2X,"Continue? (Y/N): ", $ )')
+      READ(*,*) Y_OR_N
+      SELECT CASE( Y_OR_N )
+      CASE( "Y" , "y" )
+        EXIT
+      CASE( "N" , "n" )
+        STOP
+      END SELECT
     END DO
 
-  END SUBROUTINE MR_DETER_START_MODE
+  END SUBROUTINE MR_CTRL_CONTINUE
 
-  END MODULE MR_MOD_DETER_START_MODE
+  END MODULE MR_MOD_CTRL_CONTINUE

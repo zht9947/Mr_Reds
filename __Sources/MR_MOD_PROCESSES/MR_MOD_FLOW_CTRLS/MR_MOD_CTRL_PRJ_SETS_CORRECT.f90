@@ -54,7 +54,7 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 1 ) :: Y_OR_N
+    CHARACTER(   1   ) :: Y_OR_N
 
     DO
       WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')

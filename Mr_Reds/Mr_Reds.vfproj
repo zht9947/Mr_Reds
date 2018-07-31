@@ -85,8 +85,8 @@
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_TDMA3.f90"/></Filter>
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
-		<Filter Name="MR_MOD_NUMERATOR_DETER">
-		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_NUMERATOR_DETERS\MR_MOD_DETER_START_MODE.f90"/></Filter>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_CTRL_COLD_MODE_STARTED.f90"/>
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_CTRL_CONTINUE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_CTRL_PRJ_SETS_CORRECT.f90"/></Filter>
 		<Filter Name="MR_MOD_INITS">
 		<Filter Name="MR_MOD_MALLOCS">

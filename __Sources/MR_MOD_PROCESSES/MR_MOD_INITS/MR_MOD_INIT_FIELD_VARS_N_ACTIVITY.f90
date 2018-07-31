@@ -61,9 +61,11 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
+  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
 
     IMPLICIT NONE
+
+    REAL   (PARD_KIND) , INTENT(IN ) :: HTH
 
     TBFUV    =   0.000E+0
     TBUV     =   0.000E+0
@@ -73,9 +75,9 @@
     QSBUV    =   0.000E+0   ; QSBU    =   0.000E+0   ; QSBV    =   0.000E+0
     R        =   0.000E+0
     RI       =   0.000E+0
-    ZB       = - 1.000E+0
+    ZB       = - HTH / ZR
     ZS       =   0.000E+0   ; ZSU     =   0.000E+0   ; ZSV     =   0.000E+0
-    H        =   1.000E+0   ; HU      =   1.000E+0   ; HV      =   1.000E+0
+    H        =   HTH / ZR   ; HU      =   HTH / ZR   ; HV      =   HTH / ZR
     UVA      =   0.000E+0   ; UA      =   0.000E+0   ; VA      =   0.000E+0
     UV       =   0.000E+0   ; U       =   0.000E+0   ; V       =   0.000E+0
     W        =   0.000E+0
