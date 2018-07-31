@@ -32,6 +32,8 @@
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_ERROR_ARRAY
 
+    USE MR_NUM_START_MODE
+
     USE MR_MOD_INIT_RANKS
 
     USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
@@ -48,11 +50,15 @@
     USE MR_MOD_INIT_MEANDER_PARS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
 
-    USE MR_MOD_INIT_OUTPUT
+    USE MR_MOD_CTRL_COLD_MODE_STARTED
+
+    USE MR_MOD_AVERAGE
 
     USE MR_MOD_GEN_INI_ZB
 
     USE MR_MOD_UPDT_H
+
+    USE MR_MOD_INIT_OUTPUT
 
     USE MR_MOD_OUTPUT
 
@@ -222,27 +228,24 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize field variables and activity... ", $ )')
-    IF( .FALSE. ) THEN
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
+    WRITE(*,'("Initialize field variables and activity on hot mode... ", $ )')
+    CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'( )')
+      CALL MR_CTRL_COLD_MODE_STARTED( HTH )
+      WRITE(*,'( )')
+      WRITE(*,'("Initialize field variables and activity on cold mode... ", $ )')
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
       IF( ALLOCATED( T_START_ALTER ) )  THEN
-        T_START = T_START_ALTER
+        T_START  =   T_START_ALTER
       ELSE
-        T_START = 0.0
+        T_START  =   0.0
       END IF
-      WRITE(*,'("Done! ")')
-      WRITE(*,'("Initialize output... ", $ )')
-      CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
+      START_MODE = COLD_MODE
     ELSE
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
+      CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
+      START_MODE = HOT_MODE
     END IF
     WRITE(*,'("Done! ")')
 
@@ -272,19 +275,26 @@
 
     CALL MR_UPDT_H
 
-    IF( .FALSE. ) THEN
-      CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
+      ELSE
+        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+        IF( ERROR < 0 ) THEN
+          WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+          STOP
+        END IF
       END IF
-    ELSE
+    CASE( HOT_MODE )
       CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.TRUE. )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
-    END IF
+    END SELECT
 
     WRITE(*,'(8X,"Generate bathymetry and update depth... Done! ")')
 
