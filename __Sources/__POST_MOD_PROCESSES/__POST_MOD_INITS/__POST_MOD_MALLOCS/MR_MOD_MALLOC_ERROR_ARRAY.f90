@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -18,19 +19,18 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_FUNC_VZWW
+  MODULE MR_MOD_MALLOC_ERROR_ARRAY
 
     USE MR_KINDS
 
-    USE MR_DEF_CONSTS_N_REF_PARS
-
-    USE MR_MOC_K_EPS
+    USE MR_DEF_RANKS
+    USE MR_DEF_ERROR_ARRAY
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_FUNC_VZWW
+    PUBLIC :: MR_MALLOC_ERROR_1D_ARRAY
 
 !***********************************************************************************************************************************
 
@@ -56,19 +56,12 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_VZWW( V0 , KI , DI ) RESULT( VZWW )
-
-   !DIR$ ATTRIBUTES VECTOR : UNIFORM( V0 ) :: MR_FUNC_VZWW
+  SUBROUTINE MR_MALLOC_ERROR_1D_ARRAY
 
     IMPLICIT NONE
 
-    REAL(PARD_KIND) , INTENT(IN ) :: V0
-    REAL(FDRD_KIND) , INTENT(IN ) :: KI , DI
+    ALLOCATE( ERROR_1D_ARRAY(1:NI1(NI,GJRD_KIND)) )
 
-    REAL(FDRD_KIND) :: VZWW
+  END SUBROUTINE MR_MALLOC_ERROR_1D_ARRAY
 
-    VZWW = V0 / VZR + CV0 / EKZ * KI * KI / MAX( DI , EPSILON(DI) )
-
-  END FUNCTION MR_FUNC_VZWW
-
-  END MODULE MR_MOD_FUNC_VZWW
+  END MODULE MR_MOD_MALLOC_ERROR_ARRAY

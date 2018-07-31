@@ -68,7 +68,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_OUTPUT( FILE_XMDF_NAME , T , ERROR , ERRMSG )
+  SUBROUTINE MR_OUTPUT( FILE_XMDF_NAME , T , ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -91,6 +91,8 @@
 
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
+
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
 
     REAL   (PARD_KIND)               :: DUMMY_BASE , DUMMY_REF
 
@@ -115,11 +117,19 @@
   ! WRITE TBFUV
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBFUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & UV=TBFUV ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=TBFUV ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=TBFUV ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting TBFUV(:,:) to it"
@@ -131,11 +141,19 @@
   ! WRITE TBUV
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_TBUV)
     DUMMY_BASE = 0.0 ; DUMMY_REF = TUVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & UV=TBUV ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=TBUV ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=TBUV ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting TBUV(:,:) to it"
@@ -151,11 +169,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
     //"K-Epsilon Model/"//TRIM(DSET_NAME_KI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = KIR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=KI(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=KI(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=KI(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting KI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
@@ -173,11 +199,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
     //"K-Epsilon Model/"//TRIM(DSET_NAME_DI)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = DIR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=DI(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=DI(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=DI(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting DI(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
@@ -195,11 +229,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
     //TRIM(DSET_NAME_R)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = R0 ; DUMMY_REF = RR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=R(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=R(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=R(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting R(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
@@ -222,11 +264,19 @@
   ! WRITE ZB
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/"//TRIM(DSET_NAME_ZB)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=ZB , SU=ZBU , SV=ZBV , SO=ZBOO ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=ZB , SU=ZBU , SV=ZBV , SO=ZBOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=ZB , SU=ZBU , SV=ZBV , SO=ZBOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting ZB(:,:) to it"
@@ -245,11 +295,19 @@
   ! WRITE ZS
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_ZS)
     DUMMY_BASE = 0.0 ; DUMMY_REF = SR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=ZS , SU=ZSU , SV=ZSV , SO=ZSOO ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=ZS , SU=ZSU , SV=ZSV , SO=ZSOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=ZS , SU=ZSU , SV=ZSV , SO=ZSOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting ZS(:,:) to it"
@@ -270,11 +328,19 @@
   ! WRITE H
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_H)
     DUMMY_BASE = 0.0 ; DUMMY_REF = ZR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=H , SU=HU , SV=HV , SO=HOO ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=H , SU=HU , SV=HV , SO=HOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE)
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=H , SU=HU , SV=HV , SO=HOO ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting H(:,:) to it"
@@ -290,11 +356,19 @@
   ! WRITE UVA
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/"//TRIM(DSET_NAME_UVA)
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & UV=UVA , U=UA , V=VA ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=UVA , U=UA , V=VA ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=UVA , U=UA , V=VA ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting UVA(:,:) to it"
@@ -310,11 +384,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
     //TRIM(DSET_NAME_UV)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = UVR
-    CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & UV=UV(:,:,1:2, K ) , U=U(:,:, K ) , V=V(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=UV(:,:,1:2, K ) , U=U(:,:, K ) , V=V(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_UV( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO , JUV , JUU , JVV , JOO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & UV=UV(:,:,1:2, K ) , U=U(:,:, K ) , V=V(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting UV(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
@@ -338,11 +420,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/"   &
     //TRIM(DSET_NAME_WW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = WR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=WW(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=WW(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=WW(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting WW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"
@@ -363,11 +453,19 @@
     PATH_DSET_IN_MULTI_DSETS = "Mr.Reds/Hydrodynamics/By Layers/"//"K"//TRIM(ADJUSTL(K_CHAR))//"/Eddy Viscosity/"   &
     //TRIM(DSET_NAME_VZWW)//" ("//TRIM(ADJUSTL(K_CHAR))//")"
     DUMMY_BASE = 0.0 ; DUMMY_REF = VZR
-    CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
-    & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
-    & DUMMY_BASE , DUMMY_REF ,   &
-    & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
-    & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG , OVERWRITE=OVERWRITE )
+    ELSE
+      CALL MR_WRITE_SS( MULTI_DSETS_ID , PATH_DSET_IN_MULTI_DSETS , T ,   &
+      & NND , NEM , NI , NJ , EMIDW , NDIDW , NDIDU , NDIDV , NDIDO ,   &
+      & DUMMY_BASE , DUMMY_REF ,   &
+      & SS=VZWW(:,:, K ) , SU=VXYU(:,:, K ) , SV=VXYV(:,:, K ) ,   &
+      & ACTIVITY=ACTIVITY , ERROR=ERROR , ERRMSG=ERRMSG )
+    END IF
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" /"//TRIM(XF_PATH_MULTI_DSETS)//" in file "//TRIM(FILE_XMDF_NAME)   &
       //" when outputting VZWW(:,:,"//TRIM(ADJUSTL(K_CHAR))//") to it"

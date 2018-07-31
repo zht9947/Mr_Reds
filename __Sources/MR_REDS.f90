@@ -24,7 +24,7 @@
     USE MR_KINDS
 
     USE MR_DEF_TIMING
-    USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_CONSTS_N_REF_PARS , ONLY : COR
 
     USE MR_MOD_INIT_PRJ
     USE MR_MOD_ECHO_PRJ
@@ -35,7 +35,6 @@
 
     USE MR_MOD_INIT_RANKS
 
-    USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
     USE MR_MOD_MALLOC_FIELD_VARS
@@ -159,7 +158,7 @@
         END IF
       END IF
     CASE( HOT_MODE )
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , ERROR , ERRMSG )
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
@@ -234,6 +233,8 @@
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+    CHARACTER( 2**03 )               :: I_ARG_CHAR
+    INTEGER                          :: I_ARG
 
     INTEGER                          :: FILE_ID
 
@@ -251,8 +252,8 @@
         RETURN
       ELSE
         SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
         )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
@@ -272,14 +273,16 @@
       RETURN
     END IF
 
+    I_ARG = 1
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET PROJECT FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 1 , FILE_PRJ , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
       ERRMSG = "Project file's path\name too long"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.1 as project file"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
       RETURN
     ELSE
     ! VERIFY PROJECT FILE'S OPENING AND CLOSING
@@ -296,14 +299,16 @@
       END IF
     END IF
 
+    I_ARG = 2
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET XMDF FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 2 , FILE_XMDF , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
       ERRMSG = "Mesh file's path\name too long!"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.2 as mesh file"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as mesh file"
       RETURN
     ELSE
     ! VERIFY XMDF FILE'S OPENING AND CLOSING

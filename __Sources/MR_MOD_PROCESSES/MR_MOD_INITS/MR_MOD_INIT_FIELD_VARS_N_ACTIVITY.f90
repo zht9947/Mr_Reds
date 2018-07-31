@@ -29,7 +29,6 @@
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_FIELD_VARS_DSET_NAMES
     USE MR_DEF_ACTIVITY
-    USE MR_DEF_TIMING
 
     IMPLICIT NONE
 
@@ -75,10 +74,10 @@
     R        =   0.000E+0
     RI       =   0.000E+0
     ZB       = - 1.000E+0
-    ZS       =   0.000E+0   ;  ZSU    =   0.000E+0   ;  ZSV    =   0.000E+0
-    H        =   1.000E+0   ;   HU    =   1.000E+0   ;   HV    =   1.000E+0
-    UVA      =   0.000E+0   ;   UA    =   0.000E+0   ;   VA    =   0.000E+0
-    UV       =   0.000E+0   ;    U    =   0.000E+0   ;    V    =   0.000E+0
+    ZS       =   0.000E+0   ; ZSU     =   0.000E+0   ; ZSV     =   0.000E+0
+    H        =   1.000E+0   ; HU      =   1.000E+0   ; HV      =   1.000E+0
+    UVA      =   0.000E+0   ; UA      =   0.000E+0   ; VA      =   0.000E+0
+    UV       =   0.000E+0   ; U       =   0.000E+0   ; V       =   0.000E+0
     W        =   0.000E+0
     VZWW     =   V0 / VZR   ; VXYU    =   V0 / VZR   ; VXYV    =   V0 / VZR
     VZW      =   V0 / VZR
@@ -109,7 +108,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF_NAME , ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF_NAME , T_START , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -125,6 +124,8 @@
     INTEGER                          :: FILE_XMDF_ID , MULTI_DSETS_ID
 
     INTEGER(TSID_KIND)               :: NTSS_PREV
+
+    REAL   (TMRD_KIND) , INTENT(OUT) :: T_START
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG

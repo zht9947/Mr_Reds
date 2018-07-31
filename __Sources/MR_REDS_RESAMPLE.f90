@@ -21,7 +21,7 @@
 !***********************************************************************************************************************************
   PROGRAM MR_REDS_RESAMPLE
 
-    USE MR_ERRORS
+    USE MR_ERRORS_FILE_MANIPULATE
 
     USE MR_KINDS
 
@@ -77,8 +77,8 @@
       WRITE(*,'(  "        by <from> and ended to the timestep specified by <to>; the increment of")')
       WRITE(*,'(  "        timestep will be specified by the following command argument if it exsits,")')
       WRITE(*,'(  "        or set to 1 by default;")')
-      WRITE(*,'(  "          Each of <from> and <to> is allowed to be omitted: if omitting <from>, it")')
-      WRITE(*,'(  "        will be set to the first timestep, i.e. 0, by default; if omitting <to>,")')
+      WRITE(*,'(  "          Each of <from> and <to> is allowed to be omitted: if omitting <from>,")')
+      WRITE(*,'(  "        it will be set to the first timestep, i.e. 0, by default; if omitting <to>,")')
       WRITE(*,'(  "        it will be set to the last timestep by default;")')
       WRITE(*,'(  "              (Note: Use colon to separate <from> and <to>; and if only ONE of")')
       WRITE(*,'(  "                   them is omitted, the colon should not;)")')
@@ -223,6 +223,8 @@
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+    CHARACTER( 2**03 )               :: I_ARG_CHAR
+    INTEGER                          :: I_ARG
 
     INTEGER                          :: FILE_ID
 
@@ -243,8 +245,8 @@
         RETURN
       ELSE
         SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
+        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
+        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
         )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
@@ -264,14 +266,16 @@
       RETURN
     END IF
 
+    I_ARG = 1
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET XMDF FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 1 , FILE_XMDF , STATUS=ERROR )
+    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
     IF( ERROR == - 1 ) THEN
       ERRMSG = "XMDF File's path too long!"
       RETURN
     ELSE IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument No.1 as source file"
+      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as source file"
       RETURN
     ELSE
     ! VERIFY XMDF FILE'S OPENING AND CLOSING
@@ -293,11 +297,13 @@
 
     IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
 
+      I_ARG = 2
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET RESAMPLING TIMESTEP CONTROL SPECIFIER
-      CALL GET_COMMAND_ARGUMENT( 2 , CHAR_ARGUMENT , STATUS=ERROR )
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
       IF( ERROR /= 0 ) THEN
         ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no.2"
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
 
@@ -312,21 +318,21 @@
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" (only end)"
 
           IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
-            ERROR = - 12
+            ERROR = - 1
             ERRMSG = "Too many command arguments"
             RETURN
           END IF
 
         ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789:" ) /= 0 ) THEN
           ERROR = - 1
-          ERRMSG = "Illegal character in command argument no.2"
+          ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
         ELSE IF( INDEX( TRIM(CHAR_ARGUMENT) , ":" ) /= 0 ) THEN
           IDX = INDEX( TRIM(CHAR_ARGUMENT) , ":" )
           CHAR_ARGUMENT(IDX:IDX) = ","
           IF( INDEX( TRIM(CHAR_ARGUMENT) , ":" ) /= 0 ) THEN
             ERROR = - 1
-            ERRMSG = "Too many colons in command argument no.2"
+            ERRMSG = "Too many colons in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
           END IF
         ! CASE ITS_START:ITS_END
@@ -334,7 +340,7 @@
             READ( CHAR_ARGUMENT(:IDX-1) , * , IOSTAT=ERROR ) ITS_START
             IF( ERROR /= 0 ) THEN
               ERROR = - ABS(ERROR)
-              ERRMSG = "Error in reading a value from command argument no.2"
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
             END IF
             FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from "//TRIM(CHAR_ARGUMENT(:IDX-1))
@@ -349,7 +355,7 @@
             READ( CHAR_ARGUMENT(IDX+1:) , * , IOSTAT=ERROR ) ITS_END
             IF( ERROR /= 0 ) THEN
               ERROR = - ABS(ERROR)
-              ERRMSG = "Error in reading a value from command argument no.2"
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
             END IF
             FILE_XMDF_ = TRIM(FILE_XMDF_)//" to "//TRIM(CHAR_ARGUMENT(IDX+1:))
@@ -363,22 +369,24 @@
 
           IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
 
+            I_ARG = 3
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
           ! GET ADDITIONAL RESAMPLING TIMESTEP CONTROL SPECIFIER
-            CALL GET_COMMAND_ARGUMENT( 3 , CHAR_ARGUMENT , STATUS=ERROR )
+            CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
             IF( ERROR /= 0 ) THEN
               ERROR = - ABS(ERROR)
-              ERRMSG = "Error in getting command argument no.3"
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
             ELSE
               IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
                 ERROR = - 1
-                ERRMSG = "Illegal character in command argument no.3"
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
               ELSE
                 READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_STRIDE
                 IF( ERROR /= 0 ) THEN
                   ERROR = - ABS(ERROR)
-                  ERRMSG = "Error in reading a value from command argument no.3"
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                   RETURN
                 END IF
                 FILE_XMDF_ = TRIM(FILE_XMDF_)//" by "//TRIM(CHAR_ARGUMENT)//")"
@@ -403,13 +411,13 @@
           READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) ITS_STRIDE
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
-            ERRMSG = "Error in reading a value from command argument no.2"
+            ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
           END IF
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0 to end by "//TRIM(CHAR_ARGUMENT)//")"
 
           IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
-            ERROR = - 12
+            ERROR = - 1
             ERRMSG = "Too many command arguments"
             RETURN
           END IF

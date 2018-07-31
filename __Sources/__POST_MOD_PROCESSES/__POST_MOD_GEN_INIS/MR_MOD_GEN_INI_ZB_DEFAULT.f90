@@ -1,3 +1,4 @@
+#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -18,19 +19,15 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_FUNC_VZWW
+  MODULE MR_MOD_GEN_INI_ZB_DEFAULT
 
     USE MR_KINDS
-
-    USE MR_DEF_CONSTS_N_REF_PARS
-
-    USE MR_MOC_K_EPS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_FUNC_VZWW
+    PUBLIC :: MR_GEN_INI_ZB_DEFAULT
 
 !***********************************************************************************************************************************
 
@@ -56,19 +53,25 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_VZWW( V0 , KI , DI ) RESULT( VZWW )
-
-   !DIR$ ATTRIBUTES VECTOR : UNIFORM( V0 ) :: MR_FUNC_VZWW
+  SUBROUTINE MR_GEN_INI_ZB_DEFAULT( HTH , NI , NJ , ZB )
 
     IMPLICIT NONE
 
-    REAL(PARD_KIND) , INTENT(IN ) :: V0
-    REAL(FDRD_KIND) , INTENT(IN ) :: KI , DI
+    REAL   (PARD_KIND) , INTENT(IN ) :: HTH
 
-    REAL(FDRD_KIND) :: VZWW
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-    VZWW = V0 / VZR + CV0 / EKZ * KI * KI / MAX( DI , EPSILON(DI) )
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: ZB
 
-  END FUNCTION MR_FUNC_VZWW
+    INTEGER(IJID_KIND) :: I , J
 
-  END MODULE MR_MOD_FUNC_VZWW
+    DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        ZB( I , J ) = - HTH
+      END DO
+    END DO
+
+  END SUBROUTINE MR_GEN_INI_ZB_DEFAULT
+
+  END MODULE MR_MOD_GEN_INI_ZB_DEFAULT

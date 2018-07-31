@@ -1,11 +1,11 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (MODULE) MR_ERRORS
+!  (MODULE) MR_DEF_MEANDER_PARS
 !
 ! PURPOSE:
 !
-!   TO DEFINE THE ERROR PARAMETERS.
+!   TO
 !
 ! DEFINITION OF VARIABLES:
 !
@@ -18,10 +18,17 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_ERRORS
+  MODULE MR_DEF_MEANDER_PARS
+
+    USE MR_KINDS
 
     IMPLICIT NONE
 
-    INTEGER , PARAMETER :: ERROR_CANNOT_CREATE_NEW_FILE = -1001
+    REAL   (GJRD_KIND) :: THETA0
 
-  END MODULE MR_ERRORS
+    REAL   (GJRD_KIND) :: BTH , LTH , LAMBTH
+    REAL   (GJRD_KIND) :: LAMBTH2BTH , SINUOSITY
+
+    INTEGER            :: NBENDS
+
+  END MODULE MR_DEF_MEANDER_PARS

@@ -30,7 +30,7 @@
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
 		<Filter Name="MR_ERRORS">
-		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS_FILE_MANIPULATE.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
@@ -65,6 +65,8 @@
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_FLOW_CTRLS\MR_MOD_CTRL_RETRY_CREATING_FILES.f90"/></Filter>
+		<Filter Name="MR_MOD_GEN_INIS">
+		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_GEN_INIS\MR_MOD_GEN_GRID_SYS.f90"/></Filter>
 		<Filter Name="MR_MOD_INITS">
 		<Filter Name="MR_MOD_MALLOCS">
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_MALLOCS\MR_MOD_MALLOC_GRID_SYS.f90"/>
@@ -72,8 +74,6 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_GRID_SYS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_RANKS.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_INITS\MR_MOD_INIT_RANKS_EXTEND.f90"/></Filter>
-		<Filter Name="MR_MOD_GEN_INIS">
-		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_GEN_INIS\MR_MOD_GEN_GRID_SYS.f90"/></Filter>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_DO_EXTEND_OUTPUT_MESH_DATA.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_EXTEND.f90"/></Filter>

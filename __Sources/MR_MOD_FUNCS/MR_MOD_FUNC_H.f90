@@ -57,7 +57,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_H( HSTOR , ZS , ZB ) RESULT( H )
+
    !DIR$ ATTRIBUTES VECTOR :: MR_FUNC_H
+
     IMPLICIT NONE
 
     REAL(FDRD_KIND) , INTENT(IN ) :: HSTOR , ZS , ZB

@@ -56,7 +56,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_HDS( D0 ) RESULT( HDS )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( D0 ) :: MR_FUNC_HDS
+
     IMPLICIT NONE
 
     REAL(PARD_KIND) , INTENT(IN ) :: D0
@@ -88,7 +90,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_TBFUV_COMP( TBFUV_MOD , D0 , H , SIGMA , UV_MOD , UV_COMP ) RESULT( TBFUV_COMP )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( D0 , SIGMA ) :: MR_FUNC_TBFUV_COMP
+
     IMPLICIT NONE
 
     REAL(PARD_KIND) , INTENT(IN ) :: D0
@@ -125,7 +129,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_HKS( TBFUV_MOD , D0 , TCRS , H ) RESULT( HKS )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( D0 , TCRS ) :: MR_FUNC_HKS
+
     IMPLICIT NONE
 
     REAL(PARD_KIND) , INTENT(IN ) :: D0 , TCRS
@@ -167,7 +173,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_TBUV_COMP( TBUV_MOD , TBFUV_MOD , D0 , TCRS , H , SIGMA , UV_MOD , UV_COMP ) RESULT( TBUV_COMP )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( D0 , TCRS , SIGMA ) :: MR_FUNC_TBUV_COMP
+
     IMPLICIT NONE
 
     REAL(PARD_KIND) , INTENT(IN ) :: D0 , TCRS
@@ -204,7 +212,9 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_CHEZY( TBFUV_MOD , HDS , H , SIGMA ) RESULT( CHEZY )
+
    !DIR$ ATTRIBUTES VECTOR : UNIFORM( SIGMA ) :: MR_FUNC_CHEZY
+
     IMPLICIT NONE
 
     REAL(FDRD_KIND) , INTENT(IN ) :: TBFUV_MOD , HDS , H
@@ -242,15 +252,17 @@
 !
 !***********************************************************************************************************************************
   FUNCTION MR_FUNC_BS( TBFUV_MOD , HDS ) RESULT( BS )
+
    !DIR$ ATTRIBUTES VECTOR :: MR_FUNC_BS
+
     IMPLICIT NONE
 
     REAL(FDRD_KIND) , INTENT(IN ) :: TBFUV_MOD , HDS
 
-    REAL(FDRD_KIND) :: BS
-
     REAL(FDRD_KIND) :: RESHEARS
     REAL(FDRD_KIND) :: CTMP1 , CTMP2
+
+    REAL(FDRD_KIND) :: BS
 
     RESHEARS = MAX( RET * HDS * SQRT( TBFUV_MOD ) , 1.0 )
 
