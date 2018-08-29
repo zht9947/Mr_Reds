@@ -37,6 +37,8 @@
 		<File RelativePath="..\__Sources\__POST_DEFS\__MR_MATH_CONSTS\MR_MAC_PI.f90"/></Filter>
 		<Filter Name="MR_MODEL_CONSTS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_MODEL_CONSTS\MR_MOC_BED_STOR.f90"/></Filter>
+		<Filter Name="MR_NUMERATORS">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_NUMERATORS\MR_NUM_START_MODE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
@@ -72,6 +74,7 @@
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_SS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_UV.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_XUV.f90"/></Filter>
+		<File RelativePath="..\__Sources\__POST_MOD_OPERATIONS\MR_MOD_AVERAGE.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_CALC_GRAD_XY.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_XY - for Anti-Symmetry BC.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_INTERP_Z.f90"/></Filter>
@@ -96,6 +99,8 @@
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INITS\MR_MOD_INIT_RANKS.f90"/></Filter>
 		<Filter Name="MR_MOD_UPDTS">
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_UPDTS\MR_MOD_UPDT_H.f90"/></Filter>
+		<Filter Name="MR_MOD_FLOW_CTRLS">
+		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_FLOW_CTRLS\MR_MOD_CTRL_COLD_MODE_STARTED.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_INPUT.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_OUTPUT.f90"/></Filter>

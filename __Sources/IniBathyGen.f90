@@ -32,6 +32,8 @@
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_ERROR_ARRAY
 
+    USE MR_NUM_START_MODE
+
     USE MR_MOD_INIT_RANKS
 
     USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
@@ -48,11 +50,15 @@
     USE MR_MOD_INIT_MEANDER_PARS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
 
-    USE MR_MOD_INIT_OUTPUT
+    USE MR_MOD_CTRL_COLD_MODE_STARTED
+
+    USE MR_MOD_AVERAGE
 
     USE MR_MOD_GEN_INI_ZB
 
     USE MR_MOD_UPDT_H
+
+    USE MR_MOD_INIT_OUTPUT
 
     USE MR_MOD_OUTPUT
 
@@ -94,14 +100,12 @@
       WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Number of layers into which the whole depth is expected to be divided;")')
       WRITE(*,'(  "  3- (non-optional)")')
-      WRITE(*,'(  "      Channel-averaged depth, in meters;")')
-      WRITE(*,'(  "  4- (non-optional)")')
       WRITE(*,'(  "      Maximum bed deformation at banks, (+) positive, in meters;")')
-      WRITE(*,'(  "  5- (optional)")')
+      WRITE(*,'(  "  4- (optional)")')
       WRITE(*,'(  "      Number of meander bends that the mesh contains;")')
       WRITE(*,'(  "    Or,")')
       WRITE(*,'(  "      If omitted, only ONE meander bend is supposed to be contained;")')
-      WRITE(*,'(  "  6- (optional)")')
+      WRITE(*,'(  "  5- (optional)")')
       WRITE(*,'(  "      ONE or MORE alternative options, which change the default values of")')
       WRITE(*,'(  "    corresponding variables, with the following format:")')
       WRITE(*,'(  "        --<identifier> <value>")')
@@ -141,7 +145,7 @@
       WRITE(*,'(  "  Note,")')
       WRITE(*,'(  "    ALL the alternative options A--F can be specified in any order;")')
       WRITE(*,'(  "But,")')
-      WRITE(*,'(  "  ALL the arguments 1--6 MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--5 MUST be given in sequence.")')
       STOP
     END IF
 
@@ -191,7 +195,28 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize meandering parameters... ", $ )')
+    WRITE(*,'("Initialize field variables and activity on hot mode... ", $ )')
+    CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'( )')
+      CALL MR_CTRL_COLD_MODE_STARTED( HTH )
+      WRITE(*,'( )')
+      WRITE(*,'("Initialize field variables and activity on cold mode... ", $ )')
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
+      IF( ALLOCATED( T_START_ALTER ) )  THEN
+        T_START  =   T_START_ALTER
+      ELSE
+        T_START  =   0.0
+      END IF
+      START_MODE = COLD_MODE
+    ELSE
+      CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
+      START_MODE = HOT_MODE
+    END IF
+    WRITE(*,'("Done! ")')
+
+    WRITE(*,'("Initialize essential parameters... ", $ )')
     CALL MR_INIT_MEANDER_PARS( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -222,30 +247,6 @@
     END IF
     WRITE(*,'("Done! ")')
 
-    WRITE(*,'("Initialize field variables and activity... ", $ )')
-    IF( .FALSE. ) THEN
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
-      IF( ALLOCATED( T_START_ALTER ) )  THEN
-        T_START = T_START_ALTER
-      ELSE
-        T_START = 0.0
-      END IF
-      WRITE(*,'("Done! ")')
-      WRITE(*,'("Initialize output... ", $ )')
-      CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-    ELSE
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-    END IF
-    WRITE(*,'("Done! ")')
-
     WRITE(*,'( )')
 
     WRITE(*,'(8X,"Generate bathymetry and update depth... ", A , $ )') ACHAR(13)
@@ -272,19 +273,26 @@
 
     CALL MR_UPDT_H
 
-    IF( .FALSE. ) THEN
-      CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
+      ELSE
+        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+        IF( ERROR < 0 ) THEN
+          WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+          STOP
+        END IF
       END IF
-    ELSE
+    CASE( HOT_MODE )
       CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.TRUE. )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
-    END IF
+    END SELECT
 
     WRITE(*,'(8X,"Generate bathymetry and update depth... Done! ")')
 
@@ -357,7 +365,7 @@
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
-    ELSE IF( COMMAND_ARGUMENT_COUNT() > 17 ) THEN
+    ELSE IF( COMMAND_ARGUMENT_COUNT() > 16 ) THEN
       ERROR = - 1
       ERRMSG = "Too many command arguments"
       RETURN
@@ -415,33 +423,6 @@
 
     I_ARG = 3
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET CHANNEL-AVERAGED DEPTH, IN METERS
-    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
-    IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-      RETURN
-    ELSE
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-        ERROR = - 1
-        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE
-        READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) HTH
-        IF( ERROR /= 0 ) THEN
-          ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-          RETURN
-        ELSE IF( HTH <= 0.0 ) THEN
-          ERROR = - 1
-          ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-          RETURN
-        END IF
-      END IF
-    END IF
-
-    I_ARG = 4
-    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET MAXIMUM BED DEFORMATION (POSITIVE) AT BANKS, IN METERS
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
@@ -467,9 +448,9 @@
       END IF
     END IF
 
-    IF( COMMAND_ARGUMENT_COUNT() > 4 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() > 3 ) THEN
 
-      I_ARG = 5
+      I_ARG = 4
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET NUMBER OF MEANDER BENDS
       CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
@@ -490,13 +471,13 @@
             RETURN
           END IF
         END IF
-        I_ARG_ALTER_START = 6
+        I_ARG_ALTER_START = 5
       ELSE
        !BLOCK
       ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
         NBENDS = 1
        !END BLOCK
-        I_ARG_ALTER_START = 5
+        I_ARG_ALTER_START = 4
       END IF
 
     ELSE
@@ -504,7 +485,7 @@
     ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
       NBENDS = 1
      !END BLOCK
-      I_ARG_ALTER_START = 5
+      I_ARG_ALTER_START = 4
     END IF
 
   ! LOOP FOR ALTERNATIVE OPTIONS
