@@ -31,6 +31,7 @@
 !                       XYRD_KIND    :    KIND OF COORDINATES
 !                       GJRD_KIND    :    KIND OF CURVED GEOMETRY
 !                       FDRD_KIND    :    KIND OF FIELD VARIABLES
+!                       SPRD_KIND    :    KIND OF SLOPE
 !
 !                                      \\ ABOVE ARE FOR REAL DATA
 !
@@ -64,6 +65,7 @@
     INTEGER , PARAMETER :: XYRD_KIND = 8
     INTEGER , PARAMETER :: GJRD_KIND = 8
     INTEGER , PARAMETER :: FDRD_KIND = 4
+    INTEGER , PARAMETER :: SPRD_KIND = 8
 
     INTEGER , PARAMETER :: CARD_KIND = 8
 
