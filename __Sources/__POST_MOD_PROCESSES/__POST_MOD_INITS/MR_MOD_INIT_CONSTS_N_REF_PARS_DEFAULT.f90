@@ -103,8 +103,9 @@
     RET = RE / SQRT( RBT )
     FR = UVR * UVR / ( GR * ZR )
     FRD = FR * R0 / ( RR - R0 )
-    ALPAR = FR / RB
-    BPAR = RB / ALPAR
+    BPAR = RB * RB / FR
+    SURPAR = FR / RB
+    SLOPEPAR = ( XYR / ZR ) / SURPAR
 
    !BLOCK
     IF( .NOT. ( NK > 0 ) ) THEN

@@ -36,7 +36,7 @@
 !                                         GENERALLY AS AVERAGE DEPTH
 !                             UVR    :    REFERENCE HORIZONTAL VELOCITY,
 !                                         GENERALLY AS AVERAGE HORIZONTAL VELOCITY MAGNITUDE
-!                              WR    :    REFERENCE VERTICAL VELOCITY, WR = UVR / XYR * ZR
+!                              WR    :    REFERENCE VERTICAL VELOCITY, WR = UVR / ( XYR / ZR )
 !                              SR    :    REFERENCE FREE SURFACE ELEVATION, SR = COR * UVR * XYR / GR
 !                            TUVR    :    REFERENCE SHEAR STRESS, TUVR = R0 * COR * UVR * ZR
 !                           QSUVR    :    REFERENCE TRANSPORT FLUX, QSUVR = R0 * COR * XYR * ZR
@@ -57,8 +57,9 @@
 !                             RET    :    REYNOLDS NUMBER FOR SHEAR STRESS, RET = RE / SQRT( RBT )
 !                              FR    :    SQUARED FROUDE NUMBER, FR = UVR * UVR / ( GR * ZR )
 !                             FRD    :    SQUARED DENSIMETRIC FROUDE NUMBER, FRD = FR * R0 / ( RR - R0 )
-!                           ALPAR    :    ALPHA PARAMETER, ALPAR = FR / RB
 !                            BPAR    :    BETA PARAMETER, BPAR = RB * RB / FR
+!                          SURPAR    :    PARAMETER THAT MEASURES FREE SURFACE ELEVATION AS BED ELEVATION, SURPAR = FR / RB
+!                        SLOPEPAR    :    PARAMETER THAT MEASURES BED SLOPE AS FREE SURFACE SLOPE , SLOPEPAR = ( XYR / ZR ) / SURPAR
 !
 !                                      \\ ABOVE ARE DIMENSIONLESS COMBINATIONS
 !
@@ -123,8 +124,9 @@
     REAL   (PARD_KIND) :: RET
     REAL   (PARD_KIND) :: FR
     REAL   (PARD_KIND) :: FRD
-    REAL   (PARD_KIND) :: ALPAR
     REAL   (PARD_KIND) :: BPAR
+    REAL   (PARD_KIND) :: SURPAR
+    REAL   (PARD_KIND) :: SLOPEPAR
 
     REAL   (PARD_KIND) :: D0 , DS
     REAL   (PARD_KIND) :: TCRS
