@@ -739,13 +739,13 @@ END SUBROUTINE
 
 SUBROUTINE XF_WRITE_PROPERTY_INT (a_Id, a_Name, a_Number, a_Properties, &
                                   a_Compression, error)
-INTEGER,                INTENT(IN)  :: a_Id
-CHARACTER(LEN=*),              INTENT(IN)  :: a_Name
-INTEGER,                       INTENT(IN)  :: a_Number
-INTEGER, DIMENSION(*),         INTENT(IN)  :: a_Properties
-INTEGER,                       INTENT(IN)  :: a_Compression
-INTEGER,                       INTENT(OUT) :: error
-INTEGER                                       namelen
+INTEGER,               INTENT(IN)  :: a_Id
+CHARACTER(LEN=*),      INTENT(IN)  :: a_Name
+INTEGER,               INTENT(IN)  :: a_Number
+INTEGER, DIMENSION(*), INTENT(IN)  :: a_Properties
+INTEGER,               INTENT(IN)  :: a_Compression
+INTEGER,               INTENT(OUT) :: error
+INTEGER                               namelen
   
 
 !            INTEGER, EXTERNAL :: _xfWritePropertyInt_f
@@ -782,7 +782,7 @@ END SUBROUTINE
 !------------------------------------------------------------------------------
 SUBROUTINE XF_WRITE_PROPERTY_UINT (a_Id, a_Name, a_Number, a_Properties, &
                                   a_Compression, error)
-INTEGER,        INTENT(IN)          :: a_Id
+INTEGER,               INTENT(IN)   :: a_Id
 CHARACTER(LEN=*),      INTENT(IN)   :: a_Name
 INTEGER,               INTENT(IN)   :: a_Number
 INTEGER, DIMENSION(*), INTENT(IN)   :: a_Properties
@@ -821,13 +821,13 @@ END SUBROUTINE
 
 SUBROUTINE XF_WRITE_PROPERTY_DOUBLE (a_Id, a_Name, a_Number, a_Properties, &
                                      a_Compression, error)
-INTEGER, INTENT(IN)                 :: a_Id
-CHARACTER(LEN=*), INTENT(IN)        :: a_Name
-INTEGER, INTENT(IN)                 :: a_Number
-REAL*8, DIMENSION(*), INTENT(IN)    :: a_Properties 
-INTEGER, INTENT(IN)                 :: a_Compression
+INTEGER,               INTENT(IN)   :: a_Id
+CHARACTER(LEN=*),      INTENT(IN)   :: a_Name
+INTEGER,               INTENT(IN)   :: a_Number
+REAL*8,  DIMENSION(*), INTENT(IN)   :: a_Properties 
+INTEGER,               INTENT(IN)   :: a_Compression
+INTEGER,               INTENT(OUT)  :: error
 INTEGER                             :: namelen
-INTEGER, INTENT(OUT)                :: error
 
 
 !            INTEGER, EXTERNAL :: _xfWritePropertyDouble_f
@@ -838,12 +838,12 @@ INTEGER, INTENT(OUT)                :: error
                                              a_Compression)
     !MS$ATTRIBUTES C,reference::xfwritepropertydouble_f
     !DEC$ATTRIBUTES reference :: a_Name
-    INTEGER,              INTENT(IN)  :: a_Id
-    CHARACTER(LEN=*),     INTENT(IN)  :: a_Name
-    INTEGER,              INTENT(IN)  :: a_Number
-    REAL*8, DIMENSION(*), INTENT(IN)   :: a_Properties 
-    INTEGER,              INTENT(IN)  :: a_Compression
-    INTEGER,              INTENT(IN)  :: namelen
+    INTEGER,               INTENT(IN)  :: a_Id
+    CHARACTER(LEN=*),      INTENT(IN)  :: a_Name
+    INTEGER,               INTENT(IN)  :: a_Number
+    REAL*8,  DIMENSION(*), INTENT(IN)  :: a_Properties 
+    INTEGER,               INTENT(IN)  :: a_Compression
+    INTEGER,               INTENT(IN)  :: namelen
 
     END FUNCTION xfwritepropertydouble_f
   END INTERFACE
@@ -865,13 +865,13 @@ END SUBROUTINE
 !-----------------------------------------------------------------------------
 SUBROUTINE XF_WRITE_PROPERTY_FLOAT (a_Id, a_Name, a_Number, a_Properties, &
                                     a_Compression, error)
-INTEGER, INTENT(IN)          :: a_Id
-CHARACTER(LEN=*), INTENT(IN) :: a_Name
-INTEGER, INTENT(IN)          :: a_Number
-REAL*4, INTENT(IN)             :: a_Properties
-INTEGER, INTENT(IN)          :: a_Compression
-INTEGER, INTENT(OUT)         :: error
-INTEGER                         namelen
+INTEGER,               INTENT(IN)   :: a_Id
+CHARACTER(LEN=*),      INTENT(IN)   :: a_Name
+INTEGER,               INTENT(IN)   :: a_Number
+REAL*4,  DIMENSION(*), INTENT(IN)   :: a_Properties 
+INTEGER,               INTENT(IN)   :: a_Compression
+INTEGER,               INTENT(OUT)  :: error
+INTEGER                             :: namelen
 
 
 !            INTEGER, EXTERNAL :: _xfWritePropertyFloat_f
@@ -882,12 +882,12 @@ INTEGER                         namelen
                                             a_Compression)
     !MS$ATTRIBUTES C,reference::xfwritepropertyfloat_f
     !DEC$ATTRIBUTES reference :: a_Name
-    INTEGER,          INTENT(IN)  :: a_Id
-    CHARACTER(LEN=*), INTENT(IN)  :: a_Name
-    INTEGER,          INTENT(IN)  :: a_Number
-    REAL*4,             INTENT(IN)  :: a_Properties
-    INTEGER,          INTENT(IN)  :: a_Compression
-    INTEGER,          INTENT(IN)  :: namelen
+    INTEGER,               INTENT(IN)  :: a_Id
+    CHARACTER(LEN=*),      INTENT(IN)  :: a_Name
+    INTEGER,               INTENT(IN)  :: a_Number
+    REAL*4,  DIMENSION(*), INTENT(IN)  :: a_Properties 
+    INTEGER,               INTENT(IN)  :: a_Compression
+    INTEGER,               INTENT(IN)  :: namelen
 
     END FUNCTION xfwritepropertyfloat_f
   END INTERFACE
