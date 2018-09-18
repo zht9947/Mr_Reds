@@ -24,7 +24,7 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 2**06 ) :: PRJ_TITLE = ""
-    CHARACTER( 2**08 ) :: PRJ_ABSTRACT = ""
+    CHARACTER( 2**06 ) :: PRJ_TITLE = "No Title"
+    CHARACTER( 2**08 ) :: PRJ_ABSTRACT = "No Abstract"
 
   END MODULE MR_DEF_PRJ_METADATA
