@@ -214,6 +214,8 @@
 
     WRITE(*,'(8X,"Compute...  0.00%", A , $ )') ACHAR(13)
 
+    DT = DT * COR   ! NONDIMENSIONALIZE DT
+
     DO ITS = 1 , NTSS
 
       CALL MR_UPDT_TBUV
@@ -224,7 +226,7 @@
      !CALL MR_UPDT_R
       CALL MR_UPDT_VZWW
 
-      T = T + DT/COR
+      T = T + ( DT / COR )
       IF( MOD( ITS , NTSS_OUTPUT ) == 0 ) THEN
 
         CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
