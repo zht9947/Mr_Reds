@@ -133,7 +133,7 @@
 
     REAL   (PARD_KIND) :: SIGMA(32)
 
-    REAL   (PARD_KIND) :: D0    =    2.0E-3
+    REAL   (PARD_KIND) :: D0    =    1.000E-3
     REAL   (PARD_KIND) :: DS
     REAL   (PARD_KIND) :: TCRS
     REAL   (PARD_KIND) :: WALLS
