@@ -120,7 +120,13 @@
       STOP
     END IF
     SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      WRITE(*,'(//,"No datasets seem in the XMDF file. ")')
+      CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
+      WRITE(*,'(/,"Initialize project... ", $ )')
     CASE( HOT_MODE )
+      WRITE(*,'(//,"Datasets have been detected in the XMDF file. ")')
+      CALL MR_CTRL_CONFIRM_START_MODE_HOT
       CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -131,17 +137,9 @@
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
+      WRITE(*,'(/,"Initialize project... ", $ )')
     END SELECT
     WRITE(*,'("Done! ")')
-
-    SELECT CASE( START_MODE )
-    CASE( COLD_MODE )
-      WRITE(*,'(/,"No datasets seem in the XMDF file. ")')
-      CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
-    CASE( HOT_MODE )
-      WRITE(*,'(/,"Datasets have been detected in the XMDF file. ")')
-      CALL MR_CTRL_CONFIRM_START_MODE_HOT
-    END SELECT
 
     WRITE(*,'( )')
 
