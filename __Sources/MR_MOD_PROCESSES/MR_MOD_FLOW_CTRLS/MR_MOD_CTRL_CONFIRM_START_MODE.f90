@@ -82,9 +82,8 @@
 
     WRITE(*,'( )')
 
-  ! SET CHANNEL-AVERAGED DEPTH
     HTH = ZR
-
+  ! SET CHANNEL-AVERAGED DEPTH
     SET_HTH :   &
     DO
       WRITE(*,'(2X,"The channel-averaged depth will be set as: ")')
@@ -132,6 +131,7 @@
     WRITE(*,'( )')
 
   ! SET PROPERTIES
+    SET_PROPS :   &
     DO
       WRITE(*,'(2X,"Specify manually /PROPERTIES for datasets? (Y/N): ", $ )')
       READ(*,*) Y_OR_N
@@ -247,12 +247,21 @@
           END SELECT
         END DO
 
-        EXIT
+        DO
+          WRITE(*,'(4X,"Is above input correct? (Y/N): ", $ )')
+          READ(*,*) Y_OR_N
+          SELECT CASE( Y_OR_N )
+          CASE( "Y" , "y" )
+            EXIT SET_PROPS
+          CASE( "N" , "n" )
+            EXIT
+          END SELECT
+        END DO
 
       CASE( "N" , "n" )
         EXIT
       END SELECT
-    END DO
+    END DO SET_PROPS
 
   END SUBROUTINE MR_CTRL_CONFIRM_START_MODE_COLD
 
