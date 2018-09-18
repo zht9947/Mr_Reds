@@ -62,8 +62,6 @@
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
-    USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
-
     USE MR_MOD_FUNC_DS
     USE MR_MOD_FUNC_TCRS
 
@@ -125,7 +123,7 @@
             ELSE
 
               SELECT CASE( TRIM(LABEL) )
-              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
+              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                 BACKSPACE( FILE_PRJ_ID )
                 REC_ID = REC_ID - 1
                 EXIT
@@ -171,23 +169,56 @@
             RETURN
           END IF
 
-        ! ALLOCATE MEMORIES FOR LAYER CLASSFIED PARAMETERS
-          CALL MR_MALLOC_KK_CONSTS_N_REF_PARS
-
-        CASE( "DKS" )
+        CASE( "NKS" )
           BACKSPACE( FILE_PRJ_ID )
 
-          READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
+          READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NKS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading grain size from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading number of sediment sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
-          END IF
+          ELSE
 
-        ! CONVERT UNIT FROM MILLIMETERS TO METERS
-          D0 = D0 / 1000.0
+            DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
+
+              REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+              READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
+              IF( ERROR > 0 ) THEN
+                ERROR = - ERROR
+                ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                RETURN
+              ELSE
+                SELECT CASE( TRIM(LABEL) )
+                CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+                  BACKSPACE( FILE_PRJ_ID )
+                  REC_ID = REC_ID - 1
+                  EXIT
+                CASE( "DKS" )
+                  BACKSPACE( FILE_PRJ_ID )
+
+                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
+                  IF( ERROR > 0 ) THEN
+                    ERROR = - ERROR
+                    ERRMSG = "Error in reading value of sediment sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                    RETURN
+                  END IF
+
+                  D0 = D0 / 1000.0
+
+                END SELECT
+
+              END IF
+
+            END DO
+
+          END IF
 
         CASE( "TAB" )
           BACKSPACE( FILE_PRJ_ID )
@@ -218,7 +249,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -235,52 +266,13 @@
                     ELSE
 
                       SELECT CASE( TRIM(ALIAS) )
-                      CASE( "Computational time interval" )
+                      CASE( "Time interval" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , DT
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Computational time interval"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
-                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                          RETURN
-                        END IF
-
-                      CASE( "Starting time" )
-                        BACKSPACE( FILE_PRJ_ID )
-
-                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , T_START
-                        IF( ERROR > 0 ) THEN
-                          ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Starting time"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
-                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                          RETURN
-                        END IF
-
-                      CASE( "Total number of timesteps" )
-                        BACKSPACE( FILE_PRJ_ID )
-
-                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS
-                        IF( ERROR > 0 ) THEN
-                          ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Total number of timesteps"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
-                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                          RETURN
-                        END IF
-
-                      CASE( "Number of timesteps between two outputs" )
-                        BACKSPACE( FILE_PRJ_ID )
-
-                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS_OUTPUT
-                        IF( ERROR > 0 ) THEN
-                          ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Number of timesteps between two outputs"" "   &
+                          ERRMSG = "Error in reading ""Time interval"" "   &
                           //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -294,6 +286,32 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading ""Time relaxation factor"" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        END IF
+
+                      CASE( "Total number of timesteps computed" )
+                        BACKSPACE( FILE_PRJ_ID )
+
+                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS
+                        IF( ERROR > 0 ) THEN
+                          ERROR = - ERROR
+                          ERRMSG = "Error in reading ""Total number of timesteps computed"" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        END IF
+
+                      CASE( "Number of timesteps between two outputs" )
+                        BACKSPACE( FILE_PRJ_ID )
+
+                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS_OUTPUT
+                        IF( ERROR > 0 ) THEN
+                          ERROR = - ERROR
+                          ERRMSG = "Error in reading ""Number of timesteps between two outputs"" "   &
                           //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -326,7 +344,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -382,7 +400,7 @@
                 ELSE
 
                   SELECT CASE( TRIM(LABEL) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -416,7 +434,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -489,7 +507,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -562,7 +580,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -649,7 +667,7 @@
                           ELSE
 
                             SELECT CASE( TRIM(LABEL) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "DKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -723,6 +741,20 @@
                                     RETURN
                                   END IF
 
+                                CASE( "Reference eddy kinematic diffusivity" )
+                                  BACKSPACE( FILE_PRJ_ID )
+
+                                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , DZR
+                                  IF( ERROR > 0 ) THEN
+                                    ERROR = - ERROR
+                                    ERRMSG = "Error in reading ""Reference eddy kinematic diffusivity"" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  END IF
+
                                 CASE( "Reference water-sediment mixture density" )
                                   BACKSPACE( FILE_PRJ_ID )
 
@@ -772,54 +804,6 @@
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ_NAME)
       RETURN
     END IF
-
-  ! CALCULATE REFERENCE PARAMETERS
-    WR = UVR / XYR * ZR
-    SR = COR * UVR * XYR / GR
-    TUVR = R0 * COR * UVR * ZR
-    QSUVR = R0 * COR * XYR * ZR
-    KIR = COR * UVR * ZR
-    DIR = COR * UVR * UVR
-    DZR = VZR
-
-  ! CALCULATE DIMENSIONLESS COMBINATIONS
-    RB = UVR / ( COR * XYR )
-    RBT = UVR / ( COR * ZR )
-    EKXY = VZR / ( COR * XYR * XYR )
-    EKZ = VZR / ( COR * ZR * ZR )
-    SCXY = DZR / ( COR * XYR * XYR )
-    SCZ = DZR / ( COR * ZR * ZR )
-    RE = UVR * ZR / V0
-    RET = RE / SQRT( RBT )
-    FR = UVR * UVR / ( GR * ZR )
-    FRD = FR * R0 / ( RR - R0 )
-    BPAR = RB * RB / FR
-    SURPAR = FR / RB
-    SLOPEPAR = ( XYR / ZR ) / SURPAR
-
-   !BLOCK
-    IF( .NOT. ( NK > 0 ) ) THEN
-      ERROR = - 1
-      ERRMSG = "Number of layers is identified with zero, "   &
-      //"please check the project file "//TRIM(FILE_PRJ_NAME)
-      RETURN
-    ELSE
-    ! CALCULATE DSIGMA
-      DSIGMA = 1.0_PARD_KIND / NK
-    ! CALCULATE SIGMA COORDINATES
-      SIGMA(NK) = - 0.5_PARD_KIND * DSIGMA
-      DO K = NK-1 , 1 , -1
-        SIGMA( K ) = SIGMA(K+1) - DSIGMA
-      END DO
-    END IF
-   !END BLOCK
-
-  ! CALCULATE DS, TCRS, WS & RBS
-    DS = MR_FUNC_DS( D0 )
-    TCRS = MR_FUNC_TCRS( D0 , DS )
-
-  ! NONDIMENSIONALIZE DT
-    DT = DT * COR
 
   END SUBROUTINE MR_INIT_PRJ
 

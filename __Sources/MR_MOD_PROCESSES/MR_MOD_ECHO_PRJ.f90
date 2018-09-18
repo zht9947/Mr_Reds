@@ -62,26 +62,18 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 1 ) :: PRJ_SETS_CORRECT_Y_OR_N
-
-    WRITE(*,'( )')
-    WRITE(*,'(2X,"Please check the project settings below:")')
+    WRITE(*,'(2X,"PLEASE CHECK the project settings below:")')
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"   <TITLE> ", A )') TRIM(PRJ_TITLE)
     WRITE(*,'(4X,"<ABSTRACT> ", A )') TRIM(PRJ_ABSTRACT)
 
     WRITE(*,'( )')
-    WRITE(*,'(4X,"    NUMBER OF LAYERS ",I09)') NK
-    WRITE(*,'(4X,"       GRAIN SIZE ",F12.5," mm")') D0*1000.0
-
-    WRITE(*,'( )')
     WRITE(*,'(4X,"----Timing----")')
-    WRITE(*,'(4X,"                       Computational time interval [s]              : ", F16.6       )') DT/COR
-    WRITE(*,'(4X,"                                    Time beginning [s]              : ", F15.5       )') T_START
-    WRITE(*,'(4X,"           Total number of timesteps for computing                  : ", I09         )') NTSS
-    WRITE(*,'(4X,"     Inteval of number of timesteps for outputting                  : ", I09         )') NTSS_OUTPUT
+    WRITE(*,'(4X,"                                     Time interval [s]              : ", F16.6       )') DT
     WRITE(*,'(4X,"                            Time relaxation factor                  : ", F13.3       )') PHI
+    WRITE(*,'(4X,"                Total number of timesteps computed                  : ", I09         )') NTSS
+    WRITE(*,'(4X,"           Number of timesteps between two outputs                  : ", I09         )') NTSS_OUTPUT
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Constants and Reference Parameters----")')
@@ -107,6 +99,10 @@
     WRITE(*,'(4X,"    Please confirm that the slope")')
     WRITE(*,'(4X,"    be along the centerline!")')
     WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
+
+    WRITE(*,'( )')
+    WRITE(*,'(4X,"    GRID : ", I05 ," x ", I05 ," x ", I05 )') NI , NJ , NK
+    WRITE(*,'(4X,"    GRAINS : ", <NKS>( F10.3 ," mm", : ,", ") )') D0*1000.0
 
   END SUBROUTINE MR_ECHO_PRJ
 

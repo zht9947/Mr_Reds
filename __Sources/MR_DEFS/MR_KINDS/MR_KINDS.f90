@@ -15,6 +15,7 @@
 !                       IJID_KIND    :    KIND OF CELL ID          , MARKED AS 'I' FOR COLUMN ID & 'J' FOR ROW ID
 !                                    :    KIND OF DIMENSION ID     , MARKED AS 'DIM'
 !                       KKID_KIND    :    KIND OF LAYER ID         , MARKED AS 'K'
+!                       KSID_KIND    :    KIND OF SEDIMENT SIZE ID , MARKED AS 'KS'
 !
 !                                      \\ ABOVE ARE FOR RANKS AND LOOP VARIABLES
 !
@@ -55,6 +56,7 @@
     INTEGER , PARAMETER :: NDID_KIND = 4
     INTEGER , PARAMETER :: IJID_KIND = 4
     INTEGER , PARAMETER :: KKID_KIND = 4
+    INTEGER , PARAMETER :: KSID_KIND = 4
 
     INTEGER , PARAMETER :: NRID_KIND = 1
 

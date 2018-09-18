@@ -973,23 +973,25 @@ END SUBROUTINE
 SUBROUTINE XF_READ_PROPERTY_INT (a_Id, a_Name, a_Number, a_Properties, error)
 
 INTEGER,          INTENT(IN)  :: a_Id
-INTEGER,          INTENT(IN)  :: a_Number
-INTEGER,          INTENT(OUT) :: a_Properties
 CHARACTER(LEN=*), INTENT(IN)  :: a_Name
-INTEGER                          namelen
+INTEGER,          INTENT(IN)  :: a_Number
+INTEGER, DIMENSION(*), INTENT(OUT) :: a_Properties
 INTEGER,          INTENT(OUT) :: error
+INTEGER                          namelen
 
 
 !            INTEGER, EXTERNAL :: _xfReadPropertyInt_f
 !  MS FORTRAN needs explicit interface for C functions called here.
 !
   INTERFACE
-    INTEGER FUNCTION xfreadpropertyint_f(a_Id, a_Name, namelen, a_Number, a_Properties)
+    INTEGER FUNCTION xfreadpropertyint_f(a_Id, a_Name, namelen, a_Number, &
+                                         a_Properties)
     !MS$ATTRIBUTES C,reference::xfreadpropertyint_f
     !DEC$ATTRIBUTES reference :: a_Name
-    INTEGER,          INTENT(IN)  :: a_Id, a_Number
-    INTEGER,          INTENT(OUT) :: a_Properties
+    INTEGER,          INTENT(IN)  :: a_Id
     CHARACTER(LEN=*), INTENT(IN)  :: a_Name
+    INTEGER,          INTENT(IN)  :: a_Number
+    INTEGER, DIMENSION(*), INTENT(OUT) :: a_Properties
     INTEGER,          INTENT(IN)  :: namelen
 
     END FUNCTION xfreadpropertyint_f
@@ -1070,8 +1072,8 @@ INTEGER                          namelen
 
   namelen = LEN_TRIM(a_Name)
   error = xfgetpropertytype_f(a_GroupId, a_Name, namelen, a_Type)
-    
-    
+
+
   return
 
 END SUBROUTINE
@@ -1122,12 +1124,12 @@ END SUBROUTINE
 ! NOTES       the variable properties must already be allocated to a_Number
 !------------------------------------------------------------------------------
 SUBROUTINE XF_READ_PROPERTY_FLOAT (a_Id, a_Name, a_Number, a_Properties, error)
-INTEGER, INTENT(IN)          :: a_Id
-CHARACTER(LEN=*), INTENT(IN) :: a_Name
-INTEGER, INTENT(IN)          :: a_Number
-REAL*4, INTENT(OUT)            :: a_Properties
-INTEGER, INTENT(OUT)         :: error
-INTEGER                         namelen
+INTEGER,          INTENT(IN)  :: a_Id
+CHARACTER(LEN=*), INTENT(IN)  :: a_Name
+INTEGER,          INTENT(IN)  :: a_Number
+REAL*4,  DIMENSION(*), INTENT(OUT) :: a_Properties
+INTEGER,          INTENT(OUT) :: error
+INTEGER                          namelen
 
 
 !            INTEGER, EXTERNAL :: _xfReadPropertyFloat_f
@@ -1141,7 +1143,7 @@ INTEGER                         namelen
     INTEGER,          INTENT(IN)  :: a_Id
     CHARACTER(LEN=*), INTENT(IN)  :: a_Name
     INTEGER,          INTENT(IN)  :: a_Number
-    REAL*4,             INTENT(OUT) :: a_Properties
+    REAL*4,  DIMENSION(*), INTENT(OUT) :: a_Properties
     INTEGER,          INTENT(IN)  :: namelen
 
     END FUNCTION xfreadpropertyfloat_f
@@ -1161,12 +1163,12 @@ END SUBROUTINE
 ! NOTES       the variable properties must already be allocated to a_Number
 !------------------------------------------------------------------------------
 SUBROUTINE XF_READ_PROPERTY_DOUBLE (a_Id, a_Name, a_Number, a_Properties, error)
-INTEGER, INTENT(IN)          :: a_Id
-CHARACTER(LEN=*), INTENT(IN) :: a_Name
-INTEGER, INTENT(IN)          :: a_Number
-REAL*8, DIMENSION(*), INTENT(OUT) :: a_Properties
-INTEGER, INTENT(OUT)         :: error
-INTEGER                         namelen
+INTEGER,          INTENT(IN)  :: a_Id
+CHARACTER(LEN=*), INTENT(IN)  :: a_Name
+INTEGER,          INTENT(IN)  :: a_Number
+REAL*8,  DIMENSION(*), INTENT(OUT) :: a_Properties
+INTEGER,          INTENT(OUT) :: error
+INTEGER                          namelen
 
 
 !            INTEGER, EXTERNAL :: _xfReadPropertyDouble_f
@@ -1180,7 +1182,7 @@ INTEGER                         namelen
     INTEGER,          INTENT(IN)  :: a_Id
     CHARACTER(LEN=*), INTENT(IN)  :: a_Name
     INTEGER,          INTENT(IN)  :: a_Number
-    REAL*8, DIMENSION(*), INTENT(OUT) :: a_Properties
+    REAL*8,  DIMENSION(*), INTENT(OUT) :: a_Properties
     INTEGER,          INTENT(IN)  :: namelen
 
     END FUNCTION xfreadpropertydouble_f

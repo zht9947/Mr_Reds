@@ -18,13 +18,13 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_CTRL_PRJ_SETS_CORRECT
+  MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_CTRL_PRJ_SETS_CORRECT
+    PUBLIC :: MR_CTRL_CONFIRM_PRJ_SETS
 
 !***********************************************************************************************************************************
 
@@ -50,7 +50,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CTRL_PRJ_SETS_CORRECT
+  SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
 
     IMPLICIT NONE
 
@@ -67,6 +67,6 @@
       END SELECT
     END DO
 
-  END SUBROUTINE MR_CTRL_PRJ_SETS_CORRECT
+  END SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
 
-  END MODULE MR_MOD_CTRL_PRJ_SETS_CORRECT
+  END MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
