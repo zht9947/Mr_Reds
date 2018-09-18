@@ -77,12 +77,12 @@
       ERRMSG = "Error in opening /PROPERTIES"
     ELSE
 
-        CALL XF_READ_PROPERTY_DOUBLE( PROP_ID , "Slope" , 1 , SLOPE_ARRAY , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting the value of slope from /PROPERTIES"
-        ELSE
-          SLOPE = SLOPE_ARRAY(1)
-        END IF
+      CALL XF_READ_PROPERTY_DOUBLE( PROP_ID , "Slope" , 1 , SLOPE_ARRAY , ERROR )
+      IF( ERROR < 0 ) THEN
+        ERRMSG = "Error in getting the value of slope from /PROPERTIES"
+      ELSE
+        SLOPE = SLOPE_ARRAY(1)
+      END IF
 
       CALL XF_CLOSE_GROUP( PROP_ID , ERROR_DUMMY )
       IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
