@@ -172,7 +172,7 @@
       CALL MR_CTRL_CONFIRM_START_MODE_HOT
       WRITE(*,'(/,"Initialize project... ", $ )')
     END SELECT
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -184,7 +184,7 @@
     CALL MR_MALLOC_FIELD_VARS
     CALL MR_MALLOC_ACTIVITY
     CALL MR_MALLOC_ERROR_1D_ARRAY
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -194,7 +194,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -202,7 +202,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -210,7 +210,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize field variables and activity... ", $ )')
     SELECT CASE( START_MODE )
@@ -228,7 +228,7 @@
         CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
       END IF
     END SELECT
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize essential parameters... ", $ )')
     CALL MR_INIT_MEANDER_PARS( ERROR , ERRMSG )
@@ -263,7 +263,7 @@
         )
       END IF
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -312,7 +312,7 @@
       END IF
     END SELECT
 
-    WRITE(*,'(2X,"Generate bathymetry and update depth... Done! ")')
+    WRITE(*,'(2X,"Generate bathymetry and update depth... Done!")')
 
     WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF)
 
