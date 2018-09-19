@@ -65,8 +65,6 @@
     CHARACTER( 2**08 ) :: FILE_XMDF
     CHARACTER( 2**08 ) :: FILE_PRJ
 
-    LOGICAL            :: FILE_PRJ_EXISTS
-
     REAL   (PARD_KIND) :: HTH
 
     INTEGER(TSID_KIND) :: ITS
@@ -107,7 +105,7 @@
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
-    IF( FILE_PRJ_EXISTS ) THEN
+    IF( FILE_PRJ /= "" ) THEN
       CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -121,11 +119,11 @@
     END IF
     SELECT CASE( START_MODE )
     CASE( COLD_MODE )
-      WRITE(*,'(//,"No datasets seem in the XMDF file. ")')
+      WRITE(*,'(//,"No datasets seem in the XMDF file.")')
       CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
       WRITE(*,'(/,"Initialize project... ", $ )')
     CASE( HOT_MODE )
-      WRITE(*,'(//,"Datasets have been detected in the XMDF file. ")')
+      WRITE(*,'(//,"Datasets have been detected in the XMDF file.")')
       CALL MR_CTRL_CONFIRM_START_MODE_HOT
       CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
@@ -139,7 +137,7 @@
       END IF
       WRITE(*,'(/,"Initialize project... ", $ )')
     END SELECT
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -156,7 +154,7 @@
     CALL MR_MALLOC_CURVED_GEOS
     CALL MR_MALLOC_FIELD_VARS
     CALL MR_MALLOC_ACTIVITY
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -166,7 +164,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -174,7 +172,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -182,13 +180,13 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize field variables and activity... ", $ )')
     SELECT CASE( START_MODE )
     CASE( COLD_MODE )
       CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH , T )
-      WRITE(*,'("Done! ")')
+      WRITE(*,'("Done!")')
       WRITE(*,'("Initialize output... ", $ )')
       CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
@@ -208,7 +206,7 @@
         STOP
       END IF
     END SELECT
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -371,12 +369,11 @@
         END IF
       END IF
 
-      FILE_PRJ_EXISTS = .TRUE.
-
     ELSE
-
-      FILE_PRJ_EXISTS = .FALSE.
-
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      FILE_PRJ = ""
+     !END BLOCK
     END IF
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
