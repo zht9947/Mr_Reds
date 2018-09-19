@@ -23,15 +23,21 @@
 
     USE MR_ERRORS_FILE_MANIPULATE
 
-    USE MR_KINDS
-
     USE MR_MOD_CTRL_RETRY_CREATING_FILES
 
-    USE MR_MOD_INIT_PRJ
-    USE MR_MOD_ECHO_PRJ
-    USE MR_MOD_CTRL_PRJ_SETS_CORRECT
+    USE MR_KINDS
 
+    USE MR_DEF_TIMING , ONLY : DT
+    USE MR_DEF_CONSTS_N_REF_PARS , ONLY : COR
+
+    USE MR_NUM_START_MODE
+
+    USE MR_MOD_DETER_START_MODE
+
+    USE MR_MOD_INIT_PRJ
     USE MR_MOD_INIT_RANKS
+    USE MR_MOD_INIT_RANKS_PLUS
+    USE MR_MOD_INIT_SLOPE
 
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
@@ -39,6 +45,7 @@
     USE MR_MOD_MALLOC_FIELD_VARS_AVERAGE
     USE MR_MOD_MALLOC_ACTIVITY
 
+    USE MR_MOD_INIT_CONSTS_N_REF_PARS
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
 
@@ -51,10 +58,11 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
+    CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_AVERAGE
 
+    INTEGER(TSID_KIND) :: NTSS
     INTEGER(TSID_KIND) :: ITS
 
     REAL   (TMRD_KIND) :: T
@@ -72,13 +80,15 @@
     CALL MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      WRITE(*,'(/,"PLEASE RUN ", A ,"_Average with the following command arguments:")') TRIM(INNERNAME)
+      WRITE(*,'(/,"PLEASE RUN ", A ," with the following command arguments:")') TRIM(INNERNAME)
       WRITE(*,'(  "  1- (non-optional)")')
-      WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
-      WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
+      WRITE(*,'(  "  2- (optional)")')
+      WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
       WRITE(*,'(  "Note,")')
-      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--2 MUST be given in sequence.")')
       STOP
     END IF
   ! CREATE OUTPUT FILES
@@ -97,41 +107,66 @@
       STOP
     END IF
 
-    WRITE(*,'( )')
-
-    WRITE(*,'("Initialize project... ", $ )')
-    CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+  ! DETERMINE START MODE BY DETECTING XMDF FILE
+    CALL MR_DETER_START_MODE( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
-
-    CALL MR_ECHO_PRJ
 
     WRITE(*,'( )')
 
-    CALL MR_CTRL_PRJ_SETS_CORRECT
-
-    WRITE(*,'( )')
-
-    WRITE(*,'("Initialize ranks... ", $ )')
+    WRITE(*,'("Initialize project... ", $ )')
+    IF( FILE_PRJ /= "" ) THEN
+      CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    END IF
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
-      CALL MR_MALLOC_CURVED_GEOS
-      CALL MR_MALLOC_FIELD_VARS
-      CALL MR_MALLOC_FIELD_VARS_AVERAGE
-      CALL MR_MALLOC_ACTIVITY
     END IF
-    WRITE(*,'("Done! ")')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      WRITE(*,'(//,"No datasets seem in the XMDF file.")')
+      WRITE(*,'("The program is stopped.")')
+      STOP
+    CASE( HOT_MODE )
+      CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+      CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    END SELECT
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
+
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    CALL MR_MALLOC_CURVED_GEOS
+    CALL MR_MALLOC_FIELD_VARS
+    CALL MR_MALLOC_FIELD_VARS_AVERAGE
+    CALL MR_MALLOC_ACTIVITY
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'("Initialize constants and reference parameters... ", $ )')
+    CALL MR_INIT_CONSTS_N_REF_PARS( ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -139,7 +174,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -147,7 +182,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize output... ", $ )')
     CALL MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE , ERROR , ERRMSG )
@@ -155,38 +190,49 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Get the maximum number of timesteps and corresponding time, ")')
-    WRITE(*,'("and the data of the last time will be averaged... ", $ )')
-    CALL MR_GET_NTSS_N_T_NTSS( FILE_XMDF , ITS , T , ERROR , ERRMSG )
+    WRITE(*,'(8X,"Average...  0.00%", A , $ )') ACHAR(13)
+
+  ! GET NTSS
+    CALL MR_GET_NTSS( FILE_XMDF , NTSS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
 
-    WRITE(*,'( )')
+    DT = DT * COR   ! NONDIMENSIONALIZE DT
 
-    WRITE(*,'("Input... ", $ )')
-    CALL MR_INPUT( FILE_XMDF , ITS , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
+    DO ITS = 0 , NTSS
 
-    CALL MR_UPDT_FIELD_VARS_AVERAGE
+    ! GET T OF ITS
+      CALL MR_GET_T_ITS( FILE_XMDF , NTSS , ITS , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
 
-    WRITE(*,'("Output... ", $ )')
-    CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE, T , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
+      CALL MR_INPUT( FILE_XMDF , ITS , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+
+      CALL MR_UPDT_FIELD_VARS_AVERAGE
+
+      CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+
+      WRITE(*,'(8X,"Average...",F6.2,"%", A , $ )') REAL(ITS+1)/REAL(NTSS+1)*100.00 , ACHAR(13)
+
+    END DO
+
+    WRITE(*,'(8X,"Average... Done! ")')
 
     WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_AVERAGE)
 
@@ -252,7 +298,7 @@
     END IF
 
   ! NUMBER OF COMMAND ARGUMENTS DETECT
-    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
@@ -263,32 +309,6 @@
     END IF
 
     I_ARG = 1
-    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET PROJECT FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "Project file's path\name too long"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
-      RETURN
-    ELSE
-    ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-        RETURN
-      ELSE
-        CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
-          RETURN
-        END IF
-      END IF
-    END IF
-
-    I_ARG = 2
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET XMDF FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
@@ -312,6 +332,41 @@
           RETURN
         END IF
       END IF
+    END IF
+
+    IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
+
+      I_ARG = 2
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET PROJECT FILE'S PATH\NAME
+      CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
+      IF( ERROR == - 1 ) THEN
+        ERRMSG = "Project file's path\name too long"
+        RETURN
+      ELSE IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
+        RETURN
+      ELSE
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+          RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
+        END IF
+      END IF
+
+    ELSE
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      FILE_PRJ = ""
+     !END BLOCK
     END IF
 
   ! SET AVERAGE FILE'S PATH\NAME
