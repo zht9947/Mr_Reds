@@ -30,10 +30,6 @@
     USE MR_DEF_TIMING , ONLY : DT
     USE MR_DEF_CONSTS_N_REF_PARS , ONLY : COR
 
-    USE MR_NUM_START_MODE
-
-    USE MR_MOD_DETER_START_MODE
-
     USE MR_MOD_INIT_PRJ
     USE MR_MOD_INIT_RANKS
     USE MR_MOD_INIT_RANKS_PLUS
@@ -107,13 +103,6 @@
       STOP
     END IF
 
-  ! DETERMINE START MODE BY DETECTING XMDF FILE
-    CALL MR_DETER_START_MODE( FILE_XMDF , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
@@ -129,23 +118,16 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    SELECT CASE( START_MODE )
-    CASE( COLD_MODE )
-      WRITE(*,'(//,"No datasets seem in the XMDF file.")')
-      WRITE(*,'("The program is stopped.")')
+    CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    CASE( HOT_MODE )
-      CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-      CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-        STOP
-      END IF
-    END SELECT
+    END IF
+    CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
     WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
