@@ -19,7 +19,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CURVED_GEOS_ADDITIONAL
+  MODULE MR_MOD_MALLOC_CURVED_GEOS_PLUS
 
     USE MR_KINDS
 
@@ -151,4 +151,4 @@
 
   END SUBROUTINE MR_MALLOC_CURVED_GEOS_FOO
 
-  END MODULE MR_MOD_MALLOC_CURVED_GEOS_ADDITIONAL
+  END MODULE MR_MOD_MALLOC_CURVED_GEOS_PLUS
