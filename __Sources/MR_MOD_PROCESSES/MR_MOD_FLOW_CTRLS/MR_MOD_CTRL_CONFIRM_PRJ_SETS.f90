@@ -1,4 +1,3 @@
-#INCLUDE 'MR_H_ALIGN_PADDING.H'
 !***********************************************************************************************************************************
 ! UNIT:
 !
@@ -19,18 +18,13 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CONSTS_N_REF_PARS
-
-    USE MR_KINDS
-
-    USE MR_DEF_RANKS
-    USE MR_DEF_CONSTS_N_REF_PARS
+  MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_KK_CONSTS_N_REF_PARS
+    PUBLIC :: MR_CTRL_CONFIRM_PRJ_SETS
 
 !***********************************************************************************************************************************
 
@@ -56,12 +50,23 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS
+  SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
 
     IMPLICIT NONE
 
-    ALLOCATE( SIGMA(1:NK) )
+    CHARACTER(   1   ) :: Y_OR_N
 
-  END SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS
+    DO
+      WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
+      READ(*,*) Y_OR_N
+      SELECT CASE( Y_OR_N )
+      CASE( "Y" , "y" )
+        RETURN
+      CASE( "N" , "n" )
+        STOP
+      END SELECT
+    END DO
 
-  END MODULE MR_MOD_MALLOC_CONSTS_N_REF_PARS
+  END SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
+
+  END MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS

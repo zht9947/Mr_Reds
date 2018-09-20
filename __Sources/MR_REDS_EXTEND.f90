@@ -23,12 +23,14 @@
 
     USE MR_ERRORS_FILE_MANIPULATE
 
-    USE MR_KINDS
-
     USE MR_MOD_CTRL_RETRY_CREATING_FILES
+
+    USE MR_KINDS
 
     USE MR_MOD_INIT_RANKS
     USE MR_MOD_INIT_RANKS_EXTEND
+    USE MR_MOD_INIT_RANKS_PLUS
+    USE MR_MOD_INIT_SLOPE
 
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_GRID_SYS_
@@ -95,19 +97,31 @@
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Initialize ranks... ", $ )')
+    WRITE(*,'("Initialize project... ", $ )')
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      CALL MR_INIT_RANKS_EXTEND( NLOOPS )
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
-      CALL MR_MALLOC_GRID_SYS_
     END IF
-    WRITE(*,'("Done! ")')
+    CALL MR_INIT_RANKS_EXTEND( NLOOPS )
+    CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    CALL MR_MALLOC_GRID_SYS_
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -123,18 +137,18 @@
         STOP
       END IF
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
+
+    WRITE(*,'(8X,"Extend data...  0.00%", A , $ )') ACHAR(13)
 
   ! GET NTSS
     CALL MR_GET_NTSS( FILE_XMDF , NTSS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-
-    WRITE(*,'(8X,"Extend data...  0.00%", A , $ )') ACHAR(13)
 
     DO ITS = 0 , NTSS
 
@@ -151,8 +165,7 @@
         STOP
       END IF
 
-      WRITE(*,'(8X,"Extend data...",F6.2,"%", A , $ )')   &
-      & REAL(ITS+1)/REAL(NTSS+1)*100.00 , ACHAR(13)
+      WRITE(*,'(8X,"Extend data...",F6.2,"%", A , $ )') REAL(ITS+1)/REAL(NTSS+1)*100.00 , ACHAR(13)
 
     END DO
 

@@ -34,23 +34,24 @@
 
     USE MR_NUM_START_MODE
 
+    USE MR_MOD_DETER_START_MODE
+
     USE MR_MOD_INIT_RANKS
 
-    USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
+    USE MR_MOD_CTRL_CONFIRM_START_MODE
+
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
-    USE MR_MOD_MALLOC_CURVED_GEOS_ADDITIONAL
+    USE MR_MOD_MALLOC_CURVED_GEOS_PLUS
     USE MR_MOD_MALLOC_FIELD_VARS
     USE MR_MOD_MALLOC_ACTIVITY
     USE MR_MOD_MALLOC_ERROR_ARRAY
 
-    USE MR_MOD_INIT_CONSTS_N_REF_PARS_DEFAULT
+    USE MR_MOD_INIT_CONSTS_N_REF_PARS
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
     USE MR_MOD_INIT_MEANDER_PARS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
-
-    USE MR_MOD_CTRL_COLD_MODE_STARTED
 
     USE MR_MOD_AVERAGE
 
@@ -67,13 +68,13 @@
     CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
 
-    REAL   (TMRD_KIND) :: T_START
+    REAL   (TMRD_KIND) :: T
 
     REAL   (PARD_KIND) :: HTH
     REAL   (PARD_KIND) :: DZB_BK_MIN , DZB_BK_MAX
     REAL   (PARD_KIND) :: XI0 , XXIM
 
-    REAL   (TMRD_KIND) , ALLOCATABLE :: T_START_ALTER
+    REAL   (TMRD_KIND) , ALLOCATABLE :: T_ALTER
     REAL   (PARD_KIND) , ALLOCATABLE :: DZB_BK_MIN_ALTER
     REAL   (PARD_KIND) , ALLOCATABLE :: XI0_ALTER , XXIM_ALTER
     REAL   (GJRD_KIND) , ALLOCATABLE :: THETA0_ALTER
@@ -98,14 +99,8 @@
       WRITE(*,'(  "  1- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
       WRITE(*,'(  "  2- (non-optional)")')
-      WRITE(*,'(  "      Number of layers into which the whole depth is expected to be divided;")')
-      WRITE(*,'(  "  3- (non-optional)")')
       WRITE(*,'(  "      Maximum bed deformation at banks, (+) positive, in meters;")')
-      WRITE(*,'(  "  4- (optional)")')
-      WRITE(*,'(  "      Number of meander bends that the mesh contains;")')
-      WRITE(*,'(  "    Or,")')
-      WRITE(*,'(  "      If omitted, only ONE meander bend is supposed to be contained;")')
-      WRITE(*,'(  "  5- (optional)")')
+      WRITE(*,'(  "  3- (optional)")')
       WRITE(*,'(  "      ONE or MORE alternative options, which change the default values of")')
       WRITE(*,'(  "    corresponding variables, with the following format:")')
       WRITE(*,'(  "        --<identifier> <value>")')
@@ -138,46 +133,68 @@
       WRITE(*,'(  "    F-  t")')
       WRITE(*,'(  "        Time stamped on the generated data, in either relative or Julian sense,")')
       WRITE(*,'(  "      in seconds;")')
-      WRITE(*,'(  "        t takes effect only when the mesh file contains no datasets; if not so,")')
-      WRITE(*,'(  "      t will be determined as the time recorded in the datasets;")')
+      WRITE(*,'(  "        t takes effect only when the mesh file contains no datasets, the default")')
+      WRITE(*,'(  "      is 0.0; if the mesh file contains datasets, t will be determined as the time")')
+      WRITE(*,'(  "      recorded in the datasets;")')
+      WRITE(*,'(  "    G-  nbends")')
+      WRITE(*,'(  "        Number of meander bends that the mesh contains, the default is 1;")')
       WRITE(*,'(  "    Or,")')
       WRITE(*,'(  "      If omitted, ALL these variables will be assigned default values;")')
       WRITE(*,'(  "  Note,")')
-      WRITE(*,'(  "    ALL the alternative options A--F can be specified in any order;")')
+      WRITE(*,'(  "    ALL the alternative options A--G can be specified in any order;")')
       WRITE(*,'(  "But,")')
-      WRITE(*,'(  "  ALL the arguments 1--5 MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--3 MUST be given in sequence.")')
+      STOP
+    END IF
+
+  ! DETERMINE START MODE BY DETECTING XMDF FILE
+    CALL MR_DETER_START_MODE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
 
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
-    CALL MR_INIT_CONSTS_N_REF_PARS_DEFAULT( ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      STOP
-    END IF
-    WRITE(*,'("Done! ")')
-
-    WRITE(*,'("Initialize ranks... ", $ )')
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
-      CALL MR_MALLOC_CURVED_GEOS
-      CALL MR_MALLOC_CURVED_GEOS_GVV
-      CALL MR_MALLOC_CURVED_GEOS_GOO
-      CALL MR_MALLOC_FIELD_VARS
-      CALL MR_MALLOC_ACTIVITY
-      CALL MR_MALLOC_ERROR_1D_ARRAY
     END IF
-    WRITE(*,'("Done! ")')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      WRITE(*,'(//,"No datasets seem in the XMDF file. ")')
+      CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    CASE( HOT_MODE )
+      WRITE(*,'(//,"Datasets have been detected in the XMDF file. ")')
+      CALL MR_CTRL_CONFIRM_START_MODE_HOT
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    END SELECT
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
+
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    CALL MR_MALLOC_CURVED_GEOS
+    CALL MR_MALLOC_CURVED_GEOS_GVV
+    CALL MR_MALLOC_CURVED_GEOS_GOO
+    CALL MR_MALLOC_FIELD_VARS
+    CALL MR_MALLOC_ACTIVITY
+    CALL MR_MALLOC_ERROR_1D_ARRAY
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'("Initialize constants and reference parameters... ", $ )')
+    CALL MR_INIT_CONSTS_N_REF_PARS( ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -185,7 +202,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -193,28 +210,25 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
-    WRITE(*,'("Initialize field variables and activity on hot mode... ", $ )')
-    CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      WRITE(*,'( )')
-      CALL MR_CTRL_COLD_MODE_STARTED( HTH )
-      WRITE(*,'( )')
-      WRITE(*,'("Initialize field variables and activity on cold mode... ", $ )')
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
-      IF( ALLOCATED( T_START_ALTER ) )  THEN
-        T_START  =   T_START_ALTER
-      ELSE
-        T_START  =   0.0
+    WRITE(*,'("Initialize field variables and activity... ", $ )')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH , T )
+      IF( ALLOCATED( T_ALTER ) ) THEN
+        T = T_ALTER
       END IF
-      START_MODE = COLD_MODE
-    ELSE
-      CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
-      START_MODE = HOT_MODE
-    END IF
-    WRITE(*,'("Done! ")')
+    CASE( HOT_MODE )
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      ELSE
+        CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
+      END IF
+    END SELECT
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize essential parameters... ", $ )')
     CALL MR_INIT_MEANDER_PARS( ERROR , ERRMSG )
@@ -222,8 +236,12 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     ELSE
-      IF( ALLOCATED( THETA0_ALTER ) ) THETA0 = THETA0_ALTER
-      IF( ALLOCATED( BTH_ALTER ) ) BTH = BTH_ALTER
+      IF( ALLOCATED( THETA0_ALTER ) ) THEN
+        THETA0 = THETA0_ALTER
+      END IF
+      IF( ALLOCATED( BTH_ALTER ) ) THEN
+        BTH  = BTH_ALTER
+      END IF
       IF( ALLOCATED( XI0_ALTER ) ) THEN
         XI0  = XI0_ALTER
       ELSE
@@ -245,7 +263,7 @@
         )
       END IF
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -280,21 +298,21 @@
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       ELSE
-        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.FALSE. )
+        CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG , OVERWRITE=.FALSE. )
         IF( ERROR < 0 ) THEN
           WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
           STOP
         END IF
       END IF
     CASE( HOT_MODE )
-      CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG , OVERWRITE=.TRUE. )
+      CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG , OVERWRITE=.TRUE. )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
     END SELECT
 
-    WRITE(*,'(8X,"Generate bathymetry and update depth... Done! ")')
+    WRITE(*,'(2X,"Generate bathymetry and update depth... Done! ")')
 
     WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF)
 
@@ -399,30 +417,6 @@
 
     I_ARG = 2
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET NUMBER OF LAYERS THAT THE WHOLE DEPTH IS EXPECTED TO BE DIVIDED INTO
-    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
-    IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-      RETURN
-    ELSE
-      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-        ERROR = - 1
-        ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE
-        READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NK
-        IF( ERROR /= 0 ) THEN
-          ERROR = - ABS(ERROR)
-          ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-          RETURN
-        END IF
-        CALL MR_MALLOC_KK_CONSTS_N_REF_PARS
-      END IF
-    END IF
-
-    I_ARG = 3
-    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET MAXIMUM BED DEFORMATION (POSITIVE) AT BANKS, IN METERS
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
@@ -448,48 +442,8 @@
       END IF
     END IF
 
-    IF( COMMAND_ARGUMENT_COUNT() > 3 ) THEN
-
-      I_ARG = 4
-      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-    ! GET NUMBER OF MEANDER BENDS
-      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
-      IF( ERROR /= 0 ) THEN
-        ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
-        IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-          ERROR = - 1
-          ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-          RETURN
-        ELSE
-          READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          END IF
-        END IF
-        I_ARG_ALTER_START = 5
-      ELSE
-       !BLOCK
-      ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
-        NBENDS = 1
-       !END BLOCK
-        I_ARG_ALTER_START = 4
-      END IF
-
-    ELSE
-     !BLOCK
-    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
-      NBENDS = 1
-     !END BLOCK
-      I_ARG_ALTER_START = 4
-    END IF
-
   ! LOOP FOR ALTERNATIVE OPTIONS
-    DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
+    DO I_ARG = 3 , COMMAND_ARGUMENT_COUNT() , 2
 
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET ALTERNATIVE OPTION IDENTIFIER
@@ -649,8 +603,8 @@
             END IF
           END IF
 
-        CASE( "--T" , "--t" , "--T_START" , "--T_Start" , "--T_start" , "--t_start" )
-          ALLOCATE(T_START_ALTER)
+        CASE( "--T" , "--t" )
+          ALLOCATE(T_ALTER)
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
         ! GET ALTERNATIVE STARTING TIME, IN SECONDS
@@ -665,7 +619,31 @@
               ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
             ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
+              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_ALTER
+              IF( ERROR /= 0 ) THEN
+                ERROR = - ABS(ERROR)
+                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              END IF
+            END IF
+          END IF
+
+        CASE( "--NBENDS" , "--NBends" , "--Nbends" , "--nbends" )
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+        ! GET ALTERNATIVE NUMBER OF MEANDER BENDS
+          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
               IF( ERROR /= 0 ) THEN
                 ERROR = - ABS(ERROR)
                 ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))

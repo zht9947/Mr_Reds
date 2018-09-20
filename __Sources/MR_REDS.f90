@@ -26,25 +26,29 @@
     USE MR_DEF_TIMING
     USE MR_DEF_CONSTS_N_REF_PARS , ONLY : COR
 
-    USE MR_MOD_INIT_PRJ
-    USE MR_MOD_ECHO_PRJ
-    USE MR_MOD_CTRL_PRJ_SETS_CORRECT
-
     USE MR_NUM_START_MODE
 
+    USE MR_MOD_DETER_START_MODE
+
+    USE MR_MOD_INIT_PRJ
     USE MR_MOD_INIT_RANKS
+    USE MR_MOD_INIT_RANKS_PLUS
+    USE MR_MOD_INIT_SLOPE
+
+    USE MR_MOD_CTRL_CONFIRM_START_MODE
+
+    USE MR_MOD_ECHO_PRJ
+    USE MR_MOD_CTRL_CONFIRM_PRJ_SETS
 
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
     USE MR_MOD_MALLOC_FIELD_VARS
     USE MR_MOD_MALLOC_ACTIVITY
 
+    USE MR_MOD_INIT_CONSTS_N_REF_PARS
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
-
-    USE MR_MOD_CTRL_CONTINUE
-    USE MR_MOD_CTRL_COLD_MODE_STARTED
 
     USE MR_MOD_INIT_OUTPUT
 
@@ -58,8 +62,8 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
+    CHARACTER( 2**08 ) :: FILE_PRJ
 
     REAL   (PARD_KIND) :: HTH
 
@@ -81,48 +85,86 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"PLEASE RUN ", A ," with the following command arguments:")') TRIM(INNERNAME)
       WRITE(*,'(  "  1- (non-optional)")')
-      WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
-      WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
+      WRITE(*,'(  "  2- (optional)")')
+      WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
       WRITE(*,'(  "Note,")')
-      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--2 MUST be given in sequence.")')
+      STOP
+    END IF
+
+  ! DETERMINE START MODE BY DETECTING XMDF FILE
+    CALL MR_DETER_START_MODE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
 
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
-    CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+    IF( FILE_PRJ /= "" ) THEN
+      CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    END IF
+    CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      WRITE(*,'(//,"No datasets seem in the XMDF file.")')
+      CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    CASE( HOT_MODE )
+      WRITE(*,'(//,"Datasets have been detected in the XMDF file.")')
+      CALL MR_CTRL_CONFIRM_START_MODE_HOT
+      CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+      CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    END SELECT
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
 
     CALL MR_ECHO_PRJ
 
     WRITE(*,'( )')
 
-    CALL MR_CTRL_PRJ_SETS_CORRECT
+    CALL MR_CTRL_CONFIRM_PRJ_SETS
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Initialize ranks... ", $ )')
-    CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    CALL MR_MALLOC_CURVED_GEOS
+    CALL MR_MALLOC_FIELD_VARS
+    CALL MR_MALLOC_ACTIVITY
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'("Initialize constants and reference parameters... ", $ )')
+    CALL MR_INIT_CONSTS_N_REF_PARS( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
-      CALL MR_MALLOC_CURVED_GEOS
-      CALL MR_MALLOC_FIELD_VARS
-      CALL MR_MALLOC_ACTIVITY
     END IF
-    WRITE(*,'("Done! ")')
-
-    WRITE(*,'( )')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -130,7 +172,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -138,47 +180,39 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
-    WRITE(*,'("Initialize field variables and activity on hot mode... ", $ )')
-    CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T_START , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
-      WRITE(*,'( )')
-      CALL MR_CTRL_COLD_MODE_STARTED( HTH )
-      WRITE(*,'( )')
-      WRITE(*,'("Initialize field variables and activity on cold mode... ", $ )')
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
-      WRITE(*,'("Done! ")')
+    WRITE(*,'("Initialize field variables and activity... ", $ )')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH , T )
+      WRITE(*,'("Done!")')
       WRITE(*,'("Initialize output... ", $ )')
       CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       ELSE
-        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG )
+        CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
           WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
           STOP
         END IF
       END IF
-      START_MODE = COLD_MODE
-    ELSE
-      START_MODE = HOT_MODE
-    END IF
-    WRITE(*,'("Done! ")')
-
-    SELECT CASE( START_MODE )
     CASE( HOT_MODE )
-      WRITE(*,'( )')
-      CALL MR_CTRL_CONTINUE
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
     END SELECT
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
-    T = T_START
-
     WRITE(*,'(8X,"Compute...  0.00%", A , $ )') ACHAR(13)
+
+    DT = DT * COR   ! NONDIMENSIONALIZE DT
 
     DO ITS = 1 , NTSS
 
@@ -190,7 +224,7 @@
      !CALL MR_UPDT_R
       CALL MR_UPDT_VZWW
 
-      T = T + DT/COR
+      T = T + ( DT / COR )
       IF( MOD( ITS , NTSS_OUTPUT ) == 0 ) THEN
 
         CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
@@ -271,7 +305,7 @@
     END IF
 
   ! NUMBER OF COMMAND ARGUMENTS DETECT
-    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
@@ -282,32 +316,6 @@
     END IF
 
     I_ARG = 1
-    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET PROJECT FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "Project file's path\name too long"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
-      RETURN
-    ELSE
-    ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-        RETURN
-      ELSE
-        CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
-          RETURN
-        END IF
-      END IF
-    END IF
-
-    I_ARG = 2
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET XMDF FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
@@ -331,6 +339,41 @@
           RETURN
         END IF
       END IF
+    END IF
+
+    IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
+
+      I_ARG = 2
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET PROJECT FILE'S PATH\NAME
+      CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
+      IF( ERROR == - 1 ) THEN
+        ERRMSG = "Project file's path\name too long"
+        RETURN
+      ELSE IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
+        RETURN
+      ELSE
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+          RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
+        END IF
+      END IF
+
+    ELSE
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      FILE_PRJ = ""
+     !END BLOCK
     END IF
 
   END SUBROUTINE MR_INIT_COMMAND_LINE

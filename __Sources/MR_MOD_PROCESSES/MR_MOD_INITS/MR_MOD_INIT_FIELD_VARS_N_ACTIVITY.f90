@@ -61,11 +61,13 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH )
+  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH , T )
 
     IMPLICIT NONE
 
     REAL   (PARD_KIND) , INTENT(IN ) :: HTH
+
+    REAL   (TMRD_KIND) , INTENT(OUT) :: T
 
     TBFUV    =   0.000E+0
     TBUV     =   0.000E+0
@@ -83,10 +85,16 @@
     W        =   0.000E+0
     VZWW     =   V0 / VZR   ; VXYU    =   V0 / VZR   ; VXYV    =   V0 / VZR
     VZW      =   V0 / VZR
-    DZWW     =   V0 / VZR   ; DXYU    =   V0 / VZR   ; DXYV    =   V0 / VZR
-    DZW      =   V0 / VZR
+    DZWW     =   V0 / DZR   ; DXYU    =   V0 / DZR   ; DXYV    =   V0 / DZR
+    DZW      =   V0 / DZR
 
     ACTIVITY =   BEACTIVE
+
+   !BLOCK
+  ! ALL ABOVE FIELD VARIABLES AND ACTIVITY 
+  ! ARE ASSOCIATED WITH THE FOLLOWING THEORETICAL ZERO TIME
+    T = 0.00
+   !END BLOCK
 
   END SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
 
@@ -110,7 +118,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF_NAME , T_START , ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF_NAME , T , ERROR , ERRMSG )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MULTI_DSETS
@@ -125,20 +133,20 @@
 
     INTEGER                          :: FILE_XMDF_ID , MULTI_DSETS_ID
 
-    INTEGER(TSID_KIND)               :: NTSS_PREV
+    INTEGER(TSID_KIND)               :: NTSS
 
-    REAL   (TMRD_KIND) , INTENT(OUT) :: T_START
+    REAL   (TMRD_KIND) , INTENT(OUT) :: T
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    CALL MR_GET_NTSS_N_T_NTSS( FILE_XMDF_NAME , NTSS_PREV , T_START , ERROR , ERRMSG )
+    CALL MR_GET_NTSS_N_T_NTSS( FILE_XMDF_NAME , NTSS , T , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
       RETURN
     END IF
 
-    CALL MR_INPUT( FILE_XMDF_NAME , NTSS_PREV , ERROR , ERRMSG )
+    CALL MR_INPUT( FILE_XMDF_NAME , NTSS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" when initializing field variables and activity with hot mode"
       RETURN

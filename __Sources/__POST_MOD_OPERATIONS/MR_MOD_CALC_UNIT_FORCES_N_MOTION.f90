@@ -200,9 +200,9 @@
             UNIT_FORCES( I , J ,DIM) =   &
             - TBUV( I , J ,DIM)   &
             + H( I , J ) *   &
-              ( XYR/ZR / ALPAR * FUV( I , J ,DIM,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
-              - (                FUV( I , J ,DIM,1) * GRAD_XY_ZS( I , J ,1)   &
-                +                FUV( I , J ,DIM,2) * GRAD_XY_ZS( I , J ,2)   &
+              ( SLOPEPAR * FUV( I , J ,DIM,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
+              - (          FUV( I , J ,DIM,1) * GRAD_XY_ZS( I , J ,1)   &
+                +          FUV( I , J ,DIM,2) * GRAD_XY_ZS( I , J ,2)   &
                 )   &
             & )
           END IF

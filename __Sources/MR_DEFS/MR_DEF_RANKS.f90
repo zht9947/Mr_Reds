@@ -13,7 +13,7 @@
 !                             NEM    :    NUMBER OF ELEMENTS
 !                          NI, NJ    :    NUMBER OF COLUMNS AND ROWS, RESPECTIVELY
 !                              NK    :    NUMBER OF LAYERS
-!                             NKS    :    NUMBER OF GRAIN SIZES
+!                             NKS    :    NUMBER OF SEDIMENT SIZES
 !
 ! RECORD OF REVISIONS:
 !
@@ -31,6 +31,7 @@
     INTEGER(NDID_KIND) :: NND
     INTEGER(EMID_KIND) :: NEM
     INTEGER(IJID_KIND) :: NI , NJ
-    INTEGER(KKID_KIND) :: NK
+    INTEGER(KKID_KIND) :: NK = 10
+    INTEGER(KSID_KIND) :: NKS = 1
 
   END MODULE MR_DEF_RANKS

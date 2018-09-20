@@ -36,7 +36,7 @@
 !                                         GENERALLY AS AVERAGE DEPTH
 !                             UVR    :    REFERENCE HORIZONTAL VELOCITY,
 !                                         GENERALLY AS AVERAGE HORIZONTAL VELOCITY MAGNITUDE
-!                              WR    :    REFERENCE VERTICAL VELOCITY, WR = UVR / XYR * ZR
+!                              WR    :    REFERENCE VERTICAL VELOCITY, WR = UVR / ( XYR / ZR )
 !                              SR    :    REFERENCE FREE SURFACE ELEVATION, SR = COR * UVR * XYR / GR
 !                            TUVR    :    REFERENCE SHEAR STRESS, TUVR = R0 * COR * UVR * ZR
 !                           QSUVR    :    REFERENCE TRANSPORT FLUX, QSUVR = R0 * COR * XYR * ZR
@@ -57,27 +57,29 @@
 !                             RET    :    REYNOLDS NUMBER FOR SHEAR STRESS, RET = RE / SQRT( RBT )
 !                              FR    :    SQUARED FROUDE NUMBER, FR = UVR * UVR / ( GR * ZR )
 !                             FRD    :    SQUARED DENSIMETRIC FROUDE NUMBER, FRD = FR * R0 / ( RR - R0 )
-!                           ALPAR    :    ALPHA PARAMETER, ALPAR = FR / RB
 !                            BPAR    :    BETA PARAMETER, BPAR = RB * RB / FR
+!                          SURPAR    :    PARAMETER THAT MEASURES FREE SURFACE ELEVATION AS BED ELEVATION, SURPAR = FR / RB
+!                        SLOPEPAR    :    PARAMETER THAT MEASURES BED SLOPE AS FREE SURFACE SLOPE , SLOPEPAR = ( XYR / ZR ) / SURPAR
 !
 !                                      \\ ABOVE ARE DIMENSIONLESS COMBINATIONS
-!
-!   // BELOW ARE CASE CLASSIFIED PARAMETERS
-!
-!                          D0, DS    :    GRAIN-SIZE; DIMENSIONLESS GRAIN-SIZE
-!                            TCRS    :    DIMENSIONLESS CRITICAL SHEAR STRESS
-!                           WALLS    :    DIMENSIONLESS FALL VELOCITY
-!                             RBS    :    ROSSBY NUMBERS FOR FALL VELOCITY
-!
-!                                      \\ ABOVE ARE SEDIMENT GRIAN-SIZE CLASSIFIED PARAMETERS
-!
-!                           SIGMA    :    SIGMA COORDINATE
-!
-!                                      \\ ABOVE ARE LAYER CLASSFIED PARAMETERS
 !
 !   // BELOW IS CONSTANT SIGMA THICKNESS
 !
 !                          DSIGMA    :    SIGMA THICKNESS
+!
+!   // BELOW ARE RANKED PARAMETERS
+!
+!                           SIGMA    :    SIGMA COORDINATE
+!
+!                                      \\ ABOVE ARE LAYER RANKED PARAMETERS
+!
+!                              D0    :    GRAIN-SIZE
+!                              DS    :    DIMENSIONLESS GRAIN-SIZE
+!                            TCRS    :    DIMENSIONLESS CRITICAL SHEAR STRESS
+!                           WALLS    :    DIMENSIONLESS FALL VELOCITY
+!                             RBS    :    ROSSBY NUMBERS FOR FALL VELOCITY
+!
+!                                      \\ ABOVE ARE SEDIMENT SIZE RANKED PARAMETERS
 !
 ! RECORD OF REVISIONS:
 !
@@ -92,28 +94,28 @@
 
     IMPLICIT NONE
 
-    REAL   (PARD_KIND) :: R0
-    REAL   (PARD_KIND) :: V0
+    REAL   (PARD_KIND) :: R0    =    1.000E+3
+    REAL   (PARD_KIND) :: V0    =    1.00E-6
 
-    REAL   (PARD_KIND) :: SS
-    REAL   (PARD_KIND) :: PS
+    REAL   (PARD_KIND) :: SS    =    2.65
+    REAL   (PARD_KIND) :: PS    =    0.4
 
-    REAL   (PARD_KIND) :: KAR
-    REAL   (PARD_KIND) :: COR
-    REAL   (PARD_KIND) :: GR
+    REAL   (PARD_KIND) :: KAR   =    0.40
+    REAL   (PARD_KIND) :: COR   =    1.0
+    REAL   (PARD_KIND) :: GR    =    9.80665
 
-    REAL   (PARD_KIND) :: XYR
-    REAL   (PARD_KIND) :: ZR
-    REAL   (PARD_KIND) :: UVR
+    REAL   (PARD_KIND) :: XYR   =    1.0
+    REAL   (PARD_KIND) :: ZR    =    1.0
+    REAL   (PARD_KIND) :: UVR   =    1.0
     REAL   (PARD_KIND) :: WR
     REAL   (PARD_KIND) :: SR
     REAL   (PARD_KIND) :: TUVR
     REAL   (PARD_KIND) :: QSUVR
     REAL   (PARD_KIND) :: KIR
     REAL   (PARD_KIND) :: DIR
-    REAL   (PARD_KIND) :: VZR
-    REAL   (PARD_KIND) :: DZR
-    REAL   (PARD_KIND) :: RR
+    REAL   (PARD_KIND) :: VZR   =    1.00E-6
+    REAL   (PARD_KIND) :: DZR   =    1.00E-6
+    REAL   (PARD_KIND) :: RR    =    1.200E+3
 
     REAL   (PARD_KIND) :: RB
     REAL   (PARD_KIND) :: RBT
@@ -123,16 +125,18 @@
     REAL   (PARD_KIND) :: RET
     REAL   (PARD_KIND) :: FR
     REAL   (PARD_KIND) :: FRD
-    REAL   (PARD_KIND) :: ALPAR
     REAL   (PARD_KIND) :: BPAR
+    REAL   (PARD_KIND) :: SURPAR
+    REAL   (PARD_KIND) :: SLOPEPAR
 
-    REAL   (PARD_KIND) :: D0 , DS
+    REAL   (PARD_KIND) :: DSIGMA
+
+    REAL   (PARD_KIND) :: SIGMA(32)
+
+    REAL   (PARD_KIND) :: D0    =    1.000E-3
+    REAL   (PARD_KIND) :: DS
     REAL   (PARD_KIND) :: TCRS
     REAL   (PARD_KIND) :: WALLS
     REAL   (PARD_KIND) :: RBS
-
-    REAL   (PARD_KIND) , ALLOCATABLE , DIMENSION(:) :: SIGMA
-
-    REAL   (PARD_KIND) :: DSIGMA
 
   END MODULE MR_DEF_CONSTS_N_REF_PARS
