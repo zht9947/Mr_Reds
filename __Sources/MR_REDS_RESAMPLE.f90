@@ -23,11 +23,13 @@
 
     USE MR_ERRORS_FILE_MANIPULATE
 
-    USE MR_KINDS
-
     USE MR_MOD_CTRL_RETRY_CREATING_FILES
 
+    USE MR_KINDS
+
     USE MR_MOD_INIT_RANKS
+    USE MR_MOD_INIT_RANKS_PLUS
+    USE MR_MOD_INIT_SLOPE
 
     USE MR_MOD_MALLOC_GRID_SYS
 
@@ -124,17 +126,29 @@
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Initialize ranks... ", $ )')
+    WRITE(*,'("Initialize project... ", $ )')
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
     END IF
-    WRITE(*,'("Done! ")')
+    CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      STOP
+    END IF
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
+
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
@@ -150,22 +164,22 @@
         STOP
       END IF
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
+
+    WRITE(*,'(8X,"Resample data...  0.00%", A , $ )') ACHAR(13)
 
   ! GET NTSS
     CALL MR_GET_NTSS( FILE_XMDF , NTSS , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
   ! REASSIGN ITS_END
     ITS_END = MIN( ITS_END , NTSS )
   ! REASSIGN ITS_START
     ITS_START = MIN( ITS_START , ITS_END )
-
-    WRITE(*,'(8X,"Resample data...  0.00%", A , $ )') ACHAR(13)
 
     DO ITS = ITS_START , ITS_END , ITS_STRIDE
 
