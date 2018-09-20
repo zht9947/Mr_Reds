@@ -312,7 +312,7 @@
       END IF
     END SELECT
 
-    WRITE(*,'(2X,"Generate bathymetry and update depth... Done!")')
+    WRITE(*,'(2X,"Generate bathymetry and update depth... Done! ")')
 
     WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF)
 
