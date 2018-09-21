@@ -18,17 +18,17 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_INIT_OUTPUT_AVERAGE
-
-    USE MR_KINDS
-
-    USE MR_DEF_CONSTS_N_REF_PARS
+  MODULE MR_MOD_OPERATOR_CHAR_STRING
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_INIT_OUTPUT_AVERAGE
+    PUBLIC :: OPERATOR( .MRCHARUPPER. )
+
+    INTERFACE OPERATOR( .MRCHARUPPER. )
+      MODULE PROCEDURE MR_CHAR_STRING_UPPER
+    END INTERFACE
 
 !***********************************************************************************************************************************
 
@@ -37,7 +37,7 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (SUBROUTINE)
+!  (FUNCTION)
 !
 ! PURPOSE:
 !
@@ -54,35 +54,29 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_OUTPUT_AVERAGE( FILE_AVERAGE_NAME , ERROR , ERRMSG )
-
-    USE MR_MOD_CREATE_FILE_DEFAULT
-    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
+  FUNCTION MR_CHAR_STRING_UPPER( STRING ) RESULT( STRING_UPPER )
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_AVERAGE_NAME
+    CHARACTER(   *   ) , INTENT(IN ) :: STRING
 
-    INTEGER                          :: FILE_AVERAGE_ID , MULTI_DSETS_ID
+    CHARACTER( LEN(STRING) )         :: STRING_UPPER
 
-    INTEGER            , INTENT(OUT) :: ERROR
-    CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+    INTEGER :: IDX_ASCII_CHAR
+    INTEGER :: I_CHAR
 
-    CALL MR_OPEN_FILE_DEFAULT( FILE_AVERAGE_NAME , FILE_AVERAGE_ID , ERROR , ERRMSG , READONLY=.FALSE. )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
+    DO I_CHAR = 1 , LEN(STRING)
 
-    WRITE( FILE_AVERAGE_ID , '("Rho (kg/m^3)",/,ES13.6)' ) R0
-    WRITE( FILE_AVERAGE_ID , '("g (m/s^2)",/,ES13.6)' ) GR
+      IDX_ASCII_CHAR = IACHAR( STRING(I_CHAR:I_CHAR) )
 
-    CALL MR_CLOSE_FILE_DEFAULT( FILE_AVERAGE_ID , ERROR , ERRMSG )
-    IF( ERROR < 0 ) THEN
-      ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_AVERAGE_NAME)
-      RETURN
-    END IF
+      IF( IDX_ASCII_CHAR >= 97 .AND. IDX_ASCII_CHAR <= 122 ) THEN
+        STRING_UPPER(I_CHAR:I_CHAR) = ACHAR( IDX_ASCII_CHAR - 32 )
+      ELSE
+        STRING_UPPER(I_CHAR:I_CHAR) = STRING(I_CHAR:I_CHAR)
+      END IF
 
-  END SUBROUTINE MR_INIT_OUTPUT_AVERAGE
+    END DO
 
-  END MODULE MR_MOD_INIT_OUTPUT_AVERAGE
+  END FUNCTION MR_CHAR_STRING_UPPER
+
+  END MODULE MR_MOD_OPERATOR_CHAR_STRING

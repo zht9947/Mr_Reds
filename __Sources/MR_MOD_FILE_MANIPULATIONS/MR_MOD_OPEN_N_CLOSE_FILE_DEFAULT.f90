@@ -53,17 +53,18 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_OPEN_FILE_DEFAULT( FILE_NAME , FILE_ACTION , FILE_ID , ERROR , ERRMSG )
+  SUBROUTINE MR_OPEN_FILE_DEFAULT( FILE_NAME , FILE_ID , ERROR , ERRMSG , READONLY )
 
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_ACTION
 
     INTEGER            , INTENT(OUT) :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: READONLY
 
     LOGICAL                          :: BE_OPENED
 
@@ -76,29 +77,21 @@
       IF( BE_OPENED ) THEN
         FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
       ELSE
-        SELECT CASE( TRIM(FILE_ACTION) )
-        CASE( "READ" , "R" , "Read" , "read", "r" )
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ'  , POSITION='REWIND' , IOSTAT=ERROR )
+        IF( PRESENT(READONLY) .AND. READONLY ) THEN
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READ' , POSITION='REWIND' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
             ERRMSG = "Error in opening file"
             RETURN
           END IF
-        CASE( "WRITE" , "W" , "Write" , "write", "w" )
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='WRITE' , POSITION='APPEND' , IOSTAT=ERROR )
+        ELSE
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READWRITE' , POSITION='APPEND' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
             ERRMSG = "Error in opening file"
             RETURN
           END IF
-        CASE DEFAULT
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='OLD' , ACTION='READWRITE' , IOSTAT=ERROR )
-          IF( ERROR > 0 ) THEN
-            ERROR = - ERROR
-            ERRMSG = "Error in opening file"
-            RETURN
-          END IF
-        END SELECT
+        END IF
 
         RETURN
 

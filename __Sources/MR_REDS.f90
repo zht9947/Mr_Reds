@@ -272,6 +272,8 @@
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
@@ -293,10 +295,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
@@ -328,7 +328,7 @@
       RETURN
     ELSE
     ! VERIFY XMDF FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
         RETURN
@@ -356,7 +356,7 @@
         RETURN
       ELSE
       ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
           ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
           RETURN

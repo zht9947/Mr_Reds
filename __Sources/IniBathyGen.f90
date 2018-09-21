@@ -344,6 +344,8 @@
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
@@ -367,10 +369,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
@@ -402,7 +402,7 @@
       RETURN
     ELSE
     ! VERIFY XMDF FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
         RETURN
@@ -459,8 +459,8 @@
         RETURN
       ELSE
 
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--DZB_BK_MIN" , "--Dzb_Bk_Min" , "--Dzb_bk_min" , "--dzb_bk_min" )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--DZB_BK_MIN" )
           ALLOCATE( DZB_BK_MIN_ALTER )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -489,7 +489,7 @@
             END IF
           END IF
 
-        CASE( "--XI0" , "--Xi0" , "--xi0" )
+        CASE( "--XI0" )
           ALLOCATE( XI0_ALTER )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -514,7 +514,7 @@
             END IF
           END IF
 
-        CASE( "--XXIM" , "--XXim" , "--Xxim" , "--xxim" )
+        CASE( "--XXIM" )
           ALLOCATE( XXIM_ALTER )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -543,7 +543,7 @@
             END IF
           END IF
 
-        CASE( "--THETA0" , "--Theta0" , "--theta0" )
+        CASE( "--THETA0" )
           ALLOCATE( THETA0_ALTER )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -574,7 +574,7 @@
 
           THETA0_ALTER = THETA0_ALTER * PI / 180.0
 
-        CASE( "--B" , "--b" , "--BTH" , "--Bth" , "--bth" )
+        CASE( "--B" )
           ALLOCATE( BTH_ALTER )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -603,7 +603,7 @@
             END IF
           END IF
 
-        CASE( "--T" , "--t" )
+        CASE( "--T" )
           ALLOCATE(T_ALTER)
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
@@ -628,7 +628,7 @@
             END IF
           END IF
 
-        CASE( "--NBENDS" , "--NBends" , "--Nbends" , "--nbends" )
+        CASE( "--NBENDS" )
 
           WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
         ! GET ALTERNATIVE NUMBER OF MEANDER BENDS

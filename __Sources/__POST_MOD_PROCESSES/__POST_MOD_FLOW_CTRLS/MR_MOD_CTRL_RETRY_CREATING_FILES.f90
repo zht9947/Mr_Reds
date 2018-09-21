@@ -52,6 +52,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CTRL_RETRY_CREATING_FILES
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 1 ) :: Y_OR_N
@@ -59,10 +61,10 @@
     DO
       WRITE(*,'("Retry creating files by deleting the old ones? (Y/N): ", $ )')
       READ(*,*) Y_OR_N
-      SELECT CASE( Y_OR_N )
-      CASE( "Y" , "y" )
+      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      CASE( "Y" )
         RETURN
-      CASE( "N" , "n" )
+      CASE( "N" )
         STOP
       END SELECT
     END DO

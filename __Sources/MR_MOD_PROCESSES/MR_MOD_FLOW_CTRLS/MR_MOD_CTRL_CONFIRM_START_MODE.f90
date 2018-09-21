@@ -59,6 +59,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     REAL   (PARD_KIND) , INTENT(OUT) :: HTH
@@ -72,10 +74,10 @@
     DO
       WRITE(*,'("Run on cold mode? (Y/N): ", $ )')
       READ(*,*) Y_OR_N
-      SELECT CASE( Y_OR_N )
-      CASE( "Y" , "y" )
+      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      CASE( "Y" )
         EXIT
-      CASE( "N" , "n" )
+      CASE( "N" )
         STOP
       END SELECT
     END DO
@@ -92,16 +94,16 @@
       DO
         WRITE(*,'(4X,"Is the value correct? (Y/N): ", $ )')
         READ(*,*) Y_OR_N
-        SELECT CASE( Y_OR_N )
-        CASE( "Y" , "y" )
+        SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+        CASE( "Y" )
           EXIT SET_HTH
-        CASE( "N" , "n" )
+        CASE( "N" )
 
           DO
             WRITE(*,'(6X,"Type in the correct value or ""C"" to cease: ", $ )')
             READ(*,*) CHAR_ARGUMENT
-            SELECT CASE( CHAR_ARGUMENT(1:1) )
-            CASE( "C" , "c" )
+            SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+            CASE( "C" )
               STOP
             CASE DEFAULT
               IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
@@ -135,8 +137,8 @@
     DO
       WRITE(*,'(2X,"Specify manually /PROPERTIES for datasets? (Y/N): ", $ )')
       READ(*,*) Y_OR_N
-      SELECT CASE( Y_OR_N )
-      CASE( "Y" , "y" )
+      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      CASE( "Y" )
 
         WRITE(*,'(2X,"(Type in ""C"" to cease)")')
 
@@ -147,8 +149,8 @@
         DO
           WRITE(*,'(8X,"Number of Layers = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( CHAR_ARGUMENT(1:1) )
-          CASE( "C" , "c" )
+          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          CASE( "C" )
             STOP
           CASE DEFAULT
             IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789" ) /= 0 ) THEN
@@ -175,8 +177,8 @@
         DO
           WRITE(*,'(8X,"Number of Sediment Sizes = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( CHAR_ARGUMENT(1:1) )
-          CASE( "C" , "c" )
+          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          CASE( "C" )
             STOP
           CASE DEFAULT
             IF( VERIFY( TRIM(CHAR_ARGUMENT) , "+0123456789" ) /= 0 ) THEN
@@ -196,8 +198,8 @@
                 DO
                   WRITE(*,'(10X,"Sediment Sizes = ", $ )')
                   READ(*,*) CHAR_ARGUMENT
-                  SELECT CASE( CHAR_ARGUMENT(1:1) )
-                  CASE( "C" , "c" )
+                  SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+                  CASE( "C" )
                     STOP
                   CASE DEFAULT
                     IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
@@ -228,8 +230,8 @@
         DO
           WRITE(*,'(6X,"Slope = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( CHAR_ARGUMENT(1:1) )
-          CASE( "C" , "c" )
+          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          CASE( "C" )
             STOP
           CASE DEFAULT
             IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
@@ -250,15 +252,15 @@
         DO
           WRITE(*,'(4X,"Is above input correct? (Y/N): ", $ )')
           READ(*,*) Y_OR_N
-          SELECT CASE( Y_OR_N )
-          CASE( "Y" , "y" )
+          SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+          CASE( "Y" )
             EXIT SET_PROPS
-          CASE( "N" , "n" )
+          CASE( "N" )
             EXIT
           END SELECT
         END DO
 
-      CASE( "N" , "n" )
+      CASE( "N" )
         EXIT
       END SELECT
     END DO SET_PROPS
@@ -287,6 +289,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CTRL_CONFIRM_START_MODE_HOT
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER(   1   ) :: Y_OR_N
@@ -294,10 +298,10 @@
     DO
       WRITE(*,'("Run on hot mode? (Y/N): ", $ )')
       READ(*,*) Y_OR_N
-      SELECT CASE( Y_OR_N )
-      CASE( "Y" , "y" )
+      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      CASE( "Y" )
         EXIT
-      CASE( "N" , "n" )
+      CASE( "N" )
         STOP
       END SELECT
     END DO

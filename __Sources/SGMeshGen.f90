@@ -82,12 +82,12 @@
       STOP
     END IF
   ! CREATE OUTPUT FILES
-    CALL MR_INIT_OUTPUT_FILES( "NEWCREATE" , ERROR , ERRMSG )
+    CALL MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE=.FALSE. )
     IF( ERROR == ERROR_CANNOT_CREATE_NEW_FILE ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"Files with the same names may already exist.")')
       CALL MR_CTRL_RETRY_CREATING_FILES
-      CALL MR_INIT_OUTPUT_FILES( "OVERWRITE" , ERROR , ERRMSG )
+      CALL MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE=.TRUE. )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
@@ -132,6 +132,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
@@ -153,10 +155,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
@@ -248,7 +248,7 @@
         ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
-        IDX = MAX( INDEX(CHAR_ARGUMENT,"PI") , INDEX(CHAR_ARGUMENT,"Pi") , INDEX(CHAR_ARGUMENT,"pi") )
+        IDX = INDEX( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) , "PI" )
         IF( IDX /= 0 ) THEN
           CHAR_ARGUMENT(IDX:IDX+1) = ""
         END IF
@@ -406,18 +406,18 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_OUTPUT_FILES( FILE_STATUS , ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_CREATE_FILE_XMDF
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_STATUS
-
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    CALL MR_CREATE_FILE_XMDF( FILE_XMDF , FILE_STATUS , ERROR , ERRMSG )
+   LOGICAL             , INTENT(IN ) :: OVERWRITE
+
+    CALL MR_CREATE_FILE_XMDF( FILE_XMDF , ERROR , ERRMSG , OVERWRITE )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
       RETURN
