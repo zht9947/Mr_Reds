@@ -67,9 +67,9 @@
 
     LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
 
-    LOGICAL                          :: BE_OPENED
+    LOGICAL            :: BE_OPENED
 
-    INTEGER                          :: IQID
+    INTEGER            :: IQID
 
     ERRMSG = ""
     CALL SYSTEM_CLOCK( FILE_ID )
