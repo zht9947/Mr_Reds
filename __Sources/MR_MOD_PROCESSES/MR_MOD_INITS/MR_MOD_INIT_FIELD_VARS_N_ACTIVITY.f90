@@ -77,9 +77,9 @@
     QSBUV    =   0.000E+0   ; QSBU    =   0.000E+0   ; QSBV    =   0.000E+0
     R        =   0.000E+0
     RI       =   0.000E+0
-    ZB       = - HTH / ZR
+    ZB       = - HTH
     ZS       =   0.000E+0   ; ZSU     =   0.000E+0   ; ZSV     =   0.000E+0
-    H        =   HTH / ZR   ; HU      =   HTH / ZR   ; HV      =   HTH / ZR
+    H        =   HTH        ; HU      =   HTH        ; HV      =   HTH
     UVA      =   0.000E+0   ; UA      =   0.000E+0   ; VA      =   0.000E+0
     UV       =   0.000E+0   ; U       =   0.000E+0   ; V       =   0.000E+0
     W        =   0.000E+0

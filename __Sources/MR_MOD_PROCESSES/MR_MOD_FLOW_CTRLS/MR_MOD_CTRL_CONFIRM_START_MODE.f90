@@ -96,6 +96,7 @@
         READ(*,*) Y_OR_N
         SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
         CASE( "Y" )
+          HTH = HTH / ZR
           EXIT SET_HTH
         CASE( "N" )
 

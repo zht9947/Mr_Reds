@@ -26,6 +26,7 @@
     USE MR_MAC_PI
 
     USE MR_DEF_RANKS
+    USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_MEANDER_PARS
     USE MR_DEF_FIELD_VARS
 
@@ -253,7 +254,7 @@
         DZB_BK_MIN = - DZB_BK_MAX *   &
         ( 1.0 + 2.0 /   &
           ( 1.0 +   &
-            EXP( - 0.33 * ( BTH/HTH - 15.85 ) )   &
+            EXP( - 0.33 * ( (XYR/ZR) * (BTH/HTH) - 15.85 ) )   &
           )   &
         )
       END IF
@@ -419,6 +420,8 @@
           ERROR = - 1
           ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
+        ELSE
+          DZB_BK_MAX = DZB_BK_MAX / ZR
         END IF
       END IF
     END IF
@@ -466,6 +469,8 @@
                 ERROR = - 1
                 ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
+              ELSE
+                DZB_BK_MIN_ALTER = DZB_BK_MIN_ALTER / ZR
               END IF
             END IF
           END IF
@@ -580,6 +585,8 @@
                 ERROR = - 1
                 ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
+              ELSE
+                BTH_ALTER = BTH_ALTER / XYR
               END IF
             END IF
           END IF
