@@ -18,13 +18,17 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
+  MODULE MR_MOD_OPERATOR_CHAR_STRING
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_CTRL_CONFIRM_PRJ_SETS
+    PUBLIC :: OPERATOR( .MRCHARUPPER. )
+
+    INTERFACE OPERATOR( .MRCHARUPPER. )
+      MODULE PROCEDURE MR_CHAR_STRING_UPPER
+    END INTERFACE
 
 !***********************************************************************************************************************************
 
@@ -33,7 +37,7 @@
 !***********************************************************************************************************************************
 ! UNIT:
 !
-!  (SUBROUTINE)
+!  (FUNCTION)
 !
 ! PURPOSE:
 !
@@ -50,25 +54,29 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
-
-    USE MR_MOD_OPERATOR_CHAR_STRING
+  FUNCTION MR_CHAR_STRING_UPPER( STRING ) RESULT( STRING_UPPER )
 
     IMPLICIT NONE
 
-    CHARACTER(   1   ) :: Y_OR_N
+    CHARACTER(   *   ) , INTENT(IN ) :: STRING
 
-    DO
-      WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
-      READ(*,*) Y_OR_N
-      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
-      CASE( "Y" )
-        RETURN
-      CASE( "N" )
-        STOP
-      END SELECT
+    CHARACTER( LEN(STRING) )         :: STRING_UPPER
+
+    INTEGER :: IDX_ASCII_CHAR
+    INTEGER :: I_CHAR
+
+    DO I_CHAR = 1 , LEN(STRING)
+
+      IDX_ASCII_CHAR = IACHAR( STRING(I_CHAR:I_CHAR) )
+
+      IF( IDX_ASCII_CHAR >= 97 .AND. IDX_ASCII_CHAR <= 122 ) THEN
+        STRING_UPPER(I_CHAR:I_CHAR) = ACHAR( IDX_ASCII_CHAR - 32 )
+      ELSE
+        STRING_UPPER(I_CHAR:I_CHAR) = STRING(I_CHAR:I_CHAR)
+      END IF
+
     END DO
 
-  END SUBROUTINE MR_CTRL_CONFIRM_PRJ_SETS
+  END FUNCTION MR_CHAR_STRING_UPPER
 
-  END MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
+  END MODULE MR_MOD_OPERATOR_CHAR_STRING

@@ -132,6 +132,8 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
@@ -153,10 +155,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
@@ -248,7 +248,7 @@
         ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
-        IDX = MAX( INDEX(CHAR_ARGUMENT,"PI") , INDEX(CHAR_ARGUMENT,"Pi") , INDEX(CHAR_ARGUMENT,"pi") )
+        IDX = INDEX( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) , "PI" )
         IF( IDX /= 0 ) THEN
           CHAR_ARGUMENT(IDX:IDX+1) = ""
         END IF

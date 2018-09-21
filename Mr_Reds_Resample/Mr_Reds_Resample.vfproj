@@ -75,5 +75,8 @@
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_DO_DUPLICATE_OUTPUT_MESH_DATA.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_RESAMPLE.f90"/></Filter>
+		<Filter Name="MR_MOD_OPERATIONS">
+		<Filter Name="MR_MOD_OPERATORS">
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_CHAR_STRING.f90"/></Filter></Filter>
 		<File RelativePath="..\__Sources\MR_REDS_RESAMPLE.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>

@@ -272,6 +272,8 @@
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
@@ -293,10 +295,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--H" , "--h" , "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-H" ,  "-h" ,  "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN

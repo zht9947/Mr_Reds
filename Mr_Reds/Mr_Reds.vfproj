@@ -76,6 +76,7 @@
 		<File RelativePath="..\__Sources\MR_MOD_FUNCS\MR_MOD_FUNC_VZWW.f90"/></Filter>
 		<Filter Name="MR_MOD_OPERATIONS">
 		<Filter Name="MR_MOD_OPERATORS">
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_CHAR_STRING.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_SS.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_UV.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_XUV.f90"/></Filter>
