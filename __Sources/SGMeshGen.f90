@@ -104,7 +104,7 @@
       STOP
     END IF
 
-    WRITE(*,'(/,"The mesh has been created into the file: ",/,4X, A )') TRIM(FILE_XMDF)
+    WRITE(*,'(/,"The mesh has been created into the file:",/,4X, A )') TRIM(FILE_XMDF)
 
 !***********************************************************************************************************************************
 

@@ -128,12 +128,12 @@
     WRITE(*,'(4X,"Extend mesh... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     ELSE
       CALL MR_DO_EXTEND_OUTPUT_MESH_DATA( FILE_XMDF , FILE_XMDF_ , NLOOPS , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
     END IF

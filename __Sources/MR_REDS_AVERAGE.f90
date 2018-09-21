@@ -198,7 +198,7 @@
 
       CALL MR_INPUT( FILE_XMDF , ITS , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
 
@@ -206,7 +206,7 @@
 
       CALL MR_OUTPUT_AVERAGE( FILE_AVERAGE , T , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
 

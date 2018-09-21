@@ -266,7 +266,7 @@
 
     CALL MR_GEN_INI_ZB( HTH , DZB_BK_MIN , DZB_BK_MAX , XI0 , XXIM , NBENDS , NI , NJ , ZB , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
 
@@ -276,7 +276,7 @@
     CASE( COLD_MODE )
       CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       ELSE
         CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG , OVERWRITE=.FALSE. )

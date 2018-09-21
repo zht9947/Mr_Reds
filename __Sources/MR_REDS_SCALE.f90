@@ -124,12 +124,12 @@
     WRITE(*,'(4X,"Scale mesh... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
-      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+      WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     ELSE
       CALL MR_DO_SCALE_OUTPUT_MESH_DATA( FILE_XMDF , FILE_XMDF_ , SCALE , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
-        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
     END IF
