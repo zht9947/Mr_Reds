@@ -21,8 +21,6 @@
 !***********************************************************************************************************************************
   PROGRAM INIBATHYGEN
 
-    USE MR_ERRORS_NONLINEAR_EQN_SOLVE
-
     USE MR_KINDS
 
     USE MR_MAC_PI
@@ -30,7 +28,6 @@
     USE MR_DEF_RANKS
     USE MR_DEF_MEANDER_PARS
     USE MR_DEF_FIELD_VARS
-    USE MR_DEF_ERROR_ARRAY
 
     USE MR_NUM_START_MODE
 
@@ -45,7 +42,6 @@
     USE MR_MOD_MALLOC_CURVED_GEOS_PLUS
     USE MR_MOD_MALLOC_FIELD_VARS
     USE MR_MOD_MALLOC_ACTIVITY
-    USE MR_MOD_MALLOC_ERROR_ARRAY
 
     USE MR_MOD_INIT_CONSTS_N_REF_PARS
     USE MR_MOD_INIT_GRID_SYS
@@ -183,7 +179,6 @@
     CALL MR_MALLOC_CURVED_GEOS_GOO
     CALL MR_MALLOC_FIELD_VARS
     CALL MR_MALLOC_ACTIVITY
-    CALL MR_MALLOC_ERROR_1D_ARRAY
     WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
@@ -269,23 +264,9 @@
 
     WRITE(*,'(8X,"Generate bathymetry and update depth... ", A , $ )') ACHAR(13)
 
-    CALL MR_GEN_INI_ZB( HTH , DZB_BK_MIN , DZB_BK_MAX , XI0 , XXIM , NBENDS , NI , NJ , ZB , ERROR_1D_ARRAY )
-    IF( ANY( ERROR_1D_ARRAY < 0 ) ) THEN
-      WRITE(*,'( )')
-      DO I = 1 , NI
-        WRITE( I_CHAR , '(I<LEN(I_CHAR)>)' ) I
-        SELECT CASE( ERROR_1D_ARRAY( I ) )
-        CASE( ERROR_BISECT_SOLVE_NO_UNIQUE_ROOT_IN_REGION )
-          WRITE(*,'("CS-", A ,": ", A ,"!")') TRIM(ADJUSTL(I_CHAR)) ,   &
-          & "No unique root in given region when using bisection method to solve alpha"
-        CASE( ERROR_NEWTON_SOLVE_ZERO_DERIVATIVE )
-          WRITE(*,'("CS-", A ,": ", A ,"!")') TRIM(ADJUSTL(I_CHAR)) ,   &
-          & "Zero deivative when using newton method to solve xxxi"
-        CASE( ERROR_NEWTON_SOLVE_MAX_NUMBER_OF_ITERATION )
-          WRITE(*,'("CS-", A ,": ", A ,"!")') TRIM(ADJUSTL(I_CHAR)) ,   &
-          & "Max number of iterations when using newton method to solve xxxi"
-        END SELECT
-      END DO
+    CALL MR_GEN_INI_ZB( HTH , DZB_BK_MIN , DZB_BK_MAX , XI0 , XXIM , NBENDS , NI , NJ , ZB , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
 
