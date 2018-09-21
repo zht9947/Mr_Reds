@@ -78,12 +78,12 @@
       STOP
     END IF
   ! CREATE OUTPUT FILES
-    CALL MR_INIT_OUTPUT_FILES( "NEWCREATE" , ERROR , ERRMSG )
+    CALL MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE=.FALSE. )
     IF( ERROR == ERROR_CANNOT_CREATE_NEW_FILE ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"Files with the same names may already exist.")')
       CALL MR_CTRL_RETRY_CREATING_FILES
-      CALL MR_INIT_OUTPUT_FILES( "OVERWRITE" , ERROR , ERRMSG )
+      CALL MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE=.TRUE. )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
@@ -254,7 +254,7 @@
       RETURN
     ELSE
     ! VERIFY XMDF FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
+      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG , READONLY=.TRUE. )
       IF( ERROR < 0 ) THEN
         ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as source file"
         RETURN
@@ -331,18 +331,18 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_INIT_OUTPUT_FILES( FILE_STATUS , ERROR , ERRMSG )
+  SUBROUTINE MR_INIT_OUTPUT_FILES( ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_CREATE_FILE_XMDF
 
     IMPLICIT NONE
 
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_STATUS
-
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
-    CALL MR_CREATE_FILE_XMDF( FILE_XMDF_ , FILE_STATUS , ERROR , ERRMSG )
+    LOGICAL            , INTENT(IN ) :: OVERWRITE
+
+    CALL MR_CREATE_FILE_XMDF( FILE_XMDF_ , ERROR , ERRMSG , OVERWRITE )
     IF( ERROR < 0 ) THEN
       ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF_)//" as target file"
       RETURN

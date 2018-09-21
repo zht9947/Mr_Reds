@@ -52,19 +52,20 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , FILE_STATUS , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_FILE_DEFAULT( FILE_NAME , ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_NAME
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_STATUS
 
     INTEGER                          :: FILE_ID
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
+
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
 
     LOGICAL                          :: BE_OPENED
 
@@ -77,22 +78,21 @@
       IF( BE_OPENED ) THEN
         FILE_ID = MOD( FILE_ID , HUGE(FILE_ID) ) + 1
       ELSE
-        SELECT CASE( TRIM(FILE_STATUS) )
-        CASE( "OVERWRITE" , "OverWrite" , "Overwrite" , "OVER" , "Over" , "O" , "overwrite", "o" )
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , ACTION='WRITE' , IOSTAT=ERROR )
+        IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='REPLACE' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
             ERRMSG = "Error in creating file"
             RETURN
           END IF
-        CASE DEFAULT
-          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='NEW' , ACTION='WRITE' , IOSTAT=ERROR )
+        ELSE
+          OPEN( FILE_ID , FILE=TRIM(FILE_NAME) , STATUS='NEW' , IOSTAT=ERROR )
           IF( ERROR > 0 ) THEN
             ERROR = ERROR_CANNOT_CREATE_NEW_FILE
             ERRMSG = "Error in creating file"
             RETURN
           END IF
-        END SELECT
+        END IF
 
         CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
