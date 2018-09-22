@@ -62,8 +62,7 @@
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
 
-    USE MR_MOD_FUNC_DS
-    USE MR_MOD_FUNC_TCRS
+    USE MR_MOD_OPERATOR_CHAR_STRING
 
     IMPLICIT NONE
 
@@ -100,13 +99,13 @@
       READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
       IF( ERROR > 0 ) THEN
         ERROR = - ERROR
-        ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+        ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
         //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
         CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
         RETURN
       ELSE
 
-        SELECT CASE( TRIM(LABEL) )
+        SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
         CASE( "PRJMETADATA" )
 
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
@@ -116,13 +115,13 @@
             READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
             IF( ERROR > 0 ) THEN
               ERROR = - ERROR
-              ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+              ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
             ELSE
 
-              SELECT CASE( TRIM(LABEL) )
+              SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
               CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                 BACKSPACE( FILE_PRJ_ID )
                 REC_ID = REC_ID - 1
@@ -133,7 +132,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , PRJ_TITLE
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in reading Project Title from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in reading Project Title from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -145,7 +144,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , PRJ_ABSTRACT
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in reading Project Abstract from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in reading Project Abstract from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -163,7 +162,7 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NK
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading number of layers from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading number of layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -175,7 +174,7 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NKS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading number of sediment sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading number of sediment sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -188,12 +187,12 @@
               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
               IF( ERROR > 0 ) THEN
                 ERROR = - ERROR
-                ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                 //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
               ELSE
-                SELECT CASE( TRIM(LABEL) )
+                SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                 CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                   BACKSPACE( FILE_PRJ_ID )
                   REC_ID = REC_ID - 1
@@ -204,7 +203,7 @@
                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
                   IF( ERROR > 0 ) THEN
                     ERROR = - ERROR
-                    ERRMSG = "Error in reading value of sediment sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    ERRMSG = "Error in reading value of sediment sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
@@ -226,14 +225,14 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing Project Groups from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
           ELSE
 
-            SELECT CASE( TRIM(ALIAS) )
-            CASE( "Timing" )
+            SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+            CASE( "TIMING" )
 
               DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -242,13 +241,13 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
                 ELSE
 
-                  SELECT CASE( TRIM(LABEL) )
+                  SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
@@ -259,60 +258,60 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     ELSE
 
-                      SELECT CASE( TRIM(ALIAS) )
-                      CASE( "Time interval" )
+                      SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                      CASE( "TIME INTERVAL" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , DT
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Time interval"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          ERRMSG = "Error in reading Time Interval "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         END IF
 
-                      CASE( "Time relaxation factor" )
+                      CASE( "TIME RELAXATION FACTOR" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , PHI
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Time relaxation factor"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          ERRMSG = "Error in reading ""Time Relaxation Factor"" "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         END IF
 
-                      CASE( "Total number of timesteps computed" )
+                      CASE( "TOTAL NUMBER OF TIMESTEPS COMPUTED" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Total number of timesteps computed"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          ERRMSG = "Error in reading Total Number of Timesteps Computed "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         END IF
 
-                      CASE( "Number of timesteps between two outputs" )
+                      CASE( "NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , NTSS_OUTPUT
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Number of timesteps between two outputs"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          ERRMSG = "Error in reading Number of Timesteps Between Two Outputs "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -328,7 +327,7 @@
 
               END DO
 
-            CASE( "Slope" )
+            CASE( "SLOPE" )
 
               DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -337,13 +336,13 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
                 ELSE
 
-                  SELECT CASE( TRIM(LABEL) )
+                  SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
@@ -354,21 +353,21 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     ELSE
 
-                      SELECT CASE( TRIM(ALIAS) )
-                      CASE( "Slope" )
+                      SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                      CASE( "SLOPE" )
                         BACKSPACE( FILE_PRJ_ID )
 
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , SLOPE
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Slope"" "   &
-                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          ERRMSG = "Error in reading Slope "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -384,7 +383,7 @@
 
               END DO
 
-            CASE( "Constants and Reference Parameters" )
+            CASE( "CONSTANTS AND REFERENCE PARAMETERS" )
 
               DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -393,13 +392,13 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
                 ELSE
 
-                  SELECT CASE( TRIM(LABEL) )
+                  SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                   CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
@@ -410,14 +409,14 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
                     ELSE
 
-                      SELECT CASE( TRIM(ALIAS) )
-                      CASE( "Water Physical Properties" )
+                      SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                      CASE( "WATER PHYSICAL PROPERTIES" )
 
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -426,14 +425,14 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                             RETURN
                           ELSE
 
-                            SELECT CASE( TRIM(LABEL) )
+                            SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
@@ -444,36 +443,36 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                 RETURN
                               ELSE
 
-                                SELECT CASE( TRIM(ALIAS) )
-                                CASE( "Water density" )
+                                SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                                CASE( "WATER DENSITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , R0
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Water density"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Water Density "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Water kinematic viscosity" )
+                                CASE( "WATER KINEMATIC VISCOSITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , V0
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Water kinematic viscosity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Water Kinematic Viscosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -490,7 +489,7 @@
 
                         END DO
 
-                      CASE( "Sediment Physical Properties" )
+                      CASE( "SEDIMENT PHYSICAL PROPERTIES" )
 
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -499,14 +498,14 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                             RETURN
                           ELSE
 
-                            SELECT CASE( TRIM(LABEL) )
+                            SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
@@ -517,36 +516,36 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                 RETURN
                               ELSE
 
-                                SELECT CASE( TRIM(ALIAS) )
-                                CASE( "Sediment specific gravity" )
+                                SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                                CASE( "SEDIMENT SPECIFIC GRAVITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , SS
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Sediment specific gravity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Sediment Specific Gravity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Sediment porosity" )
+                                CASE( "SEDIMENT POROSITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , PS
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Sediment porosity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Sediment Porosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -563,7 +562,7 @@
 
                         END DO
 
-                      CASE( "Physical Constants" )
+                      CASE( "PHYSICAL CONSTANTS" )
 
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -572,14 +571,14 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                             RETURN
                           ELSE
 
-                            SELECT CASE( TRIM(LABEL) )
+                            SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
@@ -590,50 +589,50 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                 RETURN
                               ELSE
 
-                                SELECT CASE( TRIM(ALIAS) )
-                                CASE( "Von Karman constant" )
+                                SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                                CASE( "VON KARMAN CONSTANT" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , KAR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Von Karman constant"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Von Karman Constant "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Coriolis frequency" )
+                                CASE( "CORIOLIS FREQUENCY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , COR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Coriolis frequency"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Coriolis Frequency "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Gravitational acceleration" )
+                                CASE( "GRAVITATIONAL ACCELERATION" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , GR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Gravitational acceleration"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Gravitational Acceleration "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -650,7 +649,7 @@
 
                         END DO
 
-                      CASE( "Reference Parameters" )
+                      CASE( "REFERENCE PARAMETERS" )
 
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
@@ -659,14 +658,14 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                             RETURN
                           ELSE
 
-                            SELECT CASE( TRIM(LABEL) )
+                            SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
                             CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
@@ -677,92 +676,92 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                 RETURN
                               ELSE
 
-                                SELECT CASE( TRIM(ALIAS) )
-                                CASE( "Reference horizontal dimension" )
+                                SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                                CASE( "REFERENCE HORIZONTAL DIMENSION" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , XYR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference horizontal dimension"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Horizontal Dimension "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Reference vertical dimension" )
+                                CASE( "REFERENCE VERTICAL DIMENSION" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , ZR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference vertical dimension"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Vertical Dimension "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Reference horizontal velocity" )
+                                CASE( "REFERENCE HORIZONTAL VELOCITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , UVR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference horizontal velocity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Horizontal Velocity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Reference eddy kinematic viscosity" )
+                                CASE( "REFERENCE EDDY KINEMATIC VISCOSITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , VZR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference eddy kinematic viscosity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Eddy Kinematic Viscosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Reference eddy kinematic diffusivity" )
+                                CASE( "REFERENCE EDDY KINEMATIC DIFFUSIVITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , DZR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference eddy kinematic diffusivity"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Eddy Kinematic Diffusivity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
                                   END IF
 
-                                CASE( "Reference water-sediment mixture density" )
+                                CASE( "REFERENCE WATER-SEDIMENT MIXTURE DENSITY" )
                                   BACKSPACE( FILE_PRJ_ID )
 
                                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , RR
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
-                                    ERRMSG = "Error in reading ""Reference water-sediment mixture density"" "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    ERRMSG = "Error in reading Reference Water-Sediment Mixture Density "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
