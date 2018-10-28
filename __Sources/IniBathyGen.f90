@@ -221,7 +221,7 @@
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       ELSE
-        CALL MR_AVERAGE_SS( NI , NJ , H , HTH )
+        CALL MR_AVERAGE_SS_BY_AREA( NI , NJ , H , HTH )
       END IF
     END SELECT
     WRITE(*,'("Done!")')
