@@ -34,6 +34,7 @@
 
     USE MR_MOD_DETER_START_MODE
 
+    USE MR_MOD_INIT_PRJ
     USE MR_MOD_INIT_RANKS
 
     USE MR_MOD_CTRL_CONFIRM_START_MODE
@@ -95,48 +96,50 @@
       WRITE(*,'(/,"PLEASE RUN ", A ," with the following command arguments:")') TRIM(INNERNAME)
       WRITE(*,'(  "  1- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
-      WRITE(*,'(  "  2- (non-optional)")')
+      WRITE(*,'(  "  2- (optional)")')
+      WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
+      WRITE(*,'(  "  3- (non-optional)")')
       WRITE(*,'(  "      Maximum bed deformation at banks, (+) positive, in meters;")')
-      WRITE(*,'(  "  3- (optional)")')
-      WRITE(*,'(  "      ONE or MORE alternative options, which change the default values of")')
-      WRITE(*,'(  "    corresponding variables, with the following format:")')
+      WRITE(*,'(  "  4- (optional)")')
+      WRITE(*,'(  "      ONE or MORE alternative options, which change the default values of corresponding")')
+      WRITE(*,'(  "    variables, with the following format:")')
       WRITE(*,'(  "        --<identifier> <value>")')
-      WRITE(*,'(  "    where <identifier> must be chosen from the following list and corresponding")')
-      WRITE(*,'(  "    <value> needs to be specified:")')
+      WRITE(*,'(  "    where <identifier> must be chosen from the following list and corresponding <value>")')
+      WRITE(*,'(  "    needs to be specified:")')
       WRITE(*,'(  "    A-  dzb_bk_min")')
       WRITE(*,'(  "        Minimum bed deformation at banks, (-) negative, in meters;")')
       WRITE(*,'(  "    B-  xi0")')
-      WRITE(*,'(  "        Dimensionless longitudinal coordinate of cross section where zero bed")')
-      WRITE(*,'(  "      deformation occurs;")')
+      WRITE(*,'(  "        Dimensionless longitudinal coordinate with respect to the reference crossover")')
+      WRITE(*,'(  "      section of the cross section where zero bed deformation occurs;")')
       WRITE(*,'(  "    C-  xxim")')
-      WRITE(*,'(  "        Difference in dimensionless longitudinal coordinate between the cross")')
-      WRITE(*,'(  "      section where the largest bed deformation occurs and its nearest upstream")')
-      WRITE(*,'(  "      cross section where zero bed deformation occurs;")')
-      WRITE(*,'(  "        i.e. xxim = xim - xi0;")')
+      WRITE(*,'(  "        Difference in dimensionless longitudinal coordinate between the cross section where")')
+      WRITE(*,'(  "      the largest bed deformation occurs and its nearest upstream cross section where zero")')
+      WRITE(*,'(  "      bed deformation occurs;")')
+      WRITE(*,'(  "        i.e. <xxim> = <xim> - <xi0>;")')
       WRITE(*,'(  "    D-  theta0")')
-      WRITE(*,'(  "        Deflection angle of channel ceterline at reference crossover section,")')
-      WRITE(*,'(  "      in degrees;")')
-      WRITE(*,'(  "        theta0 is used to determine xi0 and xxim; if any or both of xi0 and xxim is")')
-      WRITE(*,'(  "      specified together with theta0, the former takes precedence over the latter;")')
-      WRITE(*,'(  "      if neither xi0 or xxim nor theta0 is specified, xi0 or xxim will be determined")')
-      WRITE(*,'(  "      by the theta0 read from the mesh;")')
+      WRITE(*,'(  "        Deflection angle of channel centerline at reference crossover section, in degrees;")')
+      WRITE(*,'(  "        <theta0> is used to determine <xi0> and <xxim>; if any or both of <xi0> and <xxim>")')
+      WRITE(*,'(  "      is specified together with <theta0>, the former takes precedence over the latter;")')
+      WRITE(*,'(  "      if neither <xi0> or <xxim> nor <theta0> is specified, <xi0> or <xxim> will be")')
+      WRITE(*,'(  "      determined by the <theta0> read from the mesh;")')
       WRITE(*,'(  "    E-  b")')
       WRITE(*,'(  "        Channel width, in meters;")')
-      WRITE(*,'(  "        b is used to calculte the width-to-depth ratio and then determine dzb_bk_min")')
+      WRITE(*,'(  "        <b> is used to calculte the width-to-depth ratio and then determine <dzb_bk_min>")')
       WRITE(*,'(  "      by considering that the ratio of the maximum to the minimum bed deformation at")')
-      WRITE(*,'(  "      banks is a function of the width-to-depth ratio; b takes no effect if it is")')
-      WRITE(*,'(  "      specified together with dzb_bk_min; if neither dzb_bk_min nor b is specified,")')
-      WRITE(*,'(  "      dzb_bk_min will be determined by the b read from the mesh;")')
+      WRITE(*,'(  "      banks is a function of the width-to-depth ratio; <b> takes no effect if it is")')
+      WRITE(*,'(  "      specified together with <dzb_bk_min>; if neither <dzb_bk_min> nor <b> is specified,")')
+      WRITE(*,'(  "      <dzb_bk_min> will be determined by the <b> read from the mesh;")')
       WRITE(*,'(  "    F-  t")')
-      WRITE(*,'(  "        Time stamped on the generated data, in either relative or Julian sense,")')
-      WRITE(*,'(  "      in seconds;")')
-      WRITE(*,'(  "        t takes effect only when the mesh file contains no datasets, the default")')
-      WRITE(*,'(  "      is 0.0; if the mesh file contains datasets, t will be determined as the time")')
-      WRITE(*,'(  "      recorded in the datasets;")')
+      WRITE(*,'(  "        Time stamped on the generated data, in either relative or Julian sense, in seconds;")')
+      WRITE(*,'(  "        <t> takes effect only when the mesh file contains no datasets, the default is 0.0;")')
+      WRITE(*,'(  "      if the mesh file contains datasets, <t> will be determined as the time recorded in")')
+      WRITE(*,'(  "      the datasets;")')
       WRITE(*,'(  "    G-  nbends")')
       WRITE(*,'(  "        Number of meander bends that the mesh contains, the default is 1;")')
       WRITE(*,'(  "    Or,")')
-      WRITE(*,'(  "      If omitted, ALL these variables will be assigned default values;")')
+      WRITE(*,'(  "      If omitted, default values will be assigned to ALL these variables;")')
       WRITE(*,'(  "  Note,")')
       WRITE(*,'(  "    ALL the alternative options A--G can be specified in any order;")')
       WRITE(*,'(  "But,")')
@@ -154,6 +157,13 @@
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
+    IF( FILE_PRJ /= "" ) THEN
+      CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    END IF
     CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
@@ -236,7 +246,7 @@
         THETA0 = THETA0_ALTER
       END IF
       IF( ALLOCATED( BTH_ALTER ) ) THEN
-        BTH  = BTH_ALTER
+        BTH  = BTH_ALTER / XYR
       END IF
       IF( ALLOCATED( XI0_ALTER ) ) THEN
         XI0  = XI0_ALTER
@@ -248,8 +258,9 @@
       ELSE
         XXIM = 0.25 - 0.0327670 * ( ABS(THETA0)**3.36 ) * ( ( 2.4048255 - ABS(THETA0) )**2.66 )
       END IF
+      DZB_BK_MAX = DZB_BK_MAX / ZR
       IF( ALLOCATED( DZB_BK_MIN_ALTER ) ) THEN
-        DZB_BK_MIN = DZB_BK_MIN_ALTER
+        DZB_BK_MIN = DZB_BK_MIN_ALTER / ZR
       ELSE
         DZB_BK_MIN = - DZB_BK_MAX *   &
         ( 1.0 + 2.0 /   &
@@ -324,6 +335,7 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_COMMAND_LINE( ERROR , ERRMSG )
 
+    USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
 
     USE MR_MOD_OPERATOR_CHAR_STRING
@@ -361,11 +373,11 @@
     END IF
 
   ! NUMBER OF COMMAND ARGUMENTS DETECT
-    IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
-    ELSE IF( COMMAND_ARGUMENT_COUNT() > 16 ) THEN
+    ELSE IF( COMMAND_ARGUMENT_COUNT() > 17 ) THEN
       ERROR = - 1
       ERRMSG = "Too many command arguments"
       RETURN
@@ -399,12 +411,47 @@
 
     I_ARG = 2
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET MAXIMUM BED DEFORMATION (POSITIVE) AT BANKS, IN METERS
+  ! GET PRJ FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
       ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
       RETURN
+    ELSE
+      IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+        FILE_PRJ = TRIM(CHAR_ARGUMENT)
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+          RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
+        END IF
+      ELSE
+        I_ARG = 1
+        FILE_PRJ = ""
+      END IF
+    END IF
+
+    I_ARG = I_ARG + 1
+    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+  ! GET MAXIMUM BED DEFORMATION (POSITIVE) AT BANKS, IN METERS
+    CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+    IF( ERROR /= 0 ) THEN
+      IF( COMMAND_ARGUMENT_COUNT() < I_ARG + 1 ) THEN
+        ERROR = - 1
+        ERRMSG = "Not enough command arguments"
+        RETURN
+      ELSE
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        RETURN
+      END IF
     ELSE
       IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
         ERROR = - 1
@@ -420,14 +467,13 @@
           ERROR = - 1
           ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
-        ELSE
-          DZB_BK_MAX = DZB_BK_MAX / ZR
         END IF
       END IF
     END IF
 
+    I_ARG_ALTER_START = I_ARG + 1
   ! LOOP FOR ALTERNATIVE OPTIONS
-    DO I_ARG = 3 , COMMAND_ARGUMENT_COUNT() , 2
+    DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
 
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET ALTERNATIVE OPTION IDENTIFIER
@@ -447,9 +493,9 @@
         CASE( "--DZB_BK_MIN" )
           ALLOCATE( DZB_BK_MIN_ALTER )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE MINIMUM BED DEFORMATION (NEGATIVE) AT BANKS, IN METERS
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -469,8 +515,6 @@
                 ERROR = - 1
                 ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
-              ELSE
-                DZB_BK_MIN_ALTER = DZB_BK_MIN_ALTER / ZR
               END IF
             END IF
           END IF
@@ -478,9 +522,9 @@
         CASE( "--XI0" )
           ALLOCATE( XI0_ALTER )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE XI-LOCATION OF CROSS SECTION WHERE ZERO BED DEFORMATION OCCURS
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -503,9 +547,9 @@
         CASE( "--XXIM" )
           ALLOCATE( XXIM_ALTER )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE XXI-LOCATION OF CROSS SECTION WHERE MAXIMUM BED DEFORMATION OCCURS
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -532,9 +576,9 @@
         CASE( "--THETA0" )
           ALLOCATE( THETA0_ALTER )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -563,9 +607,9 @@
         CASE( "--B" )
           ALLOCATE( BTH_ALTER )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -585,8 +629,6 @@
                 ERROR = - 1
                 ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
-              ELSE
-                BTH_ALTER = BTH_ALTER / XYR
               END IF
             END IF
           END IF
@@ -594,9 +636,9 @@
         CASE( "--T" )
           ALLOCATE(T_ALTER)
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE STARTING TIME, IN SECONDS
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
@@ -618,9 +660,9 @@
 
         CASE( "--NBENDS" )
 
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG+1
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
         ! GET ALTERNATIVE NUMBER OF MEANDER BENDS
-          CALL GET_COMMAND_ARGUMENT( I_ARG+1 , CHAR_ARGUMENT , STATUS=ERROR )
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
           IF( ERROR /= 0 ) THEN
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
