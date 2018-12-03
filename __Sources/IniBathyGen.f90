@@ -409,7 +409,7 @@
       END IF
     END IF
 
-    I_ARG = 2
+    I_ARG = I_ARG + 1
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
   ! GET PROJECT FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
@@ -443,7 +443,7 @@
   ! GET MAXIMUM BED DEFORMATION (POSITIVE) AT BANKS, IN METERS
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
-      IF( COMMAND_ARGUMENT_COUNT() < I_ARG + 1 ) THEN
+      IF( COMMAND_ARGUMENT_COUNT() < I_ARG ) THEN
         ERROR = - 1
         ERRMSG = "Not enough command arguments"
         RETURN
@@ -471,226 +471,232 @@
       END IF
     END IF
 
-    I_ARG_ALTER_START = I_ARG + 1
-  ! LOOP FOR ALTERNATIVE OPTIONS
-    DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
+    IF( COMMAND_ARGUMENT_COUNT() <= I_ARG ) THEN
+      CONTINUE
+    ELSE
 
-      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-    ! GET ALTERNATIVE OPTION IDENTIFIER
-      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
-      IF( ERROR /= 0 ) THEN
-        ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
-        ERROR = - 1
-        ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
-        //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE
+      I_ARG_ALTER_START = I_ARG + 1
+    ! LOOP FOR ALTERNATIVE OPTIONS
+      DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
 
-        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
-        CASE( "--DZB_BK_MIN" )
-          ALLOCATE( DZB_BK_MIN_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE MINIMUM BED DEFORMATION (NEGATIVE) AT BANKS, IN METERS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DZB_BK_MIN_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( DZB_BK_MIN_ALTER > 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--XI0" )
-          ALLOCATE( XI0_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE XI-LOCATION OF CROSS SECTION WHERE ZERO BED DEFORMATION OCCURS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) XI0_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--XXIM" )
-          ALLOCATE( XXIM_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE XXI-LOCATION OF CROSS SECTION WHERE MAXIMUM BED DEFORMATION OCCURS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) XXIM_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( XXIM_ALTER <= 0.0 .OR. XXIM_ALTER >= 0.5 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--THETA0" )
-          ALLOCATE( THETA0_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) THETA0_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( THETA0_ALTER <= -138.0 .OR. THETA0_ALTER > +138.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-          THETA0_ALTER = THETA0_ALTER * PI / 180.0
-
-        CASE( "--B" )
-          ALLOCATE( BTH_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) BTH_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( BTH_ALTER <= 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--T" )
-          ALLOCATE(T_ALTER)
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE STARTING TIME, IN SECONDS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--NBENDS" )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE NUMBER OF MEANDER BENDS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE DEFAULT
-          ERROR = - 1
-          ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+      ! GET ALTERNATIVE OPTION IDENTIFIER
+        CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+        IF( ERROR /= 0 ) THEN
+          ERROR = - ABS(ERROR)
+          ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
-        END SELECT
+        ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
+          ERROR = - 1
+          ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
+          //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        ELSE
 
-      END IF
+          SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+          CASE( "--DZB_BK_MIN" )
+            ALLOCATE( DZB_BK_MIN_ALTER )
 
-    END DO
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE MINIMUM BED DEFORMATION (NEGATIVE) AT BANKS, IN METERS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DZB_BK_MIN_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( DZB_BK_MIN_ALTER > 0.0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--XI0" )
+            ALLOCATE( XI0_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE XI-LOCATION OF CROSS SECTION WHERE ZERO BED DEFORMATION OCCURS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) XI0_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--XXIM" )
+            ALLOCATE( XXIM_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE XXI-LOCATION OF CROSS SECTION WHERE MAXIMUM BED DEFORMATION OCCURS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) XXIM_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( XXIM_ALTER <= 0.0 .OR. XXIM_ALTER >= 0.5 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--THETA0" )
+            ALLOCATE( THETA0_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) THETA0_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( THETA0_ALTER <= -138.0 .OR. THETA0_ALTER > +138.0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+            THETA0_ALTER = THETA0_ALTER * PI / 180.0
+
+          CASE( "--B" )
+            ALLOCATE( BTH_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) BTH_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( BTH_ALTER <= 0.0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--T" )
+            ALLOCATE(T_ALTER)
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE STARTING TIME, IN SECONDS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--NBENDS" )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE NUMBER OF MEANDER BENDS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE DEFAULT
+            ERROR = - 1
+            ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          END SELECT
+
+        END IF
+
+      END DO
+
+    END IF
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
 

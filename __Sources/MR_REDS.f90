@@ -384,9 +384,14 @@
       END IF
     END IF
 
-    IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() <= I_ARG ) THEN
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      FILE_PRJ = ""
+     !END BLOCK
+    ELSE
 
-      I_ARG = 2
+      I_ARG = I_ARG + 1
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET PROJECT FILE'S PATH\NAME
       CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
@@ -415,178 +420,173 @@
         END IF
       END IF
 
-    ELSE
-     !BLOCK
-    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
-      FILE_PRJ = ""
-     !END BLOCK
-    END IF
+      I_ARG_ALTER_START = I_ARG + 1
+    ! LOOP FOR ALTERNATIVE OPTIONS
+      DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
 
-    I_ARG_ALTER_START = I_ARG + 1
-  ! LOOP FOR ALTERNATIVE OPTIONS
-    DO I_ARG = I_ARG_ALTER_START , COMMAND_ARGUMENT_COUNT() , 2
-
-      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-    ! GET ALTERNATIVE OPTION IDENTIFIER
-      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
-      IF( ERROR /= 0 ) THEN
-        ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
-        ERROR = - 1
-        ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
-        //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-        RETURN
-      ELSE
-
-        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
-        CASE( "--DT" )
-          ALLOCATE( DT_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE TIME INTERVAL, IN SECONDS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DT_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( DT_ALTER <= 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--PHI" )
-          ALLOCATE( PHI_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE TIME RELAXATION FACTOR
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) PHI_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( PHI_ALTER < 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--NSTEPS" , "--NTSS" )
-          ALLOCATE( NTSS_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE TOTAL NUMBER OF TIMESTEPS COMPUTED
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--NDSTEPS" , "--NDTSS" )
-          ALLOCATE( NTSS_OUTPUT_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_OUTPUT_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( NTSS_OUTPUT_ALTER == 0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE( "--T0" )
-          ALLOCATE( T_START_ALTER )
-
-          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
-        ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
-          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
-          IF( ERROR /= 0 ) THEN
-            ERROR = - ABS(ERROR)
-            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-            RETURN
-          ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-              RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
-            END IF
-          END IF
-
-        CASE DEFAULT
-          ERROR = - 1
-          ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+      ! GET ALTERNATIVE OPTION IDENTIFIER
+        CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+        IF( ERROR /= 0 ) THEN
+          ERROR = - ABS(ERROR)
+          ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
           RETURN
-        END SELECT
+        ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
+          ERROR = - 1
+          ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
+          //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        ELSE
 
-      END IF
+          SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+          CASE( "--DT" )
+            ALLOCATE( DT_ALTER )
 
-    END DO
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE TIME INTERVAL, IN SECONDS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DT_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( DT_ALTER <= 0.0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--PHI" )
+            ALLOCATE( PHI_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE TIME RELAXATION FACTOR
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) PHI_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( PHI_ALTER < 0.0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--NSTEPS" , "--NTSS" )
+            ALLOCATE( NTSS_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE TOTAL NUMBER OF TIMESTEPS COMPUTED
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--NDSTEPS" , "--NDTSS" )
+            ALLOCATE( NTSS_OUTPUT_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_OUTPUT_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                ELSE IF( NTSS_OUTPUT_ALTER == 0 ) THEN
+                  ERROR = - 1
+                  ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE( "--T0" )
+            ALLOCATE( T_START_ALTER )
+
+            WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+          ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
+            CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE
+              IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+                ERROR = - 1
+                ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                RETURN
+              ELSE
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
+                IF( ERROR /= 0 ) THEN
+                  ERROR = - ABS(ERROR)
+                  ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+                  RETURN
+                END IF
+              END IF
+            END IF
+
+          CASE DEFAULT
+            ERROR = - 1
+            ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          END SELECT
+
+        END IF
+
+      END DO
+
+    END IF
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
 

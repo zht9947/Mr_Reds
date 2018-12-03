@@ -99,7 +99,7 @@
       READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
       IF( ERROR > 0 ) THEN
         ERROR = - ERROR
-        ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+        ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
         //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
         CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
         RETURN
@@ -115,7 +115,7 @@
             READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
             IF( ERROR > 0 ) THEN
               ERROR = - ERROR
-              ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+              ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
               //"when initializing Project from file "//TRIM(FILE_PRJ_NAME)
               CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
               RETURN
@@ -132,7 +132,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , PRJ_TITLE
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in reading Project Title from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in reading Project Title from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -144,7 +144,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , PRJ_ABSTRACT
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in reading Project Abstract from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in reading Project Abstract from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Project Metadata from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -162,13 +162,13 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NK
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading Number of Layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading Number of Layers from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
           ELSE IF( NK <= 0 ) THEN
             ERROR = - 1
-            ERRMSG = "Illegal value for Number of Layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Illegal value for Number of Layers from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -180,13 +180,13 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NKS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading Number of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading Number of Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
           ELSE IF( NKS <= 0 ) THEN
             ERROR = - 1
-            ERRMSG = "Illegal value for Number of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Illegal value for Number of Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -199,7 +199,7 @@
               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
               IF( ERROR > 0 ) THEN
                 ERROR = - ERROR
-                ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                 //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
@@ -215,13 +215,13 @@
                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
                   IF( ERROR > 0 ) THEN
                     ERROR = - ERROR
-                    ERRMSG = "Error in reading value of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    ERRMSG = "Error in reading value of Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE IF( D0 <= 0.0 ) THEN
                     ERROR = - 1
-                    ERRMSG = "Illegal value for Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    ERRMSG = "Illegal value for Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
@@ -243,7 +243,7 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing Project Groups from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -259,7 +259,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -276,7 +276,7 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
@@ -290,14 +290,14 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Time Interval "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         ELSE IF( DT <= 0.0 ) THEN
                           ERROR = - 1
                           ERRMSG = "Illegal value for Time Interval "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -310,14 +310,14 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Time Relaxation Factor "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         ELSE IF( PHI < 0.0 ) THEN
                           ERROR = - 1
                           ERRMSG = "Illegal value for Time Relaxation Factor "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -330,14 +330,14 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Total Number of Timesteps Computed "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         ELSE IF( NTSS < 0 ) THEN
                           ERROR = - 1
                           ERRMSG = "Illegal value for Total Number of Timesteps Computed "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -350,14 +350,14 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Number of Timesteps Between Two Outputs "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
                         ELSE IF( NTSS_OUTPUT <= 0 ) THEN
                           ERROR = - 1
                           ERRMSG = "Illegal value for Number of Timesteps Between Two Outputs "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -370,7 +370,7 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Starting Time "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -395,7 +395,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -412,7 +412,7 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
@@ -426,7 +426,7 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Slope "   &
-                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Slope from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
@@ -451,7 +451,7 @@
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
-                  ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                  ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                   //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                   CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                   RETURN
@@ -468,7 +468,7 @@
                     READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                     IF( ERROR > 0 ) THEN
                       ERROR = - ERROR
-                      ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                      ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                       //"when initializing Constants and Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                       CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                       RETURN
@@ -484,7 +484,7 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -502,7 +502,7 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -517,7 +517,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Water Density "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -525,7 +525,7 @@
                                   ELSE IF( R0 <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Water Density "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -539,7 +539,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Water Kinematic Viscosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -547,7 +547,7 @@
                                   ELSE IF( V0 <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Water Kinematic Viscosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -573,7 +573,7 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -591,7 +591,7 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -606,7 +606,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Sediment Specific Gravity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -614,7 +614,7 @@
                                   ELSE IF( SS <= 1.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Sediment Specific Gravity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -628,7 +628,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Sediment Porosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -636,7 +636,7 @@
                                   ELSE IF( PS < 0.0 .OR. PS >= 1.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Sediment Porosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -662,7 +662,7 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -680,7 +680,7 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -695,7 +695,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Von Karman Constant "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -703,7 +703,7 @@
                                   ELSE IF( KAR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Von Karman Constant "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -717,7 +717,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Coriolis Frequency "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -725,7 +725,7 @@
                                   ELSE IF( COR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Coriolis Frequency "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -739,7 +739,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Gravitational Acceleration "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -747,7 +747,7 @@
                                   ELSE IF( GR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Gravitational Acceleration "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -773,7 +773,7 @@
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
-                            ERRMSG = "Error in acquiring the label of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                            ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                             //"when initializing Constants and Reference Parameters\"   &
                             //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -791,7 +791,7 @@
                               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS
                               IF( ERROR > 0 ) THEN
                                 ERROR = - ERROR
-                                ERRMSG = "Error in acquiring the alias of record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                ERRMSG = "Error in acquiring the alias of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                 //"when initializing Constants and Reference Parameters\"   &
                                 //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -806,7 +806,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Horizontal Dimension "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -814,7 +814,7 @@
                                   ELSE IF( XYR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Horizontal Dimension "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -828,7 +828,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Vertical Dimension "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -836,7 +836,7 @@
                                   ELSE IF( ZR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Vertical Dimension "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -850,7 +850,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Horizontal Velocity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -858,7 +858,7 @@
                                   ELSE IF( UVR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Horizontal Velocity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -872,7 +872,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Eddy Kinematic Viscosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -880,7 +880,7 @@
                                   ELSE IF( VZR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Eddy Kinematic Viscosity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -894,7 +894,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Eddy Kinematic Diffusivity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -902,7 +902,7 @@
                                   ELSE IF( DZR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Eddy Kinematic Diffusivity "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -916,7 +916,7 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Water-Sediment Mixture Density "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -924,7 +924,7 @@
                                   ELSE IF( RR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Reference Water-Sediment Mixture Density "   &
-                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )

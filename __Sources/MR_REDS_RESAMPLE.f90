@@ -309,9 +309,17 @@
   ! SET RESAMPLED XMDF FILE'S PATH\NAME
     FILE_XMDF_ = TRIM(FILE_XMDF)//". resample"
 
-    IF( COMMAND_ARGUMENT_COUNT() > 1 ) THEN
+    IF( COMMAND_ARGUMENT_COUNT() <= I_ARG ) THEN
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      ITS_END = HUGE(ITS_END)
+      ITS_START = 0
+      ITS_STRIDE = 1
+     !END BLOCK
+      FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0 to end by 1)"
+    ELSE
 
-      I_ARG = 2
+      I_ARG = I_ARG + 1
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET RESAMPLING TIMESTEP CONTROL SPECIFIER
       CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
@@ -331,7 +339,7 @@
          !END BLOCK
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" (only end)"
 
-          IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
+          IF( COMMAND_ARGUMENT_COUNT() > I_ARG ) THEN
             ERROR = - 1
             ERRMSG = "Too many command arguments"
             RETURN
@@ -350,7 +358,13 @@
             RETURN
           END IF
         ! CASE ITS_START:ITS_END
-          IF( TRIM(CHAR_ARGUMENT(:IDX-1)) /= "" ) THEN
+          IF( TRIM(CHAR_ARGUMENT(:IDX-1)) == "" ) THEN
+           !BLOCK
+          ! ASSIGN DEFAULT VALUES TO ITS_START
+            ITS_START = 0
+           !END BLOCK
+            FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0"
+          ELSE
             READ( CHAR_ARGUMENT(:IDX-1) , * , IOSTAT=ERROR ) ITS_START
             IF( ERROR /= 0 ) THEN
               ERROR = - ABS(ERROR)
@@ -358,14 +372,14 @@
               RETURN
             END IF
             FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from "//TRIM(CHAR_ARGUMENT(:IDX-1))
-          ELSE
-           !BLOCK
-          ! ASSIGN DEFAULT VALUES TO ITS_START
-            ITS_START = 0
-           !END BLOCK
-            FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0"
           END IF
-          IF( TRIM(CHAR_ARGUMENT(IDX+1:)) /= "" ) THEN
+          IF( TRIM(CHAR_ARGUMENT(IDX+1:)) == "" ) THEN
+           !BLOCK
+          ! ASSIGN DEFAULT VALUES TO ITS_END
+            ITS_END = HUGE(ITS_END)
+           !END BLOCK
+            FILE_XMDF_ = TRIM(FILE_XMDF_)//" to end"
+          ELSE
             READ( CHAR_ARGUMENT(IDX+1:) , * , IOSTAT=ERROR ) ITS_END
             IF( ERROR /= 0 ) THEN
               ERROR = - ABS(ERROR)
@@ -373,17 +387,17 @@
               RETURN
             END IF
             FILE_XMDF_ = TRIM(FILE_XMDF_)//" to "//TRIM(CHAR_ARGUMENT(IDX+1:))
-          ELSE
-           !BLOCK
-          ! ASSIGN DEFAULT VALUES TO ITS_END
-            ITS_END = HUGE(ITS_END)
-           !END BLOCK
-            FILE_XMDF_ = TRIM(FILE_XMDF_)//" to end"
           END IF
 
-          IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
+          IF( COMMAND_ARGUMENT_COUNT() <= I_ARG ) THEN
+           !BLOCK
+          ! ASSIGN DEFAULT VALUES TO ITS_STRIDE
+            ITS_STRIDE = 1
+           !END BLOCK
+            FILE_XMDF_ = TRIM(FILE_XMDF_)//" by 1)"
+          ELSE
 
-            I_ARG = 3
+            I_ARG = I_ARG + 1
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
           ! GET ADDITIONAL RESAMPLING TIMESTEP CONTROL SPECIFIER
             CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
@@ -407,14 +421,8 @@
               END IF
             END IF
 
-          ELSE
-           !BLOCK
-          ! ASSIGN DEFAULT VALUES TO ITS_STRIDE
-            ITS_STRIDE = 1
-           !END BLOCK
-            FILE_XMDF_ = TRIM(FILE_XMDF_)//" by 1)"
           END IF
-              
+
         ELSE
         ! CASE ITS_STRIDE
          !BLOCK
@@ -430,7 +438,7 @@
           END IF
           FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0 to end by "//TRIM(CHAR_ARGUMENT)//")"
 
-          IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
+          IF( COMMAND_ARGUMENT_COUNT() > I_ARG ) THEN
             ERROR = - 1
             ERRMSG = "Too many command arguments"
             RETURN
@@ -440,14 +448,6 @@
 
       END IF
 
-    ELSE
-     !BLOCK
-    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
-      ITS_END = HUGE(ITS_END)
-      ITS_START = 0
-      ITS_STRIDE = 1
-     !END BLOCK
-      FILE_XMDF_ = TRIM(FILE_XMDF_)//" (from 0 to end by 1)"
     END IF
 
     FILE_XMDF_ = TRIM(FILE_XMDF_)//".h5"
