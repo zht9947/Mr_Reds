@@ -440,7 +440,13 @@
 
           SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
           CASE( "--DT" )
-            ALLOCATE( DT_ALTER )
+            IF( .NOT. ALLOCATED( DT_ALTER ) ) THEN
+              ALLOCATE( DT_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE TIME INTERVAL, IN SECONDS
@@ -469,7 +475,13 @@
             END IF
 
           CASE( "--PHI" )
-            ALLOCATE( PHI_ALTER )
+            IF( .NOT. ALLOCATED( PHI_ALTER ) ) THEN
+              ALLOCATE( PHI_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE TIME RELAXATION FACTOR
@@ -498,7 +510,13 @@
             END IF
 
           CASE( "--NSTEPS" , "--NTSS" )
-            ALLOCATE( NTSS_ALTER )
+            IF( .NOT. ALLOCATED( NTSS_ALTER ) ) THEN
+              ALLOCATE( NTSS_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE TOTAL NUMBER OF TIMESTEPS COMPUTED
@@ -523,7 +541,13 @@
             END IF
 
           CASE( "--NDSTEPS" , "--NDTSS" )
-            ALLOCATE( NTSS_OUTPUT_ALTER )
+            IF( .NOT. ALLOCATED( NTSS_OUTPUT_ALTER ) ) THEN
+              ALLOCATE( NTSS_OUTPUT_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
@@ -552,7 +576,13 @@
             END IF
 
           CASE( "--T0" )
-            ALLOCATE( T_START_ALTER )
+            IF( .NOT. ALLOCATED( T_START_ALTER ) ) THEN
+              ALLOCATE( T_START_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES

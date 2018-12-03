@@ -77,6 +77,7 @@
     REAL   (PARD_KIND) , ALLOCATABLE :: XI0_ALTER , XXIM_ALTER
     REAL   (GJRD_KIND) , ALLOCATABLE :: THETA0_ALTER
     REAL   (GJRD_KIND) , ALLOCATABLE :: BTH_ALTER
+    INTEGER            , ALLOCATABLE :: NBENDS_ALTER
 
     INTEGER            :: ERROR
     CHARACTER( 2**10 ) :: ERRMSG
@@ -242,6 +243,9 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     ELSE
+      IF( ALLOCATED( NBENDS_ALTER ) ) THEN
+        NBENDS = NBENDS_ALTER
+      END IF
       IF( ALLOCATED( THETA0_ALTER ) ) THEN
         THETA0 = THETA0_ALTER
       END IF
@@ -495,7 +499,13 @@
 
           SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
           CASE( "--DZB_BK_MIN" )
-            ALLOCATE( DZB_BK_MIN_ALTER )
+            IF( .NOT. ALLOCATED( DZB_BK_MIN_ALTER ) ) THEN
+              ALLOCATE( DZB_BK_MIN_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE MINIMUM BED DEFORMATION (NEGATIVE) AT BANKS, IN METERS
@@ -524,7 +534,13 @@
             END IF
 
           CASE( "--XI0" )
-            ALLOCATE( XI0_ALTER )
+            IF( .NOT. ALLOCATED( XI0_ALTER ) ) THEN
+              ALLOCATE( XI0_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE XI-LOCATION OF CROSS SECTION WHERE ZERO BED DEFORMATION OCCURS
@@ -549,7 +565,13 @@
             END IF
 
           CASE( "--XXIM" )
-            ALLOCATE( XXIM_ALTER )
+            IF( .NOT. ALLOCATED( XXIM_ALTER ) ) THEN
+              ALLOCATE( XXIM_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE XXI-LOCATION OF CROSS SECTION WHERE MAXIMUM BED DEFORMATION OCCURS
@@ -578,7 +600,13 @@
             END IF
 
           CASE( "--THETA0" )
-            ALLOCATE( THETA0_ALTER )
+            IF( .NOT. ALLOCATED( THETA0_ALTER ) ) THEN
+              ALLOCATE( THETA0_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
@@ -609,7 +637,13 @@
             THETA0_ALTER = THETA0_ALTER * PI / 180.0
 
           CASE( "--B" )
-            ALLOCATE( BTH_ALTER )
+            IF( .NOT. ALLOCATED( BTH_ALTER ) ) THEN
+              ALLOCATE( BTH_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
@@ -638,7 +672,13 @@
             END IF
 
           CASE( "--T" )
-            ALLOCATE(T_ALTER)
+            IF( .NOT. ALLOCATED( T_ALTER ) ) THEN
+              ALLOCATE( T_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE STARTING TIME, IN SECONDS
@@ -663,6 +703,13 @@
             END IF
 
           CASE( "--NBENDS" )
+            IF( .NOT. ALLOCATED( NBENDS_ALTER ) ) THEN
+              ALLOCATE( NBENDS_ALTER )
+            ELSE
+              ERROR = - 1
+              ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+              RETURN
+            END IF
 
             WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
           ! GET ALTERNATIVE NUMBER OF MEANDER BENDS
@@ -677,7 +724,7 @@
                 ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
                 RETURN
               ELSE
-                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS
+                READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NBENDS_ALTER
                 IF( ERROR /= 0 ) THEN
                   ERROR = - ABS(ERROR)
                   ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
