@@ -162,7 +162,13 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NK
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading number of layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading Number of Layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+            CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+            RETURN
+          ELSE IF( NK <= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal value for Number of Layers from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -174,7 +180,13 @@
           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , NKS
           IF( ERROR > 0 ) THEN
             ERROR = - ERROR
-            ERRMSG = "Error in reading number of sediment sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            ERRMSG = "Error in reading Number of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+            CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+            RETURN
+          ELSE IF( NKS <= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal value for Number of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
             //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
             CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
             RETURN
@@ -203,7 +215,13 @@
                   READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
                   IF( ERROR > 0 ) THEN
                     ERROR = - ERROR
-                    ERRMSG = "Error in reading value of sediment sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    ERRMSG = "Error in reading value of Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                    //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                    RETURN
+                  ELSE IF( D0 <= 0.0 ) THEN
+                    ERROR = - 1
+                    ERRMSG = "Illegal value for Sediment Sizes from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
@@ -276,6 +294,13 @@
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
+                        ELSE IF( DT <= 0.0 ) THEN
+                          ERROR = - 1
+                          ERRMSG = "Illegal value for Time Interval "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
                         END IF
 
                       CASE( "TIME RELAXATION FACTOR" )
@@ -284,7 +309,14 @@
                         READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , PHI
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
-                          ERRMSG = "Error in reading ""Time Relaxation Factor"" "   &
+                          ERRMSG = "Error in reading Time Relaxation Factor "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        ELSE IF( PHI < 0.0 ) THEN
+                          ERROR = - 1
+                          ERRMSG = "Illegal value for Time Relaxation Factor "   &
                           //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -302,6 +334,13 @@
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                           RETURN
+                        ELSE IF( NTSS < 0 ) THEN
+                          ERROR = - 1
+                          ERRMSG = "Illegal value for Total Number of Timesteps Computed "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
                         END IF
 
                       CASE( "NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS" )
@@ -311,6 +350,26 @@
                         IF( ERROR > 0 ) THEN
                           ERROR = - ERROR
                           ERRMSG = "Error in reading Number of Timesteps Between Two Outputs "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        ELSE IF( NTSS_OUTPUT <= 0 ) THEN
+                          ERROR = - 1
+                          ERRMSG = "Illegal value for Number of Timesteps Between Two Outputs "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        END IF
+
+                      CASE( "STARTING TIME" )
+                        BACKSPACE( FILE_PRJ_ID )
+
+                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , T_START
+                        IF( ERROR > 0 ) THEN
+                          ERROR = - ERROR
+                          ERRMSG = "Error in reading Starting Time "   &
                           //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                           //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
                           CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
@@ -463,6 +522,14 @@
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( R0 <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Water Density "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "WATER KINEMATIC VISCOSITY" )
@@ -472,6 +539,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Water Kinematic Viscosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( V0 <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Water Kinematic Viscosity "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Water Physical Properties from file "//TRIM(FILE_PRJ_NAME)
@@ -536,6 +611,14 @@
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( SS <= 1.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Sediment Specific Gravity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "SEDIMENT POROSITY" )
@@ -545,6 +628,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Sediment Porosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( PS < 0.0 .OR. PS >= 1.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Sediment Porosity "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Sediment Physical Properties from file "//TRIM(FILE_PRJ_NAME)
@@ -609,6 +700,14 @@
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( KAR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Von Karman Constant "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "CORIOLIS FREQUENCY" )
@@ -623,6 +722,14 @@
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( COR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Coriolis Frequency "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "GRAVITATIONAL ACCELERATION" )
@@ -632,6 +739,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Gravitational Acceleration "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( GR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Gravitational Acceleration "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
@@ -696,6 +811,14 @@
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( XYR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Horizontal Dimension "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "REFERENCE VERTICAL DIMENSION" )
@@ -705,6 +828,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Vertical Dimension "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( ZR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Vertical Dimension "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
@@ -724,6 +855,14 @@
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( UVR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Horizontal Velocity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "REFERENCE EDDY KINEMATIC VISCOSITY" )
@@ -733,6 +872,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Eddy Kinematic Viscosity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( VZR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Eddy Kinematic Viscosity "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
@@ -752,6 +899,14 @@
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
                                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                                     RETURN
+                                  ELSE IF( DZR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Eddy Kinematic Diffusivity "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
                                   END IF
 
                                 CASE( "REFERENCE WATER-SEDIMENT MIXTURE DENSITY" )
@@ -761,6 +916,14 @@
                                   IF( ERROR > 0 ) THEN
                                     ERROR = - ERROR
                                     ERRMSG = "Error in reading Reference Water-Sediment Mixture Density "   &
+                                    //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( RR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Water-Sediment Mixture Density "   &
                                     //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Reference Parameters from file "//TRIM(FILE_PRJ_NAME)
