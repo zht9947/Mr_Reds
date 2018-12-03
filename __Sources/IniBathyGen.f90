@@ -411,7 +411,7 @@
 
     I_ARG = 2
     WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET PRJ FILE'S PATH\NAME
+  ! GET PROJECT FILE'S PATH\NAME
     CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
     IF( ERROR /= 0 ) THEN
       ERROR = - ABS(ERROR)
@@ -433,7 +433,7 @@
           END IF
         END IF
       ELSE
-        I_ARG = 1
+        I_ARG = I_ARG - 1
         FILE_PRJ = ""
       END IF
     END IF
