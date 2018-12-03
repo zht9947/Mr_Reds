@@ -96,8 +96,28 @@
       WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
       WRITE(*,'(  "    Or,")')
       WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
+      WRITE(*,'(  "  3- (optional)")')
+      WRITE(*,'(  "      ONE or MORE alternative timing options with the following format:")')
+      WRITE(*,'(  "        --<identifier> <value>")')
+      WRITE(*,'(  "    where <identifier> must be chosen from the following list and corresponding <value>")')
+      WRITE(*,'(  "    needs to be specified:")')
+      WRITE(*,'(  "    A-  dt")')
+      WRITE(*,'(  "        Time interval, in seconds;")')
+      WRITE(*,'(  "    B-  phi")')
+      WRITE(*,'(  "        Time relaxation factor;")')
+      WRITE(*,'(  "    C-  nsteps")')
+      WRITE(*,'(  "        Total number of timesteps computed;")')
+      WRITE(*,'(  "    D-  ndsteps")')
+      WRITE(*,'(  "        Number of timesteps between two successive outputs;")')
+      WRITE(*,'(  "    E-  t0")')
+      WRITE(*,'(  "        Staring time (only for cold mode), in either relative or Julian sense, in seconds;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values or those read from the project file will be assigned to")')
+      WRITE(*,'(  "    ALL these timing variables;")')
+      WRITE(*,'(  "  Note,")')
+      WRITE(*,'(  "    ALL the alternative options A--E can be specified in any order;")')
       WRITE(*,'(  "Note,")')
-      WRITE(*,'(  "  ALL the arguments 1--2 MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--3 MUST be given in sequence.")')
       STOP
     END IF
 
@@ -230,12 +250,6 @@
     WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
-
-    print*, dt
-    print*, phi
-    print*, ntss , ntss_output
-    print*, t_start
-    pause
 
     WRITE(*,'(8X,"Compute...  0.00%", A , $ )') ACHAR(13)
 
