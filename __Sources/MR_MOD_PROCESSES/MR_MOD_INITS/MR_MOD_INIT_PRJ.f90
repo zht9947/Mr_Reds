@@ -317,6 +317,19 @@
                           RETURN
                         END IF
 
+                      CASE( "STARTING TIME" )
+                        BACKSPACE( FILE_PRJ_ID )
+
+                        READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , T_START
+                        IF( ERROR > 0 ) THEN
+                          ERROR = - ERROR
+                          ERRMSG = "Error in reading Starting Time "   &
+                          //"from record no. "//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                          //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                          CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                          RETURN
+                        END IF
+
                       END SELECT
 
                     END IF
