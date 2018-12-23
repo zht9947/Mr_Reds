@@ -322,6 +322,7 @@
       END IF
     END IF
 
+  ! SET AVERAGE FILE'S PATH\NAME
     FILE_AVERAGE = TRIM(FILE_XMDF)//".average.txt"
 
     I_ARG = I_ARG + 1
