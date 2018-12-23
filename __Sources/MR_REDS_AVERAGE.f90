@@ -21,6 +21,8 @@
 !***********************************************************************************************************************************
   PROGRAM MR_REDS_AVERAGE
 
+    USE MR_0_SKIP_MODE
+
     USE MR_ERRORS_FILE_MANIPULATE
 
     USE MR_MOD_CTRL_RETRY_CREATING_FILES
@@ -83,8 +85,15 @@
       WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
       WRITE(*,'(  "    Or,")')
       WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
+      WRITE(*,'(  "  3- (optional)")')
+      WRITE(*,'(  "      An alternative option, which tells the program to run on skip mode, so that all")')
+      WRITE(*,'(  "    the runtime inputs from user can be skipped, with the following format:")')
+      WRITE(*,'(  "        --skip")')
+      WRITE(*,'(  "      Careful with this option and make sure you really know what will be skipped;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, the program will by default run on non-skip mode;")')
       WRITE(*,'(  "Note,")')
-      WRITE(*,'(  "  ALL the arguments 1--2 MUST be given in sequence.")')
+      WRITE(*,'(  "  ALL the arguments 1--3 MUST be given in sequence.")')
       STOP
     END IF
   ! CREATE OUTPUT FILES
@@ -279,80 +288,111 @@
       END IF
     END IF
 
-  ! NUMBER OF COMMAND ARGUMENTS DETECT
-    IF( COMMAND_ARGUMENT_COUNT() < 1 ) THEN
+    I_ARG = 0
+
+    I_ARG = I_ARG + 1
+    IF( COMMAND_ARGUMENT_COUNT() < I_ARG ) THEN
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
-    ELSE IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
-      ERROR = - 1
-      ERRMSG = "Too many command arguments"
-      RETURN
-    END IF
-
-    I_ARG = 1
-    WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
-  ! GET XMDF FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "Mesh file's path\name too long!"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as mesh file"
-      RETURN
     ELSE
-    ! VERIFY XMDF FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET XMDF FILE'S PATH\NAME
+      CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
+      IF( ERROR == - 1 ) THEN
+        ERRMSG = "Mesh file's path\name too long!"
+        RETURN
+      ELSE IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as mesh file"
         RETURN
       ELSE
-        CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+      ! VERIFY XMDF FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
           RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+            RETURN
+          END IF
         END IF
       END IF
     END IF
 
-    IF( COMMAND_ARGUMENT_COUNT() <= I_ARG ) THEN
+    FILE_AVERAGE = TRIM(FILE_XMDF)//".average.txt"
+
+    I_ARG = I_ARG + 1
+    IF( COMMAND_ARGUMENT_COUNT() < I_ARG ) THEN
      !BLOCK
     ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
       FILE_PRJ = ""
      !END BLOCK
     ELSE
-    
-      I_ARG = I_ARG + 1
       WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
     ! GET PROJECT FILE'S PATH\NAME
-      CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_PRJ , STATUS=ERROR )
-      IF( ERROR == - 1 ) THEN
-        ERRMSG = "Project file's path\name too long"
-        RETURN
-      ELSE IF( ERROR /= 0 ) THEN
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
         ERROR = - ABS(ERROR)
-        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as project file"
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE
-      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-          RETURN
-        ELSE
-          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+        IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
+          FILE_PRJ = TRIM(CHAR_ARGUMENT)
+        ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+          CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
           IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
             RETURN
+          ELSE
+            CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+            IF( ERROR < 0 ) THEN
+              ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+              RETURN
+            END IF
           END IF
+        ELSE
+          I_ARG = I_ARG - 1
+          FILE_PRJ = ""
         END IF
       END IF
-
     END IF
 
-  ! SET AVERAGE FILE'S PATH\NAME
-    FILE_AVERAGE = TRIM(FILE_XMDF)//".average.txt"
+    I_ARG = I_ARG + 1
+  ! LOOP FOR ALTERNATIVE OPTIONS
+    DO WHILE( I_ARG <= COMMAND_ARGUMENT_COUNT() )
+
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET ALTERNATIVE OPTION IDENTIFIER
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        RETURN
+      ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
+        ERROR = - 1
+        ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
+        //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        RETURN
+      ELSE
+
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--SKIP" )
+          RUN_ON_SKIP_MODE = .TRUE.
+
+          I_ARG = I_ARG + 1
+
+        CASE DEFAULT
+          ERROR = - 1
+          ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        END SELECT
+
+      END IF
+
+    END DO
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
 
