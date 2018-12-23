@@ -100,7 +100,7 @@
       WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
       WRITE(*,'(  "  3- (optional)")')
       WRITE(*,'(  "      ONE or MORE alternative options, which respecify the predetermined parameters,")')
-      WRITE(*,'(  "    with the following format:")')
+      WRITE(*,'(  "    with the following form:")')
       WRITE(*,'(  "        --<identifier> [<value>]")')
       WRITE(*,'(  "    where <identifier> must be selected from the following list and corresponding <value>")')
       WRITE(*,'(  "    (if appropriate) needs to be specified:")')
@@ -400,24 +400,22 @@
         ERROR = - ABS(ERROR)
         ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
+      ELSE IF( CHAR_ARGUMENT(1:2) == "--" ) THEN
+        I_ARG = I_ARG - 1
+        FILE_PRJ = ""
       ELSE
-        IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
-          FILE_PRJ = TRIM(CHAR_ARGUMENT)
-        ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-          CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
-          IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-            RETURN
-          ELSE
-            CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
-            IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
-              RETURN
-            END IF
-          END IF
+        FILE_PRJ = TRIM(CHAR_ARGUMENT)
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+          RETURN
         ELSE
-          I_ARG = I_ARG - 1
-          FILE_PRJ = ""
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
         END IF
       END IF
     END IF
@@ -457,22 +455,20 @@
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
           ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DT_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DT_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( DT_ALTER <= 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
+            ELSE IF( DT_ALTER <= 0.0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
             END IF
           END IF
 
@@ -494,22 +490,20 @@
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
           ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) PHI_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) PHI_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( PHI_ALTER < 0.0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
+            ELSE IF( PHI_ALTER < 0.0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
             END IF
           END IF
 
@@ -531,18 +525,16 @@
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
           ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
             END IF
           END IF
 
@@ -564,22 +556,20 @@
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
           ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_OUTPUT_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_OUTPUT_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              ELSE IF( NTSS_OUTPUT_ALTER == 0 ) THEN
-                ERROR = - 1
-                ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
+            ELSE IF( NTSS_OUTPUT_ALTER == 0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
             END IF
           END IF
 
@@ -601,18 +591,16 @@
             ERROR = - ABS(ERROR)
             ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
             RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
           ELSE
-            IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
-              ERROR = - 1
-              ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
               RETURN
-            ELSE
-              READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
-              IF( ERROR /= 0 ) THEN
-                ERROR = - ABS(ERROR)
-                ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
-                RETURN
-              END IF
             END IF
           END IF
 

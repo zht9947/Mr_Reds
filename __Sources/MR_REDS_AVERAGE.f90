@@ -339,24 +339,22 @@
         ERROR = - ABS(ERROR)
         ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
+      ELSE IF( CHAR_ARGUMENT(1:2) == "--" ) THEN
+        I_ARG = I_ARG - 1
+        FILE_PRJ = ""
       ELSE
-        IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
-          FILE_PRJ = TRIM(CHAR_ARGUMENT)
-        ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-          CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
-          IF( ERROR < 0 ) THEN
-            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
-            RETURN
-          ELSE
-            CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
-            IF( ERROR < 0 ) THEN
-              ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
-              RETURN
-            END IF
-          END IF
+        FILE_PRJ = TRIM(CHAR_ARGUMENT)
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+          RETURN
         ELSE
-          I_ARG = I_ARG - 1
-          FILE_PRJ = ""
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
         END IF
       END IF
     END IF
