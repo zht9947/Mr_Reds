@@ -20,6 +20,8 @@
 !***********************************************************************************************************************************
   MODULE MR_MOD_CTRL_CONFIRM_PRJ_SETS
 
+    USE MR_0_SKIP_MODE
+
     IMPLICIT NONE
 
     PRIVATE
@@ -60,8 +62,13 @@
 
     DO
       WRITE(*,'(2X,"Are all these settings above correct? (Y/N): ", $ )')
-      READ(*,*) Y_OR_N
-      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      IF( RUN_ON_SKIP_MODE ) THEN
+        Y_OR_N = "Y"
+        WRITE(*,'(A)') TRIM(Y_OR_N(1:1))
+      ELSE
+        READ(*,*) Y_OR_N
+      END IF
+      SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
       CASE( "Y" )
         RETURN
       CASE( "N" )
