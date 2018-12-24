@@ -29,6 +29,8 @@
 		<File RelativePath="..\__Library\include\MR_H_PROGRAM_METADATA.h"/></Filter>
 		<Filter Name="Source Files" Filter="f90;for;f;fpp;ftn;def;odl;idl">
 		<Filter Name="MR_DEFS">
+		<Filter Name="MR_0_SKIP_MODE">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_0_SKIP_MODE\MR_0_SKIP_MODE.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<Filter Name="MR_MODEL_CONSTS">

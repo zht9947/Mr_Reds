@@ -33,6 +33,8 @@
 		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS_FILE_MANIPULATE.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<Filter Name="MR_0_SKIP_MODE">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_0_SKIP_MODE\MR_0_SKIP_MODE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
 		<File RelativePath="..\__Sources\__POST_DEFS\MR_DEF_COORS_.f90"/>

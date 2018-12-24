@@ -20,6 +20,8 @@
 !***********************************************************************************************************************************
   MODULE MR_MOD_CTRL_CONFIRM_START_MODE
 
+    USE MR_0_SKIP_MODE
+
     USE MR_KINDS
 
     USE MR_DEF_RANKS
@@ -73,8 +75,13 @@
 
     DO
       WRITE(*,'("Run on cold mode? (Y/N): ", $ )')
-      READ(*,*) Y_OR_N
-      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      IF( RUN_ON_SKIP_MODE ) THEN
+        Y_OR_N = "Y"
+        WRITE(*,'(A)') TRIM(Y_OR_N(1:1))
+      ELSE
+        READ(*,*) Y_OR_N
+      END IF
+      SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
       CASE( "Y" )
         EXIT
       CASE( "N" )
@@ -93,8 +100,13 @@
 
       DO
         WRITE(*,'(4X,"Is the value correct? (Y/N): ", $ )')
-        READ(*,*) Y_OR_N
-        SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+        IF( RUN_ON_SKIP_MODE ) THEN
+          Y_OR_N = "Y"
+          WRITE(*,'(A)') TRIM(Y_OR_N(1:1))
+        ELSE
+          READ(*,*) Y_OR_N
+        END IF
+        SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
         CASE( "Y" )
           EXIT SET_HTH
         CASE( "N" )
@@ -102,7 +114,7 @@
           DO
             WRITE(*,'(6X,"Type in the correct value or ""C"" to cease: ", $ )')
             READ(*,*) CHAR_ARGUMENT
-            SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+            SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT(1:1))) )
             CASE( "C" )
               STOP
             CASE DEFAULT
@@ -136,8 +148,13 @@
     SET_PROPS :   &
     DO
       WRITE(*,'(2X,"Specify manually /PROPERTIES for datasets? (Y/N): ", $ )')
-      READ(*,*) Y_OR_N
-      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      IF( RUN_ON_SKIP_MODE ) THEN
+        Y_OR_N = "N"
+        WRITE(*,'(A)') TRIM(Y_OR_N(1:1))
+      ELSE
+        READ(*,*) Y_OR_N
+      END IF
+      SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
       CASE( "Y" )
 
         WRITE(*,'(2X,"(Type in ""C"" to cease)")')
@@ -149,7 +166,7 @@
         DO
           WRITE(*,'(8X,"Number of Layers = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT(1:1))) )
           CASE( "C" )
             STOP
           CASE DEFAULT
@@ -177,7 +194,7 @@
         DO
           WRITE(*,'(8X,"Number of Sediment Sizes = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT(1:1))) )
           CASE( "C" )
             STOP
           CASE DEFAULT
@@ -198,7 +215,7 @@
                 DO
                   WRITE(*,'(10X,"Sediment Sizes = ", $ )')
                   READ(*,*) CHAR_ARGUMENT
-                  SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+                  SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT(1:1))) )
                   CASE( "C" )
                     STOP
                   CASE DEFAULT
@@ -230,7 +247,7 @@
         DO
           WRITE(*,'(6X,"Slope = ", $ )')
           READ(*,*) CHAR_ARGUMENT
-          SELECT CASE( .MRCHARUPPER.(CHAR_ARGUMENT(1:1)) )
+          SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT(1:1))) )
           CASE( "C" )
             STOP
           CASE DEFAULT
@@ -252,7 +269,7 @@
         DO
           WRITE(*,'(4X,"Is above input correct? (Y/N): ", $ )')
           READ(*,*) Y_OR_N
-          SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+          SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
           CASE( "Y" )
             EXIT SET_PROPS
           CASE( "N" )
@@ -297,8 +314,13 @@
 
     DO
       WRITE(*,'("Run on hot mode? (Y/N): ", $ )')
-      READ(*,*) Y_OR_N
-      SELECT CASE( .MRCHARUPPER.(Y_OR_N) )
+      IF( RUN_ON_SKIP_MODE ) THEN
+        Y_OR_N = "Y"
+        WRITE(*,'(A)') TRIM(Y_OR_N(1:1))
+      ELSE
+        READ(*,*) Y_OR_N
+      END IF
+      SELECT CASE( .MRCHARUPPER.(TRIM(Y_OR_N(1:1))) )
       CASE( "Y" )
         EXIT
       CASE( "N" )

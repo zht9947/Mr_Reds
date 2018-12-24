@@ -35,6 +35,8 @@
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
 		<Filter Name="MR_NUMERATORS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_NUMERATORS\MR_NUM_START_MODE.f90"/></Filter>
+		<Filter Name="MR_0_SKIP_MODE">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_0_SKIP_MODE\MR_0_SKIP_MODE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_ACTIVITY.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
