@@ -429,8 +429,11 @@
         ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) == 0 ) THEN
+       !BLOCK
         I_ARG = I_ARG - 1
+      ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
         FILE_PRJ = ""
+       !END BLOCK
       ELSE
         FILE_PRJ = TRIM(CHAR_ARGUMENT)
       ! VERIFY PROJECT FILE'S OPENING AND CLOSING

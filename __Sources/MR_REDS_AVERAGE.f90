@@ -86,7 +86,7 @@
       WRITE(*,'(  "    Or,")')
       WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
       WRITE(*,'(  "  3- (optional)")')
-      WRITE(*,'(  "      An alternative option, which tells the program to run on skip mode, so that all")')
+      WRITE(*,'(  "      An alternative option, which tells the program to run on skip mode so that all")')
       WRITE(*,'(  "    the runtime inputs from user can be skipped, with the following format:")')
       WRITE(*,'(  "        --skip")')
       WRITE(*,'(  "      Careful with this option and make sure you really know what will be skipped;")')
@@ -340,8 +340,11 @@
         ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
       ELSE IF( CHAR_ARGUMENT(1:2) == "--" ) THEN
+       !BLOCK
         I_ARG = I_ARG - 1
+      ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
         FILE_PRJ = ""
+       !END BLOCK
       ELSE
         FILE_PRJ = TRIM(CHAR_ARGUMENT)
       ! VERIFY PROJECT FILE'S OPENING AND CLOSING
