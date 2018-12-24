@@ -737,7 +737,13 @@
           I_ARG = I_ARG + 2
 
         CASE( "--SKIP" )
-          RUN_ON_SKIP_MODE = .TRUE.
+          IF( RUN_ON_SKIP_MODE == .FALSE. ) THEN
+            RUN_ON_SKIP_MODE = .TRUE.
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
 
           I_ARG = I_ARG + 1
 
