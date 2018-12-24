@@ -33,6 +33,8 @@
 		<File RelativePath="..\__Sources\__POST_DEFS\__MR_ERRORS\MR_ERRORS_FILE_MANIPULATE.f90"/></Filter>
 		<Filter Name="MR_KINDS">
 		<File RelativePath="..\__Sources\MR_DEFS\MR_KINDS\MR_KINDS.f90"/></Filter>
+		<Filter Name="MR_0_SKIP_MODE">
+		<File RelativePath="..\__Sources\MR_DEFS\MR_0_SKIP_MODE\MR_0_SKIP_MODE.f90"/></Filter>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_CONSTS_N_REF_PARS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_COORS.f90"/>
 		<File RelativePath="..\__Sources\MR_DEFS\MR_DEF_FIELD_VARS_DSET_NAMES.f90"/>
@@ -62,6 +64,9 @@
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_FILE_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_FILE_MANIPULATIONS\MR_MOD_FILE_XMDF_MANIPULATIONS\MR_MOD_OPEN_N_CLOSE_MULTI_DSETS.f90"/></Filter></Filter>
+		<Filter Name="MR_MOD_OPERATIONS">
+		<Filter Name="MR_MOD_OPERATORS">
+		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_CHAR_STRING.f90"/></Filter></Filter>
 		<Filter Name="MR_MOD_PROCESSES">
 		<Filter Name="MR_MOD_FLOW_CTRLS">
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\__POST_MOD_FLOW_CTRLS\MR_MOD_CTRL_RETRY_CREATING_FILES.f90"/></Filter>
@@ -75,8 +80,5 @@
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_DO_DUPLICATE_OUTPUT_MESH_DATA.f90"/>
 		<File RelativePath="..\__Sources\MR_MOD_PROCESSES\MR_MOD_GET_TIMES.f90"/>
 		<File RelativePath="..\__Sources\__POST_MOD_PROCESSES\MR_MOD_IO_RESAMPLE.f90"/></Filter>
-		<Filter Name="MR_MOD_OPERATIONS">
-		<Filter Name="MR_MOD_OPERATORS">
-		<File RelativePath="..\__Sources\MR_MOD_OPERATIONS\MR_MOD_OPERATORS\MR_MOD_OPERATOR_CHAR_STRING.f90"/></Filter></Filter>
 		<File RelativePath="..\__Sources\MR_REDS_RESAMPLE.f90"/></Filter></Files>
 	<Globals/></VisualStudioProject>
