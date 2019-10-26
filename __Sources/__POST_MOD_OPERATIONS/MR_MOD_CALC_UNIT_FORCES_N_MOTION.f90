@@ -23,8 +23,8 @@
 
     USE MR_KINDS
 
-    USE MR_DEF_CURVED_GEOS
     USE MR_DEF_CONSTS_N_REF_PARS
+    USE MR_DEF_CURVED_GEOS
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_SLOPE
     USE MR_DEF_ACTIVITY
@@ -200,9 +200,9 @@
             UNIT_FORCES( I , J ,DIM) =   &
             - TBUV( I , J ,DIM)   &
             + H( I , J ) *   &
-              ( XYR/ZR / ALPAR * FUV( I , J ,DIM,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
-              - (                FUV( I , J ,DIM,1) * GRAD_XY_ZS( I , J ,1)   &
-                +                FUV( I , J ,DIM,2) * GRAD_XY_ZS( I , J ,2)   &
+              ( SLOPEPAR * FUV( I , J ,DIM,1) * SQRT(  GUV( I , J ,1,1)  ) * SLOPE   &   ! ADDITIONAL SLOPE TERM
+              - (          FUV( I , J ,DIM,1) * GRAD_XY_ZS( I , J ,1)   &
+                +          FUV( I , J ,DIM,2) * GRAD_XY_ZS( I , J ,2)   &
                 )   &
             & )
           END IF

@@ -87,20 +87,20 @@
 
     CALL XF_SET_NUMBER_OF_ELEMENTS( MESH_IN_XMDF_ID , NEM , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in setting number of elements in mesh"
+      ERRMSG = "Error in setting number of elements into mesh"
       RETURN
     END IF
 
     EM_TYPE_ARRAY = EM_TYPE
     CALL XF_WRITE_ELEM_TYPES( MESH_IN_XMDF_ID , NEM , EM_TYPE_ARRAY , NONE , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in setting types of all elements in mesh"
+      ERRMSG = "Error in setting types of all elements into mesh"
       RETURN
     END IF
 
     CALL XF_WRITE_ELEM_NODE_IDS( MESH_IN_XMDF_ID , NEM , NND_CD_IN_EM , NDID_ARRAY , NONE , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in writing node ids of all elements to mesh"
+      ERRMSG = "Error in writing node ids of all elements into mesh"
       RETURN
     END IF
 

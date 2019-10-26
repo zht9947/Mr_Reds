@@ -22,7 +22,7 @@
 
     USE XMDF
 
-    USE MR_ERRORS
+    USE MR_ERRORS_FILE_MANIPULATE
 
     IMPLICIT NONE
 
@@ -54,7 +54,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_CREATE_FILE_XMDF( FILE_XMDF_NAME , FILE_XMDF_STATUS , ERROR , ERRMSG )
+  SUBROUTINE MR_CREATE_FILE_XMDF( FILE_XMDF_NAME , ERROR , ERRMSG , OVERWRITE )
 
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
     USE MR_MOD_OPEN_N_CLOSE_MESH_IN_XMDF
@@ -63,7 +63,6 @@
     IMPLICIT NONE
 
     CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_NAME
-    CHARACTER(   *   ) , INTENT(IN ) :: FILE_XMDF_STATUS
 
     INTEGER                          :: FILE_XMDF_ID , MESH_IN_XMDF_ID , MULTI_DSETS_ID , PROP_GP_ID
 
@@ -76,22 +75,23 @@
     INTEGER                          :: ERROR_DUMMY
     CHARACTER( 2**10 )               :: ERRMSG_DUMMY
 
+    LOGICAL            , INTENT(IN ) , OPTIONAL :: OVERWRITE
+
     ERRMSG = ""
-    SELECT CASE( TRIM(FILE_XMDF_STATUS) )
-    CASE( "OVERWRITE" , "OverWrite" , "Overwrite" , "OVER" , "Over" , "O" , "overwrite", "o" )
+    IF( PRESENT(OVERWRITE) .AND. OVERWRITE ) THEN
       CALL XF_CREATE_FILE( TRIM(FILE_XMDF_NAME) , .TRUE. , FILE_XMDF_ID , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in creating file"
         RETURN
       END IF
-    CASE DEFAULT
+    ELSE
       CALL XF_CREATE_FILE( TRIM(FILE_XMDF_NAME) , .FALSE. , FILE_XMDF_ID , ERROR )
       IF( ERROR < 0 ) THEN
         ERROR = ERROR_CANNOT_CREATE_NEW_FILE
         ERRMSG = "Error in creating file"
         RETURN
       END IF
-    END SELECT
+    END IF
 
     CALL MR_GEN_GUID_N_LUID
 

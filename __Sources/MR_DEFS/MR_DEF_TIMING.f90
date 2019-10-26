@@ -12,14 +12,14 @@
 !
 ! DEFINITION OF VARIABLES:
 !
-!                              DT    :    COMPUTATIONAL TIME INTERVAL
-!
-!                         T_START    :    STARTING TIME
-!
-!                            NTSS    :    TOTAL NUMBER OF TIMESTEPS
-!                     NTSS_OUTPUT    :    NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
+!                              DT    :    TIME INTERVAL
 !
 !                             PHI    :    TIME RELAXATION FACTOR
+!
+!                            NTSS    :    TOTAL NUMBER OF TIMESTEPS COMPUTED
+!                     NTSS_OUTPUT    :    NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
+!
+!                         T_START    :    STARTING TIME (ONLY FOR COLD MODE)
 !
 ! RECORD OF REVISIONS:
 !
@@ -34,13 +34,13 @@
 
     IMPLICIT NONE
 
-    REAL   (TMRD_KIND) :: DT
+    REAL   (TMRD_KIND) :: DT = 0.000001
 
-    REAL   (TMRD_KIND) :: T_START
+    REAL   (PARD_KIND) :: PHI = 1.000
 
-    INTEGER(TSID_KIND) :: NTSS
-    INTEGER(TSID_KIND) :: NTSS_OUTPUT
+    INTEGER(TSID_KIND) :: NTSS = 10000
+    INTEGER(TSID_KIND) :: NTSS_OUTPUT = 100
 
-    REAL   (PARD_KIND) :: PHI
+    REAL   (TMRD_KIND) :: T_START = 0.000000
 
   END MODULE MR_DEF_TIMING

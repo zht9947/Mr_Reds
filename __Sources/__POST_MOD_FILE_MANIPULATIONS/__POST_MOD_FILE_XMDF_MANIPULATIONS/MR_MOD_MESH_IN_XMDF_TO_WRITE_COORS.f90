@@ -96,25 +96,25 @@
 
     CALL XF_SET_NUMBER_OF_NODES( MESH_IN_XMDF_ID , NND , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in setting number of nodes in mesh"
+      ERRMSG = "Error in setting number of nodes into mesh"
       RETURN
     END IF
 
     CALL XF_WRITE_X_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 1 ,1:NND) , NONE , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in writing X coordinates of all nodes to mesh"
+      ERRMSG = "Error in writing X coordinates of all nodes into mesh"
       RETURN
     END IF
     CALL XF_WRITE_Y_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 2 ,1:NND) , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in writing Y coordinates of all nodes to mesh"
+      ERRMSG = "Error in writing Y coordinates of all nodes into mesh"
       RETURN
     END IF
 
     XY_ARRAY( 3 ,1:NND) = 0.0
     CALL XF_WRITE_Z_NODE_LOCATIONS( MESH_IN_XMDF_ID , NND , XY_ARRAY( 3 ,1:NND) , ERROR )
     IF( ERROR < 0 ) THEN
-      ERRMSG = "Error in writing Z coordinates of all nodes to mesh"
+      ERRMSG = "Error in writing Z coordinates of all nodes into mesh"
       RETURN
     END IF
 

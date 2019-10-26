@@ -23,6 +23,7 @@
 
     USE MR_KINDS
 
+    USE MR_DEF_CONSTS_N_REF_PARS
     USE MR_DEF_CURVED_GEOS
     USE MR_DEF_FIELD_VARS
     USE MR_DEF_ACTIVITY
@@ -64,22 +65,42 @@
     INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
     INTEGER(KKID_KIND) , INTENT(IN ) :: NK
 
-    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) :: UNIT_ENERGY
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2) :: UNIT_ENERGY
 
     INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
     INTEGER(KKID_KIND) :: K
+
+    !BLOCK
+      DO DIM = 1 , 2
+
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            !BLOCK
+              UNIT_ENERGY( I , J ,DIM) = 0.0
+            !END BLOCK
+          END DO
+        END DO
+
+      END DO
+    !END BLOCK
 
     DO K = 1 , NK
 
-      DO J = 1 , NJ
-       !DIR$ VECTOR ALIGNED
-        DO I = 1 , NI
-          IF( ACTIVITY( I , J ) == NOACTIVE ) THEN
-            UNIT_ENERGY( I , J , K ) = 0.0
-          ELSE
-            UNIT_ENERGY( I , J , K ) = 0.5 * GUV( I , J ,1,1) * UV( I , J ,1, K ) * UV( I , J ,1, K )
-          END IF
+      DO DIM = 1 , 2
+
+        DO J = 1 , NJ
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , NI
+            IF( ACTIVITY( I , J ) == BEACTIVE ) THEN
+              UNIT_ENERGY( I , J ,DIM) = UNIT_ENERGY( I , J ,DIM) +   &
+              & DSIGMA * H( I , J ) *   &
+              & 0.5 * GUV( I , J ,DIM,DIM) * UV( I , J ,DIM, K ) * UV( I , J ,DIM, K )
+            END IF
+          END DO
         END DO
+
       END DO
 
     END DO

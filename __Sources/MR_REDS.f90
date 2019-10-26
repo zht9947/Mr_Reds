@@ -21,26 +21,33 @@
 !***********************************************************************************************************************************
   PROGRAM MR_REDS
 
+    USE MR_0_SKIP_MODE
+
     USE MR_KINDS
 
     USE MR_DEF_TIMING
-    USE MR_DEF_CONSTS_N_REF_PARS
-
-    USE MR_MOD_INIT_PRJ
-    USE MR_MOD_ECHO_PRJ
-    USE MR_MOD_CTRL_PRJ_SETS_CORRECT
+    USE MR_DEF_CONSTS_N_REF_PARS , ONLY : COR
 
     USE MR_NUM_START_MODE
+
     USE MR_MOD_DETER_START_MODE
 
+    USE MR_MOD_INIT_PRJ
     USE MR_MOD_INIT_RANKS
+    USE MR_MOD_INIT_RANKS_PLUS
+    USE MR_MOD_INIT_SLOPE
 
-    USE MR_MOD_MALLOC_CONSTS_N_REF_PARS
+    USE MR_MOD_CTRL_CONFIRM_START_MODE
+
+    USE MR_MOD_ECHO_PRJ
+    USE MR_MOD_CTRL_CONFIRM_PRJ_SETS
+
     USE MR_MOD_MALLOC_GRID_SYS
     USE MR_MOD_MALLOC_CURVED_GEOS
     USE MR_MOD_MALLOC_FIELD_VARS
     USE MR_MOD_MALLOC_ACTIVITY
 
+    USE MR_MOD_INIT_CONSTS_N_REF_PARS
     USE MR_MOD_INIT_GRID_SYS
     USE MR_MOD_INIT_CURVED_GEOS
     USE MR_MOD_INIT_FIELD_VARS_N_ACTIVITY
@@ -57,8 +64,16 @@
 
     IMPLICIT NONE
 
-    CHARACTER( 2**08 ) :: FILE_PRJ
     CHARACTER( 2**08 ) :: FILE_XMDF
+    CHARACTER( 2**08 ) :: FILE_PRJ
+
+    REAL   (PARD_KIND) :: HTH
+
+    REAL   (TMRD_KIND) , ALLOCATABLE :: DT_ALTER
+    REAL   (PARD_KIND) , ALLOCATABLE :: PHI_ALTER
+    INTEGER(TSID_KIND) , ALLOCATABLE :: NTSS_ALTER
+    INTEGER(TSID_KIND) , ALLOCATABLE :: NTSS_OUTPUT_ALTER
+    REAL   (TMRD_KIND) , ALLOCATABLE :: T_START_ALTER
 
     INTEGER(TSID_KIND) :: ITS
 
@@ -78,52 +93,126 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       WRITE(*,'(/,"PLEASE RUN ", A ," with the following command arguments:")') TRIM(INNERNAME)
       WRITE(*,'(  "  1- (non-optional)")')
-      WRITE(*,'(  "      Project file''s path\name, in TEXT format;")')
-      WRITE(*,'(  "  2- (non-optional)")')
       WRITE(*,'(  "      Mesh file''s path\name, in XMDF format;")')
-      WRITE(*,'(  "Note,")')
-      WRITE(*,'(  "  ALL the arguments MUST be given in sequence.")')
+      WRITE(*,'(  "  2- (optional)")')
+      WRITE(*,'(  "      Project file''s path\name, which specifies the running parameters, in TEXT format;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values will be assigned to these parameters;")')
+      WRITE(*,'(  "  3- (optional)")')
+      WRITE(*,'(  "      ONE or MORE alternative options, which respecify the predetermined parameters,")')
+      WRITE(*,'(  "    with the following form:")')
+      WRITE(*,'(  "        --<identifier> [<value>]")')
+      WRITE(*,'(  "    where <identifier> must be selected from the following list and corresponding <value>")')
+      WRITE(*,'(  "    (if appropriate) needs to be specified:")')
+      WRITE(*,'(  "    A-  dt")')
+      WRITE(*,'(  "        Time interval, in seconds;")')
+      WRITE(*,'(  "    B-  phi")')
+      WRITE(*,'(  "        Time relaxation factor;")')
+      WRITE(*,'(  "    C-  nsteps")')
+      WRITE(*,'(  "        Total number of timesteps computed;")')
+      WRITE(*,'(  "    D-  ndsteps")')
+      WRITE(*,'(  "        Number of timesteps between two successive outputs;")')
+      WRITE(*,'(  "    E-  t0")')
+      WRITE(*,'(  "        Staring time (only for cold mode), in either relative or Julian sense, in seconds;")')
+      WRITE(*,'(  "    F-  skip")')
+      WRITE(*,'(  "        Without <value>; This option tells the program to run on skip mode, in which all")')
+      WRITE(*,'(  "      the runtime inputs from user are skipped; Careful with this option and make sure")')
+      WRITE(*,'(  "      you really know what will be skipped;")')
+      WRITE(*,'(  "    Or,")')
+      WRITE(*,'(  "      If omitted, default values or those read from the project file will be assigned to")')
+      WRITE(*,'(  "    these parameters;")')
+      WRITE(*,'(  "  Note,")')
+      WRITE(*,'(  "    ALL the alternative options A--F can be specified in any order;")')
+      WRITE(*,'(  "But,")')
+      WRITE(*,'(  "  ALL the arguments 1--3 MUST be given in sequence.")')
+      STOP
+    END IF
+
+  ! DETERMINE START MODE BY DETECTING XMDF FILE
+    CALL MR_DETER_START_MODE( FILE_XMDF , ERROR , ERRMSG )
+    IF( ERROR < 0 ) THEN
+      WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
 
     WRITE(*,'( )')
 
     WRITE(*,'("Initialize project... ", $ )')
-    CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+    IF( FILE_PRJ /= "" ) THEN
+      CALL MR_INIT_PRJ( FILE_PRJ , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+    END IF
+    IF( ALLOCATED( DT_ALTER ) ) THEN
+      DT = DT_ALTER
+    END IF
+    IF( ALLOCATED( PHI_ALTER ) ) THEN
+      PHI = PHI_ALTER
+    END IF
+    IF( ALLOCATED( NTSS_ALTER ) ) THEN
+      NTSS = NTSS_ALTER
+    END IF
+    IF( ALLOCATED( NTSS_OUTPUT_ALTER ) ) THEN
+      NTSS_OUTPUT = NTSS_OUTPUT_ALTER
+    END IF
+    IF( ALLOCATED( T_START_ALTER ) ) THEN
+      T_START = T_START_ALTER
+    END IF
+    CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    SELECT CASE( START_MODE )
+    CASE( COLD_MODE )
+      WRITE(*,'(//,"No datasets seem in the XMDF file.")')
+      CALL MR_CTRL_CONFIRM_START_MODE_COLD( HTH )
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    CASE( HOT_MODE )
+      WRITE(*,'(//,"Datasets have been detected in the XMDF file.")')
+      CALL MR_CTRL_CONFIRM_START_MODE_HOT
+      CALL MR_INIT_RANKS_PLUS( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+      CALL MR_INIT_SLOPE( FILE_XMDF , ERROR , ERRMSG )
+      IF( ERROR < 0 ) THEN
+        WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
+        STOP
+      END IF
+      WRITE(*,'(/,"Initialize project... ", $ )')
+    END SELECT
+    WRITE(*,'("Done!")')
+
+    WRITE(*,'( )')
 
     CALL MR_ECHO_PRJ
 
     WRITE(*,'( )')
 
-    CALL MR_CTRL_PRJ_SETS_CORRECT
+    CALL MR_CTRL_CONFIRM_PRJ_SETS
 
     WRITE(*,'( )')
 
-    CALL MR_DETER_START_MODE
+    WRITE(*,'(2X,"Allocate memories... ", $ )')
+    CALL MR_MALLOC_GRID_SYS
+    CALL MR_MALLOC_CURVED_GEOS
+    CALL MR_MALLOC_FIELD_VARS
+    CALL MR_MALLOC_ACTIVITY
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
-    WRITE(*,'("Initialize ranks... ", $ )')
-    CALL MR_INIT_RANKS( FILE_XMDF , ERROR , ERRMSG )
+    WRITE(*,'("Initialize constants and reference parameters... ", $ )')
+    CALL MR_INIT_CONSTS_N_REF_PARS( ERROR , ERRMSG )
     IF( ERROR < 0 ) THEN
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
-    ELSE
-      WRITE(*,'("Done! ")')
-      WRITE(*,'(2X,"Allocate memories... ", $ )')
-      CALL MR_MALLOC_GRID_SYS
-      CALL MR_MALLOC_CURVED_GEOS
-      CALL MR_MALLOC_FIELD_VARS
-      CALL MR_MALLOC_ACTIVITY
     END IF
-    WRITE(*,'("Done! ")')
-
-    WRITE(*,'( )')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize grid system... ", $ )')
     CALL MR_INIT_GRID_SYS( FILE_XMDF , ERROR , ERRMSG )
@@ -131,7 +220,7 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize curved geometry... ", $ )')
     CALL MR_INIT_CURVED_GEOS( FILE_XMDF , ERROR , ERRMSG )
@@ -139,39 +228,39 @@
       WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
       STOP
     END IF
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'("Initialize field variables and activity... ", $ )')
     SELECT CASE( START_MODE )
     CASE( COLD_MODE )
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD
-      WRITE(*,'("Done! ")')
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_COLD( HTH , T )
+      WRITE(*,'("Done!")')
       WRITE(*,'("Initialize output... ", $ )')
       CALL MR_INIT_OUTPUT( FILE_XMDF , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       ELSE
-        CALL MR_OUTPUT( FILE_XMDF , T_START , ERROR , ERRMSG )
+        CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
           WRITE(*,'(//,2X, A ,"!")') TRIM(ERRMSG)
           STOP
         END IF
       END IF
     CASE( HOT_MODE )
-      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , ERROR , ERRMSG )
+      CALL MR_INIT_FIELD_VARS_N_ACTIVITY_HOT( FILE_XMDF , T , ERROR , ERRMSG )
       IF( ERROR < 0 ) THEN
         WRITE(*,'(/,2X, A ,"!")') TRIM(ERRMSG)
         STOP
       END IF
     END SELECT
-    WRITE(*,'("Done! ")')
+    WRITE(*,'("Done!")')
 
     WRITE(*,'( )')
 
-    T = T_START
-
     WRITE(*,'(8X,"Compute...  0.00%", A , $ )') ACHAR(13)
+
+    DT = DT * COR   ! NONDIMENSIONALIZE DT
 
     DO ITS = 1 , NTSS
 
@@ -183,7 +272,7 @@
      !CALL MR_UPDT_R
       CALL MR_UPDT_VZWW
 
-      T = T + DT/COR
+      T = T + ( DT / COR )
       IF( MOD( ITS , NTSS_OUTPUT ) == 0 ) THEN
 
         CALL MR_OUTPUT( FILE_XMDF , T , ERROR , ERRMSG )
@@ -231,9 +320,13 @@
     USE MR_MOD_OPEN_N_CLOSE_FILE_DEFAULT
     USE MR_MOD_OPEN_N_CLOSE_FILE_XMDF
 
+    USE MR_MOD_OPERATOR_CHAR_STRING
+
     IMPLICIT NONE
 
     CHARACTER( 2**08 )               :: CHAR_ARGUMENT
+    CHARACTER( 2**03 )               :: I_ARG_CHAR
+    INTEGER                          :: I_ARG
 
     INTEGER                          :: FILE_ID
 
@@ -250,10 +343,8 @@
         ERRMSG = "Error in getting command arguments"
         RETURN
       ELSE
-        SELECT CASE( TRIM(CHAR_ARGUMENT) )
-        CASE( "--HELP" , "--HELp" , "--HElp" , "--Help" , "--help" ,   &
-        &      "-HELP" ,  "-HELp" ,  "-HElp" ,  "-Help" ,  "-help"   &
-        )
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--HELP" , "-HELP" , "--H" , "-H" )
           ERROR = - 1
           ERRMSG = "Help information is displayed as below"
           RETURN
@@ -261,64 +352,283 @@
       END IF
     END IF
 
-  ! NUMBER OF COMMAND ARGUMENTS DETECT
-    IF( COMMAND_ARGUMENT_COUNT() < 2 ) THEN
+    I_ARG = 0
+
+    I_ARG = I_ARG + 1
+    IF( COMMAND_ARGUMENT_COUNT() < I_ARG ) THEN
       ERROR = - 1
       ERRMSG = "Not enough command arguments"
       RETURN
-    ELSE IF( COMMAND_ARGUMENT_COUNT() > 2 ) THEN
-      ERROR = - 1
-      ERRMSG = "Too many command arguments"
-      RETURN
-    END IF
-
-  ! GET PROJECT FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 1 , FILE_PRJ , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "Project file's path\name too long"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.1 as project file"
-      RETURN
     ELSE
-    ! VERIFY PROJECT FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , "READ" , FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET XMDF FILE'S PATH\NAME
+      CALL GET_COMMAND_ARGUMENT( I_ARG , FILE_XMDF , STATUS=ERROR )
+      IF( ERROR == - 1 ) THEN
+        ERRMSG = "Mesh file's path\name too long!"
+        RETURN
+      ELSE IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))//" as mesh file"
         RETURN
       ELSE
-        CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+      ! VERIFY XMDF FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_XMDF( FILE_XMDF , FILE_ID , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
           RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+            RETURN
+          END IF
         END IF
       END IF
     END IF
 
-  ! GET XMDF FILE'S PATH\NAME
-    CALL GET_COMMAND_ARGUMENT( 2 , FILE_XMDF , STATUS=ERROR )
-    IF( ERROR == - 1 ) THEN
-      ERRMSG = "Mesh file's path\name too long!"
-      RETURN
-    ELSE IF( ERROR /= 0 ) THEN
-      ERROR = - ABS(ERROR)
-      ERRMSG = "Error in getting command argument no.2 as mesh file"
-      RETURN
+    I_ARG = I_ARG + 1
+    IF( COMMAND_ARGUMENT_COUNT() < I_ARG ) THEN
+     !BLOCK
+    ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+      FILE_PRJ = ""
+     !END BLOCK
     ELSE
-    ! VERIFY XMDF FILE'S OPENING AND CLOSING
-      CALL MR_OPEN_FILE_XMDF( FILE_XMDF , "READ" , FILE_ID , ERROR , ERRMSG )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)//" as mesh file"
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET PROJECT FILE'S PATH\NAME
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
         RETURN
+      ELSE IF( CHAR_ARGUMENT(1:2) == "--" ) THEN
+       !BLOCK
+        I_ARG = I_ARG - 1
+      ! ASSIGN DEFAULT VALUES TO OPTIONAL ARGUMENTS
+        FILE_PRJ = ""
+       !END BLOCK
       ELSE
-        CALL MR_CLOSE_FILE_XMDF( FILE_ID , ERROR , ERRMSG )
+        FILE_PRJ = TRIM(CHAR_ARGUMENT)
+      ! VERIFY PROJECT FILE'S OPENING AND CLOSING
+        CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ , FILE_ID , ERROR , ERRMSG )
         IF( ERROR < 0 ) THEN
-          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_XMDF)
+          ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)//" as project file"
           RETURN
+        ELSE
+          CALL MR_CLOSE_FILE_DEFAULT( FILE_ID , ERROR , ERRMSG )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = TRIM(ERRMSG)//" "//TRIM(FILE_PRJ)
+            RETURN
+          END IF
         END IF
       END IF
     END IF
+
+    I_ARG = I_ARG + 1
+  ! LOOP FOR ALTERNATIVE OPTIONS
+    DO WHILE( I_ARG <= COMMAND_ARGUMENT_COUNT() )
+
+      WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG
+    ! GET ALTERNATIVE OPTION IDENTIFIER
+      CALL GET_COMMAND_ARGUMENT( I_ARG , CHAR_ARGUMENT , STATUS=ERROR )
+      IF( ERROR /= 0 ) THEN
+        ERROR = - ABS(ERROR)
+        ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        RETURN
+      ELSE IF( CHAR_ARGUMENT(1:2) /= "--" ) THEN
+        ERROR = - 1
+        ERRMSG = "There ought to be an alternative option identifier started with ""--"" "   &
+        //"in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+        RETURN
+      ELSE
+
+        SELECT CASE( .MRCHARUPPER.(TRIM(CHAR_ARGUMENT)) )
+        CASE( "--DT" )
+          IF( .NOT. ALLOCATED( DT_ALTER ) ) THEN
+            ALLOCATE( DT_ALTER )
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+        ! GET ALTERNATIVE TIME INTERVAL, IN SECONDS
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) DT_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE IF( DT_ALTER <= 0.0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            END IF
+          END IF
+
+          I_ARG = I_ARG + 2
+
+        CASE( "--PHI" )
+          IF( .NOT. ALLOCATED( PHI_ALTER ) ) THEN
+            ALLOCATE( PHI_ALTER )
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+        ! GET ALTERNATIVE TIME RELAXATION FACTOR
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) PHI_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE IF( PHI_ALTER < 0.0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            END IF
+          END IF
+
+          I_ARG = I_ARG + 2
+
+        CASE( "--NSTEPS" , "--NTSS" )
+          IF( .NOT. ALLOCATED( NTSS_ALTER ) ) THEN
+            ALLOCATE( NTSS_ALTER )
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+        ! GET ALTERNATIVE TOTAL NUMBER OF TIMESTEPS COMPUTED
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            END IF
+          END IF
+
+          I_ARG = I_ARG + 2
+
+        CASE( "--NDSTEPS" , "--NDTSS" )
+          IF( .NOT. ALLOCATED( NTSS_OUTPUT_ALTER ) ) THEN
+            ALLOCATE( NTSS_OUTPUT_ALTER )
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+        ! GET ALTERNATIVE NUMBER OF TIMESTEPS BETWEEN TWO OUTPUTS
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "0123456789" ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) NTSS_OUTPUT_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            ELSE IF( NTSS_OUTPUT_ALTER == 0 ) THEN
+              ERROR = - 1
+              ERRMSG = "Illegal value for command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            END IF
+          END IF
+
+          I_ARG = I_ARG + 2
+
+        CASE( "--T0" )
+          IF( .NOT. ALLOCATED( T_START_ALTER ) ) THEN
+            ALLOCATE( T_START_ALTER )
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          WRITE( I_ARG_CHAR , '(I<LEN(I_ARG_CHAR)>)' ) I_ARG + 1
+        ! GET ALTERNATIVE DEFLECTION ANGLE AT REFERENCE CROSSOVER SECTION, IN DEGREES
+          CALL GET_COMMAND_ARGUMENT( I_ARG + 1 , CHAR_ARGUMENT , STATUS=ERROR )
+          IF( ERROR /= 0 ) THEN
+            ERROR = - ABS(ERROR)
+            ERRMSG = "Error in getting command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE IF( VERIFY( TRIM(CHAR_ARGUMENT) , "-+0123456789Ee." ) /= 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal character in command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+            RETURN
+          ELSE
+            READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) T_START_ALTER
+            IF( ERROR /= 0 ) THEN
+              ERROR = - ABS(ERROR)
+              ERRMSG = "Error in reading a value from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+              RETURN
+            END IF
+          END IF
+
+          I_ARG = I_ARG + 2
+
+        CASE( "--SKIP" )
+          IF( RUN_ON_SKIP_MODE == .FALSE. ) THEN
+            RUN_ON_SKIP_MODE = .TRUE.
+          ELSE
+            ERROR = - 1
+            ERRMSG = TRIM(CHAR_ARGUMENT)//" has been specified more than once"
+            RETURN
+          END IF
+
+          I_ARG = I_ARG + 1
+
+        CASE DEFAULT
+          ERROR = - 1
+          ERRMSG = "Illegal alternative option identifier from command argument no."//TRIM(ADJUSTL(I_ARG_CHAR))
+          RETURN
+        END SELECT
+
+      END IF
+
+    END DO
 
   END SUBROUTINE MR_INIT_COMMAND_LINE
 

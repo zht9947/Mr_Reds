@@ -19,18 +19,15 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_MALLOC_CONSTS_N_REF_PARS
+  MODULE MR_MOD_GEN_INI_ZB_DEFAULT
 
     USE MR_KINDS
-
-    USE MR_DEF_RANKS
-    USE MR_DEF_CONSTS_N_REF_PARS
 
     IMPLICIT NONE
 
     PRIVATE
 
-    PUBLIC :: MR_MALLOC_KK_CONSTS_N_REF_PARS
+    PUBLIC :: MR_GEN_INI_ZB_DEFAULT
 
 !***********************************************************************************************************************************
 
@@ -56,12 +53,25 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS
+  SUBROUTINE MR_GEN_INI_ZB_DEFAULT( HTH , NI , NJ , ZB )
 
     IMPLICIT NONE
 
-    ALLOCATE( SIGMA(1:NK) )
+    REAL   (PARD_KIND) , INTENT(IN ) :: HTH
 
-  END SUBROUTINE MR_MALLOC_KK_CONSTS_N_REF_PARS
+    INTEGER(IJID_KIND) , INTENT(IN ) :: NI , NJ
 
-  END MODULE MR_MOD_MALLOC_CONSTS_N_REF_PARS
+    REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: ZB
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , NJ
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , NI
+        ZB( I , J ) = - HTH
+      END DO
+    END DO
+
+  END SUBROUTINE MR_GEN_INI_ZB_DEFAULT
+
+  END MODULE MR_MOD_GEN_INI_ZB_DEFAULT
