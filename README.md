@@ -1,5 +1,5 @@
-# Mr_Reds
-Reliable and Effective Dynamic Simulation for Meandering Rivers
+# Mr. Reds
+Reliable and Effective Dynamic Simulation for Meandering Rivers (It's just a name!)
 
 ## License
 This project is licensed under the terms of the MIT license.  
