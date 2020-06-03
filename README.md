@@ -11,5 +11,5 @@ Please see this file:
 &emsp;&emsp;|-- MR\_MOD\_FILE\_MANIPULATIONS\\  
 &emsp;&emsp;&emsp;|-- MR\_MOD\_FILE\_XMDF\_MANIPULATIONS\\  
 &emsp;&emsp;&emsp;&emsp;|-- XMDF\\  
-&emsp;&emsp;&emsp;&emsp;&emsp;|-- XMDF.90  
+&emsp;&emsp;&emsp;&emsp;&emsp;|-- XMDF.f90  
 for its license.
