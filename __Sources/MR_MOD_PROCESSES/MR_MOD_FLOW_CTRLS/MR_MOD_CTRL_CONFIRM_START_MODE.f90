@@ -95,7 +95,7 @@
   ! SET CHANNEL-AVERAGED DEPTH
     SET_HTH :   &
     DO
-      WRITE(*,'(2X,"The channel-averaged depth will be set as: ")')
+      WRITE(*,'(2X,"The channel-averaged depth will be set to: ")')
       WRITE(*,'(2X, F16.6 ," m")') HTH
 
       DO

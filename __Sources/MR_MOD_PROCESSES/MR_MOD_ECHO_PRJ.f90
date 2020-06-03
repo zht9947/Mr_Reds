@@ -96,8 +96,8 @@
 
     WRITE(*,'( )')
     WRITE(*,'(4X,"----Slope----")')
-    WRITE(*,'(4X,"    Please confirm that the slope")')
-    WRITE(*,'(4X,"    be along the centerline!")')
+    WRITE(*,'(4X,"    Please confirm that the")')
+    WRITE(*,'(4X,"    slope is along the centerline!")')
     WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
 
     WRITE(*,'( )')
