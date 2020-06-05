@@ -237,6 +237,8 @@
 
                 END SELECT
 
+                LABEL = ""
+
               END IF
 
             END DO
@@ -728,28 +730,6 @@
                                     RETURN
                                   END IF
 
-                                CASE( "CORIOLIS FREQUENCY" )
-                                  BACKSPACE( FILE_PRJ_ID )
-
-                                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , COR
-                                  IF( ERROR > 0 ) THEN
-                                    ERROR = - ERROR
-                                    ERRMSG = "Error in reading Coriolis Frequency "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                                    //"when initializing Constants and Reference Parameters\"   &
-                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
-                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                                    RETURN
-                                  ELSE IF( COR <= 0.0 ) THEN
-                                    ERROR = - 1
-                                    ERRMSG = "Illegal value for Coriolis Frequency "   &
-                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                                    //"when initializing Constants and Reference Parameters\"   &
-                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
-                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
-                                    RETURN
-                                  END IF
-
                                 CASE( "GRAVITATIONAL ACCELERATION" )
                                   BACKSPACE( FILE_PRJ_ID )
 
@@ -765,6 +745,28 @@
                                   ELSE IF( GR <= 0.0 ) THEN
                                     ERROR = - 1
                                     ERRMSG = "Illegal value for Gravitational Acceleration "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  END IF
+
+                                CASE( "CORIOLIS FREQUENCY" )
+                                  BACKSPACE( FILE_PRJ_ID )
+
+                                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , COR2
+                                  IF( ERROR > 0 ) THEN
+                                    ERROR = - ERROR
+                                    ERRMSG = "Error in reading Coriolis Frequency "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( COR2 <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Coriolis Frequency "   &
                                     //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                                     //"when initializing Constants and Reference Parameters\"   &
                                     //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
@@ -819,6 +821,28 @@
                               ELSE
 
                                 SELECT CASE( .MRCHARUPPER.(TRIM(ALIAS)) )
+                                CASE( "REFERENCE FREQUENCY" )
+                                  BACKSPACE( FILE_PRJ_ID )
+
+                                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , ALIAS , COR
+                                  IF( ERROR > 0 ) THEN
+                                    ERROR = - ERROR
+                                    ERRMSG = "Error in reading Reference Frequency "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  ELSE IF( COR <= 0.0 ) THEN
+                                    ERROR = - 1
+                                    ERRMSG = "Illegal value for Reference Frequency "   &
+                                    //"from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+                                    //"when initializing Constants and Reference Parameters\"   &
+                                    //"Physical Constants from file "//TRIM(FILE_PRJ_NAME)
+                                    CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+                                    RETURN
+                                  END IF
+
                                 CASE( "REFERENCE HORIZONTAL DIMENSION" )
                                   BACKSPACE( FILE_PRJ_ID )
 

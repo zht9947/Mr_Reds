@@ -85,9 +85,10 @@
     WRITE(*,'(4X,"                                 Sediment porosity                  : ", F16.6       )') PS
     WRITE(*,'(4X,"  ----Physical Constants----")')
     WRITE(*,'(4X,"                               Von Karman constant                  : ", F16.6       )') KAR
-    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",ES20.6       )') COR
     WRITE(*,'(4X,"                        Gravitational acceleration [m/s^2]          : ", F16.6       )') GR
+    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",ES20.6       )') COR2
     WRITE(*,'(4X,"  ----Reference Parameters----")')
+    WRITE(*,'(4X,"                               Reference frequency [1/s]            : ",ES20.6       )') COR
     WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ", F16.6       )') XYR
     WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ", F16.6       )') ZR
     WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ", F16.6       )') UVR
