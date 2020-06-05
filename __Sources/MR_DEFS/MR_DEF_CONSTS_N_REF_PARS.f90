@@ -25,11 +25,12 @@
 !                                      \\ ABOVE ARE SEDIMENT PHYSICAL PROPERTIES
 !
 !                             KAR    :    VON KARMAN CONSTANT
-!                             COR    :    CORIOLIS FREQUENCY
+!                            COR2    :    CORIOLIS FREQUENCY
 !                              GR    :    GRAVITATIONAL ACCELERATION
 !
 !                                      \\ ABOVE ARE PHYSICAL CONSTANTS
 !
+!                             COR    :    REFERENCE FREQUENCY
 !                             XYR    :    REFERENCE HORIZONTAL DIMENSION,
 !                                         GENERALLY AS AVERAGE CELL DISTANCE
 !                              ZR    :    REFERENCE VERTICAL DIMENSION,
@@ -101,9 +102,10 @@
     REAL   (PARD_KIND) :: PS    =    0.4
 
     REAL   (PARD_KIND) :: KAR   =    0.40
-    REAL   (PARD_KIND) :: COR   =    1.0
+    REAL   (PARD_KIND) :: COR2  =    7.292124E-5
     REAL   (PARD_KIND) :: GR    =    9.80665
 
+    REAL   (PARD_KIND) :: COR   =    1.0
     REAL   (PARD_KIND) :: XYR   =    1.0
     REAL   (PARD_KIND) :: ZR    =    1.0
     REAL   (PARD_KIND) :: UVR   =    1.0

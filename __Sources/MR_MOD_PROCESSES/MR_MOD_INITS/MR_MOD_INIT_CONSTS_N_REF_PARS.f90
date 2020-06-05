@@ -70,6 +70,8 @@
 
     INTEGER(KSID_KIND) :: KS
 
+    COR2 = COR2 / COR
+
   ! CALCULATE REFERENCE PARAMETERS
     WR = UVR / ( XYR / ZR )
     SR = COR * UVR * XYR / GR
