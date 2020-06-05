@@ -237,8 +237,6 @@
 
                 END SELECT
 
-                LABEL = ""
-
               END IF
 
             END DO
