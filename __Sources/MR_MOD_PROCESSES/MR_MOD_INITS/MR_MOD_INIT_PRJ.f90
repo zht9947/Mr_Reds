@@ -96,6 +96,8 @@
 
       REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
 
+      LABEL = "" ; ALIAS = ""
+
       READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
       IF( ERROR > 0 ) THEN
         ERROR = - ERROR
@@ -111,6 +113,8 @@
           DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
             REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+            LABEL = "" ; ALIAS = ""
 
             READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
             IF( ERROR > 0 ) THEN
@@ -196,11 +200,13 @@
 
               REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
 
+              LABEL = "" ; ALIAS = ""
+
               READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
               IF( ERROR > 0 ) THEN
                 ERROR = - ERROR
                 ERRMSG = "Error in acquiring the label of record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
-                //"when initializing Timing from file "//TRIM(FILE_PRJ_NAME)
+                //"when initializing Sediment Sizes from file "//TRIM(FILE_PRJ_NAME)
                 CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                 RETURN
               ELSE
@@ -255,6 +261,8 @@
               DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
                 REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+                LABEL = "" ; ALIAS = ""
 
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
@@ -392,6 +400,8 @@
 
                 REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
 
+                LABEL = "" ; ALIAS = ""
+
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
@@ -448,6 +458,8 @@
 
                 REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
 
+                LABEL = "" ; ALIAS = ""
+
                 READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                 IF( ERROR > 0 ) THEN
                   ERROR = - ERROR
@@ -480,6 +492,8 @@
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
                           REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+                          LABEL = "" ; ALIAS = ""
 
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
@@ -570,6 +584,8 @@
 
                           REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
 
+                          LABEL = "" ; ALIAS = ""
+
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
                             ERROR = - ERROR
@@ -658,6 +674,8 @@
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
                           REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+                          LABEL = "" ; ALIAS = ""
 
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
@@ -769,6 +787,8 @@
                         DO WHILE( .NOT. EOF(FILE_PRJ_ID) )
 
                           REC_ID = REC_ID + 1 ; WRITE(REC_ID_CHAR,'(I<LEN(REC_ID_CHAR)>)') REC_ID
+
+                          LABEL = "" ; ALIAS = ""
 
                           READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL
                           IF( ERROR > 0 ) THEN
