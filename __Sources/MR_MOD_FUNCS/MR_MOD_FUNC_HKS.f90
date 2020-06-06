@@ -65,7 +65,7 @@
 
     REAL(FDRD_KIND) :: HDKS
 
-    HDKS = 2.0 * ( DKS * DSPAR )
+    HDKS = 3.0 * ( DKS * DSPAR )
 
   END FUNCTION MR_FUNC_HDKS
 
