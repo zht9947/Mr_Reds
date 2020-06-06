@@ -101,8 +101,12 @@
     WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
 
     WRITE(*,'( )')
-    WRITE(*,'(4X,"    GRID : ", I05 ," x ", I05 ," x ", I05 )') NI , NJ , NK
-    WRITE(*,'(4X,"    GRAINS : ", <NKS>( F10.3 ," mm", : ,", ") )') D0*1000.0
+    WRITE(*,'(4X,"    GRID SIZE : ", I05 ," x ", I05 ," x ", I05 )') NI , NJ , NK
+    IF( NKS > 0 ) THEN
+      WRITE(*,'(4X,"    GRAIN SIZE : ", <NKS>( F10.3 ," mm", : ,", ") )') D0(1:NKS)*1000.0
+    ELSE
+      WRITE(*,'(4X,"    GRAIN ROUGHNESS : ", F10.3 ," mm")') D0(1)*1000.0
+    END IF
 
   END SUBROUTINE MR_ECHO_PRJ
 

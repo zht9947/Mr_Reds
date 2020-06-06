@@ -92,6 +92,7 @@
     BPAR = RB * RB / FR
     SURPAR = FR / RB
     SLOPEPAR = ( XYR / ZR ) / SURPAR
+    DSPAR = ( ( V0 * V0) / ( GR * (SS-1.0) ) )**(1.0_PARD_KIND/3.0_PARD_KIND) / ZR
 
    !BLOCK
     IF( NK <= 0 ) THEN
@@ -109,16 +110,18 @@
    !END BLOCK
 
    !BLOCK
-    IF( NKS <= 0 ) THEN
+    IF( NKS < 0 ) THEN
       ERROR = - 1
       ERRMSG = "Invalid number of sediment sizes"
       RETURN
+    ELSE IF( NKS == 0 ) THEN
+      CONTINUE
     ELSE
     ! CALCULATE DS, TCRS, WS & RBS
-     !DO KS = 1 , NKS
-        DS = MR_FUNC_DS( D0 )
-        TCRS = MR_FUNC_TCRS( D0 , DS )
-     !END DO
+      DO KS = 1 , NKS
+        DS(KS) = MR_FUNC_DS( D0(KS) )
+        TCRS(KS) = MR_FUNC_TCRS( DS(KS) )
+      END DO
     END IF
    !END BLOCK
 

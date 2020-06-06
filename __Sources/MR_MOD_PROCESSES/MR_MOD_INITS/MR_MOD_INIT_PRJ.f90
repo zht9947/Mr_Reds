@@ -82,8 +82,6 @@
     CHARACTER( 2**05 )               :: LABEL
     CHARACTER( 2**08 )               :: ALIAS
 
-    INTEGER(KKID_KIND)               :: K
-
     REC_ID = 0
 
     CALL MR_OPEN_FILE_DEFAULT( FILE_PRJ_NAME , FILE_PRJ_ID , ERROR , ERRMSG , READONLY=.TRUE. )
@@ -122,7 +120,7 @@
             ELSE
 
               SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+              CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" )
                 BACKSPACE( FILE_PRJ_ID )
                 REC_ID = REC_ID - 1
                 EXIT
@@ -205,29 +203,29 @@
                 RETURN
               ELSE
                 SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+                CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" )
                   BACKSPACE( FILE_PRJ_ID )
                   REC_ID = REC_ID - 1
                   EXIT
                 CASE( "DKS" )
                   BACKSPACE( FILE_PRJ_ID )
 
-                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0
+                  READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0(1:NKS)
                   IF( ERROR > 0 ) THEN
                     ERROR = - ERROR
                     ERRMSG = "Error in reading value of Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
-                  ELSE IF( D0 <= 0.0 ) THEN
+                  ELSE IF( MINVAL(D0(1:NKS)) <= 0.0 ) THEN
                     ERROR = - 1
                     ERRMSG = "Illegal value for Sediment Sizes from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
                     //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
+                  ELSE
+                    D0 = D0 / 1000.0
                   END IF
-
-                  D0 = D0 / 1000.0
 
                 END SELECT
 
@@ -235,6 +233,27 @@
 
             END DO
 
+          END IF
+
+        CASE( "HKS" )
+          BACKSPACE( FILE_PRJ_ID )
+
+          READ( FILE_PRJ_ID , * , IOSTAT=ERROR ) LABEL , D0(1)
+          IF( ERROR > 0 ) THEN
+            ERROR = - ERROR
+            ERRMSG = "Error in reading Bed Roughness from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+            CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+            RETURN
+          ELSE IF( D0(1) < 0 ) THEN
+            ERROR = - 1
+            ERRMSG = "Illegal value for Bed Roughness from record no."//TRIM(ADJUSTL(REC_ID_CHAR))//" "   &
+            //"when initializing it from file "//TRIM(FILE_PRJ_NAME)
+            CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
+            RETURN
+          ELSE
+            D0(1) = D0(1) / 1000.0
+            NKS = 0
           END IF
 
         CASE( "TAB" )
@@ -266,7 +285,7 @@
                 ELSE
 
                   SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -402,7 +421,7 @@
                 ELSE
 
                   SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -458,7 +477,7 @@
                 ELSE
 
                   SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" )
+                  CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" )
                     BACKSPACE( FILE_PRJ_ID )
                     REC_ID = REC_ID - 1
                     EXIT
@@ -492,7 +511,7 @@
                           ELSE
 
                             SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -581,7 +600,7 @@
                           ELSE
 
                             SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -670,7 +689,7 @@
                           ELSE
 
                             SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT
@@ -781,7 +800,7 @@
                           ELSE
 
                             SELECT CASE( .MRCHARUPPER.(TRIM(LABEL)) )
-                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "TAB" , "TAC" )
+                            CASE( "PRJMETADATA" , "ENDPRJMETADATA" , "NKK" , "NKS" , "HKS" , "TAB" , "TAC" )
                               BACKSPACE( FILE_PRJ_ID )
                               REC_ID = REC_ID - 1
                               EXIT

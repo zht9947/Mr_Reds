@@ -35,7 +35,8 @@
     PUBLIC :: MR_UPDT_TBUV
 
     REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:,  :  ) :: UV_MOD
-    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBFUV_MOD , TBUV_MOD
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: TBUV_MOD , TBFUV_MOD
+    REAL   (FDRD_KIND) , ALLOCATABLE , DIMENSION(:,:      ) :: HKS , HDKS
 
 !***********************************************************************************************************************************
 
@@ -63,6 +64,7 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_UPDT_TBUV
 
+    USE MR_MOD_FUNC_HKS
     USE MR_MOD_FUNC_TBUV
 
     USE MR_MOD_OPERATOR_SS
@@ -73,34 +75,105 @@
     INTEGER(IJID_KIND) :: I , J
     INTEGER            :: DIM
 
-    ALLOCATE( UV_MOD(1:NI1(NI,FDRD_KIND),1:NJ,1:1) , TBFUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) , TBUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) )
+    ALLOCATE( UV_MOD(1:NI1(NI,FDRD_KIND),1:NJ,1:1) )
 
-      UV_MOD(:,:, 1 ) = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UV(:,:,1:2, 1 ) ) )
+    UV_MOD(:,:, 1 ) = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. UV(:,:,1:2, 1 ) ) )
 
-      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
-      DO DIM = 1 , 2
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            TBFUV( I , J ,DIM) = MR_FUNC_TBFUV_COMP( TBFUV_MOD( I , J ) , D0 , H( I , J ) ,   &
-            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+      IF( NKS == 0 ) THEN
+
+        ALLOCATE( TBUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) , HKS(1:NI1(NI,FDRD_KIND),1:NJ) )
+
+          TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
+          !BLOCK
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                HKS( I , J ) = D0(1) / ZR
+              END DO
+            END DO
+          !END BLOCK
+          DO DIM = 1 , 2
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( SIGMA( 1 ) ,   &
+                & H( I , J ) , HKS( I , J ) ,   &
+                & HKS( I , J ) , TBUV_MOD( I , J ) ,   &
+                & UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+              END DO
+            END DO
           END DO
-        END DO
-      END DO
 
-      TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
-      TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
-      DO DIM = 1 , 2
-        DO J = 1 , NJ
-         !DIR$ VECTOR ALIGNED
-          DO I = 1 , NI
-            TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( TBUV_MOD( I , J ) , TBFUV_MOD( I , J ) , D0 , TCRS , H( I , J ) ,   &
-            & SIGMA( 1 ) , UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+          DO DIM = 1 , 2
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                TBFUV( I , J ,DIM) = TBUV( I , J ,DIM)
+              END DO
+            END DO
           END DO
-        END DO
-      END DO
 
-    DEALLOCATE( UV_MOD , TBFUV_MOD , TBUV_MOD )
+        DEALLOCATE( TBUV_MOD , HKS )
+
+      ELSE
+
+        ALLOCATE( TBUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) , HKS(1:NI1(NI,FDRD_KIND),1:NJ) ,   &
+        & TBFUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) , HDKS(1:NI1(NI,FDRD_KIND),1:NJ) )
+
+          TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
+          TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
+          !BLOCK
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                HDKS( I , J ) = MR_FUNC_HDKS( DS(1) )
+              END DO
+            END DO
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                HKS( I , J ) = MR_FUNC_HKS( DS(1) , TCRS(1) , H( I , J ) , TBFUV_MOD( I , J ) )
+              END DO
+            END DO
+          !END BLOCK
+          DO DIM = 1 , 2
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                TBFUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( SIGMA( 1 ) ,   &
+                & H( I , J ) , HDKS( I , J ) ,   &
+                & HKS( I , J ) , TBUV_MOD( I , J ) ,   &
+                & UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+              END DO
+            END DO
+          END DO
+
+          TBFUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBFUV ) )
+          !BLOCK
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                HKS( I , J ) = MR_FUNC_HKS( DS(1) , TCRS(1) , H( I , J ) , TBFUV_MOD( I , J ) )
+              END DO
+            END DO
+          !END BLOCK
+          DO DIM = 1 , 2
+            DO J = 1 , NJ
+             !DIR$ VECTOR ALIGNED
+              DO I = 1 , NI
+                TBUV( I , J ,DIM) = MR_FUNC_TBUV_COMP( SIGMA( 1 ) ,   &
+                & H( I , J ) , HKS( I , J ) ,   &
+                & HKS( I , J ) , TBUV_MOD( I , J ) ,   &
+                & UV_MOD( I , J , 1 ) , UV( I , J ,DIM, 1 ) )
+              END DO
+            END DO
+          END DO
+
+        DEALLOCATE( TBUV_MOD , TBFUV_MOD , HKS , HDKS )
+
+      END IF
+
+    DEALLOCATE( UV_MOD )
 
   END SUBROUTINE MR_UPDT_TBUV
 

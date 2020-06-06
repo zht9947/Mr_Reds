@@ -18,7 +18,7 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  MODULE MR_MOD_FUNC_TCRS
+  MODULE MR_MOD_FUNC_HKS
 
     USE MR_KINDS
 
@@ -28,12 +28,8 @@
 
     PRIVATE
 
-    PUBLIC :: MR_FUNC_TCRS
-
-    INTERFACE MR_FUNC_TCRS
-      MODULE PROCEDURE MR_FUNC_TCRS_PARD_KIND
-      MODULE PROCEDURE MR_FUNC_TCRS_FDRD_KIND
-    END INTERFACE
+    PUBLIC :: MR_FUNC_HDKS
+    PUBLIC :: MR_FUNC_HKS
 
 !***********************************************************************************************************************************
 
@@ -59,20 +55,19 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_TCRS_PARD_KIND( DS ) RESULT( TCRS )
+  FUNCTION MR_FUNC_HDKS( DKS ) RESULT( HDKS )
+
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM( DKS ) :: MR_FUNC_HDKS
 
     IMPLICIT NONE
 
-    REAL(PARD_KIND) , INTENT(IN ) :: DS
+    REAL(PARD_KIND) , INTENT(IN ) :: DKS
 
-    REAL(PARD_KIND) :: TCRS
+    REAL(FDRD_KIND) :: HDKS
 
-    TCRS = RBT / FR * (SS-1.0) * ( DS * DSPAR ) *   &
-    ( 0.130 *           EXP( -0.015 * DS * DS ) / (DS**0.392)   &
-    + 0.045 * ( 1.000 - EXP( -0.068 *   DS    )               )   &
-    )
+    HDKS = 2.0 * ( DKS * DSPAR )
 
-  END FUNCTION MR_FUNC_TCRS_PARD_KIND
+  END FUNCTION MR_FUNC_HDKS
 
 !***********************************************************************************************************************************
 ! UNIT:
@@ -94,19 +89,28 @@
 !   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
 !
 !***********************************************************************************************************************************
-  FUNCTION MR_FUNC_TCRS_FDRD_KIND( DS ) RESULT( TCRS )
+  FUNCTION MR_FUNC_HKS( DKS , TCRKS , H , TBFUV_MOD ) RESULT( HKS )
+
+   !DIR$ ATTRIBUTES VECTOR : UNIFORM( DKS , TCRKS ) :: MR_FUNC_HKS
 
     IMPLICIT NONE
 
-    REAL(FDRD_KIND) , INTENT(IN ) :: DS
+    REAL(PARD_KIND) , INTENT(IN ) :: DKS , TCRKS
+    REAL(FDRD_KIND) , INTENT(IN ) :: H , TBFUV_MOD
 
-    REAL(FDRD_KIND) :: TCRS
+    REAL(PARD_KIND) :: TRANS_STATE
+    REAL(PARD_KIND) :: SDUNE , HDUNE
 
-    TCRS = RBT / FR * (SS-1.0) * ( DS * DSPAR ) *   &
-    ( 0.130 *           EXP( -0.015 * DS * DS ) / (DS**0.392)   &
-    + 0.045 * ( 1.000 - EXP( -0.068 *   DS    )               )   &
-    )
+    REAL(FDRD_KIND) :: HKS
 
-  END FUNCTION MR_FUNC_TCRS_FDRD_KIND
+    TRANS_STATE = MIN( MAX( TBFUV_MOD / TCRKS - 1.0 , 0.0 ) , 25.0 )
 
-  END MODULE MR_MOD_FUNC_TCRS
+    SDUNE = 0.015 * ( ( ( DKS * DSPAR ) / H )**0.3 ) *   &
+    & ( 1.0 - EXP( -0.5 * TRANS_STATE ) ) * ( 25.0 - TRANS_STATE )
+    HDUNE = 7.3 * H * SDUNE
+
+    HKS = MR_FUNC_HDKS( DKS ) + 1.1 * HDUNE * ( 1.0 - EXP( -25.0 * SDUNE ) )
+
+  END FUNCTION MR_FUNC_HKS
+
+  END MODULE MR_MOD_FUNC_HKS

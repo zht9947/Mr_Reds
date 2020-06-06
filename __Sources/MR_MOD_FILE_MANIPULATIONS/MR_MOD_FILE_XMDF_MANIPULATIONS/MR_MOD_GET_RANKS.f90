@@ -157,12 +157,16 @@
         ERRMSG = "Error in opening /PROPERTIES/By Layers"
       ELSE
 
-        CALL XF_READ_PROPERTY_INT( GROUP_ID , "Num Layers" , 1 , NK_ARRAY , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting the number of layers from /PROPERTIES/By Layers"
-        ELSE
-          NK = NK_ARRAY(1)
-        END IF
+        !BLOCK
+
+          CALL XF_READ_PROPERTY_INT( GROUP_ID , "Num Layers" , 1 , NK_ARRAY , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in getting the number of layers from /PROPERTIES/By Layers"
+          ELSE
+            NK = NK_ARRAY(1)
+          END IF
+
+        !END BLOCK
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
@@ -234,12 +238,16 @@
         ERRMSG = "Error in opening /PROPERTIES/By Sediment Sizes"
       ELSE
 
-        CALL XF_READ_PROPERTY_INT( GROUP_ID , "Num Sediment Sizes" , 1 , NKS_ARRAY , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting the number of sediment sizes from /PROPERTIES/By Sediment Sizes"
-        ELSE
-          NKS = NKS_ARRAY(1)
-        END IF
+        !BLOCK
+
+          CALL XF_READ_PROPERTY_INT( GROUP_ID , "Num Sediment Sizes" , 1 , NKS_ARRAY , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in getting the number of sediment sizes from /PROPERTIES/By Sediment Sizes"
+          ELSE
+            NKS = NKS_ARRAY(1)
+          END IF
+
+        !END BLOCK
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
