@@ -97,12 +97,16 @@
 
       IF( ERROR >= 0 ) THEN
 
-        NK_ARRAY(1) = NK
+        !BLOCK
 
-        CALL XF_WRITE_PROPERTY_INT( GROUP_ID , "Num Layers" , 1 , NK_ARRAY , COMPRESSION , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in writing the number of layers into /PROPERTIES/By Layers"
-        END IF
+          NK_ARRAY(1) = NK
+
+          CALL XF_WRITE_PROPERTY_INT( GROUP_ID , "Num Layers" , 1 , NK_ARRAY , COMPRESSION , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in writing the number of layers into /PROPERTIES/By Layers"
+          END IF
+
+        !END BLOCK
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
@@ -184,12 +188,16 @@
 
       IF( ERROR >= 0 ) THEN
 
-        NKS_ARRAY(1) = NKS
+        !BLOCK
 
-        CALL XF_WRITE_PROPERTY_INT( GROUP_ID , "Num Sediment Sizes" , 1 , NKS_ARRAY , COMPRESSION , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in writing the number of sediment sizes into /PROPERTIES/By Sediment Sizes"
-        END IF
+          NKS_ARRAY(1) = NKS
+
+          CALL XF_WRITE_PROPERTY_INT( GROUP_ID , "Num Sediment Sizes" , 1 , NKS_ARRAY , COMPRESSION , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in writing the number of sediment sizes into /PROPERTIES/By Sediment Sizes"
+          END IF
+
+        !END BLOCK
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
@@ -242,9 +250,10 @@
     INTEGER                          :: PROP_ID , GROUP_ID
 
     INTEGER(KSID_KIND) , INTENT(IN ) :: NKS
+    INTEGER                          :: NSIZE
 
-    REAL   (PARD_KIND) , INTENT(IN ) :: D0
-    REAL   (8)                       :: D0_ARRAY(1:NKS)
+    REAL   (PARD_KIND) , INTENT(IN ) , DIMENSION(:) :: D0
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:) :: D0_ARRAY
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -273,12 +282,18 @@
 
       IF( ERROR >= 0 ) THEN
 
-        D0_ARRAY(1) = D0 * 1000.0
+        ALLOCATE( D0_ARRAY(1:SIZE(D0)) )
 
-        CALL XF_WRITE_PROPERTY_DOUBLE( GROUP_ID , "Sediment Sizes" , NKS , D0_ARRAY , COMPRESSION , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in writing the value of sediment sizes into /PROPERTIES/By Sediment Sizes"
-        END IF
+          NSIZE = MAX( NKS , 1 )
+
+          D0_ARRAY = D0 * 1000.0
+
+          CALL XF_WRITE_PROPERTY_DOUBLE( GROUP_ID , "Sediment Sizes" , NSIZE , D0_ARRAY(1:NSIZE) , COMPRESSION , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in writing the value of sediment sizes into /PROPERTIES/By Sediment Sizes"
+          END IF
+
+        DEALLOCATE( D0_ARRAY )
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN
@@ -350,12 +365,16 @@
 
     IF( ERROR >= 0 ) THEN
 
-      SLOPE_ARRAY(1) = SLOPE
+      !BLOCK
 
-      CALL XF_WRITE_PROPERTY_DOUBLE( PROP_ID , "Slope" , 1 , SLOPE_ARRAY , COMPRESSION , ERROR )
-      IF( ERROR < 0 ) THEN
-        ERRMSG = "Error in writing the value of slope into /PROPERTIES"
-      END IF
+        SLOPE_ARRAY(1) = SLOPE
+
+        CALL XF_WRITE_PROPERTY_DOUBLE( PROP_ID , "Slope" , 1 , SLOPE_ARRAY , COMPRESSION , ERROR )
+        IF( ERROR < 0 ) THEN
+          ERRMSG = "Error in writing the value of slope into /PROPERTIES"
+        END IF
+
+      !END BLOCK
 
       CALL XF_CLOSE_GROUP( PROP_ID , ERROR_DUMMY )
       IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN

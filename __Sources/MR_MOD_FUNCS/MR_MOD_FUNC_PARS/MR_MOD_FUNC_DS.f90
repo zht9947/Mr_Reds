@@ -67,7 +67,7 @@
 
     REAL(PARD_KIND) :: DS
 
-    DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0_PARD_KIND/3.0_PARD_KIND)
+    DS = D0 / ( DSPAR * ZR )
 
   END FUNCTION MR_FUNC_DS_PARD_KIND
 
@@ -99,7 +99,7 @@
 
     REAL(FDRD_KIND) :: DS
 
-    DS = D0 * ( GR * (SS-1.0) / (V0*V0) )**(1.0_PARD_KIND/3.0_PARD_KIND)
+    DS = D0 / ( DSPAR * ZR )
 
   END FUNCTION MR_FUNC_DS_FDRD_KIND
 

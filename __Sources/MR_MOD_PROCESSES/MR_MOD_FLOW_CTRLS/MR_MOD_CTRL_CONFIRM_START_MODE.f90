@@ -224,10 +224,10 @@
                         WRITE(*,'(12X,"Illegal character detected!")')
                       !END BLOCK
                     ELSE
-                      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) D0
+                      READ( CHAR_ARGUMENT , * , IOSTAT=ERROR ) D0(1:NKS)
                       IF( ERROR /= 0 ) THEN
                         WRITE(*,'(12X,"Error in reading a value!")')
-                      ELSE IF( D0 <= 0.0 ) THEN
+                      ELSE IF( MINVAL(D0(1:NKS)) <= 0.0 ) THEN
                         WRITE(*,'(12X,"Illegal value!")')
                       ELSE
                         D0 = D0 / 1000.0
