@@ -1,0 +1,38 @@
+PRJMETADATA
+TITLE "A. M. F. da Silva's Run 110_2/3"
+ABSTRACT "from Turbulent Flow in Sine-Generated Meandering Channels, Ph.D. Thesis, 1995."
+ENDPRJMETADATA
+NKK 10      (Number of layers)
+HKS 4.4 mm     (Bed roughness)
+//////////////////////////////
+/// ALL below are in SI units:
+TAB "Timing"
+VAR                                         "Time interval"        0.010000
+VAR                                         "Starting time"        0.00000
+VAR                    "Total number of timesteps computed"    10000
+VAR               "Number of timesteps between two outputs"      100
+VAR                                "Time relaxation factor"        1.00
+***
+TAB "Constants and Reference Parameters"
+TAC   "Water Physical Properties"
+VAR                                         "Water density"        1.000e+3
+VAR                             "Water kinematic viscosity"        1.00e-6
+TAC   "Sediment Physical Properties"
+VAR                             "Sediment specific gravity"        2.65          (not used)
+VAR                                     "Sediment porosity"        0.40          (not used)
+TAC   "Physical Constants"
+VAR                                   "Von Karman constant"        0.40
+VAR                            "Gravitational acceleration"        9.80665
+VAR                                    "Coriolis frequency"        7.292124e-5   (not used)
+TAC   "Reference Parameters"
+VAR                                   "Reference frequency"        1.00
+VAR                        "Reference horizontal dimension"        0.04          
+VAR                          "Reference vertical dimension"        0.03
+VAR                         "Reference horizontal velocity"        1.00
+VAR                    "Reference eddy kinematic viscosity"        1.00e-6
+VAR              "Reference water-sediment mixture density"        1.200e+3      (not used)
+***
+TAB "Slope"
+///  Please confirm that the
+///  slope is along the centerline!  
+VAR                                                 "Slope"        0.892857e-3
