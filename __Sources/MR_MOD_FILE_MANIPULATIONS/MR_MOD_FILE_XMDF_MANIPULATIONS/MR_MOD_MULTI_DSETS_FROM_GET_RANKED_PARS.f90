@@ -63,9 +63,10 @@
     INTEGER                          :: PROP_ID , GROUP_ID
 
     INTEGER(KSID_KIND) , INTENT(IN ) :: NKS
+    INTEGER                          :: NSIZE
 
-    REAL   (PARD_KIND) , INTENT(OUT) :: D0
-    REAL   (8)                       :: D0_ARRAY(1:NKS)
+    REAL   (PARD_KIND) , INTENT(OUT) , DIMENSION(:) :: D0
+    REAL   (8)         , ALLOCATABLE , DIMENSION(:) :: D0_ARRAY
 
     INTEGER            , INTENT(OUT) :: ERROR
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
@@ -84,12 +85,18 @@
         ERRMSG = "Error in opening /PROPERTIES/By Sediment Sizes"
       ELSE
 
-        CALL XF_READ_PROPERTY_DOUBLE( GROUP_ID , "Sediment Sizes" , NKS , D0_ARRAY , ERROR )
-        IF( ERROR < 0 ) THEN
-          ERRMSG = "Error in getting the value of sediment sizes from /PROPERTIES/By Sediment Sizes"
-        ELSE
-          D0 = D0_ARRAY(1) / 1000.0
-        END IF
+        ALLOCATE( D0_ARRAY(1:SIZE(D0)) )
+
+          NSIZE = MAX( NKS , 1 )
+
+          CALL XF_READ_PROPERTY_DOUBLE( GROUP_ID , "Sediment Sizes" , NSIZE , D0_ARRAY(1:NSIZE) , ERROR )
+          IF( ERROR < 0 ) THEN
+            ERRMSG = "Error in getting the value of sediment sizes from /PROPERTIES/By Sediment Sizes"
+          ELSE
+            D0 = D0_ARRAY / 1000.0
+          END IF
+
+        DEALLOCATE( D0_ARRAY )
 
         CALL XF_CLOSE_GROUP( GROUP_ID , ERROR_DUMMY )
         IF( ERROR_DUMMY < 0 .AND. ERROR >= 0 ) THEN

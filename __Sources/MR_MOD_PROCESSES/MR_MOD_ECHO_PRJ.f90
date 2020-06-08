@@ -85,9 +85,10 @@
     WRITE(*,'(4X,"                                 Sediment porosity                  : ", F16.6       )') PS
     WRITE(*,'(4X,"  ----Physical Constants----")')
     WRITE(*,'(4X,"                               Von Karman constant                  : ", F16.6       )') KAR
-    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",ES20.6       )') COR
     WRITE(*,'(4X,"                        Gravitational acceleration [m/s^2]          : ", F16.6       )') GR
+    WRITE(*,'(4X,"                                Coriolis frequency [1/s]            : ",ES20.6       )') COR2
     WRITE(*,'(4X,"  ----Reference Parameters----")')
+    WRITE(*,'(4X,"                               Reference frequency [1/s]            : ",ES20.6       )') COR
     WRITE(*,'(4X,"                    Reference horizontal dimension [m]              : ", F16.6       )') XYR
     WRITE(*,'(4X,"                      Reference vertical dimension [m]              : ", F16.6       )') ZR
     WRITE(*,'(4X,"                     Reference horizontal velocity [m/s]            : ", F16.6       )') UVR
@@ -101,8 +102,12 @@
     WRITE(*,'(4X,"                                             Slope                  : ",ES20.6       )') SLOPE
 
     WRITE(*,'( )')
-    WRITE(*,'(4X,"    GRID : ", I05 ," x ", I05 ," x ", I05 )') NI , NJ , NK
-    WRITE(*,'(4X,"    GRAINS : ", <NKS>( F10.3 ," mm", : ,", ") )') D0*1000.0
+    WRITE(*,'(4X,"    GRID SIZE : ", I05 ," x ", I05 ," x ", I05 )') NI , NJ , NK
+    IF( NKS > 0 ) THEN
+      WRITE(*,'(4X,"    GRAIN SIZE : ", <NKS>( F10.3 ," mm", : ,", ") )') D0(1:NKS)*1000.0
+    ELSE
+      WRITE(*,'(4X,"    GRAIN ROUGHNESS : ", F10.3 ," mm")') D0(1)*1000.0
+    END IF
 
   END SUBROUTINE MR_ECHO_PRJ
 

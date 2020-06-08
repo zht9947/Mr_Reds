@@ -25,11 +25,12 @@
 !                                      \\ ABOVE ARE SEDIMENT PHYSICAL PROPERTIES
 !
 !                             KAR    :    VON KARMAN CONSTANT
-!                             COR    :    CORIOLIS FREQUENCY
+!                            COR2    :    CORIOLIS FREQUENCY
 !                              GR    :    GRAVITATIONAL ACCELERATION
 !
 !                                      \\ ABOVE ARE PHYSICAL CONSTANTS
 !
+!                             COR    :    REFERENCE FREQUENCY
 !                             XYR    :    REFERENCE HORIZONTAL DIMENSION,
 !                                         GENERALLY AS AVERAGE CELL DISTANCE
 !                              ZR    :    REFERENCE VERTICAL DIMENSION,
@@ -59,7 +60,8 @@
 !                             FRD    :    SQUARED DENSIMETRIC FROUDE NUMBER, FRD = FR * R0 / ( RR - R0 )
 !                            BPAR    :    BETA PARAMETER, BPAR = RB * RB / FR
 !                          SURPAR    :    PARAMETER THAT MEASURES FREE SURFACE ELEVATION AS BED ELEVATION, SURPAR = FR / RB
-!                        SLOPEPAR    :    PARAMETER THAT MEASURES BED SLOPE AS FREE SURFACE SLOPE , SLOPEPAR = ( XYR / ZR ) / SURPAR
+!                        SLOPEPAR    :    PARAMETER THAT MEASURES BED SLOPE AS FREE SURFACE SLOPE, SLOPEPAR = ( XYR / ZR ) / SURPAR
+!                           DSPAR    :    PARAMETER THAT MEASURES GRAIN SIZE AS BED ROUGHNESS, DSPAR = ( ( V0 * V0) / ( GR * (SS-1.0) ) )**(1/3) / ZR
 !
 !                                      \\ ABOVE ARE DIMENSIONLESS COMBINATIONS
 !
@@ -73,8 +75,8 @@
 !
 !                                      \\ ABOVE ARE LAYER RANKED PARAMETERS
 !
-!                              D0    :    GRAIN-SIZE
-!                              DS    :    DIMENSIONLESS GRAIN-SIZE
+!                              D0    :    GRAIN SIZE
+!                              DS    :    DIMENSIONLESS GRAIN SIZE
 !                            TCRS    :    DIMENSIONLESS CRITICAL SHEAR STRESS
 !                           WALLS    :    DIMENSIONLESS FALL VELOCITY
 !                             RBS    :    ROSSBY NUMBERS FOR FALL VELOCITY
@@ -101,9 +103,10 @@
     REAL   (PARD_KIND) :: PS    =    0.4
 
     REAL   (PARD_KIND) :: KAR   =    0.40
-    REAL   (PARD_KIND) :: COR   =    1.0
+    REAL   (PARD_KIND) :: COR2  =    7.292124E-5
     REAL   (PARD_KIND) :: GR    =    9.80665
 
+    REAL   (PARD_KIND) :: COR   =    1.0
     REAL   (PARD_KIND) :: XYR   =    1.0
     REAL   (PARD_KIND) :: ZR    =    1.0
     REAL   (PARD_KIND) :: UVR   =    1.0
@@ -128,15 +131,16 @@
     REAL   (PARD_KIND) :: BPAR
     REAL   (PARD_KIND) :: SURPAR
     REAL   (PARD_KIND) :: SLOPEPAR
+    REAL   (PARD_KIND) :: DSPAR
 
     REAL   (PARD_KIND) :: DSIGMA
 
     REAL   (PARD_KIND) :: SIGMA(32)
 
-    REAL   (PARD_KIND) :: D0    =    1.000E-3
-    REAL   (PARD_KIND) :: DS
-    REAL   (PARD_KIND) :: TCRS
-    REAL   (PARD_KIND) :: WALLS
-    REAL   (PARD_KIND) :: RBS
+    REAL   (PARD_KIND) :: D0(8) = (/ 1.0E-3 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 , 0.0 /)
+    REAL   (PARD_KIND) :: DS(8)
+    REAL   (PARD_KIND) :: TCRS(8)
+    REAL   (PARD_KIND) :: WALLS(8)
+    REAL   (PARD_KIND) :: RBS(8)
 
   END MODULE MR_DEF_CONSTS_N_REF_PARS
