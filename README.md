@@ -1,6 +1,8 @@
 # Mr. Reds
 REliable Dynamic Simulation for Meandering Rivers (just a name!)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3885611.svg)](https://doi.org/10.5281/zenodo.3885611)
+
 ## License
 This project is licensed under the terms of the MIT license.  
 [HERE](https://github.com/zht9947/Mr_Reds/blob/master/LICENSE.md) to see the full text.
