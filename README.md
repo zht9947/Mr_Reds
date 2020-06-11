@@ -15,3 +15,8 @@ Please see this file:
 &emsp;&emsp;&emsp;&emsp;|-- XMDF\\  
 &emsp;&emsp;&emsp;&emsp;&emsp;|-- XMDF.f90  
 for its license.
+
+## Notes on compilation
++ You may need to compile your own version of the XMDF library.  
+  + Download its source codes from [www.xmswiki.com/wiki/XMDF](https://www.xmswiki.com/wiki/XMDF) (v2.2 or later is required).
++ If you compile this project on a non-intel(R) processor, you may need to comment out all the compiler directives starting with "!DIR$" to disable relevant optimizations.
