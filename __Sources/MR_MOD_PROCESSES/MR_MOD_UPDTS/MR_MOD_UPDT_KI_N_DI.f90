@@ -86,6 +86,7 @@
     IMPLICIT NONE
 
     INTEGER(IJID_KIND) :: I , J
+    INTEGER(KKID_KIND) :: K
 
     ALLOCATE( EQKD_PRO_XY(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) ,   &
     & EQKD_PRO_Z(1:NI1(NI,FDRD_KIND),1:NJ,1:NK) ,   &
@@ -115,7 +116,7 @@
         & EQK_C3(1:NI1(NI,CARD_KIND),1:NJ,1:NK-1) )
           CALL MR_CALC_EQK_A3_B3_C3( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 )
           !BLOCK
-            KI = MAX( MR_TDMA3_SS( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 , EQK_D3 ) , EPSILON(KI) )
+            CALL MR_TDMA3_SS( NI , NJ , NK , EQK_A3 , EQK_B3 , EQK_C3 , EQK_D3 , KI , EPSILON(KI) )
           !END BLOCK
         DEALLOCATE( EQK_A3 , EQK_B3 , EQK_C3 )
       DEALLOCATE( EQK_D3 )
@@ -138,7 +139,7 @@
         & EQD_C3(1:NI1(NI,CARD_KIND),1:NJ,1:NK-1) )
           CALL MR_CALC_EQD_A3_B3_C3( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 )
           !BLOCK
-            DI = MAX( MR_TDMA3_SS( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 , EQD_D3 ) , EPSILON(DI) )
+            CALL MR_TDMA3_SS( NI , NJ , NK , EQD_A3 , EQD_B3 , EQD_C3 , EQD_D3 , DI , EPSILON(DI) )
           !END BLOCK
         DEALLOCATE( EQD_A3 , EQD_B3 , EQD_C3 )
       DEALLOCATE( EQD_D3 )
