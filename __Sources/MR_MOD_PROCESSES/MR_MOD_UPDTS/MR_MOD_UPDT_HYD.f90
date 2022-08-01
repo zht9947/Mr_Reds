@@ -102,9 +102,9 @@
           & B1(1:NI1(NI,CARD_KIND),1:NJ  ) ,   &
           & C1(1:NI2(NI,CARD_KIND)-1,1:NJ) )
             CALL MR_CALC_A1_B1_C1( NI , NJ , ALFA , A1 , B1 , C1 )
-           !BLOCK
-            ZS = MR_TDMA1( NI , NJ , A1 , B1 , C1 , D1 )
-           !END BLOCK
+            !BLOCK
+              CALL MR_TDMA1( NI , NJ , A1 , B1 , C1 , D1 , ZS )
+            !END BLOCK
           DEALLOCATE( A1 , B1 , C1 )
         DEALLOCATE( D1 )
 
@@ -114,9 +114,9 @@
           & B2(1:NI1(NI,CARD_KIND),1:NJ  ) ,   &
           & C2(1:NI1(NI,CARD_KIND),1:NJ-1) )
             CALL MR_CALC_A2_B2_C2( NI , NJ , ALFA , A2 , B2 , C2 )
-           !BLOCK
-            ZS = MR_TDMA2( NI , NJ , A2 , B2 , C2 , D2 )
-           !END BLOCK
+            !BLOCK
+              CALL MR_TDMA2( NI , NJ , A2 , B2 , C2 , D2 , ZS )
+            !END BLOCK
           DEALLOCATE( A2 , B2 , C2 )
         DEALLOCATE( D2 )
 
@@ -134,9 +134,9 @@
       & HYD_B3(1:NI1(NI,CARD_KIND),1:NJ,1:NK  ) ,   &
       & HYD_C3(1:NI1(NI,CARD_KIND),1:NJ,1:NK-1) )
         CALL MR_CALC_HYD_A3_B3_C3( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 )
-       !BLOCK
-        UV = MR_TDMA3_UV( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 , HYD_D3 )
-       !END BLOCK
+        !BLOCK
+          CALL MR_TDMA3_UV( NI , NJ , NK , HYD_A3 , HYD_B3 , HYD_C3 , HYD_D3 , UV )
+        !END BLOCK
       DEALLOCATE( HYD_A3 , HYD_B3 , HYD_C3 )
 
     DEALLOCATE( HYD_D3 )

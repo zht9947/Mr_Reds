@@ -76,7 +76,7 @@
     CHARACTER(   *   ) , INTENT(OUT) :: ERRMSG
 
     ERRMSG = ""
-    CALL XF_READ_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , INT(ITS+1,4) , NEM , ACTIVITY_ARRAY , ERROR )
+    CALL XF_READ_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , INT(ITS+1,4) , NEM , ACTIVITY_ARRAY(1:NEM) , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in reading activity"
       RETURN
@@ -205,7 +205,7 @@
       ERRMSG = "Error in openning vector dataset group"
     ELSE
 
-      CALL XF_READ_VECTOR_VALUES_TIMESTEP( DSET_UV_ID , INT(ITS+1,4) , NND , 2 , UV_ARRAY , ERROR )
+      CALL XF_READ_VECTOR_VALUES_TIMESTEP( DSET_UV_ID , INT(ITS+1,4) , NND , 2 , UV_ARRAY(1:2,1:NND) , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in reading vector values from dataset group"
       ELSE
@@ -231,7 +231,7 @@
       RETURN
     END IF
 
-    UV_ARRAY = ( UV_ARRAY - UV_BASE ) / ( UV_REF - UV_BASE )
+    UV_ARRAY(1:2,1:NND) = ( UV_ARRAY(1:2,1:NND) - UV_BASE ) / ( UV_REF - UV_BASE )
 
    !DIR$ FORCEINLINE
     CALL MR_READ_UV_UNPACK_FOR_W_NODES
@@ -287,7 +287,7 @@
 
       END DO
 
-      UV = IUV .MRUVTFM. UV
+      CALL MR_COPY_UV( UV , IUV .MRUVTFM. UV )
 
     END IF
 
@@ -335,7 +335,7 @@
 
       END DO
 
-      UU = IUU .MRUVTFM. UU
+      CALL MR_COPY_UV( UU , IUU .MRUVTFM. UU )
 
       IF( PRESENT( U ) ) THEN
         DO J = 1 , NJ
@@ -361,7 +361,7 @@
 
         END DO
 
-        UT = IUU .MRUVTFM. UT
+        CALL MR_COPY_UV( UT , IUU .MRUVTFM. UT )
 
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
@@ -418,7 +418,7 @@
 
       END DO
 
-      VV = IVV .MRUVTFM. VV
+      CALL MR_COPY_UV( VV , IVV .MRUVTFM. VV )
 
       IF( PRESENT( V ) ) THEN
         DO J = 0 , NJ
@@ -444,7 +444,7 @@
 
         END DO
 
-        VT = IVV .MRUVTFM. VT
+        CALL MR_COPY_UV( VT , IVV .MRUVTFM. VT )
 
         DO J = 0 , NJ
          !DIR$ VECTOR ALIGNED
@@ -499,7 +499,7 @@
 
       END DO
 
-      UVO = IOO .MRUVTFM. UVO
+      CALL MR_COPY_UV( UVO , IOO .MRUVTFM. UVO )
 
     END IF
 
@@ -576,7 +576,7 @@
       ERRMSG = "Error in openning scalar dataset group"
     ELSE
 
-      CALL XF_READ_SCALAR_VALUES_TIMESTEP( DSET_SS_ID , INT(ITS+1,4) , NND , SS_ARRAY , ERROR )
+      CALL XF_READ_SCALAR_VALUES_TIMESTEP( DSET_SS_ID , INT(ITS+1,4) , NND , SS_ARRAY(1:NND) , ERROR )
       IF( ERROR < 0 ) THEN
         ERRMSG = "Error in reading scalar values from dataset group"
       ELSE
@@ -602,7 +602,7 @@
       RETURN
     END IF
 
-    SS_ARRAY = ( SS_ARRAY - SS_BASE ) / ( SS_REF - SS_BASE )
+    SS_ARRAY(1:NND) = ( SS_ARRAY(1:NND) - SS_BASE ) / ( SS_REF - SS_BASE )
 
    !DIR$ FORCEINLINE
     CALL MR_READ_SS_UNPACK_FOR_W_NODES

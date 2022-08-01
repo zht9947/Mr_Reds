@@ -74,11 +74,13 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQKD_PRO_XY_K , EQKD_PRO_Z_K
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQD_SRC_XYZ
 
-    EQD_SRC_XYZ = + DT * RBT *   &
-    ( MW .MRSSSCL.   &
-      ( ( ( ( REAL( ( CD1 * ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - CD2 * DI(:,:, K ) ) , FDRD_KIND ) )   &
-              .MRSSMTP. DI(:,:, K )   &
-          ) .MRSSDIV. KI(:,:, K )   &
+    CALL MR_COPY_SS( EQD_SRC_XYZ ,   &
+    & + DT * RBT *   &
+      ( MW .MRSSSCL.   &
+        ( ( ( ( CD1 * ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - CD2 * DI(:,:, K ) )   &
+                .MRSSMTP. DI(:,:, K )   &
+            ) .MRSSDIV. KI(:,:, K )   &
+          )   &
         )   &
       )   &
     )

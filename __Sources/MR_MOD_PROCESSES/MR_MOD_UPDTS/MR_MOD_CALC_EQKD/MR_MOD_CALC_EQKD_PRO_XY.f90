@@ -61,11 +61,13 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_CALC_EQKD_PRO_XY( NI , NJ , NK , EQKD_PRO_XY )
 
-    USE MR_MOD_OPERATOR_UV
-    USE MR_MOD_OPERATOR_XUV
+    USE MR_MOD_INTERP_XY
 
     USE MR_MOD_CALC_QADV_N_QDIF_XY
-    USE MR_MOD_INTERP_XY
+
+    USE MR_MOD_OPERATOR_SS
+    USE MR_MOD_OPERATOR_UV
+    USE MR_MOD_OPERATOR_XUV
 
     IMPLICIT NONE
 
@@ -85,14 +87,14 @@
 
       ALLOCATE( UVT(1:NI1(NI,FDRD_KIND),1:NJ,1:2) )
 
-        UVT = ( JUV .MRUVTFM. UV(:,:,1:2, K ) )
+        CALL MR_COPY_UV( UVT , JUV .MRUVTFM. UV(:,:,1:2, K ) )
 
         ALLOCATE( VVT(1:NI1(NI,FDRD_KIND),0:NJ,1:2) )
           CALL MR_INTERP_XY_UV_V_TO_GET_U_AT_V( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,1) )
          !CALL MR_INTERP_XY_UV_V_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , VVT(:,:,2) )
-          VVT(:,:,2) = V(:,:, K )
+          CALL MR_COPY_SS( VVT(:,:,2) , V(:,:, K ) )
 
-          VVT = ( JVV .MRUVTFM. VVT )
+          CALL MR_COPY_UV( VVT , JVV .MRUVTFM. VVT )
 
           CALL MR_CALC_T_XY_UV_U( NI , NJ , UVT , VVT , RB , U(:,:, K ) , EKXY , VXYU(:,:, K ) , HYD_T_XY_U )
 
@@ -101,9 +103,9 @@
         ALLOCATE( UUT(0:NI0(NI,FDRD_KIND),1:NJ,1:2) )
           CALL MR_INTERP_XY_UV_U_TO_GET_V_AT_U( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,2) )
          !CALL MR_INTERP_XY_UV_U_BY_LINEAR( NI , NJ , UV(:,:,1:2, K ) , UUT(:,:,1) )
-          UUT(:,:,1) = U(:,:, K )
+          CALL MR_COPY_SS( UUT(:,:,1) , U(:,:, K ) )
 
-          UUT = ( JUU .MRUVTFM. UUT )
+          CALL MR_COPY_UV( UUT , JUU .MRUVTFM. UUT )
 
           CALL MR_CALC_T_XY_UV_V( NI , NJ , UVT , UUT , RB , V(:,:, K ) , EKXY , VXYV(:,:, K ) , HYD_T_XY_V )
 
@@ -114,8 +116,8 @@
     ! CALCULATE MECHANICAL PRODUCTION
       CALL MR_INV_INTERP_XY_UV_FROM_UU( NI , NJ , HYD_T_XY_U , HYD_T_XY(:,:,1:2,1) )
       CALL MR_INV_INTERP_XY_UV_FROM_VV( NI , NJ , HYD_T_XY_V , HYD_T_XY(:,:,1:2,2) )
-      HYD_T_XY = ( HYD_T_XY .MRXUVMAT. ( .MRXUVTPS. JUV ) )
-      HYD_T_XY_EXT = ( HYD_T_XY + ( .MRXUVTPS. HYD_T_XY ) )
+      CALL MR_COPY_XUV( HYD_T_XY , HYD_T_XY .MRXUVMAT. ( .MRXUVTPS. JUV ) )
+      CALL MR_COPY_XUV( HYD_T_XY_EXT , HYD_T_XY + ( .MRXUVTPS. HYD_T_XY ) )
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI

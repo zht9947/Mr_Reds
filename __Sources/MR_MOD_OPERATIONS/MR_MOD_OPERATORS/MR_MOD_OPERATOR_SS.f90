@@ -27,10 +27,18 @@
 
     PRIVATE
 
+    PUBLIC :: MR_COPY_SS
     PUBLIC :: OPERATOR( .MRSSMTP. )
     PUBLIC :: OPERATOR( .MRSSDIV. )
     PUBLIC :: OPERATOR( .MRSSSCL. )
     PUBLIC :: OPERATOR( .MRSSSQR. ) , OPERATOR( .MRSSQRT. )
+
+    INTERFACE MR_COPY_SS
+      MODULE PROCEDURE MR_COPY_SS_KIND4_X_KIND4
+      MODULE PROCEDURE MR_COPY_SS_KIND8_X_KIND4
+      MODULE PROCEDURE MR_COPY_SS_KIND4_X_KIND8
+      MODULE PROCEDURE MR_COPY_SS_KIND8_X_KIND8
+    END INTERFACE
 
     INTERFACE OPERATOR( .MRSSMTP. )
       MODULE PROCEDURE MR_SCALAR_MULTIPLY_BY_SS_KIND4_X_KIND4
@@ -66,6 +74,158 @@
 !***********************************************************************************************************************************
 
   CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_SS_KIND4_X_KIND4( SS , SS0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:) :: SS
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SS( I , J ) = SS0( I , J )
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_SS_KIND4_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_SS_KIND8_X_KIND4( SS , SS0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:) :: SS
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SS( I , J ) = SS0( I , J )
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_SS_KIND8_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_SS_KIND4_X_KIND8( SS , SS0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:) :: SS
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SS( I , J ) = SS0( I , J )
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_SS_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_SS_KIND8_X_KIND8( SS , SS0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:) :: SS
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:) :: SS0
+
+    INTEGER(IJID_KIND) :: I , J
+
+    DO J = 1 , SIZE(SS0,DIM=2)
+     !DIR$ VECTOR ALIGNED
+      DO I = 1 , MIN( SIZE(SS0,DIM=1) , SIZE(SS,DIM=1) )
+        SS( I , J ) = SS0( I , J )
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_SS_KIND8_X_KIND8
 
 !***********************************************************************************************************************************
 ! UNIT:

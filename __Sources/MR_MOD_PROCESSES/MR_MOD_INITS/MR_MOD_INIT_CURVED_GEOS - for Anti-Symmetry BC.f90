@@ -61,6 +61,7 @@
 !***********************************************************************************************************************************
   SUBROUTINE MR_INIT_CURVED_GEOS( FILE_XMDF_NAME , ERROR , ERRMSG )
 
+    USE MR_MOD_OPERATOR_SS
     USE MR_MOD_OPERATOR_XUV
 
     IMPLICIT NONE
@@ -102,14 +103,14 @@
           END DO
         END DO
       END DO
-      JUV = JUV / XYR
-      IF( ALLOCATED(GUV) ) GUV = ( .MRXUVTPS. JUV ) .MRXUVMAT. JUV
+      CALL MR_COPY_XUV( JUV , JUV / XYR )
+      IF( ALLOCATED(GUV) ) CALL MR_COPY_XUV( GUV , ( .MRXUVTPS. JUV ) .MRXUVMAT. JUV )
       IF( ALLOCATED(MW) ) THEN
-        MW = .MRXUVDTM. JUV
+        CALL MR_COPY_SS( MW , .MRXUVDTM. JUV )
         IF( ALLOCATED(IUV) ) THEN
-          IUV = MW .MRXUVIVS. JUV
+          CALL MR_COPY_XUV( IUV , MW .MRXUVIVS. JUV )
           IF( ALLOCATED(FUV) ) THEN
-            FUV = IUV .MRXUVMAT. ( .MRXUVTPS. IUV )
+            CALL MR_COPY_XUV( FUV , IUV .MRXUVMAT. ( .MRXUVTPS. IUV ) )
           END IF
         END IF
       END IF
@@ -158,14 +159,14 @@
           !END I = NI
         END DO
       END DO
-      JUU = JUU / XYR
-      IF( ALLOCATED(GUU) ) GUU = ( .MRXUVTPS. JUU ) .MRXUVMAT. JUU
+      CALL MR_COPY_XUV( JUU , JUU / XYR )
+      IF( ALLOCATED(GUU) ) CALL MR_COPY_XUV( GUU , ( .MRXUVTPS. JUU ) .MRXUVMAT. JUU )
       IF( ALLOCATED(MU) ) THEN
-        MU = .MRXUVDTM. JUU
+        CALL MR_COPY_SS( MU , .MRXUVDTM. JUU )
         IF( ALLOCATED(IUU) ) THEN
-          IUU = MU .MRXUVIVS. JUU
+          CALL MR_COPY_XUV( IUU , MU .MRXUVIVS. JUU )
           IF( ALLOCATED(FUU) ) THEN
-            FUU = IUU .MRXUVMAT. ( .MRXUVTPS. IUU )
+            CALL MR_COPY_XUV( FUU , IUU .MRXUVMAT. ( .MRXUVTPS. IUU ) )
           END IF
         END IF
       END IF
@@ -198,14 +199,14 @@
           END DO
         !END J = NJ
       END DO
-      JVV = JVV / XYR
-      IF( ALLOCATED(GVV) ) GVV = ( .MRXUVTPS. JVV ) .MRXUVMAT. JVV
+      CALL MR_COPY_XUV( JVV , JVV / XYR )
+      IF( ALLOCATED(GVV) ) CALL MR_COPY_XUV( GVV , ( .MRXUVTPS. JVV ) .MRXUVMAT. JVV )
       IF( ALLOCATED(MV) ) THEN
-        MV = .MRXUVDTM. JVV
+        CALL MR_COPY_SS( MV , .MRXUVDTM. JVV )
         IF( ALLOCATED(IVV) ) THEN
-          IVV = MV .MRXUVIVS. JVV
+          CALL MR_COPY_XUV( IVV , MV .MRXUVIVS. JVV )
           IF( ALLOCATED(FVV) ) THEN
-            FVV = IVV .MRXUVMAT. ( .MRXUVTPS. IVV )
+            CALL MR_COPY_XUV( FVV , IVV .MRXUVMAT. ( .MRXUVTPS. IVV ) )
           END IF
         END IF
       END IF
@@ -294,14 +295,14 @@
           !END I = NI
         !END J = NJ
       END DO
-      JOO = JOO / XYR
-      IF( ALLOCATED(GOO) ) GOO = ( .MRXUVTPS. JOO ) .MRXUVMAT. JOO
+      CALL MR_COPY_XUV( JOO , JOO / XYR )
+      IF( ALLOCATED(GOO) ) CALL MR_COPY_XUV( GOO , ( .MRXUVTPS. JOO ) .MRXUVMAT. JOO )
       IF( ALLOCATED(MO) ) THEN
-        MO = .MRXUVDTM. JOO
+        CALL MR_COPY_SS( MO , .MRXUVDTM. JOO )
         IF( ALLOCATED(IOO) ) THEN
-          IOO = MO .MRXUVIVS. JOO
+          CALL MR_COPY_XUV( IOO , MO .MRXUVIVS. JOO )
           IF( ALLOCATED(FOO) ) THEN
-            FOO = IOO .MRXUVMAT. ( .MRXUVTPS. IOO )
+            CALL MR_COPY_XUV( FOO , IOO .MRXUVMAT. ( .MRXUVTPS. IOO ) )
           END IF
         END IF
       END IF

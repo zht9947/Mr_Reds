@@ -231,7 +231,7 @@
             ERRMSG = "Error in getting the current number of timesteps from vector dataset group"
           ELSE
 
-            UV_MOD_ARRAY(:) = SQRT( UV_ARRAY(1,:) * UV_ARRAY(1,:) + UV_ARRAY(2,:) * UV_ARRAY(2,:) )
+            UV_MOD_ARRAY(1:NND) = SQRT( UV_ARRAY(1,1:NND) * UV_ARRAY(1,1:NND) + UV_ARRAY(2,1:NND) * UV_ARRAY(2,1:NND) )
 
             CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_UV_ID , NTIMES , MINVAL(UV_MOD_ARRAY) , MAXVAL(UV_MOD_ARRAY) , ERROR )
             IF( ERROR < 0 ) THEN

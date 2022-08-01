@@ -27,10 +27,18 @@
 
     PRIVATE
 
+    PUBLIC :: MR_COPY_UV
     PUBLIC :: OPERATOR( .MRUVMTP. )
     PUBLIC :: OPERATOR( .MRUVDIV. )
     PUBLIC :: OPERATOR( .MRUVSCL. ) , OPERATOR( .MRUVTFM. ) , OPERATOR( .MRUVROT. )
     PUBLIC :: OPERATOR( .MRUVSQR. ) , OPERATOR( .MRUVDOT. )
+
+    INTERFACE MR_COPY_UV
+      MODULE PROCEDURE MR_COPY_UV_KIND4_X_KIND4
+      MODULE PROCEDURE MR_COPY_UV_KIND8_X_KIND4
+      MODULE PROCEDURE MR_COPY_UV_KIND4_X_KIND8
+      MODULE PROCEDURE MR_COPY_UV_KIND8_X_KIND8
+    END INTERFACE
 
     INTERFACE OPERATOR( .MRUVMTP. )
       MODULE PROCEDURE MR_VECTOR_MULTIPLY_BY_SS_KIND4_X_KIND4
@@ -80,6 +88,178 @@
 !***********************************************************************************************************************************
 
   CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_UV_KIND4_X_KIND4( UV , UV0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:,:) :: UV
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:,:) :: UV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , SIZE(UV0,DIM=2)
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , MIN( SIZE(UV0,DIM=1) , SIZE(UV,DIM=1) )
+          UV( I , J ,DIM) = UV0( I , J ,DIM)
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_COPY_UV_KIND4_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_UV_KIND8_X_KIND4( UV , UV0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:,:) :: UV
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:,:) :: UV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , SIZE(UV0,DIM=2)
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , MIN( SIZE(UV0,DIM=1) , SIZE(UV,DIM=1) )
+          UV( I , J ,DIM) = UV0( I , J ,DIM)
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_COPY_UV_KIND8_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_UV_KIND4_X_KIND8( UV , UV0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:,:) :: UV
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:,:) :: UV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , SIZE(UV0,DIM=2)
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , MIN( SIZE(UV0,DIM=1) , SIZE(UV,DIM=1) )
+          UV( I , J ,DIM) = UV0( I , J ,DIM)
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_COPY_UV_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_UV_KIND8_X_KIND8( UV , UV0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:,:) :: UV
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:,:) :: UV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM
+
+    DO DIM = 1 , 2
+
+      DO J = 1 , SIZE(UV0,DIM=2)
+       !DIR$ VECTOR ALIGNED
+        DO I = 1 , MIN( SIZE(UV0,DIM=1) , SIZE(UV,DIM=1) )
+          UV( I , J ,DIM) = UV0( I , J ,DIM)
+        END DO
+      END DO
+
+    END DO
+
+  END SUBROUTINE MR_COPY_UV_KIND8_X_KIND8
 
 !***********************************************************************************************************************************
 ! UNIT:
