@@ -27,8 +27,16 @@
 
     PRIVATE
 
+    PUBLIC :: MR_COPY_XUV
     PUBLIC :: OPERATOR( .MRXUVDTM. )
     PUBLIC :: OPERATOR( .MRXUVTPS. ) , OPERATOR( .MRXUVIVS. ) , OPERATOR( .MRXUVMAT. )
+
+    INTERFACE MR_COPY_XUV
+      MODULE PROCEDURE MR_COPY_XUV_KIND4_X_KIND4
+      MODULE PROCEDURE MR_COPY_XUV_KIND8_X_KIND4
+      MODULE PROCEDURE MR_COPY_XUV_KIND4_X_KIND8
+      MODULE PROCEDURE MR_COPY_XUV_KIND8_X_KIND8
+    END INTERFACE
 
     INTERFACE OPERATOR( .MRXUVDTM. )
       MODULE PROCEDURE MR_TENSOR_DETERMINANT_KIND4
@@ -57,6 +65,186 @@
 !***********************************************************************************************************************************
 
   CONTAINS
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_XUV_KIND4_X_KIND4( XUV , XUV0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:,:,:) :: XUV
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM , DJM
+
+    DO DJM = 1 , 2
+      DO DIM = 1 , 2
+
+        DO J = 1 , SIZE(XUV0,DIM=2)
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , MIN( SIZE(XUV0,DIM=1) , SIZE(XUV,DIM=1) )
+            XUV( I , J ,DIM,DJM) = XUV0( I , J ,DIM,DJM)
+          END DO
+        END DO
+
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_XUV_KIND4_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_XUV_KIND8_X_KIND4( XUV , XUV0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:,:,:) :: XUV
+    REAL   (4)         , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM , DJM
+
+    DO DJM = 1 , 2
+      DO DIM = 1 , 2
+
+        DO J = 1 , SIZE(XUV0,DIM=2)
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , MIN( SIZE(XUV0,DIM=1) , SIZE(XUV,DIM=1) )
+            XUV( I , J ,DIM,DJM) = XUV0( I , J ,DIM,DJM)
+          END DO
+        END DO
+
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_XUV_KIND8_X_KIND4
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_XUV_KIND4_X_KIND8( XUV , XUV0 )
+
+    IMPLICIT NONE
+
+    REAL   (4)         , INTENT(OUT) , DIMENSION(:,:,:,:) :: XUV
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM , DJM
+
+    DO DJM = 1 , 2
+      DO DIM = 1 , 2
+
+        DO J = 1 , SIZE(XUV0,DIM=2)
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , MIN( SIZE(XUV0,DIM=1) , SIZE(XUV,DIM=1) )
+            XUV( I , J ,DIM,DJM) = XUV0( I , J ,DIM,DJM)
+          END DO
+        END DO
+
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_XUV_KIND4_X_KIND8
+
+!***********************************************************************************************************************************
+! UNIT:
+!
+!  (FUNCTION)
+!
+! PURPOSE:
+!
+!   TO
+!
+! DEFINITION OF VARIABLES:
+!
+!
+!
+! RECORD OF REVISIONS:
+!
+!      DATE       |    PROGRAMMER    |    DESCRIPTION OF CHANGE
+!      ====       |    ==========    |    =====================
+!   20XX-XX-XX    |     DR. HYDE     |    ORIGINAL CODE.
+!
+!***********************************************************************************************************************************
+  SUBROUTINE MR_COPY_XUV_KIND8_X_KIND8( XUV , XUV0 )
+
+    IMPLICIT NONE
+
+    REAL   (8)         , INTENT(OUT) , DIMENSION(:,:,:,:) :: XUV
+    REAL   (8)         , INTENT(IN ) , DIMENSION(:,:,:,:) :: XUV0
+
+    INTEGER(IJID_KIND) :: I , J
+    INTEGER            :: DIM , DJM
+
+    DO DJM = 1 , 2
+      DO DIM = 1 , 2
+
+        DO J = 1 , SIZE(XUV0,DIM=2)
+         !DIR$ VECTOR ALIGNED
+          DO I = 1 , MIN( SIZE(XUV0,DIM=1) , SIZE(XUV,DIM=1) )
+            XUV( I , J ,DIM,DJM) = XUV0( I , J ,DIM,DJM)
+          END DO
+        END DO
+
+      END DO
+    END DO
+
+  END SUBROUTINE MR_COPY_XUV_KIND8_X_KIND8
 
 !***********************************************************************************************************************************
 ! UNIT:
