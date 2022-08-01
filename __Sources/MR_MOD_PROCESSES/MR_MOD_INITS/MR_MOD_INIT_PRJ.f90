@@ -230,7 +230,7 @@
                     CALL MR_CLOSE_FILE_DEFAULT( FILE_PRJ_ID , ERROR_DUMMY , ERRMSG_DUMMY )
                     RETURN
                   ELSE
-                    D0 = D0 / 1000.0
+                    D0(1:NKS) = D0(1:NKS) / 1000.0
                   END IF
 
                 END SELECT
