@@ -99,7 +99,7 @@
      !BLOCK
     ! CALCULATE KI(:,:, 1 )
       ALLOCATE( TBUV_MOD(1:NI1(NI,FDRD_KIND),1:NJ) )
-        TBUV_MOD = .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) )
+        CALL MR_COPY_SS( TBUV_MOD , .MRSSQRT. ( .MRUVSQR. ( JUV .MRUVTFM. TBUV ) ) )
         DO J = 1 , NJ
          !DIR$ VECTOR ALIGNED
           DO I = 1 , NI

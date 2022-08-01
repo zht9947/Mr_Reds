@@ -82,7 +82,7 @@
   ! CALCULATE MECHANICAL PRODUCTION
     CALL MR_INV_INTERP_Z_UV_FROM_UVW( NI , NJ , NK , HYD_T_Z_W , HYD_T_Z )
     DO K = 1 , NK
-      HYD_T_Z(:,:,1:2, K ) = ( JUV .MRUVTFM. HYD_T_Z(:,:,1:2, K ) )
+      CALL MR_COPY_UV( HYD_T_Z(:,:,1:2, K ) , JUV .MRUVTFM. HYD_T_Z(:,:,1:2, K ) )
       DO J = 1 , NJ
        !DIR$ VECTOR ALIGNED
         DO I = 1 , NI
