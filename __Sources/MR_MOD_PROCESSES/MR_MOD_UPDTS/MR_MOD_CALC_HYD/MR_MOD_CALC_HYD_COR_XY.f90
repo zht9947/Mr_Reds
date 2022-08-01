@@ -71,11 +71,13 @@
 
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ,1:2) :: HYD_COR_XY
 
-    HYD_COR_XY = + DT * COR2 *   &
-    ( MW .MRUVSCL.   &
+    CALL MR_COPY_UV( HYD_COR_XY ,   &
+    & + DT * COR2 *   &
       ( MW .MRUVSCL.   &
-        ( FUV .MRUVTFM.   &
-          ( .MRUVROT. UV(:,:,1:2, K ) )   &
+        ( MW .MRUVSCL.   &
+          ( FUV .MRUVTFM.   &
+            ( .MRUVROT. UV(:,:,1:2, K ) )   &
+          )   &
         )   &
       )   &
     )

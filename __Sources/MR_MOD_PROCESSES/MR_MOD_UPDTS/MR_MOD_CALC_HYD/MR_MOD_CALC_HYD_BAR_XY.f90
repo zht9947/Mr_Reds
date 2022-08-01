@@ -79,11 +79,13 @@
     CALL MR_CALC_BY_INTERP_GRAD_XY_SS( NI , NJ , RI(:,:, K ) , GRAD_XY_RI )
     CALL MR_CALC_GRAD_XY_SS( NI , NJ , HU , HV , GRAD_XY_H )
 
-    HYD_BAR_XY = - DT * RB / FRD *   &
-    ( MW .MRUVSCL.   &
-      ( FUV .MRUVTFM.   &
-        ( ( GRAD_XY_RI .MRUVMTP. H )   &
-        + ( GRAD_XY_H  .MRUVMTP. REAL( ( RI(:,:, K ) + R(:,:, K ) * SIGMA( K ) ) , FDRD_KIND ) )   &
+    CALL MR_COPY_UV( HYD_BAR_XY ,   &
+    & - DT * RB / FRD *   &
+      ( MW .MRUVSCL.   &
+        ( FUV .MRUVTFM.   &
+          ( ( GRAD_XY_RI .MRUVMTP. H )   &
+          + ( GRAD_XY_H  .MRUVMTP. ( RI(:,:, K ) + R(:,:, K ) * SIGMA( K ) ) )   &
+          )   &
         )   &
       )   &
     )

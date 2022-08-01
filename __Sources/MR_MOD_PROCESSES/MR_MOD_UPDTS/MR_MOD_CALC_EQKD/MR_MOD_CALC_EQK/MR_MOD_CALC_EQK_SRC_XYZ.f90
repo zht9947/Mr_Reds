@@ -72,9 +72,11 @@
     REAL   (FDRD_KIND) , INTENT(IN ) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQKD_PRO_XY_K , EQKD_PRO_Z_K , EQKD_BRO_Z_K
     REAL   (FDRD_KIND) , INTENT(OUT) , DIMENSION(1:NI1(NI,FDRD_KIND),1:NJ) :: EQK_SRC_XYZ
 
-    EQK_SRC_XYZ = + DT * RBT *   &
-    ( MW .MRSSSCL.   &
-      ( REAL( ( ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - DI(:,:, K ) + EQKD_BRO_Z_K ) , FDRD_KIND ) )   &
+    CALL MR_COPY_SS( EQK_SRC_XYZ ,   &
+    & + DT * RBT *   &
+      ( MW .MRSSSCL.   &
+        ( ( EQKD_PRO_XY_K + EQKD_PRO_Z_K ) - DI(:,:, K ) + EQKD_BRO_Z_K )   &
+      )   &
     )
 
   END SUBROUTINE MR_CALC_EQK_SRC_XYZ

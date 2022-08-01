@@ -79,6 +79,8 @@
 
     REAL   (TMRD_KIND) :: T
 
+    REAL               :: CPU_TIME_START , CPU_TIME_END
+
     INTEGER            :: ERROR
     CHARACTER( 2**10 ) :: ERRMSG
 
@@ -197,6 +199,8 @@
 
     WRITE(*,'( )')
 
+    CALL CPU_TIME(CPU_TIME_START)
+
     WRITE(*,'(2X,"Allocate memories... ", $ )')
     CALL MR_MALLOC_GRID_SYS
     CALL MR_MALLOC_CURVED_GEOS
@@ -290,6 +294,10 @@
     WRITE(*,'(8X,"Compute... Done! ")')
 
     WRITE(*,'(/,"The result has been written into the file:",/,4X, A )') TRIM(FILE_XMDF)
+
+    CALL CPU_TIME(CPU_TIME_END)
+
+    WRITE(*,'(/,"Time cost: ",G16.6," seconds.")') CPU_TIME_END - CPU_TIME_START
 
 !***********************************************************************************************************************************
 

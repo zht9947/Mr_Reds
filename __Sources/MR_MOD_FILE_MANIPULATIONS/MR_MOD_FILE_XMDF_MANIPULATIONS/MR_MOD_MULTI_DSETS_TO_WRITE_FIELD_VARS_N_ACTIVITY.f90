@@ -78,7 +78,7 @@
    !END$ FORCEINLINE
 
     ERRMSG = ""
-    CALL XF_WRITE_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , NEM , ACTIVITY_ARRAY , ERROR )
+    CALL XF_WRITE_ACTIVITY_TIMESTEP( DSET_ACTIVITY_ID , NEM , ACTIVITY_ARRAY(1:NEM) , ERROR )
     IF( ERROR < 0 ) THEN
       ERRMSG = "Error in writing activity"
       RETURN
@@ -215,7 +215,7 @@
     CALL MR_WRITE_UV_PACK_FOR_O_NODES
    !END$ FORCEINLINE
 
-    UV_ARRAY = UV_ARRAY * ( UV_REF - UV_BASE ) + UV_BASE
+    UV_ARRAY(1:2,1:NND) = UV_ARRAY(1:2,1:NND) * ( UV_REF - UV_BASE ) + UV_BASE
 
     ERRMSG = ""
     CALL XF_OPEN_GROUP( MULTI_DSETS_ID , TRIM(PATH_UV_IN_MULTI_DSETS) , DSET_UV_ID , ERROR )
@@ -240,7 +240,7 @@
         CONTINUE
       ELSE
 
-        CALL XF_WRITE_VECTOR_TIMESTEP( DSET_UV_ID , REAL(T,8) , NND , 2 , UV_ARRAY , ERROR )
+        CALL XF_WRITE_VECTOR_TIMESTEP( DSET_UV_ID , REAL(T,8) , NND , 2 , UV_ARRAY(1:2,1:NND) , ERROR )
         IF( ERROR < 0 ) THEN
           ERRMSG = "Error in writing vector values into dataset group"
         ELSE
@@ -250,9 +250,9 @@
             ERRMSG = "Error in getting the current number of timesteps from vector dataset group"
           ELSE
   
-            UV_MOD_ARRAY(:) = SQRT( UV_ARRAY(1,:) * UV_ARRAY(1,:) + UV_ARRAY(2,:) * UV_ARRAY(2,:) )
+            UV_MOD_ARRAY(1:NND) = SQRT( UV_ARRAY(1,1:NND) * UV_ARRAY(1,1:NND) + UV_ARRAY(2,1:NND) * UV_ARRAY(2,1:NND) )
 
-            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_UV_ID , NTIMES , MINVAL(UV_MOD_ARRAY) , MAXVAL(UV_MOD_ARRAY) , ERROR )
+            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_UV_ID , NTIMES , MINVAL(UV_MOD_ARRAY(1:NND)) , MAXVAL(UV_MOD_ARRAY(1:NND)) , ERROR )
             IF( ERROR < 0 ) THEN
               ERRMSG = "Error in setting minimum and maximum vector values into dataset group"
             ELSE
@@ -345,7 +345,7 @@
 
     END IF
 
-    UV_AT_W = JUV .MRUVTFM. UV_AT_W
+    CALL MR_COPY_UV( UV_AT_W , JUV .MRUVTFM. UV_AT_W )
 
     DO DIM = 1 , 2
 
@@ -439,7 +439,7 @@
       END DO
     END IF
 
-    UV_AT_U = JUU .MRUVTFM. UV_AT_U
+    CALL MR_COPY_UV( UV_AT_U , JUU .MRUVTFM. UV_AT_U )
 
     DO DIM = 1 , 2
 
@@ -533,7 +533,7 @@
       END DO
     END IF
 
-    UV_AT_V = JVV .MRUVTFM. UV_AT_V
+    CALL MR_COPY_UV( UV_AT_V , JVV .MRUVTFM. UV_AT_V )
 
     DO DIM = 1 , 2
 
@@ -609,7 +609,7 @@
       END DO
     END IF
 
-    UV_AT_O = JOO .MRUVTFM. UV_AT_O
+    CALL MR_COPY_UV( UV_AT_O , JOO .MRUVTFM. UV_AT_O )
 
     DO DIM = 1 , 2
 
@@ -708,7 +708,7 @@
     CALL MR_WRITE_SS_PACK_FOR_O_NODES
    !END$ FORCEINLINE
 
-    SS_ARRAY = SS_ARRAY * ( SS_REF - SS_BASE ) + SS_BASE
+    SS_ARRAY(1:NND) = SS_ARRAY(1:NND) * ( SS_REF - SS_BASE ) + SS_BASE
 
     ERRMSG = ""
     CALL XF_OPEN_GROUP( MULTI_DSETS_ID , TRIM(PATH_SS_IN_MULTI_DSETS) , DSET_SS_ID , ERROR )
@@ -733,7 +733,7 @@
         CONTINUE
       ELSE
 
-        CALL XF_WRITE_SCALAR_TIMESTEP( DSET_SS_ID , REAL(T,8) , NND , SS_ARRAY , ERROR )
+        CALL XF_WRITE_SCALAR_TIMESTEP( DSET_SS_ID , REAL(T,8) , NND , SS_ARRAY(1:NND) , ERROR )
         IF( ERROR < 0 ) THEN
           ERRMSG = "Error in writing scalar values into dataset group"
         ELSE
@@ -743,7 +743,7 @@
             ERRMSG = "Error in getting the current number of timesteps from scalar dataset group"
           ELSE
 
-            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_SS_ID , NTIMES , MINVAL(SS_ARRAY) , MAXVAL(SS_ARRAY) , ERROR )
+            CALL XF_SET_DATASET_TIMESTEP_MIN_MAX( DSET_SS_ID , NTIMES , MINVAL(SS_ARRAY(1:NND)) , MAXVAL(SS_ARRAY(1:NND)) , ERROR )
             IF( ERROR < 0 ) THEN
               ERRMSG = "Error in setting minimum and maximum scalar values into dataset group"
             ELSE

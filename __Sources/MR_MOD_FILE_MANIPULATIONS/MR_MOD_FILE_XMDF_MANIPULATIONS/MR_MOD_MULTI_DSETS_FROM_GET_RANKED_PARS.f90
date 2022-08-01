@@ -93,7 +93,7 @@
           IF( ERROR < 0 ) THEN
             ERRMSG = "Error in getting the value of sediment sizes from /PROPERTIES/By Sediment Sizes"
           ELSE
-            D0 = D0_ARRAY / 1000.0
+            D0(1:NSIZE) = D0_ARRAY(1:NSIZE) / 1000.0
           END IF
 
         DEALLOCATE( D0_ARRAY )

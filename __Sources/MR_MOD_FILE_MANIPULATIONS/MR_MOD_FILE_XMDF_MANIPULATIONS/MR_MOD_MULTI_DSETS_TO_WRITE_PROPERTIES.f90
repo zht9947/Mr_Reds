@@ -286,7 +286,7 @@
 
           NSIZE = MAX( NKS , 1 )
 
-          D0_ARRAY = D0 * 1000.0
+          D0_ARRAY(1:NSIZE) = D0(1:NSIZE) * 1000.0
 
           CALL XF_WRITE_PROPERTY_DOUBLE( GROUP_ID , "Sediment Sizes" , NSIZE , D0_ARRAY(1:NSIZE) , COMPRESSION , ERROR )
           IF( ERROR < 0 ) THEN

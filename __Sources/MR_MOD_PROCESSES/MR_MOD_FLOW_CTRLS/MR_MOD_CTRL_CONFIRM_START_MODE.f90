@@ -230,7 +230,7 @@
                       ELSE IF( MINVAL(D0(1:NKS)) <= 0.0 ) THEN
                         WRITE(*,'(12X,"Illegal value!")')
                       ELSE
-                        D0 = D0 / 1000.0
+                        D0(1:NKS) = D0(1:NKS) / 1000.0
                         EXIT
                       END IF
                     END IF
